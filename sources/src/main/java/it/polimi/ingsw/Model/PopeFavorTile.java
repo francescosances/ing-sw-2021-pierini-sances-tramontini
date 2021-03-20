@@ -14,6 +14,8 @@ public class PopeFavorTile {
     }
 
     public int getVictoryPoints() {
-        return victoryPoints;
+        if(uncovered)
+            return victoryPoints;
+        else return 0;
     }
 }

@@ -30,7 +30,7 @@ public class FaithTrack {
         return this.faithMarker;
     }
 
-    public int getVictoryPoints(){
+    protected int getTrackVictoryPoints(){
         if(faithMarker < 3)
             return 0;
         if(faithMarker < 6)
@@ -48,6 +48,15 @@ public class FaithTrack {
         else if(faithMarker < 24)
             return 16;
         return 20;
+    }
+
+    public int getVictoryPoints(){
+        int res = getTrackVictoryPoints();
+        for(int i=0;i<popeFavorTiles.length;i++) {
+            if(popeFavorTiles[i] != null)
+                res += popeFavorTiles[i].getVictoryPoints();
+        }
+        return res;
     }
 
     public void moveMarker() throws EndGameException {
