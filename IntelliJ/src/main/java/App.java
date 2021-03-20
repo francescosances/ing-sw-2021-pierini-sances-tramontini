@@ -1,5 +1,3 @@
-package it.polimi.ingsw;
-
 /**
  * Hello world!
  *

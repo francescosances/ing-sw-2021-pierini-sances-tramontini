@@ -10,7 +10,7 @@ public class ProductionLeaderCard extends LeaderCard{
     public ProductionLeaderCard (int victoryPoints, Requirements requirements, Requirements productionCost, Map<Resource, Integer> productionGain) {
         super(victoryPoints, requirements);
         this.productionCost = productionCost;
-        this.productionGain = new HashMap<Resource, Integer> ();
+        this.productionGain = new HashMap<>();
         this.productionGain.putAll(productionGain);
     }
 

@@ -12,7 +12,7 @@ public class DepotLeaderCard extends LeaderCard implements Depot {
         occupied = 0;
     }
 
-    public Resourcetype getResourceType(){
+    public ResourceType getResourceType(){
         return resourceType;
     }
 

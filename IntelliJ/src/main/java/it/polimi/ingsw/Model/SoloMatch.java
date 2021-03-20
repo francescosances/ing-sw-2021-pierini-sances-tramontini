@@ -10,7 +10,6 @@ public class SoloMatch extends Match{
             blackCross.moveMarker();
         }
     }
-
     public void shuffleActionTokens(){
         actionTokens.shuffle();
     }

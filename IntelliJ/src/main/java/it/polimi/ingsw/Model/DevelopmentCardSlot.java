@@ -1,11 +1,12 @@
 package it.polimi.ingsw.Model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-public class DevelopmentCardSlot {
+public class DevelopmentCardSlot implements Iterable<DevelopmentCard>{
 
-    private List<DevelopmentCard> developmentCards;
+    private final List<DevelopmentCard> developmentCards;
 
     public DevelopmentCardSlot(){
         developmentCards = new ArrayList<>();
@@ -29,5 +30,14 @@ public class DevelopmentCardSlot {
         return developmentCards.size();
     }
 
+    public DevelopmentCard getFromLevel(int level){
+        if(developmentCards.size() <= level)
+            throw new IllegalStateException("No card for this level");
+        return developmentCards.get(level);
+    }
 
+    @Override
+    public Iterator<DevelopmentCard> iterator() {
+        return developmentCards.iterator();
+    }
 }

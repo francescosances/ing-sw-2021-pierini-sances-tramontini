@@ -3,10 +3,15 @@ package it.polimi.ingsw.Model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
-public class Deck <E>{
+public class Deck <E> implements Iterable<E>{
 
-    private ArrayList<E> cards;
+    private List<E> cards;
+
+    public Deck(){
+        cards = new ArrayList<>();
+    }
 
     public void shuffle(){
         Collections.shuffle(cards);
@@ -22,6 +27,7 @@ public class Deck <E>{
         return temp;
     }
 
+    @Override
     public Iterator<E> iterator(){
         return cards.iterator();
     }
