@@ -15,11 +15,14 @@ public class Match {
     protected List<Deck<DevelopmentCard>> developmentDecks;
     protected Deck<LeaderCard> leaderCards;
 
+    private int vaticanReportsCount;
+
     public Match(){
         this.players = new ArrayList<>();
         this.market = new Market();
         this.developmentDecks = new ArrayList<>();
         this.leaderCards = new Deck<>();
+        this.vaticanReportsCount = 0;
     }
 
     public Deck<DevelopmentCard> getDevelopmentCardDeck(DevelopmentColorType color, int level){
@@ -49,8 +52,19 @@ public class Match {
         }
     }
 
+    public int getVaticanReportsCount() {
+        return vaticanReportsCount;
+    }
+
     public void vaticanReport(int popeSpace){
-//TODO
+        for(PlayerBoard p : players){
+            if(p.getFaithTrack().getFaithMarker() >= popeSpace-3-vaticanReportsCount){
+                p.getFaithTrack().getPopeFavoreTiles()[vaticanReportsCount].uncover();
+            }else{
+                p.getFaithTrack().getPopeFavoreTiles()[vaticanReportsCount] = null;
+            }
+        }
+        vaticanReportsCount++;
     }
 
 }
