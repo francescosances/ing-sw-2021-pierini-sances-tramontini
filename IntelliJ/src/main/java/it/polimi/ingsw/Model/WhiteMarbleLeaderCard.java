@@ -15,7 +15,7 @@ public class WhiteMarbleLeaderCard extends LeaderCard {
     }
 
     @Override
-    public ResourceType getOutputResourceType() throws WrongLeaderCardException {
+    public ResourceType getOutputResourceType() {
         return outputResourceType;
     }
 
