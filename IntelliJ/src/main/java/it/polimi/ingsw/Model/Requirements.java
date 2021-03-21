@@ -1,11 +1,9 @@
 package it.polimi.ingsw.Model;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Predicate;
 
-public class Requirements {
+public class Requirements implements Cloneable{
 
     private Map<ResourceType,Integer> resources;
 
@@ -56,6 +54,21 @@ public class Requirements {
         return resources.get(resource);
     }
 
+    public void addResourceRequirement(ResourceType resource,int quantity){
+        resources.put(resource,resources.getOrDefault(resource,0)+quantity);
+    }
+
+    public void removeResourceRequirement(ResourceType resource,int quantity){
+        resources.put(resource,resources.getOrDefault(resource,quantity)-quantity);
+        if(resources.get(resource) <= 0)
+            resources.remove(resource);
+    }
+
+    public void addDevelopmentCardRequirement(DevelopmentColorType type,int level,int quantity){
+        developmentCards.computeIfAbsent(type, k -> new HashMap<>());
+        developmentCards.get(type).put(level,quantity);
+    }
+
     public int getDevelopmentCards(DevelopmentColorType color,int level){
         Map<Integer,Integer> temp = developmentCards.get(color);
         if(temp == null)
@@ -63,5 +76,18 @@ public class Requirements {
         return temp.get(level);
     }
 
+    @Override
+    public Object clone(){
+        Requirements ris = new Requirements();
+        ris.resources.putAll(this.resources);
+        for(Map.Entry<DevelopmentColorType,Map<Integer,Integer>> entry: developmentCards.entrySet()){
+            Map<Integer,Integer> temp = new HashMap<>();
+            for(Map.Entry<Integer,Integer> x : entry.getValue().entrySet()) {
+                temp.put(x.getKey(),x.getValue());
+            }
+            ris.developmentCards.put(entry.getKey(),temp);
+        }
+        return ris;
+    }
 
 }

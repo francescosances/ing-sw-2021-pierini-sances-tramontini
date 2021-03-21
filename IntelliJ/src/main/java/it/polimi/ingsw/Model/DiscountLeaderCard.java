@@ -1,8 +1,5 @@
 package it.polimi.ingsw.Model;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class DiscountLeaderCard extends LeaderCard {
     private final ResourceType discountResourceType;
     private final int discount;
@@ -17,15 +14,15 @@ public class DiscountLeaderCard extends LeaderCard {
         super(victoryPoints, requirements);
         this.discountResourceType = resourceType;
         this.discount = discount;
+
     }
+
 
     @Override
     public Requirements recalculateRequirements(Requirements requirements) {
-        if (requirements.getResources(discountResourceType) > 0) {
-            Map<ResourceType, Integer> updatedRequirements = new HashMap<>();
-            //TODO: ricopiare requirements senza la risorsa scontata
-            return new Requirements(updatedRequirements, null);
-        } else
-            return requirements;
+        requirements = super.recalculateRequirements(requirements);
+        if(isActive())
+            requirements.removeResourceRequirement(discountResourceType,discount);
+        return requirements;
     }
 }
