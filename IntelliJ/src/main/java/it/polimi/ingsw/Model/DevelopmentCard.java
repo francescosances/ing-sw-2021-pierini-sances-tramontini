@@ -1,14 +1,13 @@
 package it.polimi.ingsw.Model;
 
-import Utils.Pair;
-import Utils.Serializable;
+import it.polimi.ingsw.Utils.Pair;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class DevelopmentCard extends Card implements Producer, Serializable<DevelopmentCard> {
+public class DevelopmentCard extends Card implements Producer {
 
     public static final int MAX_LEVEL = 3;
 
@@ -58,18 +57,5 @@ public class DevelopmentCard extends Card implements Producer, Serializable<Deve
     @Override
     public void produce() {
 
-    }
-
-    @Override
-    public JsonObject toJSON() {
-        JsonObject ret = new JsonObject();
-        ret.addProperty("level",level);
-        return ret;
-    }
-
-    @Override
-    public DevelopmentCard fromJSON(String jsonObject) {
-        Gson gson = new Gson();
-        return gson.fromJson(jsonObject,DevelopmentCard.class);
     }
 }

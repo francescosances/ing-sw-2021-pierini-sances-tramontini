@@ -1,7 +1,7 @@
 package it.polimi.ingsw.Model;
 
-import Utils.Pair;
-import Utils.Triple;
+import it.polimi.ingsw.Utils.Pair;
+import it.polimi.ingsw.Utils.Triple;
 
 import java.util.HashMap;
 import java.util.Map;

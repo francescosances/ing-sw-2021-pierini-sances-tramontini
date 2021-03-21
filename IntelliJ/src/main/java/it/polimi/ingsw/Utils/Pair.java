@@ -1,4 +1,4 @@
-package Utils;
+package it.polimi.ingsw.Utils;
 
 public class Pair <E,T>{
 
