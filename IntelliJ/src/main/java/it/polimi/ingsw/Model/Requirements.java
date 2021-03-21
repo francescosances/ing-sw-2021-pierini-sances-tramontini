@@ -1,35 +1,55 @@
 package it.polimi.ingsw.Model;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public class Requirements {
 
     private Map<ResourceType,Integer> resources;
 
+    /**
+     * tipo, livello, quantita richiesta
+     */
     private Map<DevelopmentColorType,Map<Integer,Integer>> developmentCards;
 
-    public Requirements (Map<ResourceType,Integer> resources, Map<DevelopmentColorType,Map<Integer,Integer>> developmentCards){
-        if (resources != null) {
-            this.resources = new HashMap<>();
-            this.resources.putAll(resources);
-        } else
-            this.resources = null;
+    protected Requirements(){
+        resources = new HashMap<>();
+        developmentCards = new HashMap<>();
+    }
 
-        if (developmentCards != null){
-            this.developmentCards = new HashMap<>();
+    public Requirements (Map<ResourceType,Integer> resources, Map<DevelopmentColorType,Map<Integer,Integer>> developmentCards){
+        this();
+        if (resources != null)
+            this.resources.putAll(resources);
+
+        if (developmentCards != null)
             developmentCards.forEach((k, v) -> {
-                HashMap x = new HashMap<Integer,Integer>();
-                x.putAll(v);
+                Map<Integer,Integer> x = new HashMap<>(v);
                 this.developmentCards.put(k, x);
             });
-        } else
-            this.developmentCards = null;
     }
 
     public boolean satisfied(PlayerBoard player){
-        //TODO: controllare requisiti
-        return false;
+        //TODO: controllare requisiti risorse
+
+        //DevelopmentCards check
+        for(Map.Entry<DevelopmentColorType,Map<Integer,Integer>> entry: developmentCards.entrySet()){
+            Map<Integer,Integer> temp = entry.getValue();
+            for(Map.Entry<Integer,Integer> x : temp.entrySet()) {
+                int toBeFound = x.getValue();
+                for(DevelopmentCardSlot slot : player.getDevelopmentCardSlots()){
+                    try {
+                        if(slot.getFromLevel(x.getKey()).getColor() == entry.getKey())
+                            toBeFound--;
+                    }catch (IllegalStateException ignored){}
+                }
+                if(toBeFound > 0)
+                    return false;
+            }
+        }
+        return true;
     }
 
     public int getResources(ResourceType resource){
