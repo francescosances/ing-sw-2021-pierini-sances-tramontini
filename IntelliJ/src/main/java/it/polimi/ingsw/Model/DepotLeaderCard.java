@@ -5,7 +5,7 @@ public class DepotLeaderCard extends LeaderCard implements Depot {
     private int occupied;
     private final int SIZE;
 
-    private DepotLeaderCard(int victoryPoints, Requirements requirements, ResourceType resourceType){
+    public DepotLeaderCard(int victoryPoints, Requirements requirements, ResourceType resourceType){
         super(victoryPoints, requirements);
         this.resourceType = resourceType;
         SIZE = 2;
