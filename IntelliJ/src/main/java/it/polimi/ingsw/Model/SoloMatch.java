@@ -6,6 +6,7 @@ public class SoloMatch extends Match{
     private Deck<ActionToken> actionTokens;
 
     public SoloMatch(){
+        super();
         blackCross = new FaithTrack(this);
         actionTokens = new Deck<>();
         actionTokens.add(new ActionToken(DevelopmentColorType.BLUE));

@@ -1,5 +1,8 @@
 package it.polimi.ingsw.Model;
 
+import Utils.Triple;
+import com.sun.tools.javac.util.Pair;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +18,21 @@ public class Requirements implements Cloneable{
     protected Requirements(){
         resources = new HashMap<>();
         developmentCards = new HashMap<>();
+    }
+
+    public Requirements(Triple<DevelopmentColorType,Integer,Integer> ... developmentCards){
+        this();
+        for(Triple<DevelopmentColorType,Integer,Integer> x: developmentCards){
+            this.developmentCards.putIfAbsent(x.getFirst(),new HashMap<>());
+            this.developmentCards.get(x.getFirst()).put(x.getSecond(),x.getThird());
+        }
+    }
+
+    public Requirements(Pair<ResourceType,Integer> ... resources){
+        this();
+        for(Pair<ResourceType,Integer> x: resources){
+            this.resources.put(x.fst,x.snd);
+        }
     }
 
     public Requirements (Map<ResourceType,Integer> resources, Map<DevelopmentColorType,Map<Integer,Integer>> developmentCards){
