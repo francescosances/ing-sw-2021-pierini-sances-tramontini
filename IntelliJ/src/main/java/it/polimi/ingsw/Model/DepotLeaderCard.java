@@ -1,7 +1,7 @@
 package it.polimi.ingsw.Model;
 
 public class DepotLeaderCard extends LeaderCard implements Depot {
-    private ResourceType resourceType;
+    private final ResourceType resourceType;
     private int occupied;
     private final int SIZE;
 
@@ -12,23 +12,32 @@ public class DepotLeaderCard extends LeaderCard implements Depot {
         occupied = 0;
     }
 
+    @Override
     public ResourceType getResourceType(){
         return resourceType;
     }
 
+    @Override
     public int getSize(){
         return SIZE;
     }
 
+    @Override
     public int getOccupied(){
         return occupied;
     }
 
-    public void addResource(){
+    @Override
+    public void addResource(ResourceType res){
+        if (this.resourceType != res)
+            throw new IllegalArgumentException("Resource Type not compatible with depot");
         occupied++;
     }
 
+    @Override
     public void removeResource(){
+        if (this.occupied == 0)
+            throw new IndexOutOfBoundsException();
         occupied--;
     }
 
