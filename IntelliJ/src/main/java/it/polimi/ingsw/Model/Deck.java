@@ -42,6 +42,10 @@ public class Deck <E> implements Iterable<E>{
         return temp;
     }
 
+    public void add(E item){
+        cards.add(item);
+    }
+
     public int size(){
         return cards.size();
     }

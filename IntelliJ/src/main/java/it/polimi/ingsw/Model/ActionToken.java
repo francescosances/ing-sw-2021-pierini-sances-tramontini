@@ -5,11 +5,11 @@ public class ActionToken {
     private DevelopmentColorType developmentCard;
     private int blackCrossSpaces;
 
-    public void ActionToken(DevelopmentColorType developmentCard){
+    public ActionToken(DevelopmentColorType developmentCard){
         this.developmentCard = developmentCard;
     }
 
-    public void ActionToken(int blackCrossSpaces){
+    public ActionToken(int blackCrossSpaces){
         this.blackCrossSpaces = blackCrossSpaces;
     }
 

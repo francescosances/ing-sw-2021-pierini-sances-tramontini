@@ -5,6 +5,18 @@ public class SoloMatch extends Match{
     private FaithTrack blackCross;
     private Deck<ActionToken> actionTokens;
 
+    public SoloMatch(){
+        blackCross = new FaithTrack(this);
+        actionTokens = new Deck<>();
+        actionTokens.add(new ActionToken(DevelopmentColorType.BLUE));
+        actionTokens.add(new ActionToken(DevelopmentColorType.GREEN));
+        actionTokens.add(new ActionToken(DevelopmentColorType.YELLOW));
+        actionTokens.add(new ActionToken(DevelopmentColorType.PURPLE));
+        actionTokens.add(new ActionToken(2));
+        actionTokens.add(new ActionToken(2));
+        actionTokens.add(new ActionToken(1));
+    }
+
     public void moveBlackCross(int spaces) throws EndGameException {
         for(int i=0;i<spaces;i++){
             blackCross.moveMarker();
