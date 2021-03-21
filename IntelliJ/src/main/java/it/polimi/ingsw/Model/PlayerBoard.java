@@ -1,6 +1,8 @@
 package it.polimi.ingsw.Model;
 
 
+import java.util.Objects;
+
 public class PlayerBoard {
 
     private Match match;
@@ -9,7 +11,8 @@ public class PlayerBoard {
 
     private DevelopmentCardSlot[] developmentCardSlots;
 
-    public PlayerBoard(){
+    public PlayerBoard(String username){
+        this.username = username;
         developmentCardSlots = new DevelopmentCardSlot[3];
     }
 
@@ -54,5 +57,13 @@ public class PlayerBoard {
 
     public DevelopmentCardSlot[] getDevelopmentCardSlots(){
         return developmentCardSlots;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PlayerBoard that = (PlayerBoard) o;
+        return username.equals(that.username);
     }
 }

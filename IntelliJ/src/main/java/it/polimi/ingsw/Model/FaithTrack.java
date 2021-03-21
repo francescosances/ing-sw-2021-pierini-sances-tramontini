@@ -1,5 +1,7 @@
 package it.polimi.ingsw.Model;
 
+import java.util.Arrays;
+
 public class FaithTrack {
 
     public static final int[] POPE_SPACES = {8,16,24};
@@ -8,6 +10,7 @@ public class FaithTrack {
     private Match match;
     private int faithMarker;
     private PopeFavorTile[] popeFavorTiles;
+    private boolean[] vaticanReports;
 
     public FaithTrack(Match match){
         this.match = match;
@@ -16,6 +19,8 @@ public class FaithTrack {
             popeFavorTiles[i] = new PopeFavorTile();
         }
         faithMarker = 0;
+        vaticanReports = new boolean[POPE_SPACES.length];
+        Arrays.fill(vaticanReports,false);
     }
 
     private boolean isPopeSpace(int space){
@@ -61,11 +66,12 @@ public class FaithTrack {
 
     public void moveMarker() throws EndGameException {
         faithMarker++;
-        if(isPopeSpace(faithMarker)) {
+        if(isPopeSpace(faithMarker) && !vaticanReports[match.getVaticanReportsCount()]) {
+            vaticanReports[match.getVaticanReportsCount()] = true;
             match.vaticanReport(faithMarker);
-            if(faithMarker == SIZE)
-                throw new EndGameException();
         }
+        if(faithMarker == SIZE)
+            throw new EndGameException();
 
     }
 
