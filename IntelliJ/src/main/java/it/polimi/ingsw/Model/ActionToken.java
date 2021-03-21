@@ -15,7 +15,7 @@ public class ActionToken {
 
     public void show(SoloMatch match) throws EndGameException {
         if(developmentCard != null)
-            match.discardDevelopmentCard(developmentCard);
+            match.discardDevelopmentCards(developmentCard);
         else {
             match.moveBlackCross(blackCrossSpaces);
             if (blackCrossSpaces == 1)

@@ -4,6 +4,8 @@ import java.util.Map;
 
 public class DevelopmentCard extends Card implements Producer {
 
+    public static final int MAX_LEVEL = 3;
+
     private final Requirements cost;
     private final int level;
     private final DevelopmentColorType color;

@@ -18,8 +18,16 @@ public class SoloMatch extends Match{
         return blackCross;
     }
 
-    public void discardDevelopmentCard(DevelopmentColorType color){
-        //TODO
+    public void discardDevelopmentCards(DevelopmentColorType color){
+        for(int j=0;j<2;j++) {
+            for (int i = 0; i < DevelopmentCard.MAX_LEVEL; i++) {
+                Deck<DevelopmentCard> temp = getDevelopmentCardDeck(color, i);
+                if (!temp.isEmpty()) {
+                    temp.remove(0);
+                    return;
+                }
+            }
+        }
     }
 
 }

@@ -42,4 +42,12 @@ public class Deck <E> implements Iterable<E>{
         return temp;
     }
 
+    public int size(){
+        return cards.size();
+    }
+
+    public boolean isEmpty(){
+        return cards.isEmpty();
+    }
+
 }
