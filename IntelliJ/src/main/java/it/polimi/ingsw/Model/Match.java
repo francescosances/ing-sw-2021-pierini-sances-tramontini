@@ -153,7 +153,7 @@ public class Match {
             throw new IllegalStateException("Maximum number of players reached");
         if(players.stream().anyMatch(playerBoard -> playerBoard.getUsername().equals(username)))
             throw new IllegalArgumentException("Username already inserted");
-        PlayerBoard temp = new PlayerBoard(username);
+        PlayerBoard temp = new PlayerBoard(username,this);
         players.add(temp);
         return temp;
     }

@@ -9,7 +9,19 @@ public enum MarbleType {
     RED;
 
     public Resource toResource(){
-        return null;
-        //TODO: return resource
+        switch (this) {
+            case GREY:
+                return ResourceType.STONE;
+            case BLUE:
+                return ResourceType.SHIELD;
+            case PURPLE:
+                return ResourceType.SERVANT;
+            case YELLOW:
+                return ResourceType.COIN;
+            case RED:
+                return NonPhysicalResourceType.FAITH_POINT;
+            default:
+                return NonPhysicalResourceType.VOID;
+        }
     }
 }

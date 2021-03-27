@@ -4,9 +4,11 @@ import it.polimi.ingsw.Utils.Pair;
 import it.polimi.ingsw.Utils.Triple;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.function.Consumer;
 
-public class Requirements implements Cloneable{
+public class Requirements implements Cloneable,Iterable<Map.Entry<ResourceType,Integer>>{
 
     private Map<ResourceType,Integer> resources;
 
@@ -48,7 +50,11 @@ public class Requirements implements Cloneable{
     }
 
     public boolean satisfied(PlayerBoard player){
-        //TODO: controllare requisiti risorse
+        Requirements playerResources = player.getAllResources();
+        for(Map.Entry<ResourceType,Integer> x : playerResources){
+            if(getResources(x.getKey()) > x.getValue())
+                return false;
+        }
 
         //DevelopmentCards check
         for(Map.Entry<DevelopmentColorType,Map<Integer,Integer>> entry: developmentCards.entrySet()){
@@ -70,6 +76,13 @@ public class Requirements implements Cloneable{
 
     public int getResources(ResourceType resource){
         return resources.get(resource);
+    }
+
+    public static Requirements sum(Requirements first,Requirements second){
+        Requirements ret = (Requirements) first.clone();
+        second.resources.forEach(ret::addResourceRequirement);
+        second.developmentCards.forEach((colorType,k)-> k.forEach((level, num)-> ret.addDevelopmentCardRequirement(colorType,level,num)));
+        return ret;
     }
 
     public void addResourceRequirement(ResourceType resource,int quantity){
@@ -106,6 +119,11 @@ public class Requirements implements Cloneable{
             ris.developmentCards.put(entry.getKey(),temp);
         }
         return ris;
+    }
+
+    @Override
+    public Iterator<Map.Entry<ResourceType, Integer>> iterator() {
+        return resources.entrySet().iterator();
     }
 
 }

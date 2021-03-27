@@ -1,18 +1,18 @@
 package it.polimi.ingsw.Model;
 
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.Arrays;
 
 public class Warehouse implements Storage{
     private final ArrayList<Depot> depots;
     private final ArrayList<Resource> toBeStored;
 
     public Warehouse(){
-        depots = new ArrayList<Depot>();
+        depots = new ArrayList<>();
         depots.add(new StandardDepot(1));
         depots.add(new StandardDepot(2));
         depots.add(new StandardDepot(3));
-        toBeStored = new ArrayList<Resource>();
+        toBeStored = new ArrayList<>();
     }
 
     public void addResource(int depotNumber, ResourceType res, int num) {
@@ -21,20 +21,22 @@ public class Warehouse implements Storage{
     }
 
     @Override
-    public void removeResources(Map<ResourceType, Integer> resources) {
-            resources.forEach((res, num) -> {
-                int i = num;
+    public Requirements removeResources(Requirements requirements) {
+        Requirements newRequirements = (Requirements) requirements.clone();
+            requirements.forEach((res) -> {
+                int toBeRemoved = res.getValue();
                 for (Depot dep : depots)
-                    while (dep.getOccupied() > 0 && dep.getResourceType() == res && i > 0){
+                    while (dep.getOccupied() > 0 && dep.getResourceType() == res.getKey() && toBeRemoved > 0){
                         dep.removeResource();
-                        i--;
+                        toBeRemoved--;
+                        newRequirements.removeResourceRequirement(res.getKey(),1);
                     }
             });
+        return newRequirements;
     }
 
     public void toBeStored(Resource[] resources) {
-        for (Resource res : resources)
-            toBeStored.add((ResourceType) res);
+        toBeStored.addAll(Arrays.asList(resources));
     }
 
     public void swapDepots(int first, int second) {
@@ -62,6 +64,15 @@ public class Warehouse implements Storage{
 
     public Resource popResourceToBeStored(){
         return toBeStored.remove(toBeStored.size() - 1);
+    }
+
+    public Requirements getAllResources(){
+        Requirements ret = new Requirements();
+        for(Depot x:depots){
+            if(x.getOccupied() > 0)
+                ret.addResourceRequirement(x.getResourceType(),x.getOccupied());
+        }
+        return ret;
     }
 
 }

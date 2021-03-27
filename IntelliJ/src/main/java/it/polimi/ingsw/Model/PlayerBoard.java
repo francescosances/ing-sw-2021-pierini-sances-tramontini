@@ -1,18 +1,22 @@
 package it.polimi.ingsw.Model;
 
-
-import java.util.Objects;
-
 public class PlayerBoard {
 
     private Match match;
-    private String username;
-    private FaithTrack faithTrack;
+    protected String username;
+    protected FaithTrack faithTrack;
+
+    protected Warehouse warehouse;
+    protected Strongbox strongbox;
 
     private DevelopmentCardSlot[] developmentCardSlots;
 
-    public PlayerBoard(String username){
+    public PlayerBoard(String username,Match match){
+        this.match = match;
         this.username = username;
+        warehouse = new Warehouse();
+        strongbox = new Strongbox();
+        faithTrack = new FaithTrack(match);
         developmentCardSlots = new DevelopmentCardSlot[3];
     }
 
@@ -23,14 +27,16 @@ public class PlayerBoard {
             resources = match.getMarket().chooseColumn(rowOrColumn);
         }else
             resources = match.getMarket().chooseRow(rowOrColumn);
-        //TODO: stoccare risorse
+        warehouse.toBeStored(resources);
     }
 
     public void buyDevelopmentCard(DevelopmentCard developmentCard){
         if(!developmentCard.getCost().satisfied(this)){
             throw new IllegalArgumentException("Card not purchasable");
         }
-        //TODO:scalare risorse per l'acquisto
+        Requirements requirements = developmentCard.getCost();
+        requirements = warehouse.removeResources(requirements);
+        strongbox.removeResources(requirements);
     }
 
     public void gainFaithPoints(int points) throws EndGameException {
@@ -57,6 +63,10 @@ public class PlayerBoard {
 
     public DevelopmentCardSlot[] getDevelopmentCardSlots(){
         return developmentCardSlots;
+    }
+
+    public Requirements getAllResources(){
+        return Requirements.sum(strongbox.getAllResources(),warehouse.getAllResources());
     }
 
     @Override
