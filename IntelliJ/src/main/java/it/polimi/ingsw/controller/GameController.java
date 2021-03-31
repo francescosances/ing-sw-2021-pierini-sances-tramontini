@@ -1,7 +1,10 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Match;
+import it.polimi.ingsw.view.VirtualView;
 
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,12 +29,11 @@ public class GameController {
         currentPlayerIndex = (currentPlayerIndex+1)%players.size();
         if(!players.get(currentPlayerIndex).isActive()) //TODO: controllare che non siano tutti disconnessi
             nextTurn();
-
-        //TODO: manda messaggio "è il tuo turno" al giocatore attivo
+        players.get(currentPlayerIndex++).getVirtualView().yourTurn();
     }
 
-    public PlayerController addPlayer(String username){
-        PlayerController playerController = new PlayerController(username,match.addPlayer(username));
+    public PlayerController addPlayer(String username, PrintWriter outputStream){
+        PlayerController playerController = new PlayerController(username,match.addPlayer(username),new VirtualView(outputStream));
         players.add(playerController);
         return playerController;
     }
@@ -53,6 +55,7 @@ public class GameController {
             if(user.getUsername().equals(username)) {
                 user.activate();
             }
+            user.getVirtualView().userConnected(username);
         });
     }
 
@@ -61,6 +64,7 @@ public class GameController {
             if(user.getUsername().equals(username)) {
                 user.deactivate();
             }
+            user.getVirtualView().userDisconnected(username);
         });
     }
 

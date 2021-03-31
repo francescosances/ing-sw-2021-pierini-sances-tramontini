@@ -1,6 +1,8 @@
 package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.controller.GameController;
+import it.polimi.ingsw.controller.MessageReader;
+import it.polimi.ingsw.view.VirtualView;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -41,7 +43,7 @@ public class ClientHandler implements Runnable {
             //TODO: scegliere il numero di persone per partita oppure permettere all'host di avviarla
             while(!Thread.currentThread().isInterrupted()){
                String msg = in.next();
-             //  server.getGameController(username).messageReceived(msg);
+               server.getGameController(username).messageReceived(msg);
             }
 
             //close connections
@@ -79,5 +81,6 @@ public class ClientHandler implements Runnable {
             chooseMatch();
         }
     }
+
 
 }
