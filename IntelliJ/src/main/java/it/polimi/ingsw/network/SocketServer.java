@@ -11,9 +11,9 @@ public class SocketServer {
 
     protected Server server;
 
-    public SocketServer(int port,Server server){
+    public SocketServer(int port){
         this.port = port;
-        this.server = server;
+        this.server = new Server();
     }
 
     public void startServer() throws IOException {
@@ -26,7 +26,7 @@ public class SocketServer {
             System.err.println(e.getMessage()); //port not available
             return;
         }
-        System.out.println("Server ready");
+        System.out.println("Server ready on port "+port);
         while (true){
             try{
                 Socket socket = serverSocket.accept();
