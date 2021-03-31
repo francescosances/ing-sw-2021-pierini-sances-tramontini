@@ -1,5 +1,5 @@
 import it.polimi.ingsw.Controller.GameController;
-import it.polimi.ingsw.View.CLI.CLIController;
+import it.polimi.ingsw.view.cli.CLIController;
 
 public class App
 {
