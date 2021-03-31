@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.cli;
 
-import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.model.Match;
+import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.view.View;
 
 import java.io.PrintStream;
@@ -9,12 +9,12 @@ import java.util.Scanner;
 
 public class CLIController implements View {
 
-    protected GameController gameController;
+    protected Client client;
     private Scanner input;
     private PrintStream output;
 
-    public CLIController(GameController gameController){
-        this.gameController = gameController;//TODO: deve passare dal socket
+    public CLIController(Client client){
+        this.client = client;//TODO: deve passare dal socket
         this.input = new Scanner(System.in);
         this.output = System.out;
     }
