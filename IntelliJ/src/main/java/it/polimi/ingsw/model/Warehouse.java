@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
 public class Warehouse implements Storage{
     private final ArrayList<Depot> depots;
@@ -23,15 +24,15 @@ public class Warehouse implements Storage{
     @Override
     public Requirements removeResources(Requirements requirements) {
         Requirements newRequirements = (Requirements) requirements.clone();
-            requirements.forEach((res) -> {
-                int toBeRemoved = res.getValue();
-                for (Depot dep : depots)
-                    while (dep.getOccupied() > 0 && dep.getResourceType() == res.getKey() && toBeRemoved > 0){
-                        dep.removeResource();
-                        toBeRemoved--;
-                        newRequirements.removeResourceRequirement(res.getKey(),1);
-                    }
-            });
+        for (Map.Entry<Resource, Integer> res : requirements) {
+            int toBeRemoved = res.getValue();
+            for (Depot dep : depots)
+                while (dep.getOccupied() > 0 && dep.getResourceType() == res.getKey() && toBeRemoved > 0) {
+                    dep.removeResource();
+                    toBeRemoved--;
+                    newRequirements.removeResourceRequirement((ResourceType) res.getKey(), 1);
+                }
+        }
         return newRequirements;
     }
 

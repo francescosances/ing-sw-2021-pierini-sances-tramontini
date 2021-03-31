@@ -7,17 +7,17 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class Requirements implements Cloneable,Iterable<Map.Entry<ResourceType,Integer>>{
+public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Integer>> {
 
-    private Map<ResourceType,Integer> resources;
+    private Map<Resource, Integer> resources;
 
     /**
      * tipo, livello, quantita richiesta
      */
     private Map<DevelopmentColorType,Map<Integer,Integer>> developmentCards;
 
-    protected Requirements(){
-        resources = new HashMap<>();
+    public Requirements(){
+        resources = new HashMap<Resource, Integer>();
         developmentCards = new HashMap<>();
     }
 
@@ -29,14 +29,14 @@ public class Requirements implements Cloneable,Iterable<Map.Entry<ResourceType,I
         }
     }
 
-    public Requirements(Pair<ResourceType,Integer>... resources){
+    public Requirements(Pair<Resource,Integer>... resources){
         this();
-        for(Pair<ResourceType,Integer> x: resources){
+        for(Pair<Resource,Integer> x: resources){
             this.resources.put(x.fst,x.snd);
         }
     }
 
-    public Requirements (Map<ResourceType,Integer> resources, Map<DevelopmentColorType,Map<Integer,Integer>> developmentCards){
+    public Requirements (Map<Resource,Integer> resources, Map<DevelopmentColorType,Map<Integer,Integer>> developmentCards){
         this();
         if (resources != null)
             this.resources.putAll(resources);
@@ -50,8 +50,8 @@ public class Requirements implements Cloneable,Iterable<Map.Entry<ResourceType,I
 
     public boolean satisfied(PlayerBoard player){
         Requirements playerResources = player.getAllResources();
-        for(Map.Entry<ResourceType,Integer> x : playerResources){
-            if(getResources(x.getKey()) > x.getValue())
+        for(Map.Entry<Resource,Integer> x : playerResources){
+            if(getResources((ResourceType) x.getKey()) > x.getValue())
                 return false;
         }
 
@@ -73,8 +73,8 @@ public class Requirements implements Cloneable,Iterable<Map.Entry<ResourceType,I
         return true;
     }
 
-    public int getResources(ResourceType resource){
-        return resources.get(resource);
+    public int getResources(Resource resource){
+        return resources.getOrDefault(resource, 0);
     }
 
     public static Requirements sum(Requirements first,Requirements second){
@@ -84,8 +84,8 @@ public class Requirements implements Cloneable,Iterable<Map.Entry<ResourceType,I
         return ret;
     }
 
-    public void addResourceRequirement(ResourceType resource,int quantity){
-        resources.put(resource,resources.getOrDefault(resource,0)+quantity);
+    public void addResourceRequirement(Resource resource, int quantity){
+        resources.put(resource, resources.getOrDefault(resource,0)+quantity);
     }
 
     public void removeResourceRequirement(ResourceType resource,int quantity){
@@ -101,7 +101,7 @@ public class Requirements implements Cloneable,Iterable<Map.Entry<ResourceType,I
 
     public int getDevelopmentCards(DevelopmentColorType color,int level){
         Map<Integer,Integer> temp = developmentCards.get(color);
-        if(temp == null)
+        if(temp == null || temp.get(level) == null)
             return 0;
         return temp.get(level);
     }
@@ -121,7 +121,7 @@ public class Requirements implements Cloneable,Iterable<Map.Entry<ResourceType,I
     }
 
     @Override
-    public Iterator<Map.Entry<ResourceType, Integer>> iterator() {
+    public Iterator<Map.Entry<Resource, Integer>> iterator() {
         return resources.entrySet().iterator();
     }
 

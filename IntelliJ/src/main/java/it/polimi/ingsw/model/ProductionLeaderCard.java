@@ -3,7 +3,7 @@ package it.polimi.ingsw.model;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProductionLeaderCard extends LeaderCard{
+public class ProductionLeaderCard extends LeaderCard implements Producer{
     private final Requirements productionCost;
     private final Map<Resource, Integer>  productionGain;
 
@@ -15,6 +15,7 @@ public class ProductionLeaderCard extends LeaderCard{
         productionGain.put(NonPhysicalResourceType.FAITH_POINT,1);
     }
 
+    @Override
     public void produce(){}
 
 }

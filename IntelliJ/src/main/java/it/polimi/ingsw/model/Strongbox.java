@@ -17,15 +17,15 @@ public class Strongbox implements Storage{
     @Override
     public Requirements removeResources(Requirements resources){
         Requirements newRequirements = (Requirements) resources.clone();
-        resources.forEach((res) -> {
+        for (Map.Entry<Resource, Integer> res : resources) {
             int toBeRemoved = res.getValue();
-            int previousValue = getResourcesNum(res.getKey());
-            if(previousValue < toBeRemoved){
+            int previousValue = getResourcesNum((ResourceType) res.getKey());
+            if (previousValue < toBeRemoved) {
                 toBeRemoved = previousValue;
             }
-            this.resources.put(res.getKey(), previousValue-toBeRemoved);
-            newRequirements.removeResourceRequirement(res.getKey(),toBeRemoved);
-        });
+            this.resources.put((ResourceType) res.getKey(), previousValue - toBeRemoved);
+            newRequirements.removeResourceRequirement((ResourceType) res.getKey(), toBeRemoved);
+        }
         return newRequirements;
     }
 

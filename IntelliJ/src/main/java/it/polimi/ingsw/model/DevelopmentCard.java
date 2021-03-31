@@ -14,21 +14,21 @@ public class DevelopmentCard extends Card implements Producer {
     private DevelopmentColorType color;
 
     private Requirements productionCost;
-    private Map<Resource,Integer> productionGain;
+    private Requirements productionGain;
 
     private DevelopmentCard(int victoryPoints){
         super(victoryPoints);
     }
 
-    public DevelopmentCard(int victoryPoints, Requirements requirements, int level, DevelopmentColorType color, Requirements productionCost, Pair<Resource,Integer> ... productionGain) {
+    public DevelopmentCard(int victoryPoints, Requirements cost, int level, DevelopmentColorType color, Requirements productionCost, Pair<Resource,Integer> ... productionGain) {
         super(victoryPoints);
-        this.cost = requirements;
+        this.cost = cost;
         this.level = level;
         this.color = color;
         this.productionCost = productionCost;
-        this.productionGain = new HashMap<>();
+        this.productionGain = new Requirements();
         for(Pair<Resource,Integer> x : productionGain){
-            this.productionGain.put(x.fst,x.snd);
+            this.productionGain.addResourceRequirement(x.fst,x.snd);
         }
     }
 
@@ -48,7 +48,7 @@ public class DevelopmentCard extends Card implements Producer {
         return productionCost;
     }
 
-    public Map<Resource, Integer> getProductionGain() {
+    public Requirements getProductionGain() {
         return productionGain;
     }
 
