@@ -1,10 +1,6 @@
-import it.polimi.ingsw.network.Client;
-import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.SocketServer;
-import it.polimi.ingsw.view.cli.CLIController;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 public class ServerMain
 {

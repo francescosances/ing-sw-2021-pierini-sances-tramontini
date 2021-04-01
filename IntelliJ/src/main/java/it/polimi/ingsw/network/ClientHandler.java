@@ -43,7 +43,7 @@ public class ClientHandler implements Runnable {
             //TODO: scegliere il numero di persone per partita oppure permettere all'host di avviarla
             while(!Thread.currentThread().isInterrupted()){
                String msg = in.next();
-               server.getGameController(username).messageReceived(msg);
+             //  server.getGameController(username).messageReceived(msg);
             }
 
             //close connections

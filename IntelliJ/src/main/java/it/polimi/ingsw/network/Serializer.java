@@ -66,8 +66,6 @@ public class Serializer {
     }
 
 
-
-
     public DevelopmentCard deserializeDevelopmentCard(File file) throws IOException {
         Reader reader = Files.newBufferedReader(Paths.get(file.getPath()));
         RequirementsCreator requirementsCreator = new RequirementsCreator();
@@ -77,7 +75,6 @@ public class Serializer {
         reader.close();
 
         return card;
-
     }
 
     public List<Deck<DevelopmentCard>> deserializeDevelopmentCardDecks(File file) throws IOException {
@@ -89,7 +86,6 @@ public class Serializer {
         reader.close();
 
         return deckList;
-
     }
 
 

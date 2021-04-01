@@ -54,13 +54,13 @@ public class PlayerController {
             playerBoard.addLeaderCard(this.leaderCardList.get(cardsIndex));
         }
     }
-
+/*
     public void messageReceived(Message message){
         //Quelli che seguono sono esempi
         if(message.getType == "scelta carta leader"){
             this.sceltaCartaLeader(message.sceltaFatta);
         }
-    }
+    }*/
 
     public VirtualView getVirtualView(){
         return virtualView;
