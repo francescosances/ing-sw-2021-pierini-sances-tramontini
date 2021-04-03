@@ -7,16 +7,15 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class SocketServer {
-    private int port;
-
-    protected Server server;
+    private final int port;
+    private final Server server;
 
     public SocketServer(int port){
-        this.port = port;
         this.server = new Server();
+        this.port = port;
     }
 
-    public void startServer() throws IOException {
+    public void start() throws IOException {
         //It creates threads when necessary, otherwise it re-uses existing one when possible
         ExecutorService executor = Executors.newCachedThreadPool();
         ServerSocket serverSocket;
@@ -26,10 +25,11 @@ public class SocketServer {
             System.err.println(e.getMessage()); //port not available
             return;
         }
-        System.out.println("Server ready on port "+port);
+        server.log("Server ready on port " + port);
         while (true){
             try{
                 Socket socket = serverSocket.accept();
+                server.log("User connected");
                 executor.submit(new ClientHandler(socket,server));
             }catch(IOException e){
                 e.printStackTrace();

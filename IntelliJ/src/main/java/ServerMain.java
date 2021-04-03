@@ -8,7 +8,6 @@ public class ServerMain
         int serverPort = 8000;
 
         SocketServer socketServer = new SocketServer(serverPort);
-        socketServer.startServer();
-
+        socketServer.start();
     }
 }
