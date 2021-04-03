@@ -1,16 +1,22 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.Match;
+import it.polimi.ingsw.utils.Triple;
+
+import java.util.List;
 
 public interface View {
 
-    public void resumeMatch(Match match);
+    // show generic message
+    void showMessage(String message);
 
-    public void yourTurn();
+    void askLobby(List<Triple<String, Integer, Integer>> availableMatches);
 
-    public void userConnected(String username);
-    public void userDisconnected(String username);
+    void resumeMatch(Match match);
 
-    public void askUsername();
+    void yourTurn();
+
+    void userConnected(String username);
+    void userDisconnected(String username);
 
 }

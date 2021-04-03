@@ -1,6 +1,8 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Match;
+import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.network.ClientHandler;
 import it.polimi.ingsw.view.VirtualView;
 
 import java.io.OutputStream;
@@ -32,8 +34,8 @@ public class GameController {
         players.get(currentPlayerIndex++).getVirtualView().yourTurn();
     }
 
-    public PlayerController addPlayer(String username, PrintWriter outputStream){
-        PlayerController playerController = new PlayerController(username,match.addPlayer(username),new VirtualView(outputStream));
+    public PlayerController addPlayer(String username, ClientHandler clientHandler){
+        PlayerController playerController = new PlayerController(username,match.addPlayer(username),new VirtualView(clientHandler));
         players.add(playerController);
         return playerController;
     }

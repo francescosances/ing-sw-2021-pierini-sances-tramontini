@@ -1,39 +1,51 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.Match;
+import it.polimi.ingsw.network.ClientHandler;
+import it.polimi.ingsw.network.Message;
+import it.polimi.ingsw.network.MessageType;
+import it.polimi.ingsw.utils.Triple;
 
-import java.io.PrintWriter;
+import java.util.List;
 
-public class VirtualView implements View{
 
-    protected PrintWriter out;
+public class VirtualView implements View {
+    private final ClientHandler clientHandler;
 
-    public VirtualView(PrintWriter out){
-        this.out = out;
+    public VirtualView(ClientHandler clientHandler) { this.clientHandler = clientHandler; }
+
+    private void sendMessage(Message message){ clientHandler.sendMessage(message); }
+
+    @Override
+    public void showMessage(String message) {
+        Message msg = new Message(MessageType.GENERIC);
+        msg.addData("text", message);
+        sendMessage(msg);
+    };
+
+    @Override
+    public void askLobby(List<Triple<String, Integer, Integer>> availableMatches){
+        sendMessage(new Message(/*TODO Messaggio con serializzazione della lista delle partite disponibili */MessageType.LOBBY_INFO, null));
     }
 
     @Override
     public void resumeMatch(Match match) {
-        out.println("Messaggio con serializzazione di un oggetto Match");
+        sendMessage(new Message(/*TODO Messaggio con serializzazione di un oggetto Match */MessageType.MATCH_FULL_STATUS, null));
     }
 
     @Override
     public void yourTurn() {
-        out.println("Messaggio che indica che è il tuo turno");
+        sendMessage(new Message(/*TODO Messaggio che indica che è il tuo turno */null, null));
     }
 
     @Override
     public void userConnected(String username) {
-        out.println("Messaggio che notifica la connessione di un nuovo utente");
+        sendMessage(new Message(/*TODO Messaggio che notifica la connessione di un nuovo utente */null, null));
     }
 
     @Override
     public void userDisconnected(String username) {
-
+        sendMessage(new Message(/*TODO Messaggio che notifica la disconnessione di un utente */null, null));
     }
 
-    @Override
-    public void askUsername() {
-
-    }
 }
