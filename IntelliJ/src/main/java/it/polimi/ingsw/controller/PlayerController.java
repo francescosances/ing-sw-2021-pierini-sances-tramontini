@@ -13,6 +13,8 @@ public class PlayerController {
     protected boolean active;
     private VirtualView virtualView;
 
+    private PlayerStatus currentStatus;
+
     private List<LeaderCard> leaderCardList;
 
     public PlayerController(String username,PlayerBoard playerBoard,VirtualView virtualView){
@@ -20,6 +22,7 @@ public class PlayerController {
         this.playerBoard = playerBoard;
         this.active = true;
         this.virtualView = virtualView;
+        this.currentStatus = PlayerStatus.WAITING;
     }
 
     public boolean isActive() {
@@ -61,6 +64,15 @@ public class PlayerController {
             this.sceltaCartaLeader(message.sceltaFatta);
         }
     }*/
+
+    public void yourTurn(){
+        this.currentStatus = PlayerStatus.YOUR_TURN;
+        virtualView.yourTurn();
+    }
+
+    public void turnEnded(){
+        this.currentStatus = PlayerStatus.WAITING;
+    }
 
     public VirtualView getVirtualView(){
         return virtualView;

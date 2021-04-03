@@ -14,22 +14,28 @@ public class GameController {
     private List<PlayerController> players;
 
     private int currentPlayerIndex;
+    private GameStatus currentStatus;
 
     public GameController(String matchName){
         match = new Match(matchName);
         players = new ArrayList<>();
+        currentStatus = GameStatus.ADDING_PLAYERS;
     }
 
     public void start(){
         currentPlayerIndex = (int) (Math.random() * players.size());
+        currentStatus = currentStatus.next();
         //players.forEach(PlayerController::drawLeaderCards);
     }
 
     public void nextTurn(){
+        players.get(currentPlayerIndex).turnEnded();
         currentPlayerIndex = (currentPlayerIndex+1)%players.size();
-        if(!players.get(currentPlayerIndex).isActive()) //TODO: controllare che non siano tutti disconnessi
+        if(players.stream().noneMatch(PlayerController::isActive))//No one is active
+            return;
+        if(!players.get(currentPlayerIndex).isActive())
             nextTurn();
-        players.get(currentPlayerIndex++).getVirtualView().yourTurn();
+        players.get(currentPlayerIndex++).yourTurn();
     }
 
     public PlayerController addPlayer(String username, PrintWriter outputStream){

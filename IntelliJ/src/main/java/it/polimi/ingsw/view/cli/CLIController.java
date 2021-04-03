@@ -41,6 +41,9 @@ public class CLIController implements View {
 
     @Override
     public void askUsername() {
-
+        System.out.println("Insert username");
+        String username = input.next();
+        //TODO: codificare messaggio di risposta al server con l'username
+        output.println("messaggio con username"+username);
     }
 }
