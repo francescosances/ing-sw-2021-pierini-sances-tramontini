@@ -1,49 +1,98 @@
 package it.polimi.ingsw.view.cli;
 
+import it.polimi.ingsw.controller.ClientController;
 import it.polimi.ingsw.model.Match;
-import it.polimi.ingsw.network.Client;
-import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.utils.Triple;
+import it.polimi.ingsw.view.RealView;
 
+import java.io.IOException;
 import java.io.PrintStream;
+import java.util.List;
 import java.util.Scanner;
 
-public class CLIController implements View {
+public class CLIController implements RealView {
+    private final ClientController clientController;
 
-    protected Client client;
-    private Scanner input;
-    private PrintStream output;
+    private final Scanner input;
+    private final PrintStream output;
 
-    public CLIController(Client client){
-        this.client = client;//TODO: deve passare dal socket
+    public CLIController(ClientController clientController){
+        this.clientController = clientController;
         this.input = new Scanner(System.in);
         this.output = System.out;
     }
 
     @Override
-    public void resumeMatch(Match match) {
+    public void showMessage(String message) {
+        output.println(message);
+    }
 
+    @Override
+    public void init() {
+        output.println("Welcome");
+        askConnection();
+    }
+
+    @Override
+    public void askConnection(){
+        output.print("Insert server address: ");
+        String serverAddress = input.next();
+        output.print("Insert server port: ");
+        int serverPort = input.nextInt();
+        try {
+            clientController.connect(serverAddress, serverPort);
+        } catch (IOException e){
+            output.println("Unable to connect");
+            askConnection();
+        }
+    }
+
+    @Override
+    public void askLogin(){
+        output.print("Insert desired username: ");
+        String username = input.next();
+        clientController.login(username);
+    }
+
+    @Override
+    public void askLobby(List<Triple<String, Integer, Integer>> availableMatches) {
+        // TODO possibilità di aggiornare la lista di lobby disponibili
+        output.println("Create a new match or join one:");
+        output.println("[0] New match");
+        for (int i = 1; i <= availableMatches.size(); i++){
+            output.print("[" + i + "] ");
+            output.print(availableMatches.get(i - 1).getFirst() + "'s match ");
+            output.println("(" + availableMatches.get(i - 1).getSecond() + "/" + availableMatches.get(i - 1).getSecond() + ")");
+        }
+        int choice = input.nextInt();
+        if (choice == 0)
+            clientController.lobbyChoice(null);
+        else if (choice > 0 && choice <= availableMatches.size())
+            clientController.lobbyChoice(availableMatches.get(choice - 1).getFirst());
+        else{
+            output.println("Invalid choice");
+            askLobby(availableMatches);
+        }
+    }
+
+    @Override
+    public void resumeMatch(Match match) {
+        // TODO
     }
 
     @Override
     public void yourTurn() {
-        System.out.println("It's your turn");
+        output.println("It's your turn");
     }
 
     @Override
     public void userConnected(String username) {
-        System.out.println(username+" has joined the match");
+        output.println(username + " has joined the match");
     }
 
     @Override
     public void userDisconnected(String username) {
-        System.err.println(username+" has been disconnected");
+        output.println(username + " has been disconnected");
     }
 
-    @Override
-    public void askUsername() {
-        System.out.println("Insert username");
-        String username = input.next();
-        //TODO: codificare messaggio di risposta al server con l'username
-        output.println("messaggio con username"+username);
-    }
 }

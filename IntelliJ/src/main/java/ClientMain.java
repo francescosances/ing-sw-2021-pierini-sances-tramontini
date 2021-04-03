@@ -8,21 +8,16 @@ public class ClientMain
 {
     public static void main( String[] args )
     {
+        // client, clientController and cli are created
+        Client client = new Client();
+
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Insert server address:");
-        String serverAddress = scanner.next();
-        System.out.println("Insert server port:");
-        int serverPort = scanner.nextInt();
-
-        Client client = new Client(serverAddress,serverPort);
-
         System.out.println("Select 1 for CLI, 2 for GUI:");
-        View controller;
+
+        // start view and show welcome screen
         if(scanner.nextInt() == 1)
-            controller = new CLIController(client);
+            client.startCli();
         else
-            controller = null;//new GUI Controller
-
-
+            client.startGui();
     }
 }
