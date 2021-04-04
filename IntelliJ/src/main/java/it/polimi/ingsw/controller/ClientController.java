@@ -1,11 +1,14 @@
 package it.polimi.ingsw.controller;
 
+import com.google.gson.Gson;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.utils.Message;
+import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cli.CLI;
 
 import java.io.IOException;
+import java.util.List;
 
 public class ClientController {
     private final Client client;
@@ -29,6 +32,7 @@ public class ClientController {
     }
 
     public void handleReceivedMessage(Message message) {
+        Gson gson = new Gson();
         switch (message.getType()) {
             case GENERIC:
                 view.showMessage(message.getData("text"));
@@ -36,9 +40,9 @@ public class ClientController {
                 view.showMessage("Login failed, try with another username");
                 view.askLogin();
             case LOBBY_INFO:
-                // TODO
-                //  deserialize content of message into List<Triple<String, Integer, Integer>> availableMatches
-                //  view.askLobby(availableMatches);
+                String availableMessages = message.getData("availableMatches");
+                List<Triple<String, Integer, Integer>> matches = gson.fromJson(availableMessages, List.class);
+                view.listLobbies(matches);
             default:
                 client.log("Received unexpected message");
         }

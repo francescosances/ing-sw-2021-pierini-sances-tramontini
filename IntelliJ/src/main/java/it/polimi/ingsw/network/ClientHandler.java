@@ -42,9 +42,11 @@ public class ClientHandler implements Runnable {
             socketIn.close();
             socketOut.close();
             socket.close();
-        } catch (IOException e){
+        } catch (IOException e) {
             server.log("Received invalid message");
             server.log(e.getMessage());
+        }catch (Exception e){
+            e.printStackTrace();
         }finally {
            //Client disconnected
             if (username != null) {
@@ -58,7 +60,7 @@ public class ClientHandler implements Runnable {
     public void sendMessage(Message message) {
         socketOut.println(message.serialize());
         socketOut.flush();
-        server.log("Message sent to client");
+        server.log("Message sent to client:\n"+message.serialize());
     }
 
 }

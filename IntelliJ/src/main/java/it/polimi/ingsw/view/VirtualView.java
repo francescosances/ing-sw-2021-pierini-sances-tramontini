@@ -1,12 +1,12 @@
 package it.polimi.ingsw.view;
 
+import com.google.gson.Gson;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.network.ClientHandler;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.utils.Triple;
 
 import java.util.List;
-
 
 public class VirtualView implements View {
     private final ClientHandler clientHandler;
@@ -23,8 +23,11 @@ public class VirtualView implements View {
     };
 
     @Override
-    public void askLobby(List<Triple<String, Integer, Integer>> availableMatches){
-        sendMessage(new Message(/*TODO Messaggio con serializzazione della lista delle partite disponibili */Message.MessageType.LOBBY_INFO, null));
+    public void listLobbies(List<Triple<String, Integer, Integer>> availableMatches){
+        Message message = new Message(Message.MessageType.LOBBY_INFO);
+        Gson gson = new Gson();
+        message.addData("availableMatches",gson.toJson(availableMatches));
+        sendMessage(message);
     }
 
     @Override

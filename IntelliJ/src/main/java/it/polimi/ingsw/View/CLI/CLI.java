@@ -54,7 +54,7 @@ public class CLI implements View {
     }
 
     @Override
-    public void askLobby(List<Triple<String, Integer, Integer>> availableMatches) {
+    public void listLobbies(List<Triple<String, Integer, Integer>> availableMatches) {
         // TODO possibilità di aggiornare la lista di lobby disponibili
         output.println("Create a new match or join one:");
         output.println("[0] New match");
@@ -70,7 +70,7 @@ public class CLI implements View {
             clientController.lobbyChoice(availableMatches.get(choice - 1).getFirst());
         else{
             output.println("Invalid choice");
-            askLobby(availableMatches);
+            listLobbies(availableMatches);
         }
     }
 

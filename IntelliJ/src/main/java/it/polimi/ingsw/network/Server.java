@@ -9,6 +9,7 @@ import it.polimi.ingsw.view.VirtualView;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Server {
@@ -16,15 +17,16 @@ public class Server {
     private final Map<String,GameController> players;
 
     public Server() {
-        players = new HashMap<String, GameController>();
+        players = new HashMap<>();
     }
 
     public GameController getGameController(String username){ return players.get(username); }
 
     public List<GameController> getAvailableMatches(){
         return players.values().stream()
-                .distinct()
+                .filter(Objects::nonNull)
                 .filter(x->!x.isFull())
+                .distinct()
                 .collect(Collectors.toList());
     }
 
@@ -82,17 +84,17 @@ public class Server {
 
     private void connect(String username, ClientHandler clientHandler) {
         players.put(username, null);
-        askLobby(clientHandler);
+        listLobbies(clientHandler);
     }
 
-    private void askLobby(ClientHandler clientHandler) {
-        View view = new VirtualView(clientHandler);
-        // send the user a list of available matches (with num of joined players and size of the match)
-        List<Triple<String, Integer, Integer>> availableMatches = getAvailableMatches().stream()
-                // TODO add getJoinedPlayers and getTotalPlayer methods in Gamecontroller
-                .map(match -> new Triple<String, Integer, Integer>(match.getMatchName(), 1, 4))
-                .collect(Collectors.toList());
-        view.askLobby(availableMatches);
+    private void listLobbies(ClientHandler clientHandler) {
+            View view = new VirtualView(clientHandler);
+            // send the user a list of available matches (with num of joined players and size of the match)
+            List<Triple<String, Integer, Integer>> availableMatches = getAvailableMatches().stream()
+                    // TODO add getJoinedPlayers and getTotalPlayer methods in Gamecontroller
+                    .map(match -> new Triple<>(match.getMatchName(), 1, 4))
+                    .collect(Collectors.toList());
+            view.listLobbies(availableMatches);
     }
 
     private void lobbyChoice(String matchOwner, ClientHandler clientHandler) {
@@ -105,7 +107,7 @@ public class Server {
             View view = new VirtualView(clientHandler);
             if (getGameController(matchOwner) == null || getGameController(matchOwner).isFull()){
                 view.showMessage("Selected match is full or does not exist");
-                askLobby(clientHandler);
+                listLobbies(clientHandler);
             } else {
                 addPlayerToMatch(clientHandler.getUsername(), getGameController(matchOwner));
             }

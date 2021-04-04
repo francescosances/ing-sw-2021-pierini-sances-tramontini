@@ -10,7 +10,7 @@ public interface View {
     // show generic message
     void showMessage(String message);
 
-    void askLobby(List<Triple<String, Integer, Integer>> availableMatches);
+    void listLobbies(List<Triple<String, Integer, Integer>> availableMatches);
 
     void resumeMatch(Match match);
 

@@ -53,7 +53,6 @@ public class Client implements Runnable{
     public void sendMessage(Message message) {
         socketOut.println(message.serialize());
         socketOut.flush();
-        log("Message sent to server");
     }
 
     // logger
