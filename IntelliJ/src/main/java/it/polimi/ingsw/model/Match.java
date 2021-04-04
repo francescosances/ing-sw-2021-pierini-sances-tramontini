@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.cards.*;
+import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
+import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.Triple;
 

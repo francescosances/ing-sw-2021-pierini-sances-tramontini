@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network;
 
+import it.polimi.ingsw.utils.Message;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -31,7 +33,7 @@ public class ClientHandler implements Runnable {
             // wait for messages from client
             while(!Thread.currentThread().isInterrupted()){
                 // TODO cosa succede se l'utente spamma?
-                Message message = new Message(socketIn.next());
+                Message message = Message.messageFromString(socketIn.next());
                 server.log("Message received from " + username);
                 server.handleReceivedMessage(message, this);
             }

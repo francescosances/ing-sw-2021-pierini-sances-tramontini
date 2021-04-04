@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.cards.EndGameException;
+
 import java.util.Arrays;
 
 public class FaithTrack {

@@ -1,6 +1,4 @@
 import it.polimi.ingsw.network.Client;
-import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.cli.CLIController;
 
 import java.util.Scanner;
 

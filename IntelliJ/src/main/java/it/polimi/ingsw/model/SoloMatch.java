@@ -1,5 +1,10 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.cards.Deck;
+import it.polimi.ingsw.model.cards.DevelopmentCard;
+import it.polimi.ingsw.model.cards.DevelopmentColorType;
+import it.polimi.ingsw.model.cards.EndGameException;
+
 public class SoloMatch extends Match{
 
     private FaithTrack blackCross;

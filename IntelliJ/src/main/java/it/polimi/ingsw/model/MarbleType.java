@@ -1,5 +1,9 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
+import it.polimi.ingsw.model.storage.Resource;
+import it.polimi.ingsw.model.storage.ResourceType;
+
 public enum MarbleType {
     WHITE,
     BLUE,

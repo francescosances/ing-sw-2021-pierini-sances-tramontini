@@ -1,6 +1,6 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.model.LeaderCard;
+import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.view.VirtualView;
 
@@ -76,5 +76,16 @@ public class PlayerController {
 
     public VirtualView getVirtualView(){
         return virtualView;
+    }
+
+    public enum PlayerStatus {
+        YOUR_TURN,WAITING;
+
+        private static final PlayerStatus[] vals = values();
+
+        public PlayerStatus next()
+        {
+            return vals[(this.ordinal()+1) % vals.length];
+        }
     }
 }

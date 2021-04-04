@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.cards.DevelopmentColorType;
+import it.polimi.ingsw.model.cards.EndGameException;
+
 public class ActionToken {
 
     private DevelopmentColorType developmentCard;

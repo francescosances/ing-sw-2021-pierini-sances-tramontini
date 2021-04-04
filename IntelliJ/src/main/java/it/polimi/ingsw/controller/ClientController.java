@@ -1,16 +1,15 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.network.Client;
-import it.polimi.ingsw.network.Message;
-import it.polimi.ingsw.network.MessageType;
-import it.polimi.ingsw.view.RealView;
-import it.polimi.ingsw.view.cli.CLIController;
+import it.polimi.ingsw.utils.Message;
+import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.cli.CLI;
 
 import java.io.IOException;
 
 public class ClientController {
     private final Client client;
-    private RealView view;
+    private View view;
 
     public ClientController(Client client) {
         this.client = client;
@@ -19,7 +18,7 @@ public class ClientController {
     // --- FROM SEVER TO CLIENT (invoked by Client class during initialization or after message from server) ---
 
     public void startCli() {
-        view = new CLIController(this);
+        view = new CLI(this);
         view.init();
     }
 
@@ -55,13 +54,13 @@ public class ClientController {
     }
 
     public void login(String username){
-        Message message = new Message(MessageType.LOGIN_REQUEST);
+        Message message = new Message(Message.MessageType.LOGIN_REQUEST);
         message.addData("username", username);
         client.sendMessage(message);
     }
 
     public void lobbyChoice(String matchOwner) {
-        Message message = new Message(MessageType.LOBBY_CHOICE);
+        Message message = new Message(Message.MessageType.LOBBY_CHOICE);
         message.addData("matchOwner", matchOwner);
         client.sendMessage(message);
     }

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.controller.GameController;
+import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.VirtualView;
@@ -64,7 +65,7 @@ public class Server {
             reconnect(newUsername, clientHandler);
         } else {
             // login failed
-            clientHandler.sendMessage(new Message(MessageType.LOGIN_FAILED));
+            clientHandler.sendMessage(new Message(Message.MessageType.LOGIN_FAILED));
             log("Failed login attempt from new client, username " + newUsername + " already taken");
         }
     }

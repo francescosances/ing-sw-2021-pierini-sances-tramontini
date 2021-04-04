@@ -16,6 +16,10 @@ public interface View {
 
     void yourTurn();
 
+    void init();
+
+    void askLogin();
+
     void userConnected(String username);
     void userDisconnected(String username);
 

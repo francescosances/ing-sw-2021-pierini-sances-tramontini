@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.controller.ClientController;
+import it.polimi.ingsw.utils.Message;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -36,7 +37,7 @@ public class Client implements Runnable{
     @Override
     public void run(){
         while (!Thread.currentThread().isInterrupted()){
-            Message message = new Message(socketIn.next());
+            Message message = Message.messageFromString(socketIn.next());
             clientController.handleReceivedMessage(message);
         }
         socketIn.close();
