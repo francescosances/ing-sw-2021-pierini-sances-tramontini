@@ -33,4 +33,13 @@ public abstract class LeaderCard extends Card {
     public Requirements recalculateRequirements(Requirements requirements){
         return (Requirements) requirements.clone();
     }
+
+    @Override
+    public String toString() {
+        //TODO: fare tutti i to string delle carte leader
+        return "LeaderCard{" +
+                "active=" + active +
+                ", requirements=" + requirements +
+                '}';
+    }
 }

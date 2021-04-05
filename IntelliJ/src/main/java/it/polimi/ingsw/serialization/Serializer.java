@@ -1,10 +1,12 @@
 package it.polimi.ingsw.serialization;
 
 import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.*;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -65,17 +67,11 @@ public class Serializer {
 
     }
 
-    public static void serializeLeaderCard(LeaderCard leaderCard, File file) throws IOException {
-        Writer writer = Files.newBufferedWriter(Paths.get(file.getPath()));
-        serializeLeaderCard(leaderCard, writer);
-        writer.close();
-    }
 
-    private static void serializeLeaderCard(LeaderCard leaderCard, Writer writer){
+    private static String serializeLeaderCard(LeaderCard leaderCard){
         Gson gson = new Gson();
-        gson.toJson(leaderCard, writer);
+        return gson.toJson(leaderCard);
     }
-
 
     public static DevelopmentCard deserializeDevelopmentCard(File file) throws IOException {
         Reader reader = Files.newBufferedReader(Paths.get(file.getPath()));
@@ -100,17 +96,18 @@ public class Serializer {
     }
 
 
-    public static LeaderCard deserializeLeaderCard(File file) throws IOException {
-        Reader reader = Files.newBufferedReader(Paths.get(file.getPath()));
+    public static LeaderCard deserializeLeaderCard(String serializedCard) {
         GsonBuilder gsonbuilder = new GsonBuilder().registerTypeAdapter(Requirements.class, new RequirementsCreator());
         Gson gson = gsonbuilder.registerTypeAdapter(LeaderCard.class, new LeaderCardCreator()).create();
-
-        LeaderCard leaderCard = gson.fromJson(reader, LeaderCard.class);
-        reader.close();
-
-        return leaderCard;
+        return gson.fromJson(serializedCard, LeaderCard.class);
     }
 
+    public static List<LeaderCard> deserializeLeaderCards(String serializedCard) {
+        GsonBuilder gsonbuilder = new GsonBuilder().registerTypeAdapter(Requirements.class, new RequirementsCreator());
+        Gson gson = gsonbuilder.registerTypeAdapter(LeaderCard.class, new LeaderCardCreator()).create();
+        Type type = new TypeToken<List<LeaderCard>>(){}.getType();
+        return gson.fromJson(serializedCard, type);
+    }
 
 }
 

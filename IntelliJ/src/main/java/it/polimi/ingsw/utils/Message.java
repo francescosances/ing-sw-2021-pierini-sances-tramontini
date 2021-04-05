@@ -27,6 +27,10 @@ public class Message{
     public void addData(String key, String value){ this.data.put(key, value); }
     public void addData(Map<String, String> data){ this.data.putAll(data); }
 
+    public void addData(String key,Object obj,Gson gson){
+        addData(key,gson.toJson(obj));
+    }
+
     public String serialize() {
         Gson gson = new Gson();
         return gson.toJson(this);
@@ -46,11 +50,13 @@ public class Message{
         WAIT_FOR_START,
         RESUME_MATCH,
         YOUR_TURN,
+        LIST_LEADER_CARDS,
 
         // from client to server
         LOGIN_REQUEST,
         START_MATCH,
-        LOBBY_CHOICE;
+        LOBBY_CHOICE,
+        LEADER_CARDS_CHOICE;
     }
 
 }

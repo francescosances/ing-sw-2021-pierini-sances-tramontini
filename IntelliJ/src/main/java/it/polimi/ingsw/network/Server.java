@@ -1,12 +1,16 @@
 package it.polimi.ingsw.network;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.controller.PlayerController;
+import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.VirtualView;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +45,7 @@ public class Server {
     // --- communication with client ---
 
     public void handleReceivedMessage(Message message, ClientHandler clientHandler) {
+        Gson gson = new Gson();
         switch (message.getType()){
             case LOGIN_REQUEST:
                 login(message.getData("username"), clientHandler);
@@ -50,6 +55,13 @@ public class Server {
                 break;
             case START_MATCH:
                 getGameController(clientHandler.getUsername()).start();
+                break;
+            case LEADER_CARDS_CHOICE:
+                Type listType = new TypeToken<List<LeaderCard>>(){}.getType();
+                List<LeaderCard> leaderCards = gson.fromJson(message.getData("leaderCards"),listType);
+                System.out.println("Scelta carte leader");
+                System.out.println(leaderCards);
+                getGameController(clientHandler.getUsername()).getPlayerController(clientHandler.getUsername()).chooseLeaderCards(leaderCards.toArray(new LeaderCard[]{}));
                 break;
             default:
                 System.out.println("DEFAULT handleReceivedMessage");

@@ -23,6 +23,7 @@ public class SoloMatch extends Match{
         actionTokens.add(new ActionToken(1));
     }
 
+
     public void moveBlackCross(int spaces) throws EndGameException {
         for(int i=0;i<spaces;i++){
             blackCross.moveMarker();

@@ -2,6 +2,7 @@ package it.polimi.ingsw.view;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.model.Match;
+import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.network.ClientHandler;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
@@ -75,5 +76,14 @@ public class VirtualView implements View {
     public void userDisconnected(String username) {
         showMessage(username+" has left the lobby");
     }
+
+    @Override
+    public void listLeaderCards(List<LeaderCard> leaderCardList) {
+        Gson gson = new Gson();
+        Message message = new Message(Message.MessageType.LIST_LEADER_CARDS);
+        message.addData("leaderCards",gson.toJson(leaderCardList));
+        sendMessage(message);
+    }
+
 
 }

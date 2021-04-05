@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.cli;
 
 import it.polimi.ingsw.controller.ClientController;
 import it.polimi.ingsw.model.Match;
+import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
 
@@ -111,6 +112,24 @@ public class CLI implements View {
     @Override
     public void userDisconnected(String username) {
         output.println(username + " has been disconnected");
+    }
+
+    @Override
+    public void listLeaderCards(List<LeaderCard> leaderCardList) {
+        System.out.println("Choose two leader cards:");
+        for (int i = 1; i < leaderCardList.size(); i++) {
+            output.print("[" + i + "] ");
+            LeaderCard temp = leaderCardList.get(i);
+            output.println(temp.toString());
+        }
+        int choiceA = input.nextInt();
+        int choiceB = input.nextInt();
+        if (choiceA > 0 && choiceA <= leaderCardList.size() && choiceB > 0 && choiceB < leaderCardList.size())
+            clientController.leaderCardsChoice(leaderCardList.get(choiceA),leaderCardList.get(choiceB));
+        else{
+            output.println("Invalid choice");
+            listLeaderCards(leaderCardList);
+        }
     }
 
 }

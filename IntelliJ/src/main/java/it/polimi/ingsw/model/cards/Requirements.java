@@ -21,7 +21,7 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
     private Map<DevelopmentColorType,Map<Integer,Integer>> developmentCards;
 
     public Requirements(){
-        resources = new HashMap<Resource, Integer>();
+        resources = new HashMap<>();
         developmentCards = new HashMap<>();
     }
 
@@ -129,4 +129,11 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
         return resources.entrySet().iterator();
     }
 
+    @Override
+    public String toString() {
+        return "Requirements{" +
+                "resources=" + resources +
+                ", developmentCards=" + developmentCards +
+                '}';
+    }
 }

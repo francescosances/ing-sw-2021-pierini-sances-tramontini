@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.model.Match;
+import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
@@ -12,6 +13,7 @@ import it.polimi.ingsw.view.cli.CLI;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClientController {
@@ -57,6 +59,10 @@ public class ClientController {
             case RESUME_MATCH:
                 resumeMatch(Serializer.deserializeMatchState(message.getData("match")));
                 break;
+            case LIST_LEADER_CARDS:
+                List<LeaderCard> leaderCardList = Serializer.deserializeLeaderCards(message.getData("leaderCards"));
+                view.listLeaderCards(leaderCardList);
+                break;
             default:
                 client.log("Received unexpected message");
                 client.log(message.serialize());
@@ -81,6 +87,12 @@ public class ClientController {
     public void lobbyChoice(String matchOwner) {
         Message message = new Message(Message.MessageType.LOBBY_CHOICE);
         message.addData("matchOwner", matchOwner);
+        client.sendMessage(message);
+    }
+
+    public void leaderCardsChoice(LeaderCard ... leaderCards){
+        Message message = new Message(Message.MessageType.LEADER_CARDS_CHOICE);
+        message.addData("leaderCards",leaderCards,new Gson());
         client.sendMessage(message);
     }
 

@@ -46,24 +46,18 @@ public class PlayerController {
         if(isActive()){
             System.out.println(leaderCardList);
             System.out.println("qui");
+            virtualView.listLeaderCards(leaderCardList);
             //TODO: invia messaggio scegli carta
         }else {
-            chooseLeaderCards(0,1);
+            chooseLeaderCards(leaderCardList.get(0),leaderCardList.get(1));
         }
     }
 
-    public void chooseLeaderCards(int ... cardsIndexes){
-        for (int cardsIndex : cardsIndexes) {
-            playerBoard.addLeaderCard(this.leaderCardList.get(cardsIndex));
+    public void chooseLeaderCards(LeaderCard ... cards){
+        for (LeaderCard card : cards) {
+            playerBoard.addLeaderCard(card);
         }
     }
-/*
-    public void messageReceived(Message message){
-        //Quelli che seguono sono esempi
-        if(message.getType == "scelta carta leader"){
-            this.sceltaCartaLeader(message.sceltaFatta);
-        }
-    }*/
 
     public void yourTurn(){
         this.currentStatus = PlayerStatus.YOUR_TURN;

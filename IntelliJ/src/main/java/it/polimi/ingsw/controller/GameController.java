@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Match;
+import it.polimi.ingsw.model.SoloMatch;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.ClientHandler;
 import it.polimi.ingsw.view.VirtualView;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class GameController {
 
-    private final Match match;
+    private Match match;
     private final List<PlayerController> players;
 
     private int currentPlayerIndex;
@@ -25,8 +26,12 @@ public class GameController {
     }
 
     public void start(){
+        if(this.players.size() == 1) {
+            this.match = new SoloMatch(match.getMatchName());
+            match.addPlayer(players.get(0).getUsername());//TODO: gestire salvataggio istanza match single player
+        }
         currentPlayerIndex = (int) (Math.random() * players.size());
-        currentStatus = currentStatus.next();
+        nextStatus();
         //players.forEach(PlayerController::drawLeaderCards);
         System.out.println("PARTITA AVVIATA");
     }
@@ -108,10 +113,31 @@ public class GameController {
         return match;
     }
 
-    public enum GameStatus {
-        ADDING_PLAYERS,SETUP;
+    protected void onStatusChanged(){
+        switch (currentStatus){
+            case PLAYERS_SETUP:
+                players.get(currentPlayerIndex).drawLeaderCards();
+                break;
+        }
+    }
 
-        private static GameStatus[] vals = values();
+    protected void nextStatus(){
+        this.currentStatus = this.currentStatus.next();
+        onStatusChanged();
+    }
+
+    public enum GameStatus {
+        ADDING_PLAYERS, PLAYERS_SETUP;
+
+        private int currentPhasePlayers = 0;//Conta i giocatori che hanno già svolto questa fase
+
+        public int getCurrentPhasePlayers(){return currentPhasePlayers;}
+
+        public void incrementCurrentPhasePlayers(){
+            this.currentPhasePlayers++;
+        }
+
+        private static final GameStatus[] vals = values();
 
         public GameStatus next()
         {
