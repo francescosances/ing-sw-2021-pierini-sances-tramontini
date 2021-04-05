@@ -48,6 +48,9 @@ public class Server {
             case LOBBY_CHOICE:
                 lobbyChoice(message.getData("matchOwner"), clientHandler);
                 break;
+            case START_MATCH:
+                getGameController(clientHandler.getUsername()).start();
+                break;
             default:
                 System.out.println("DEFAULT handleReceivedMessage");
                 // TODO forward message to playerController / messageReader
@@ -103,6 +106,7 @@ public class Server {
             GameController match = new GameController(clientHandler.getUsername());
             addPlayerToMatch(clientHandler.getUsername(), match, clientHandler);
             System.out.println("Scelta una lobby vuota");
+            new VirtualView(clientHandler).waitForStart();
         } else {
             // join existing match
             View view = new VirtualView(clientHandler);

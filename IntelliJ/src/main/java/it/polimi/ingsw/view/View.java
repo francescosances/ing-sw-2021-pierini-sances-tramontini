@@ -14,6 +14,8 @@ public interface View {
 
     void listLobbies(List<Triple<String, Integer, Integer>> availableMatches);
 
+    void waitForStart();
+
     void resumeMatch(Match match);
 
     void yourTurn();

@@ -12,8 +12,8 @@ import java.util.List;
 
 public class GameController {
 
-    private Match match;
-    private List<PlayerController> players;
+    private final Match match;
+    private final List<PlayerController> players;
 
     private int currentPlayerIndex;
     private GameStatus currentStatus;
@@ -28,6 +28,7 @@ public class GameController {
         currentPlayerIndex = (int) (Math.random() * players.size());
         currentStatus = currentStatus.next();
         //players.forEach(PlayerController::drawLeaderCards);
+        System.out.println("PARTITA AVVIATA");
     }
 
     public void nextTurn(){

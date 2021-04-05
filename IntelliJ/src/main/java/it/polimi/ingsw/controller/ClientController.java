@@ -2,7 +2,9 @@ package it.polimi.ingsw.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
@@ -49,6 +51,12 @@ public class ClientController {
                 List<Triple<String, Integer, Integer>> matches = gson.fromJson(availableMessages, listType);
                 view.listLobbies(matches);
                 break;
+            case WAIT_FOR_START:
+                view.waitForStart();
+                break;
+            case RESUME_MATCH:
+                resumeMatch(Serializer.deserializeMatchState(message.getData("match")));
+                break;
             default:
                 client.log("Received unexpected message");
                 client.log(message.serialize());
@@ -74,6 +82,13 @@ public class ClientController {
         Message message = new Message(Message.MessageType.LOBBY_CHOICE);
         message.addData("matchOwner", matchOwner);
         client.sendMessage(message);
-        System.out.println("Invio la scelta lobby");
+    }
+
+    public void startMatch(){
+        client.sendMessage(new Message(Message.MessageType.START_MATCH));
+    }
+
+    public void resumeMatch(Match match){
+        throw new IllegalStateException("Not implemented yet");
     }
 }

@@ -43,12 +43,13 @@ public class Message{
         ERROR,
         LOGIN_FAILED,
         LOBBY_INFO,
-        MATCH_FULL_STATUS,
+        WAIT_FOR_START,
         RESUME_MATCH,
         YOUR_TURN,
 
         // from client to server
         LOGIN_REQUEST,
+        START_MATCH,
         LOBBY_CHOICE;
     }
 

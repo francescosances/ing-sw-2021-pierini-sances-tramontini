@@ -10,6 +10,7 @@ import it.polimi.ingsw.utils.Triple;
 import java.util.List;
 
 public class VirtualView implements View {
+
     private final ClientHandler clientHandler;
 
     public VirtualView(ClientHandler clientHandler) { this.clientHandler = clientHandler; }
@@ -36,6 +37,11 @@ public class VirtualView implements View {
         Gson gson = new Gson();
         message.addData("availableMatches",gson.toJson(availableMatches));
         sendMessage(message);
+    }
+
+    @Override
+    public void waitForStart() {
+        sendMessage(new Message(Message.MessageType.WAIT_FOR_START));
     }
 
     @Override

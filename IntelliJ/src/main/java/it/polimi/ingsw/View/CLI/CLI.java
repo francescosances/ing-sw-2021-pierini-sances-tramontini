@@ -84,6 +84,14 @@ public class CLI implements View {
         }
     }
 
+    @Override
+    public void waitForStart() {
+        do {
+            System.out.println("Type \"START\" to start the match");
+        }while(!input.nextLine().equals("START"));
+        clientController.startMatch();
+    }
+
 
     @Override
     public void resumeMatch(Match match) {

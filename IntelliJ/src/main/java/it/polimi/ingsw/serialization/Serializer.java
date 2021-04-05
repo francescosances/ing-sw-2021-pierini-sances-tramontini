@@ -14,7 +14,11 @@ import java.util.List;
 public class Serializer {
 
     public static String serializeMatchState(Match match) {
-      return "To be implemented";//TODO: implementare serializzazione match
+        throw new IllegalStateException("Not implemented yet");
+    }
+
+    public static Match deserializeMatchState(String serializedMatch) {
+        throw new IllegalStateException("Not implemented yet");
     }
 
 
