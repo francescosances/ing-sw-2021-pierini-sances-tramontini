@@ -11,20 +11,28 @@ import java.util.List;
 import java.util.Scanner;
 
 public class CLI implements View {
+
     private final ClientController clientController;
 
     private final Scanner input;
     private final PrintStream output;
+    private final PrintStream errorOutput;
 
     public CLI(ClientController clientController){
         this.clientController = clientController;
         this.input = new Scanner(System.in);
         this.output = System.out;
+        this.errorOutput = System.err;
     }
 
     @Override
     public void showMessage(String message) {
         output.println(message);
+    }
+
+    @Override
+    public void showErrorMessage(String message) {
+        errorOutput.println(message);
     }
 
     @Override
@@ -61,7 +69,7 @@ public class CLI implements View {
         for (int i = 1; i <= availableMatches.size(); i++){
             output.print("[" + i + "] ");
             output.print(availableMatches.get(i - 1).getFirst() + "'s match ");
-            output.println("(" + availableMatches.get(i - 1).getSecond() + "/" + availableMatches.get(i - 1).getSecond() + ")");
+            output.println("(" + availableMatches.get(i - 1).getSecond() + "/" + availableMatches.get(i - 1).getThird() + ")");
         }
         int choice = input.nextInt();
         if (choice == 0)
@@ -73,6 +81,7 @@ public class CLI implements View {
             listLobbies(availableMatches);
         }
     }
+
 
     @Override
     public void resumeMatch(Match match) {

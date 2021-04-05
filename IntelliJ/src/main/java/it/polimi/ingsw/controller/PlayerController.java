@@ -78,6 +78,10 @@ public class PlayerController {
         return virtualView;
     }
 
+    public void setVirtualView(VirtualView virtualView){
+        this.virtualView = virtualView;
+    }
+
     public enum PlayerStatus {
         YOUR_TURN,WAITING;
 

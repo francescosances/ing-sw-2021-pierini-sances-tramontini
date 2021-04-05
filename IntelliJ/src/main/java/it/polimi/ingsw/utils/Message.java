@@ -40,9 +40,12 @@ public class Message{
     public enum MessageType {
         // from server to client
         GENERIC,
+        ERROR,
         LOGIN_FAILED,
         LOBBY_INFO,
         MATCH_FULL_STATUS,
+        RESUME_MATCH,
+        YOUR_TURN,
 
         // from client to server
         LOGIN_REQUEST,

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.utils.Message;
+import it.polimi.ingsw.view.VirtualView;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -35,7 +36,12 @@ public class ClientHandler implements Runnable {
                 // TODO cosa succede se l'utente spamma?
                 Message message = Message.messageFromString(socketIn.next());
                 server.log("Message received from " + username);
-                server.handleReceivedMessage(message, this);
+                server.log(message.serialize());
+                try {
+                    server.handleReceivedMessage(message, this);
+                }catch (IllegalStateException | IllegalArgumentException e){
+                    new VirtualView(this).showErrorMessage(e.getMessage());
+                }
             }
             //close connections
             server.log("Closing connection");

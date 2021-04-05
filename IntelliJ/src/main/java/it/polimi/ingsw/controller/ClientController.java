@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.utils.Triple;
@@ -8,6 +9,7 @@ import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cli.CLI;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class ClientController {
@@ -41,10 +43,13 @@ public class ClientController {
                 view.askLogin();
             case LOBBY_INFO:
                 String availableMessages = message.getData("availableMatches");
-                List<Triple<String, Integer, Integer>> matches = gson.fromJson(availableMessages, List.class);
+                Type listType = new TypeToken<List<Triple<String,Integer,Integer>>>(){}.getType();
+                List<Triple<String, Integer, Integer>> matches = gson.fromJson(availableMessages, listType);
                 view.listLobbies(matches);
+
             default:
                 client.log("Received unexpected message");
+                client.log(message.serialize());
         }
     }
 
@@ -67,5 +72,6 @@ public class ClientController {
         Message message = new Message(Message.MessageType.LOBBY_CHOICE);
         message.addData("matchOwner", matchOwner);
         client.sendMessage(message);
+        System.out.println("Invio la scelta lobby");
     }
 }

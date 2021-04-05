@@ -41,9 +41,24 @@ public class GameController {
     }
 
     public PlayerController addPlayer(String username, ClientHandler clientHandler){
-        PlayerController playerController = new PlayerController(username,match.addPlayer(username),new VirtualView(clientHandler));
-        players.add(playerController);
-        return playerController;
+        PlayerController playerController = getPlayerController(username);
+        if(playerController != null){
+            //Reactivating existing player
+            playerController.setVirtualView(new VirtualView(clientHandler));
+            playerController.activate();
+            return playerController;
+        }else{
+            playerController = new PlayerController(username, match.addPlayer(username), new VirtualView(clientHandler));
+            players.add(playerController);
+            return playerController;
+        }
+    }
+
+    public PlayerController getPlayerController(String username){
+        for(PlayerController x : players)
+            if(x.getUsername().equals(username))
+                return x;
+        return null;
     }
 
     public boolean containsUsername(String username){
@@ -76,8 +91,20 @@ public class GameController {
         });
     }
 
+    public int getJoinedPlayers(){
+        return players.size();
+    }
+
+    public int getTotalPlayers(){
+        return Match.MAX_PLAYERS;
+    }
+
     public boolean isFull(){
         return match.isFull();
+    }
+
+    public Match getMatch(){
+        return match;
     }
 
     public enum GameStatus {

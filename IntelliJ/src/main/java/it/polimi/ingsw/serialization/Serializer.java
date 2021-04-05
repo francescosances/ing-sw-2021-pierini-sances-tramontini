@@ -13,7 +13,12 @@ import java.util.List;
 
 public class Serializer {
 
-    public void serializeMatchState(Match match, File file) throws IOException {
+    public static String serializeMatchState(Match match) {
+      return "To be implemented";//TODO: implementare serializzazione match
+    }
+
+
+    public static void serializeMatchState(Match match, File file) throws IOException {
         Writer writer = Files.newBufferedWriter(Paths.get(file.getPath()));
         //TODO: formattare (manualmente?) il formato del file json
         //serializeDevelopmentCardDecks(match, writer);
@@ -22,24 +27,24 @@ public class Serializer {
         writer.close();
     }
 
-    public void serializeDevelopmentCard(DevelopmentCard developmentCard, File file) throws IOException {
+    public static void serializeDevelopmentCard(DevelopmentCard developmentCard, File file) throws IOException {
         Writer writer = Files.newBufferedWriter(Paths.get(file.getPath()));
         serializeDevelopmentCard(developmentCard, writer);
         writer.close();
     }
 
-    private void serializeDevelopmentCard(DevelopmentCard developmentCard, Writer writer) {
+    private static void serializeDevelopmentCard(DevelopmentCard developmentCard, Writer writer) {
         Gson gson = new Gson();
         gson.toJson(developmentCard, writer);
     }
 
-    public void serializeDevelopmentCardDecks(Match match, File file) throws IOException {
+    public static void serializeDevelopmentCardDecks(Match match, File file) throws IOException {
         Writer writer = Files.newBufferedWriter(Paths.get(file.getPath()));
         serializeDevelopmentCardDecks(match, writer);
         writer.close();
     }
 
-    private void serializeDevelopmentCardDecks(Match match, Writer writer){
+    private static void serializeDevelopmentCardDecks(Match match, Writer writer){
         List<Deck<DevelopmentCard>> list = new ArrayList<>();
         for (int level = 1; level <= DevelopmentCard.MAX_LEVEL; level++) {
             for (DevelopmentColorType color : DevelopmentColorType.values()) {
@@ -51,24 +56,24 @@ public class Serializer {
         new Gson().toJson(list, writer);
     }
 
-    private void serializeMarket(Match match, Writer writer) {
+    private static void serializeMarket(Match match, Writer writer) {
         Market market = match.getMarket();
 
     }
 
-    public void serializeLeaderCard(LeaderCard leaderCard, File file) throws IOException {
+    public static void serializeLeaderCard(LeaderCard leaderCard, File file) throws IOException {
         Writer writer = Files.newBufferedWriter(Paths.get(file.getPath()));
         serializeLeaderCard(leaderCard, writer);
         writer.close();
     }
 
-    private void serializeLeaderCard(LeaderCard leaderCard, Writer writer){
+    private static void serializeLeaderCard(LeaderCard leaderCard, Writer writer){
         Gson gson = new Gson();
         gson.toJson(leaderCard, writer);
     }
 
 
-    public DevelopmentCard deserializeDevelopmentCard(File file) throws IOException {
+    public static DevelopmentCard deserializeDevelopmentCard(File file) throws IOException {
         Reader reader = Files.newBufferedReader(Paths.get(file.getPath()));
         RequirementsCreator requirementsCreator = new RequirementsCreator();
         Gson gson = new GsonBuilder().registerTypeAdapter(Requirements.class, requirementsCreator).create();
@@ -79,7 +84,7 @@ public class Serializer {
         return card;
     }
 
-    public List<Deck<DevelopmentCard>> deserializeDevelopmentCardDecks(File file) throws IOException {
+    public static List<Deck<DevelopmentCard>> deserializeDevelopmentCardDecks(File file) throws IOException {
         Reader reader = Files.newBufferedReader(Paths.get(file.getPath()));
         RequirementsCreator requirementsCreator = new RequirementsCreator();
         Gson gson = new GsonBuilder().registerTypeAdapter(Requirements.class, requirementsCreator).create();
@@ -91,7 +96,7 @@ public class Serializer {
     }
 
 
-    public LeaderCard deserializeLeaderCard(File file) throws IOException {
+    public static LeaderCard deserializeLeaderCard(File file) throws IOException {
         Reader reader = Files.newBufferedReader(Paths.get(file.getPath()));
         GsonBuilder gsonbuilder = new GsonBuilder().registerTypeAdapter(Requirements.class, new RequirementsCreator());
         Gson gson = gsonbuilder.registerTypeAdapter(LeaderCard.class, new LeaderCardCreator()).create();

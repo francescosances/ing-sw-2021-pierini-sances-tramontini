@@ -10,6 +10,8 @@ public interface View {
     // show generic message
     void showMessage(String message);
 
+    void showErrorMessage(String message);
+
     void listLobbies(List<Triple<String, Integer, Integer>> availableMatches);
 
     void resumeMatch(Match match);
@@ -21,6 +23,7 @@ public interface View {
     void askLogin();
 
     void userConnected(String username);
+
     void userDisconnected(String username);
 
 }

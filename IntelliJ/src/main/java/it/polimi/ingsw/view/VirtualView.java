@@ -3,6 +3,7 @@ package it.polimi.ingsw.view;
 import com.google.gson.Gson;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.network.ClientHandler;
+import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.utils.Triple;
 
@@ -20,7 +21,14 @@ public class VirtualView implements View {
         Message msg = new Message(Message.MessageType.GENERIC);
         msg.addData("text", message);
         sendMessage(msg);
-    };
+    }
+
+    @Override
+    public void showErrorMessage(String message) {
+        Message msg = new Message(Message.MessageType.ERROR);
+        msg.addData("text", message);
+        sendMessage(msg);
+    }
 
     @Override
     public void listLobbies(List<Triple<String, Integer, Integer>> availableMatches){
@@ -32,12 +40,14 @@ public class VirtualView implements View {
 
     @Override
     public void resumeMatch(Match match) {
-        sendMessage(new Message(/*TODO Messaggio con serializzazione di un oggetto Match */Message.MessageType.MATCH_FULL_STATUS, null));
+        Message message = new Message(Message.MessageType.RESUME_MATCH);
+        message.addData("match", Serializer.serializeMatchState(match));
+        sendMessage(message);
     }
 
     @Override
     public void yourTurn() {
-        sendMessage(new Message(/*TODO Messaggio che indica che è il tuo turno */null, null));
+        sendMessage(new Message(Message.MessageType.YOUR_TURN));
     }
 
     @Override
@@ -52,12 +62,12 @@ public class VirtualView implements View {
 
     @Override
     public void userConnected(String username) {
-        sendMessage(new Message(/*TODO Messaggio che notifica la connessione di un nuovo utente */null, null));
+       showMessage(username+" has joined the lobby");
     }
 
     @Override
     public void userDisconnected(String username) {
-        sendMessage(new Message(/*TODO Messaggio che notifica la disconnessione di un utente */null, null));
+        showMessage(username+" has left the lobby");
     }
 
 }

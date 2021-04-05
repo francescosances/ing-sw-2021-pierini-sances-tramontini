@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.controller.GameController;
+import it.polimi.ingsw.controller.PlayerController;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
@@ -30,10 +31,12 @@ public class Server {
                 .collect(Collectors.toList());
     }
 
-    public void addPlayerToMatch(String username,GameController match){
-        if(match.isFull())
+    public void addPlayerToMatch(String username,GameController gameController,ClientHandler clientHandler){
+        if(gameController.isFull())
             throw new IllegalStateException("Match full");
-        players.put(username,match);
+        players.put(username,gameController);
+        gameController.addPlayer(username,clientHandler);
+
         // TODO
         //  new view and playerController
         //  lobbyChoice() deve passare a questo metodo anche il clientHandler o la view gia creata
@@ -49,6 +52,7 @@ public class Server {
             case LOBBY_CHOICE:
                 lobbyChoice(message.getData("matchOwner"), clientHandler);
             default:
+                System.out.println("DEFAULT handleReceivedMessage");
                 // TODO forward message to playerController / messageReader
         }
     }
@@ -91,8 +95,7 @@ public class Server {
             View view = new VirtualView(clientHandler);
             // send the user a list of available matches (with num of joined players and size of the match)
             List<Triple<String, Integer, Integer>> availableMatches = getAvailableMatches().stream()
-                    // TODO add getJoinedPlayers and getTotalPlayer methods in Gamecontroller
-                    .map(match -> new Triple<>(match.getMatchName(), 1, 4))
+                    .map(match -> new Triple<>(match.getMatchName(), match.getJoinedPlayers(), match.getTotalPlayers()))
                     .collect(Collectors.toList());
             view.listLobbies(availableMatches);
     }
@@ -101,7 +104,8 @@ public class Server {
         if (matchOwner == null){
             // new match
             GameController match = new GameController(clientHandler.getUsername());
-            addPlayerToMatch(clientHandler.getUsername(), match);
+            addPlayerToMatch(clientHandler.getUsername(), match,clientHandler);
+            System.out.println("Scelta una lobby vuota");
         } else {
             // join existing match
             View view = new VirtualView(clientHandler);
@@ -109,16 +113,19 @@ public class Server {
                 view.showMessage("Selected match is full or does not exist");
                 listLobbies(clientHandler);
             } else {
-                addPlayerToMatch(clientHandler.getUsername(), getGameController(matchOwner));
+                GameController gameController = getGameController(matchOwner);
+                addPlayerToMatch(clientHandler.getUsername(), gameController,clientHandler);
+                if(gameController.isFull())
+                    gameController.start();
             }
         }
     }
 
     private void reconnect(String username, ClientHandler clientHandler) {
-        View view = new VirtualView(clientHandler);
-        // TODO
-        //  attach new clientHandler to existing PlayerController
-        //  view.resumeMatch()
+        PlayerController playerController = getGameController(username).getPlayerController(username);
+        playerController.setVirtualView(new VirtualView(clientHandler));
+        playerController.activate();
+        playerController.getVirtualView().resumeMatch(getGameController(username).getMatch());
     }
 
     public void disconnect(String username){
