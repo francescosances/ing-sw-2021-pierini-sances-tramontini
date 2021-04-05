@@ -36,12 +36,7 @@ public class Server {
             throw new IllegalStateException("Match full");
         players.put(username,gameController);
         gameController.addPlayer(username,clientHandler);
-
-        // TODO
-        //  new view and playerController
-        //  lobbyChoice() deve passare a questo metodo anche il clientHandler o la view gia creata
     }
-
 
     // --- communication with client ---
 
@@ -49,8 +44,10 @@ public class Server {
         switch (message.getType()){
             case LOGIN_REQUEST:
                 login(message.getData("username"), clientHandler);
+                break;
             case LOBBY_CHOICE:
                 lobbyChoice(message.getData("matchOwner"), clientHandler);
+                break;
             default:
                 System.out.println("DEFAULT handleReceivedMessage");
                 // TODO forward message to playerController / messageReader
@@ -104,7 +101,7 @@ public class Server {
         if (matchOwner == null){
             // new match
             GameController match = new GameController(clientHandler.getUsername());
-            addPlayerToMatch(clientHandler.getUsername(), match,clientHandler);
+            addPlayerToMatch(clientHandler.getUsername(), match, clientHandler);
             System.out.println("Scelta una lobby vuota");
         } else {
             // join existing match

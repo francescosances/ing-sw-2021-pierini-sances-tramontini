@@ -38,15 +38,17 @@ public class ClientController {
         switch (message.getType()) {
             case GENERIC:
                 view.showMessage(message.getData("text"));
+                break;
             case LOGIN_FAILED:
                 view.showMessage("Login failed, try with another username");
                 view.askLogin();
+                break;
             case LOBBY_INFO:
                 String availableMessages = message.getData("availableMatches");
                 Type listType = new TypeToken<List<Triple<String,Integer,Integer>>>(){}.getType();
                 List<Triple<String, Integer, Integer>> matches = gson.fromJson(availableMessages, listType);
                 view.listLobbies(matches);
-
+                break;
             default:
                 client.log("Received unexpected message");
                 client.log(message.serialize());

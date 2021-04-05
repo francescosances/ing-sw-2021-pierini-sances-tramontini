@@ -37,7 +37,9 @@ public class Client implements Runnable{
     @Override
     public void run(){
         while (!Thread.currentThread().isInterrupted()){
-            Message message = Message.messageFromString(socketIn.next());
+            String ricevo = socketIn.nextLine();
+            System.out.println("ricevo "+ricevo);
+            Message message = Message.messageFromString(ricevo);
             clientController.handleReceivedMessage(message);
         }
         socketIn.close();

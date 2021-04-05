@@ -34,7 +34,7 @@ public class ClientHandler implements Runnable {
             // wait for messages from client
             while(!Thread.currentThread().isInterrupted()){
                 // TODO cosa succede se l'utente spamma?
-                Message message = Message.messageFromString(socketIn.next());
+                Message message = Message.messageFromString(socketIn.nextLine());
                 server.log("Message received from " + username);
                 server.log(message.serialize());
                 try {

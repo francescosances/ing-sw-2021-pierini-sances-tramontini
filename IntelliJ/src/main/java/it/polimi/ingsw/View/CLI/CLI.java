@@ -66,10 +66,12 @@ public class CLI implements View {
         // TODO possibilità di aggiornare la lista di lobby disponibili
         output.println("Create a new match or join one:");
         output.println("[0] New match");
-        for (int i = 1; i <= availableMatches.size(); i++){
-            output.print("[" + i + "] ");
-            output.print(availableMatches.get(i - 1).getFirst() + "'s match ");
-            output.println("(" + availableMatches.get(i - 1).getSecond() + "/" + availableMatches.get(i - 1).getThird() + ")");
+        if(availableMatches != null) {
+            for (int i = 1; i <= availableMatches.size(); i++) {
+                output.print("[" + i + "] ");
+                output.print(availableMatches.get(i - 1).getFirst() + "'s match ");
+                output.println("(" + availableMatches.get(i - 1).getSecond() + "/" + availableMatches.get(i - 1).getThird() + ")");
+            }
         }
         int choice = input.nextInt();
         if (choice == 0)
