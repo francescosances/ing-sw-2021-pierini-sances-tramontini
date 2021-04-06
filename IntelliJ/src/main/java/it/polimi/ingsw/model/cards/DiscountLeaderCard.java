@@ -19,12 +19,22 @@ public class DiscountLeaderCard extends LeaderCard {
 
     }
 
-
     @Override
     public Requirements recalculateRequirements(Requirements requirements) {
         requirements = super.recalculateRequirements(requirements);
         if(isActive())
             requirements.removeResourceRequirement(discountResourceType,discount);
         return requirements;
+    }
+
+
+    @Override
+    public String toString() {
+        return "DiscountLeaderCard{" +
+                "discountResourceType=" + discountResourceType +
+                ", discount=" + discount +
+                ", active=" + active +
+                ", requirements=" + requirements +
+                '}';
     }
 }

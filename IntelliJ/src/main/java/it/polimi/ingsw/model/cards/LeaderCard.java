@@ -36,7 +36,6 @@ public abstract class LeaderCard extends Card {
 
     @Override
     public String toString() {
-        //TODO: fare tutti i to string delle carte leader
         return "LeaderCard{" +
                 "active=" + active +
                 ", requirements=" + requirements +

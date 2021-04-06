@@ -2,12 +2,9 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.SoloMatch;
-import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.ClientHandler;
 import it.polimi.ingsw.view.VirtualView;
 
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,12 +14,12 @@ public class GameController {
     private final List<PlayerController> players;
 
     private int currentPlayerIndex;
-    private GameStatus currentStatus;
+    private GamePhase currentPhase;
 
     public GameController(String matchName){
         match = new Match(matchName);
         players = new ArrayList<>();
-        currentStatus = GameStatus.ADDING_PLAYERS;
+        currentPhase = GamePhase.ADDING_PLAYERS;
     }
 
     public void start(){
@@ -31,7 +28,7 @@ public class GameController {
             match.addPlayer(players.get(0).getUsername());//TODO: gestire salvataggio istanza match single player
         }
         currentPlayerIndex = (int) (Math.random() * players.size());
-        nextStatus();
+        nextPhase();
         //players.forEach(PlayerController::drawLeaderCards);
         System.out.println("PARTITA AVVIATA");
     }
@@ -43,7 +40,11 @@ public class GameController {
             return;
         if(!players.get(currentPlayerIndex).isActive())
             nextTurn();
-        players.get(currentPlayerIndex++).yourTurn();
+        players.get(currentPlayerIndex).yourTurn();
+        currentPhase.incrementCurrentPhasePlayers();
+        if(currentPhase.currentPhasePlayers >= players.size())
+            currentPhase = currentPhase.next();
+        onStatusChanged();
     }
 
     public PlayerController addPlayer(String username, ClientHandler clientHandler){
@@ -114,19 +115,19 @@ public class GameController {
     }
 
     protected void onStatusChanged(){
-        switch (currentStatus){
+        switch (currentPhase){
             case PLAYERS_SETUP:
                 players.get(currentPlayerIndex).drawLeaderCards();
                 break;
         }
     }
 
-    protected void nextStatus(){
-        this.currentStatus = this.currentStatus.next();
+    protected void nextPhase(){
+        this.currentPhase = this.currentPhase.next();
         onStatusChanged();
     }
 
-    public enum GameStatus {
+    public enum GamePhase {
         ADDING_PLAYERS, PLAYERS_SETUP;
 
         private int currentPhasePlayers = 0;//Conta i giocatori che hanno già svolto questa fase
@@ -137,10 +138,11 @@ public class GameController {
             this.currentPhasePlayers++;
         }
 
-        private static final GameStatus[] vals = values();
+        private static final GamePhase[] vals = values();
 
-        public GameStatus next()
+        public GamePhase next()
         {
+            this.currentPhasePlayers = 0;
             return vals[(this.ordinal()+1) % vals.length];
         }
     }

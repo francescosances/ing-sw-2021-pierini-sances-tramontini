@@ -21,4 +21,12 @@ public class WhiteMarbleLeaderCard extends LeaderCard {
         return outputResourceType;
     }
 
+    @Override
+    public String toString() {
+        return "WhiteMarbleLeaderCard{" +
+                "active=" + active +
+                ", requirements=" + requirements +
+                ", outputResourceType=" + outputResourceType +
+                '}';
+    }
 }

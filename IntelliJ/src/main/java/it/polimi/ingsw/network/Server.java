@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.controller.PlayerController;
 import it.polimi.ingsw.model.cards.LeaderCard;
+import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
@@ -57,11 +58,12 @@ public class Server {
                 getGameController(clientHandler.getUsername()).start();
                 break;
             case LEADER_CARDS_CHOICE:
-                Type listType = new TypeToken<List<LeaderCard>>(){}.getType();
-                List<LeaderCard> leaderCards = gson.fromJson(message.getData("leaderCards"),listType);
+                List<LeaderCard> leaderCards = Serializer.deserializeLeaderCards(message.getData("leaderCards"));
                 System.out.println("Scelta carte leader");
                 System.out.println(leaderCards);
-                getGameController(clientHandler.getUsername()).getPlayerController(clientHandler.getUsername()).chooseLeaderCards(leaderCards.toArray(new LeaderCard[]{}));
+                GameController gameController = getGameController(clientHandler.getUsername());
+                gameController.getPlayerController(clientHandler.getUsername()).chooseLeaderCards(leaderCards.toArray(new LeaderCard[]{}));
+                gameController.nextTurn();
                 break;
             default:
                 System.out.println("DEFAULT handleReceivedMessage");
@@ -117,7 +119,6 @@ public class Server {
             // new match
             GameController match = new GameController(clientHandler.getUsername());
             addPlayerToMatch(clientHandler.getUsername(), match, clientHandler);
-            System.out.println("Scelta una lobby vuota");
             new VirtualView(clientHandler).waitForStart();
         } else {
             // join existing match

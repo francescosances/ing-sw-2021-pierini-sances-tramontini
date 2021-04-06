@@ -13,7 +13,6 @@ import it.polimi.ingsw.view.cli.CLI;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ClientController {
@@ -42,6 +41,9 @@ public class ClientController {
         switch (message.getType()) {
             case GENERIC:
                 view.showMessage(message.getData("text"));
+                break;
+            case YOUR_TURN:
+                view.yourTurn();
                 break;
             case LOGIN_FAILED:
                 view.showMessage("Login failed, try with another username");

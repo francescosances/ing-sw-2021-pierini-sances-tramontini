@@ -67,14 +67,16 @@ public class CLI implements View {
         // TODO possibilità di aggiornare la lista di lobby disponibili
         output.println("Create a new match or join one:");
         output.println("[0] New match");
+        int choice;
         if(availableMatches != null) {
             for (int i = 1; i <= availableMatches.size(); i++) {
                 output.print("[" + i + "] ");
                 output.print(availableMatches.get(i - 1).getFirst() + "'s match ");
                 output.println("(" + availableMatches.get(i - 1).getSecond() + "/" + availableMatches.get(i - 1).getThird() + ")");
             }
-        }
-        int choice = input.nextInt();
+            choice = input.nextInt();
+        }else
+            choice = 0;
         if (choice == 0)
             clientController.lobbyChoice(null);
         else if (choice > 0 && choice <= availableMatches.size())
@@ -117,14 +119,14 @@ public class CLI implements View {
     @Override
     public void listLeaderCards(List<LeaderCard> leaderCardList) {
         System.out.println("Choose two leader cards:");
-        for (int i = 1; i < leaderCardList.size(); i++) {
+        for (int i = 0; i < leaderCardList.size(); i++) {
             output.print("[" + i + "] ");
             LeaderCard temp = leaderCardList.get(i);
             output.println(temp.toString());
         }
         int choiceA = input.nextInt();
         int choiceB = input.nextInt();
-        if (choiceA > 0 && choiceA <= leaderCardList.size() && choiceB > 0 && choiceB < leaderCardList.size())
+        if (choiceA >= 0 && choiceA <= leaderCardList.size() && choiceB >= 0 && choiceB < leaderCardList.size())
             clientController.leaderCardsChoice(leaderCardList.get(choiceA),leaderCardList.get(choiceB));
         else{
             output.println("Invalid choice");

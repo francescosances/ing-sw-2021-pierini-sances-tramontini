@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.cards.Requirements;
 import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
 import it.polimi.ingsw.model.storage.Resource;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,4 +25,13 @@ public class ProductionLeaderCard extends LeaderCard implements Producer {
     @Override
     public void produce(){}
 
+    @Override
+    public String toString() {
+        return "ProductionLeaderCard{" +
+                "active=" + active +
+                ", requirements=" + requirements +
+                ", productionCost=" + productionCost +
+                ", productionGain=" + productionGain +
+                '}';
+    }
 }
