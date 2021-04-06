@@ -8,11 +8,26 @@ public class DevelopmentCard extends Card implements Producer {
 
     public static final int MAX_LEVEL = 3;
 
+    /**
+     * The requirements to be met in order to buy this card
+     */
     private Requirements cost;
+    /**
+     * The level of this card
+     */
     private int level;
+    /**
+     * The color of this card
+     */
     private DevelopmentColorType color;
 
+    /**
+     * The amount of resources to be paid in order to start the production
+     */
     private Requirements productionCost;
+    /**
+     * The amount of resources gained from the production
+     */
     private Requirements productionGain;
 
     private DevelopmentCard(int victoryPoints){
@@ -31,22 +46,42 @@ public class DevelopmentCard extends Card implements Producer {
         }
     }
 
+    /**
+     * Returns the amount of resources to be paid in order to start the production
+     * @return a Requirements object containin the amount of resources to be paid in order to start the production
+     */
     public Requirements getCost() {
         return cost;
     }
 
+    /**
+     * Returns the level of this card
+     * @return the level of this card
+     */
     public int getLevel() {
         return level;
     }
 
+    /**
+     * Returns the color of this card
+     * @return a DevelopmentColorType representing the color of the card
+     */
     public DevelopmentColorType getColor() {
         return color;
     }
 
+    /**
+     * Returns the amount of resources to be paid in order to start the production
+     * @return a Requirements object containing the amount of resources to be paid in order to start the production
+     */
     public Requirements getProductionCost() {
         return productionCost;
     }
 
+    /**
+     * Returns the amount of resources gained from the production
+     * @return a Requirements object containing the amount of resources gained from the production
+     */
     public Requirements getProductionGain() {
         return productionGain;
     }
