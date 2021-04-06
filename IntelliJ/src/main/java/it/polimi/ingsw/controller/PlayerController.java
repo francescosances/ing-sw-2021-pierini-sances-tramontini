@@ -47,7 +47,6 @@ public class PlayerController {
             System.out.println(leaderCardList);
             System.out.println("qui");
             virtualView.listLeaderCards(leaderCardList);
-            //TODO: invia messaggio scegli carta
         }else {
             chooseLeaderCards(leaderCardList.get(0),leaderCardList.get(1));
         }
