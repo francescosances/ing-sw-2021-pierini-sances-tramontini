@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class Server {
@@ -78,16 +80,6 @@ public class Server {
         return !players.containsKey(username);
     }
 
-    private boolean isDisconnected(String username) {
-        return players.containsKey(username)
-                && players.get(username) != null
-                && !players.get(username).isConnected(username);
-    }
-
-    private void connect(String username, ClientHandler clientHandler) {
-        players.put(username, null);
-        listLobbies(clientHandler);
-    }
 
     private void listLobbies(ClientHandler clientHandler) {
             View view = new VirtualView(clientHandler);
@@ -120,6 +112,17 @@ public class Server {
         getGameController(clientHandler.getUsername()).connect(clientHandler.getUsername());
     }
 
+    private boolean isDisconnected(String username) {
+        return players.containsKey(username)
+                && players.get(username) != null
+                && !players.get(username).isConnected(username);
+    }
+
+    private void connect(String username, ClientHandler clientHandler) {
+        players.put(username, null);
+        listLobbies(clientHandler);
+    }
+
     private void reconnect(String username, ClientHandler clientHandler) {
         PlayerController playerController = getGameController(username).getPlayerController(username);
         playerController.setVirtualView(new VirtualView(clientHandler));
@@ -132,6 +135,8 @@ public class Server {
     }
 
     // logger
-    public void log(String msg) { System.out.println(msg); }
+    public void log(String msg) {
+        System.out.println(msg);
+    }
 
 }

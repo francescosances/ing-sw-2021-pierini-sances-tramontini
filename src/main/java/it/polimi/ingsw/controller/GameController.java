@@ -151,10 +151,10 @@ public class GameController {
 
     public void connect(String username){
         players.forEach((user)->{
-            if(user.getUsername().equals(username)) {
+            if(user.getUsername().equals(username))
                 user.activate();
-            }
-            user.getVirtualView().userConnected(username);
+            else
+                user.getVirtualView().userConnected(username);
         });
     }
 
@@ -162,6 +162,8 @@ public class GameController {
         players.forEach((user)->{
             if(user.getUsername().equals(username)) {
                 user.deactivate();
+                if(user.getCurrentStatus() == PlayerController.PlayerStatus.YOUR_TURN)
+                    nextTurn();
             }
             user.getVirtualView().userDisconnected(username);
         });
