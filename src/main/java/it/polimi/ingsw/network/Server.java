@@ -1,6 +1,5 @@
 package it.polimi.ingsw.network;
 
-import com.google.gson.Gson;
 import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.controller.PlayerController;
 import it.polimi.ingsw.model.cards.LeaderCard;
@@ -44,7 +43,6 @@ public class Server {
     // --- communication with client ---
 
     public void handleReceivedMessage(Message message, ClientHandler clientHandler) {
-        Gson gson = new Gson();
         switch (message.getType()){
             case LOGIN_REQUEST:
                 login(message.getData("username"), clientHandler);
@@ -52,20 +50,8 @@ public class Server {
             case LOBBY_CHOICE:
                 lobbyChoice(message.getData("matchOwner"), clientHandler);
                 break;
-            case START_MATCH:
-                getGameController(clientHandler.getUsername()).start();
-                break;
-            case LEADER_CARDS_CHOICE:
-                List<LeaderCard> leaderCards = Serializer.deserializeLeaderCards(message.getData("leaderCards"));
-                System.out.println("Scelta carte leader");
-                System.out.println(leaderCards);
-                GameController gameController = getGameController(clientHandler.getUsername());
-                gameController.getPlayerController(clientHandler.getUsername()).chooseLeaderCards(leaderCards.toArray(new LeaderCard[]{}));
-                gameController.nextTurn();
-                break;
             default:
-                System.out.println("DEFAULT handleReceivedMessage");
-                // TODO forward message to playerController / messageReader
+                getGameController(clientHandler.getUsername()).handleReceivedGameMessage(message,clientHandler.getUsername());
         }
     }
 

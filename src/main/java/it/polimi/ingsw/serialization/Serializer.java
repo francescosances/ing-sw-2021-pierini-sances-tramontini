@@ -26,7 +26,6 @@ public class Serializer {
 
     public static void serializeMatchState(Match match, File file) throws IOException {
         Writer writer = Files.newBufferedWriter(Paths.get(file.getPath()));
-        //TODO: formattare (manualmente?) il formato del file json
         //serializeDevelopmentCardDecks(match, writer);
 
         //serializeMarket(match, writer);
@@ -94,7 +93,6 @@ public class Serializer {
 
         return deckList;
     }
-
 
     public static LeaderCard deserializeLeaderCard(String serializedCard) {
         GsonBuilder gsonbuilder = new GsonBuilder().registerTypeAdapter(Requirements.class, new RequirementsCreator());

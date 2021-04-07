@@ -232,4 +232,7 @@ public class Match {
         return players.size() == MAX_PLAYERS;
     }
 
+    public void endTurn(){
+
+    }
 }

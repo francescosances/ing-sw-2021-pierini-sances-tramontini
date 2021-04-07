@@ -15,22 +15,12 @@ public class PlayerController {
 
     private PlayerStatus currentStatus;
 
-    private List<LeaderCard> leaderCardList;
-
     public PlayerController(String username,PlayerBoard playerBoard,VirtualView virtualView){
         this.username = username;
         this.playerBoard = playerBoard;
         this.active = true;
         this.virtualView = virtualView;
         this.currentStatus = PlayerStatus.WAITING;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public String getUsername(){
-        return username;
     }
 
     public void activate() {
@@ -41,14 +31,21 @@ public class PlayerController {
         this.active = false;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public String getUsername(){
+        return username;
+    }
+
     public void drawLeaderCards(){
-        leaderCardList = playerBoard.getMatch().drawLeaderCards(4);
+        List<LeaderCard> leaderCardList = playerBoard.getMatch().drawLeaderCards(4);
         if(isActive()){
-            System.out.println(leaderCardList);
-            System.out.println("qui");
             virtualView.listLeaderCards(leaderCardList);
         }else {
             chooseLeaderCards(leaderCardList.get(0),leaderCardList.get(1));
+            //TODO: ricontrollare riconnessione utente
         }
     }
 
@@ -73,6 +70,10 @@ public class PlayerController {
 
     public void setVirtualView(VirtualView virtualView){
         this.virtualView = virtualView;
+    }
+
+    public PlayerStatus getCurrentStatus() {
+        return currentStatus;
     }
 
     public enum PlayerStatus {

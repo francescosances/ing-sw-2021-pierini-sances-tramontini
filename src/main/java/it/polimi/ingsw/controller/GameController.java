@@ -2,7 +2,10 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.SoloMatch;
+import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.network.ClientHandler;
+import it.polimi.ingsw.serialization.Serializer;
+import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.view.VirtualView;
 
 import java.util.ArrayList;
@@ -22,6 +25,17 @@ public class GameController {
         currentPhase = GamePhase.ADDING_PLAYERS;
     }
 
+    public void handleReceivedGameMessage(Message message, String username){
+        switch (message.getType()) {
+            case START_MATCH:
+                this.start();
+                break;
+            case LEADER_CARDS_CHOICE:
+                this.leaderCardsChoice(username, Serializer.deserializeLeaderCards(message.getData("leaderCards")));
+                break;
+        }
+    }
+
     public void start(){
         if(this.players.size() == 1) {
             this.match = new SoloMatch(match.getMatchName());
@@ -32,18 +46,9 @@ public class GameController {
         System.out.println("PARTITA AVVIATA");
     }
 
-    public void nextTurn(){
-        players.get(currentPlayerIndex).turnEnded();
-        currentPlayerIndex = (currentPlayerIndex+1)%players.size();
-        if(players.stream().noneMatch(PlayerController::isActive))//No one is active
-            return;
-        if(!players.get(currentPlayerIndex).isActive())
-            nextTurn();
-        players.get(currentPlayerIndex).yourTurn();
-        currentPhase.incrementCurrentPhasePlayers();
-        if(currentPhase.currentPhasePlayers >= players.size())
-            currentPhase = currentPhase.next();
-        onStatusChanged();
+    public void leaderCardsChoice(String username,List<LeaderCard> leaderCards){
+        getPlayerController(username).chooseLeaderCards(leaderCards.toArray(new LeaderCard[]{}));
+        nextTurn();
     }
 
     public PlayerController addPlayer(String username, ClientHandler clientHandler){
@@ -51,13 +56,12 @@ public class GameController {
         if(playerController != null){
             //Reactivating existing player
             playerController.setVirtualView(new VirtualView(clientHandler));
-            playerController.activate();
-            return playerController;
         }else{
             playerController = new PlayerController(username, match.addPlayer(username), new VirtualView(clientHandler));
             players.add(playerController);
-            return playerController;
         }
+        this.connect(username);
+        return playerController;
     }
 
     public PlayerController getPlayerController(String username){
@@ -67,34 +71,8 @@ public class GameController {
         return null;
     }
 
-    public boolean containsUsername(String username){
-        return match.containsUsername(username);
-    }
-
-    public boolean isConnected(String username){
-        return players.stream().filter(x->x.getUsername().equals(username)).anyMatch(PlayerController::isActive);
-    }
-
     public String getMatchName(){
         return match.getMatchName();
-    }
-
-    public void connect(String username){
-        players.forEach((user)->{
-            if(user.getUsername().equals(username)) {
-                user.activate();
-            }
-            user.getVirtualView().userConnected(username);
-        });
-    }
-
-    public void disconnect(String username){
-        players.forEach((user)->{
-            if(user.getUsername().equals(username)) {
-                user.deactivate();
-            }
-            user.getVirtualView().userDisconnected(username);
-        });
     }
 
     public int getJoinedPlayers(){
@@ -121,6 +99,20 @@ public class GameController {
         }
     }
 
+    public void nextTurn(){
+        players.get(currentPlayerIndex).turnEnded();
+        currentPlayerIndex = (currentPlayerIndex+1)%players.size();
+        if(players.stream().noneMatch(PlayerController::isActive))//No one is active
+            return;
+        if(!players.get(currentPlayerIndex).isActive())
+            nextTurn();
+        players.get(currentPlayerIndex).yourTurn();
+        currentPhase.incrementCurrentPhasePlayers();
+        if(currentPhase.getCurrentPhasePlayers() >= players.size())
+            currentPhase = currentPhase.next();
+        onStatusChanged();
+    }
+
     protected void nextPhase(){
         this.currentPhase = this.currentPhase.next();
         onStatusChanged();
@@ -129,6 +121,8 @@ public class GameController {
     public enum GamePhase {
         ADDING_PLAYERS,
         PLAYERS_SETUP,
+        //TODO: aggiungere fase intermedia per scartare carte leader / spostare risorse
+        TURN,
         END_GAME;
 
         /**
@@ -153,5 +147,27 @@ public class GameController {
             this.currentPhasePlayers = 0;
             return vals[(this.ordinal()+1) % vals.length];
         }
+    }
+
+    public void connect(String username){
+        players.forEach((user)->{
+            if(user.getUsername().equals(username)) {
+                user.activate();
+            }
+            user.getVirtualView().userConnected(username);
+        });
+    }
+
+    public void disconnect(String username){
+        players.forEach((user)->{
+            if(user.getUsername().equals(username)) {
+                user.deactivate();
+            }
+            user.getVirtualView().userDisconnected(username);
+        });
+    }
+
+    public boolean isConnected(String username){
+        return players.stream().filter(x->x.getUsername().equals(username)).anyMatch(PlayerController::isActive);
     }
 }
