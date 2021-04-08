@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.cards.DevelopmentCard;
-import it.polimi.ingsw.model.cards.EndGameException;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.Requirements;
 import it.polimi.ingsw.model.storage.Resource;
