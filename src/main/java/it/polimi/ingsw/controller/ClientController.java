@@ -23,7 +23,6 @@ public class ClientController {
         this.client = client;
     }
 
-    // --- FROM SEVER TO CLIENT (invoked by Client class during initialization or after message from server) ---
 
     public void startCli() {
         view = new CLI(this);
