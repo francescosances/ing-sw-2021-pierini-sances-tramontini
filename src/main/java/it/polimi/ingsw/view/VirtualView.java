@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.network.ClientHandler;
@@ -8,6 +9,7 @@ import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.utils.Triple;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class VirtualView implements View {
@@ -82,6 +84,14 @@ public class VirtualView implements View {
         Gson gson = new Gson();
         Message message = new Message(Message.MessageType.LIST_LEADER_CARDS);
         message.addData("leaderCards",gson.toJson(leaderCardList));
+        sendMessage(message);
+    }
+
+    @Override
+    public void askForAction(Action... availableActions) {
+        Gson gson = new Gson();
+        Message message = new Message(Message.MessageType.ASK_FOR_ACTION);
+        message.addData("availableActions",gson.toJson(Arrays.asList(availableActions)));
         sendMessage(message);
     }
 

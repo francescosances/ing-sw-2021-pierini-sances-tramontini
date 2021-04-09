@@ -1,5 +1,7 @@
 package it.polimi.ingsw.controller;
 
+import com.google.gson.Gson;
+import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.SoloMatch;
 import it.polimi.ingsw.model.cards.LeaderCard;
@@ -48,6 +50,7 @@ public class GameController {
      * @param username the username of the user that sent the message
      */
     public void handleReceivedGameMessage(Message message, String username){
+        Gson gson = new Gson();
         switch (message.getType()) {
             case START_MATCH:
                 start();
@@ -55,8 +58,12 @@ public class GameController {
             case LEADER_CARDS_CHOICE:
                 leaderCardsChoice(username, Serializer.deserializeLeaderCards(message.getData("leaderCards")));
                 break;
+            case PERFORM_ACTION:
+                getPlayerController(username).performAction(gson.fromJson(message.getData("action"),Action.class));
+                break;
         }
     }
+
 
     /**
      * Starts the match ending the phase of adding players. The firt player is chosen randomly.
@@ -159,6 +166,9 @@ public class GameController {
             case PLAYERS_SETUP:
                 players.get(currentPlayerIndex).listLeaderCards();
                 break;
+            case ACTION_CHOICE:
+                players.get(currentPlayerIndex).askForAction();
+                break;
         }
     }
 
@@ -190,8 +200,9 @@ public class GameController {
     public enum GamePhase {
         ADDING_PLAYERS,
         PLAYERS_SETUP,
+        ACTION_CHOICE,
         //TODO: aggiungere fase intermedia per scartare carte leader / spostare risorse
-        TURN,
+        NORMAL_ACTION,
         END_GAME;
 
         /**

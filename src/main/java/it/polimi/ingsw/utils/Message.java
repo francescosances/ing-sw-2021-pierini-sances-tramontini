@@ -51,12 +51,14 @@ public class Message{
         RESUME_MATCH,
         YOUR_TURN,
         LIST_LEADER_CARDS,
+        ASK_FOR_ACTION,
 
         // from client to server
         LOGIN_REQUEST,
         START_MATCH,
         LOBBY_CHOICE,
-        LEADER_CARDS_CHOICE;
+        LEADER_CARDS_CHOICE,
+        PERFORM_ACTION;
     }
 
 }

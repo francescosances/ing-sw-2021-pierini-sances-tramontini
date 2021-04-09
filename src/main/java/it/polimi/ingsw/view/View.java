@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.utils.Triple;
@@ -53,5 +54,12 @@ public interface View {
     void userDisconnected(String username);
 
     void listLeaderCards(List<LeaderCard> leaderCardList);
+
+    /**
+     * Shows the actions that the user can choose to perform
+     * @param availableActions the array of available actions which the user can choose
+     */
+    void askForAction(Action... availableActions);
+
 
 }

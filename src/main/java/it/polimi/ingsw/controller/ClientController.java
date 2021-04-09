@@ -2,6 +2,7 @@ package it.polimi.ingsw.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.network.Client;
@@ -13,6 +14,7 @@ import it.polimi.ingsw.view.cli.CLI;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClientController {
@@ -84,6 +86,10 @@ public class ClientController {
                 List<LeaderCard> leaderCardList = Serializer.deserializeLeaderCards(message.getData("leaderCards"));
                 view.listLeaderCards(leaderCardList);
                 break;
+            case ASK_FOR_ACTION:
+                List<Action> actions = gson.fromJson(message.getData("availableActions"),new TypeToken<List<Action>>(){}.getType());
+                view.askForAction(actions.toArray(new Action[0]));
+                break;
             default:
                 client.log("Received unexpected message");
                 client.log(message.serialize());
@@ -123,6 +129,13 @@ public class ClientController {
     }
 
     /**
+     * Sends to the server the message that communicate that the match can start
+     */
+    public void startMatch(){
+        client.sendMessage(new Message(Message.MessageType.START_MATCH));
+    }
+
+    /**
      * Sends to the server the array of leader cards chosen by the user
      * @param leaderCards the array of leader cards chosen by the user
      */
@@ -133,10 +146,14 @@ public class ClientController {
     }
 
     /**
-     * Sends to the server the message that communicate that the match can start
+     * Sends to the server the action chosen by the user so that it can be performed
+     * @param action the action to start
      */
-    public void startMatch(){
-        client.sendMessage(new Message(Message.MessageType.START_MATCH));
+    public void performAction(Action action){
+        Gson gson = new Gson();
+        Message message = new Message(Message.MessageType.PERFORM_ACTION);
+        message.addData("action",gson.toJson(action));
+        client.sendMessage(message);
     }
 
     /**

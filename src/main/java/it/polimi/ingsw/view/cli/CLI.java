@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.cli;
 
 import it.polimi.ingsw.controller.ClientController;
+import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.utils.Triple;
@@ -130,7 +131,7 @@ public class CLI implements View {
 
     @Override
     public void listLeaderCards(List<LeaderCard> leaderCardList) {
-        System.out.println("Choose two leader cards:");
+        output.println("Choose two leader cards:");
         for (int i = 0; i < leaderCardList.size(); i++) {
             output.print("[" + i + "] ");
             LeaderCard temp = leaderCardList.get(i);
@@ -143,6 +144,22 @@ public class CLI implements View {
         else{
             output.println("Invalid choice");
             listLeaderCards(leaderCardList);
+        }
+    }
+
+    @Override
+    public void askForAction(Action ... availableActions) {
+        output.println("Which action do you want to perform?");
+        for (int i = 0; i < availableActions.length; i++) {
+            output.print("[" + (i) + "] ");
+            output.println(availableActions[i].toString());
+        }
+        int choice = input.nextInt();
+        if (choice >= 0 && choice <= availableActions.length)
+            clientController.performAction(availableActions[choice] );
+        else{
+            output.println("Invalid choice");
+            askForAction(availableActions);
         }
     }
 

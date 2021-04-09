@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.view.VirtualView;
@@ -73,29 +74,6 @@ public class PlayerController {
         return username;
     }
 
-    /**
-     * Get 4 leader cards from the match and send it to the client through the virtual view.
-     * If the user is inactive, the cards are randomly chosen
-     */
-    public void listLeaderCards(){
-        List<LeaderCard> leaderCardList = playerBoard.getMatch().drawLeaderCards(4);
-        if(isActive()){
-            virtualView.listLeaderCards(leaderCardList);
-        }else {
-            chooseLeaderCards(leaderCardList.get(0),leaderCardList.get(1));
-            //TODO: ricontrollare riconnessione utente
-        }
-    }
-
-    /**
-     * Puts the given leader cards into the player's hand
-     * @param cards the cards to keep in the hand
-     */
-    public void chooseLeaderCards(LeaderCard ... cards){
-        for (LeaderCard card : cards) {
-            playerBoard.addLeaderCard(card);
-        }
-    }
 
     /**
      * Mark the player as currently playing and notify the status update to the virtual view
@@ -136,13 +114,66 @@ public class PlayerController {
         return currentStatus;
     }
 
+    /**
+     * Get 4 leader cards from the match and send it to the client through the virtual view.
+     * If the user is inactive, the cards are randomly chosen
+     */
+    public void listLeaderCards(){
+        List<LeaderCard> leaderCardList = playerBoard.getMatch().drawLeaderCards(4);
+        if(isActive()){
+            virtualView.listLeaderCards(leaderCardList);
+        }else {
+            chooseLeaderCards(leaderCardList.get(0),leaderCardList.get(1));
+            //TODO: ricontrollare riconnessione utente
+        }
+    }
+
+    /**
+     * Puts the given leader cards into the player's hand
+     * @param cards the cards to keep in the hand
+     */
+    public void chooseLeaderCards(LeaderCard ... cards){
+        for (LeaderCard card : cards) {
+            playerBoard.addLeaderCard(card);
+        }
+    }
+
+    /**
+     * Ask to the user which action want to perform
+     */
+    public void askForAction(){
+        virtualView.askForAction(Action.values());
+        this.currentStatus = PlayerStatus.PERFORMING_ACTION;
+    }
+
+    /**
+     * Start the action chosen by the user
+     * @param action the action that must be performed
+     */
+    public void performAction(Action action) {
+        switch (action) {
+            case PLAY_LEADER:
+                //TODO: play leader;
+                break;
+            case DISCARD_LEADER:
+                //TODO: discard leader
+                break;
+            case MOVE_RESOURCES:
+                //TODO: move resources
+                break;
+            default:
+                this.currentStatus = this.currentStatus.next();
+        }
+    }
 
     public enum PlayerStatus {
+        PERFORMING_ACTION,
         YOUR_TURN,
         WAITING;
 
         private static final PlayerStatus[] vals = values();
 
+        //TODO: rivedere il flusso perché ripassi per PERFORMING_ACTION due volte
         public PlayerStatus next()
         {
             return vals[(this.ordinal()+1) % vals.length];
