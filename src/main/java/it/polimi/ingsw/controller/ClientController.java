@@ -16,24 +16,45 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 public class ClientController {
+    /**
+     * The socket connection to the server
+     */
     private final Client client;
+
+    /**
+     * The view used to interact with the user
+     */
     private View view;
 
+    /**
+     * Initialize a new ClientController connected to the server through the specified Client object
+     * @param client the socket connection reference
+     */
     public ClientController(Client client) {
         this.client = client;
     }
 
+    /**
+     * Set the view to Command Line Interface and launch it
+     */
     public void startCli() {
         view = new CLI(this);
         view.init();
     }
 
+    /**
+     * Set the view to Graphical User Interface and launch it
+     */
     public void startGui() {
         // TODO - GUI Controller
         // this.view = new GuiController(this);
         view.init();
     }
 
+    /**
+     * Method that map a message with the the action that must be executed
+     * @param message the message received from the server via socket
+     */
     public void handleReceivedMessage(Message message) {
         Gson gson = new Gson();
         switch (message.getType()) {
@@ -44,7 +65,7 @@ public class ClientController {
                 view.yourTurn();
                 break;
             case LOGIN_FAILED:
-                view.showMessage("Login failed, try with another username");
+                view.showErrorMessage("Login failed, try with another username");
                 view.askLogin();
                 break;
             case LOBBY_INFO:
@@ -69,37 +90,59 @@ public class ClientController {
         }
     }
 
-
-    // --- FROM CLIENT TO SERVER --- (invoked by View)
-
+    /**
+     * Connect the socket to server and ask the user to login
+     * @param ip the ip address of the server
+     * @param port the port of the server
+     * @throws IOException if the server connection is interrupted
+     */
     public void connect(String ip, int port) throws IOException {
         client.setupSocket(ip, port);
         new Thread(client).start();
         view.askLogin();
     }
 
+    /**
+     * Send to the server a login request
+     * @param username the username chosen to login
+     */
     public void login(String username){
         Message message = new Message(Message.MessageType.LOGIN_REQUEST);
         message.addData("username", username);
         client.sendMessage(message);
     }
 
-    public void lobbyChoice(String matchOwner) {
+    /**
+     * Send to the server the lobby chosen by the user
+     * @param matchName the name of the match chosen by the user
+     */
+    public void lobbyChoice(String matchName) {
         Message message = new Message(Message.MessageType.LOBBY_CHOICE);
-        message.addData("matchOwner", matchOwner);
+        message.addData("matchOwner", matchName);
         client.sendMessage(message);
     }
 
+    /**
+     * Send to the server the array of leader cards chosen by the user
+     * @param leaderCards the array of leader cards chosen by the user
+     */
     public void leaderCardsChoice(LeaderCard ... leaderCards){
         Message message = new Message(Message.MessageType.LEADER_CARDS_CHOICE);
         message.addData("leaderCards",leaderCards,new Gson());
         client.sendMessage(message);
     }
 
+    /**
+     * Send to the server the message that communicate that the match can start
+     */
     public void startMatch(){
         client.sendMessage(new Message(Message.MessageType.START_MATCH));
     }
 
+    /**
+     * Resume a match suspended after a network disconnection
+     * @param match the match to be resumed
+     */
     public void resumeMatch(Match match){
         throw new IllegalStateException("Not implemented yet");
     }

@@ -39,8 +39,16 @@ public class ClientHandler implements Runnable {
         socketOut = new PrintWriter(socket.getOutputStream());
     }
 
+    /**
+     * Returns the username associated to this ClientHandler
+     * @return the username associated to this ClientHandler
+     */
     public String getUsername() { return this.username; }
 
+    /**
+     * Set the username associated to this ClientHandler
+     * @param username the username to associate to this ClientHandler
+     */
     public void setUsername(String username) { this.username = username; }
 
     @Override
@@ -48,11 +56,11 @@ public class ClientHandler implements Runnable {
         try {
             // wait for messages from client
             while(!Thread.currentThread().isInterrupted()){
-                Message message = Message.messageFromString(socketIn.nextLine());
+                Message message = Message.messageFromString(socketIn.nextLine()); //Read the new message
                 server.log("Message received from " + username);
                 server.log(message.serialize());
                 try {
-                    server.handleReceivedMessage(message, this);
+                    server.handleReceivedMessage(message, this); // Forward the message to the server
                 }catch (IllegalStateException | IllegalArgumentException e){
                     new VirtualView(this).showErrorMessage(e.getMessage());
                 }
@@ -77,6 +85,10 @@ public class ClientHandler implements Runnable {
         server.log("ClientHandler closed");
     }
 
+    /**
+     * Send the specified message to the client
+     * @param message the message to send
+     */
     public void sendMessage(Message message) {
         socketOut.println(message.serialize());
         socketOut.flush();
