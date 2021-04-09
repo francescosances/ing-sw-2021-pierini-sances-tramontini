@@ -44,7 +44,7 @@ public class GameController {
 
     /**
      * Method that map a message and an username with the the action that must be executed
-     * @param message the message received from the socket
+     * @param message the message received from the client via socket
      * @param username the username of the user that sent the message
      */
     public void handleReceivedGameMessage(Message message, String username){
@@ -157,7 +157,7 @@ public class GameController {
     protected void onStatusChanged(){
         switch (currentPhase){
             case PLAYERS_SETUP:
-                players.get(currentPlayerIndex).drawLeaderCards();
+                players.get(currentPlayerIndex).listLeaderCards();
                 break;
         }
     }
@@ -219,7 +219,7 @@ public class GameController {
     }
 
     /**
-     * Activates the specified user and notify to the others that the user has been connected
+     * Activates the specified user and notify to the others that the user has been connected.
      * @param username the user to be connected
      */
     public void connect(String username){
@@ -232,7 +232,7 @@ public class GameController {
     }
 
     /**
-     * Deactivates the specified user and notify to the others that the user has been disconnected
+     * Deactivates the specified user and notify to the others that the user has been disconnected.
      * @param username the user to be disconnected
      */
     public void disconnect(String username){

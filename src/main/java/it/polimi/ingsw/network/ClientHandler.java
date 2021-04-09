@@ -9,12 +9,27 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class ClientHandler implements Runnable {
+    /**
+     * The socket connection reference
+     */
     private final Socket socket;
+    /**
+     * The server object reference
+     */
     private final Server server;
 
+    /**
+     * A scanner on the socket input stream
+     */
     private final Scanner socketIn;
+    /**
+     * A printWriter used to write on the socket output stream
+     */
     private final PrintWriter socketOut;
 
+    /**
+     * The username associated to this ClientHandler
+     */
     private String username = null;
 
     public ClientHandler(Socket socket,Server server) throws IOException {

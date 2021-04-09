@@ -23,7 +23,6 @@ public class ClientController {
         this.client = client;
     }
 
-
     public void startCli() {
         view = new CLI(this);
         view.init();
