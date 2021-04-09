@@ -20,6 +20,7 @@ public class SoloMatch extends Match{
         actionTokens.add(new ActionToken(2));
         actionTokens.add(new ActionToken(2));
         actionTokens.add(new ActionToken(1));
+        actionTokens.shuffle();
     }
 
     public void moveBlackCross(int spaces) throws EndGameException {
@@ -54,8 +55,12 @@ public class SoloMatch extends Match{
     @Override
     public void endTurn(){
         super.endTurn();
-        drawActionToken();
-        //TODO: svolgere action token
+        try {
+            drawActionToken().show(this);
+            //TODO: creare metodo endgame per contare i punti
+        } catch (EndGameException e) {
+            e.printStackTrace();
+        }
     }
 
 }
