@@ -13,10 +13,22 @@ import java.util.Scanner;
 
 public class CLI implements View {
 
+    /**
+     * The controller related to this view
+     */
     private final ClientController clientController;
 
+    /**
+     * The scanner that reads the user inputs
+     */
     private final Scanner input;
+    /**
+     * The default output stream to communicate with the user
+     */
     private final PrintStream output;
+    /**
+     * The output stream used to communicate the errors to the user
+     */
     private final PrintStream errorOutput;
 
     public CLI(ClientController clientController){
@@ -63,27 +75,27 @@ public class CLI implements View {
     }
 
     @Override
-    public void listLobbies(List<Triple<String, Integer, Integer>> availableMatches) {
+    public void listLobbies(List<Triple<String, Integer, Integer>> availableLobbies) {
         // TODO possibilità di aggiornare la lista di lobby disponibili
         output.println("Create a new match or join one:");
         output.println("[0] New match");
         int choice;
-        if(availableMatches != null) {
-            for (int i = 1; i <= availableMatches.size(); i++) {
+        if(availableLobbies != null) {
+            for (int i = 1; i <= availableLobbies.size(); i++) {
                 output.print("[" + i + "] ");
-                output.print(availableMatches.get(i - 1).getFirst() + "'s match ");
-                output.println("(" + availableMatches.get(i - 1).getSecond() + "/" + availableMatches.get(i - 1).getThird() + ")");
+                output.print(availableLobbies.get(i - 1).getFirst() + "'s match ");
+                output.println("(" + availableLobbies.get(i - 1).getSecond() + "/" + availableLobbies.get(i - 1).getThird() + ")");
             }
             choice = input.nextInt();
         }else
             choice = 0;
         if (choice == 0)
             clientController.lobbyChoice(null);
-        else if (choice > 0 && choice <= availableMatches.size())
-            clientController.lobbyChoice(availableMatches.get(choice - 1).getFirst());
+        else if (choice > 0 && choice <= availableLobbies.size())
+            clientController.lobbyChoice(availableLobbies.get(choice - 1).getFirst());
         else{
             output.println("Invalid choice");
-            listLobbies(availableMatches);
+            listLobbies(availableLobbies);
         }
     }
 

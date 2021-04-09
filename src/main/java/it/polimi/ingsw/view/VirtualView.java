@@ -33,10 +33,10 @@ public class VirtualView implements View {
     }
 
     @Override
-    public void listLobbies(List<Triple<String, Integer, Integer>> availableMatches){
+    public void listLobbies(List<Triple<String, Integer, Integer>> availableLobbies){
         Message message = new Message(Message.MessageType.LOBBY_INFO);
         Gson gson = new Gson();
-        message.addData("availableMatches",gson.toJson(availableMatches));
+        message.addData("availableMatches",gson.toJson(availableLobbies));
         sendMessage(message);
     }
 
