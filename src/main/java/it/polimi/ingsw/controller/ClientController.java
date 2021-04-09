@@ -43,7 +43,7 @@ public class ClientController {
     }
 
     /**
-     * Set the view to Graphical User Interface and launch it
+     * Sets the view to Graphical User Interface and launch it
      */
     public void startGui() {
         // TODO - GUI Controller
@@ -91,10 +91,10 @@ public class ClientController {
     }
 
     /**
-     * Connect the socket to server and ask the user to login
+     * Connects the socket to server and ask the user to login
      * @param ip the ip address of the server
      * @param port the port of the server
-     * @throws IOException if the server connection is interrupted
+     * @throws IOException if the connection is interrupted
      */
     public void connect(String ip, int port) throws IOException {
         client.setupSocket(ip, port);
@@ -103,7 +103,7 @@ public class ClientController {
     }
 
     /**
-     * Send to the server a login request
+     * Sends to the server a login request
      * @param username the username chosen to login
      */
     public void login(String username){
@@ -113,7 +113,7 @@ public class ClientController {
     }
 
     /**
-     * Send to the server the lobby chosen by the user
+     * Sends to the server the lobby chosen by the user
      * @param matchName the name of the match chosen by the user
      */
     public void lobbyChoice(String matchName) {
@@ -123,7 +123,7 @@ public class ClientController {
     }
 
     /**
-     * Send to the server the array of leader cards chosen by the user
+     * Sends to the server the array of leader cards chosen by the user
      * @param leaderCards the array of leader cards chosen by the user
      */
     public void leaderCardsChoice(LeaderCard ... leaderCards){
@@ -133,14 +133,14 @@ public class ClientController {
     }
 
     /**
-     * Send to the server the message that communicate that the match can start
+     * Sends to the server the message that communicate that the match can start
      */
     public void startMatch(){
         client.sendMessage(new Message(Message.MessageType.START_MATCH));
     }
 
     /**
-     * Resume a match suspended after a network disconnection
+     * Resumes a match suspended after a network disconnection
      * @param match the match to be resumed
      */
     public void resumeMatch(Match match){

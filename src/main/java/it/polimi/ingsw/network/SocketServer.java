@@ -7,9 +7,19 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class SocketServer {
+    /**
+     * The server port
+     */
     private final int port;
+    /**
+     * The object containing the socket reference
+     */
     private final Server server;
 
+    /**
+     * Initialize a new server listening on the specified port
+     * @param port the port used by the server
+     */
     public SocketServer(int port){
         this.server = new Server();
         this.port = port;

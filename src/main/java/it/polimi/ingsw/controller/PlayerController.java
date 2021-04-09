@@ -67,7 +67,7 @@ public class PlayerController {
 
     /**
      * Returns the username of the player associated to this controller
-     * @return
+     * @return the username of the player associated to this controller
      */
     public String getUsername(){
         return username;
