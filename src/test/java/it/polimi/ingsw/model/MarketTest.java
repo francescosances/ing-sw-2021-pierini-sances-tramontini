@@ -44,26 +44,26 @@ public class MarketTest {
         market.setMarble(2,3, MarbleType.BLUE);
 
         List<Resource> res = new ArrayList<Resource>(Arrays.asList(market.chooseRow(1)));
-        assertEquals(res.get(0), MarbleType.PURPLE.toResource());
-        assertEquals(res.get(1), MarbleType.YELLOW.toResource());
-        assertEquals(res.get(2), MarbleType.WHITE.toResource());
-        assertEquals(res.get(3), MarbleType.GREY.toResource());
+        assertEquals(MarbleType.PURPLE.toResource(), res.get(0));
+        assertEquals(MarbleType.YELLOW.toResource(), res.get(1));
+        assertEquals(MarbleType.WHITE.toResource(), res.get(2));
+        assertEquals(MarbleType.GREY.toResource(), res.get(3));
 
-        assertEquals(market.getMarble(0,0), MarbleType.WHITE);
-        assertEquals(market.getMarble(0,1), MarbleType.PURPLE);
-        assertEquals(market.getMarble(0,2), MarbleType.BLUE);
-        assertEquals(market.getMarble(0,3), MarbleType.YELLOW);
+        assertEquals(MarbleType.WHITE, market.getMarble(0,0));
+        assertEquals(MarbleType.PURPLE, market.getMarble(0,1));
+        assertEquals(MarbleType.BLUE, market.getMarble(0,2));
+        assertEquals(MarbleType.YELLOW, market.getMarble(0,3));
 
-        assertEquals(market.getMarble(1,0), MarbleType.YELLOW);
-        assertEquals(market.getMarble(1,1), MarbleType.WHITE);
-        assertEquals(market.getMarble(1,2), MarbleType.GREY);
-        assertEquals(market.getMarble(1,3), MarbleType.WHITE);
-        assertEquals(market.getSlideMarble(), MarbleType.PURPLE);
+        assertEquals(MarbleType.YELLOW, market.getMarble(1,0));
+        assertEquals(MarbleType.WHITE, market.getMarble(1,1));
+        assertEquals(MarbleType.GREY, market.getMarble(1,2));
+        assertEquals(MarbleType.WHITE, market.getMarble(1,3));
+        assertEquals(MarbleType.PURPLE, market.getSlideMarble());
 
-        assertEquals(market.getMarble(2,0), MarbleType.WHITE);
-        assertEquals(market.getMarble(2,1), MarbleType.RED);
-        assertEquals(market.getMarble(2,2), MarbleType.GREY);
-        assertEquals(market.getMarble(2,3), MarbleType.BLUE);
+        assertEquals(MarbleType.WHITE, market.getMarble(2,0));
+        assertEquals(MarbleType.RED, market.getMarble(2,1));
+        assertEquals(MarbleType.GREY, market.getMarble(2,2));
+        assertEquals(MarbleType.BLUE, market.getMarble(2,3));
     }
 
     @Test
@@ -83,24 +83,24 @@ public class MarketTest {
         market.setMarble(2,3, MarbleType.BLUE);
 
         List<Resource> res = new ArrayList<Resource>(Arrays.asList(market.chooseColumn(2)));
-        assertEquals(res.get(0), MarbleType.BLUE.toResource());
-        assertEquals(res.get(1), MarbleType.WHITE.toResource());
-        assertEquals(res.get(2), MarbleType.GREY.toResource());
+        assertEquals(MarbleType.BLUE.toResource(), res.get(0));
+        assertEquals(MarbleType.WHITE.toResource(), res.get(1));
+        assertEquals(MarbleType.GREY.toResource(), res.get(2));
 
-        assertEquals(market.getMarble(0,0), MarbleType.WHITE);
-        assertEquals(market.getMarble(0,1), MarbleType.PURPLE);
-        assertEquals(market.getMarble(0,2), MarbleType.WHITE);
-        assertEquals(market.getMarble(0,3), MarbleType.YELLOW);
+        assertEquals(MarbleType.WHITE, market.getMarble(0,0));
+        assertEquals(MarbleType.PURPLE, market.getMarble(0,1));
+        assertEquals(MarbleType.WHITE, market.getMarble(0,2));
+        assertEquals(MarbleType.YELLOW, market.getMarble(0,3));
 
-        assertEquals(market.getMarble(1,0), MarbleType.PURPLE);
-        assertEquals(market.getMarble(1,1), MarbleType.YELLOW);
-        assertEquals(market.getMarble(1,2), MarbleType.GREY);
-        assertEquals(market.getMarble(1,3), MarbleType.GREY);
-        assertEquals(market.getSlideMarble(), MarbleType.BLUE);
+        assertEquals(MarbleType.PURPLE, market.getMarble(1,0));
+        assertEquals(MarbleType.YELLOW, market.getMarble(1,1));
+        assertEquals(MarbleType.GREY, market.getMarble(1,2));
+        assertEquals(MarbleType.GREY, market.getMarble(1,3));
+        assertEquals(MarbleType.BLUE, market.getSlideMarble());
 
-        assertEquals(market.getMarble(2,0), MarbleType.WHITE);
-        assertEquals(market.getMarble(2,1), MarbleType.RED);
-        assertEquals(market.getMarble(2,2), MarbleType.WHITE);
-        assertEquals(market.getMarble(2,3), MarbleType.BLUE);
+        assertEquals(MarbleType.WHITE, market.getMarble(2,0));
+        assertEquals(MarbleType.RED, market.getMarble(2,1));
+        assertEquals(MarbleType.WHITE, market.getMarble(2,2));
+        assertEquals(MarbleType.BLUE, market.getMarble(2,3));
     }
 }

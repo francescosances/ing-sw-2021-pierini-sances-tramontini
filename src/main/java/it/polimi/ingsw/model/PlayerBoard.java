@@ -78,7 +78,7 @@ public class PlayerBoard {
     }
 
     public Requirements getAllResources(){
-        return Requirements.sum(strongbox.getAllResources(),warehouse.getAllResources());
+        return Requirements.sum(strongbox.getAllResources(), warehouse.getAllResources());
     }
 
     public void addLeaderCard(LeaderCard card){

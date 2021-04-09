@@ -53,6 +53,7 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
     }
 
     public boolean satisfied(PlayerBoard player){
+        //Resources check
         Requirements playerResources = player.getAllResources();
         for(Map.Entry<Resource,Integer> x : playerResources){
             if(getResources((ResourceType) x.getKey()) > x.getValue())
@@ -108,6 +109,15 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
         if(temp == null || temp.get(level) == null)
             return 0;
         return temp.get(level);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof Requirements) {
+            Requirements otherRequirements = (Requirements) other;
+            return this.resources.equals(otherRequirements.resources) && this.developmentCards.equals(otherRequirements.developmentCards);
+        }
+        return false;
     }
 
     @Override
