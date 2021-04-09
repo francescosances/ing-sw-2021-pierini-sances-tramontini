@@ -24,8 +24,12 @@ public class Market {
         return marbles[row][column];
     }
 
-    public void setMarble(int row,int column,MarbleType marble){
+    protected void setMarble(int row,int column,MarbleType marble){
         marbles[row][column] = marble;
+    }
+
+    protected void setSlideMarble(MarbleType marble){
+        slideMarble = marble;
     }
 
     public MarbleType getSlideMarble(){
@@ -53,7 +57,7 @@ public class Market {
             throw new IllegalArgumentException("Invalid column");
         Resource[] res = new Resource[ROWS];
         for(int i=0;i<ROWS;i++){
-            res[i] = getMarble(i,COLUMNS).toResource();
+            res[i] = getMarble(i,column).toResource();
         }
         MarbleType temp = getMarble(0,column);
         for(int i=1;i<ROWS;i++){
