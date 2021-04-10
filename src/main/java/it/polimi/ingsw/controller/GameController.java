@@ -13,7 +13,7 @@ import it.polimi.ingsw.view.VirtualView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameController {
+public class GameController implements PlayerStatusListener {
 
     /**
      * The match managed by the controller
@@ -89,6 +89,7 @@ public class GameController {
 
     /**
      * Adds the player to the match and creates the instance of the relative player controller. An associated virtual view is also connected to the clientHandler.
+     * Add this object as observer of the new Player Controller
      * @param username the username of the player to add
      * @param clientHandler the clientHandler that manage the socket connection with the client
      * @return the player controller containing the reference of the virtual view
@@ -103,6 +104,7 @@ public class GameController {
             players.add(playerController);
         }
         this.connect(username);
+        playerController.addObserver(this);
         return playerController;
     }
 
@@ -183,7 +185,7 @@ public class GameController {
         if(!players.get(currentPlayerIndex).isActive()) // The current player is inactive
             nextTurn();
         players.get(currentPlayerIndex).yourTurn();
-        currentPhase.incrementCurrentPhasePlayers();
+        //currentPhase.incrementCurrentPhasePlayers();
         if(currentPhase.getCurrentPhasePlayers() >= players.size()) // If all the users have finished the turn, move the phase to the next one
             currentPhase = currentPhase.next();
         onStatusChanged();
@@ -195,6 +197,13 @@ public class GameController {
     protected void nextPhase(){
         this.currentPhase = this.currentPhase.next();
         onStatusChanged();
+    }
+
+    @Override
+    public void onPlayerStatusChanged(PlayerController player) {
+        System.out.println("The player "+player.getUsername()+" has changed his status to "+player.getCurrentStatus());
+        if(player.getCurrentStatus() == PlayerController.PlayerStatus.TURN_ENDED)
+            this.currentPhase.incrementCurrentPhasePlayers();
     }
 
     public enum GamePhase {

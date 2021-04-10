@@ -5,6 +5,8 @@ import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.view.VirtualView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class PlayerController {
@@ -26,9 +28,14 @@ public class PlayerController {
      */
     private VirtualView virtualView;
     /**
-     * Rapresent the current status of the player
+     * Represent the current status of the player
      */
     private PlayerStatus currentStatus;
+
+    /**
+     * A list of observers of the player status
+     */
+    private final List<PlayerStatusListener> observers = new ArrayList<>();
 
     /**
      * Initialize a new player controller active and waiting for his turn.
@@ -41,7 +48,7 @@ public class PlayerController {
         this.playerBoard = playerBoard;
         this.active = true;
         this.virtualView = virtualView;
-        this.currentStatus = PlayerStatus.WAITING;
+        this.currentStatus = PlayerStatus.TURN_ENDED;
     }
 
     /**
@@ -79,7 +86,7 @@ public class PlayerController {
      * Mark the player as currently playing and notify the status update to the virtual view
      */
     public void yourTurn(){
-        this.currentStatus = PlayerStatus.YOUR_TURN;
+        changeStatus(PlayerStatus.YOUR_TURN);
         virtualView.yourTurn();
     }
 
@@ -87,7 +94,7 @@ public class PlayerController {
      * Mark the player as waiting for others and notify the status update to the virtual view
      */
     public void turnEnded(){
-        this.currentStatus = PlayerStatus.WAITING;
+        changeStatus(PlayerStatus.TURN_ENDED);
     }
 
     /**
@@ -143,7 +150,7 @@ public class PlayerController {
      */
     public void askForAction(){
         virtualView.askForAction(Action.values());
-        this.currentStatus = PlayerStatus.PERFORMING_ACTION;
+        changeStatus(PlayerStatus.PERFORMING_ACTION);
     }
 
     /**
@@ -162,21 +169,47 @@ public class PlayerController {
                 //TODO: move resources
                 break;
             default:
-                this.currentStatus = this.currentStatus.next();
+                changeStatus(this.currentStatus.next());
         }
+    }
+
+    /**
+     * Change the current status of the controller and notify the change to the observers
+     * @param newStatus the new status of the player controller
+     */
+    protected void changeStatus(PlayerStatus newStatus){
+        this.currentStatus = newStatus;
+        for (PlayerStatusListener x : this.observers) {
+            x.onPlayerStatusChanged(this);
+        }
+    }
+
+    /**
+     * Add the specified observer to the list of observers
+     * @param playerStatusListener the observer to add
+     */
+    public void addObserver(PlayerStatusListener playerStatusListener){
+        observers.add(playerStatusListener);
+    }
+
+    /**
+     * Remove the specified observer from the list of observers
+     * @param playerStatusListener the observer to remove
+     */
+    public void removeObserver(PlayerStatusListener playerStatusListener){
+        observers.remove(playerStatusListener);
     }
 
     public enum PlayerStatus {
         PERFORMING_ACTION,
         YOUR_TURN,
-        WAITING;
+        TURN_ENDED;
 
-        private static final PlayerStatus[] vals = values();
+        private static final PlayerStatus[] vals = {PERFORMING_ACTION,YOUR_TURN,PERFORMING_ACTION,TURN_ENDED};
 
-        //TODO: rivedere il flusso perché ripassi per PERFORMING_ACTION due volte
         public PlayerStatus next()
         {
-            return vals[(this.ordinal()+1) % vals.length];
+            return vals[(this.ordinal()+1) % vals.length];//TODO: rivedere flusso perché passi due volte da performing action
         }
     }
 }
