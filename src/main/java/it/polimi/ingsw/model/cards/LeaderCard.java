@@ -3,6 +3,8 @@ package it.polimi.ingsw.model.cards;
 import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.storage.ResourceType;
 
+import java.util.Objects;
+
 public abstract class LeaderCard extends Card {
     protected boolean active;
     protected final Requirements requirements;
@@ -21,9 +23,12 @@ public abstract class LeaderCard extends Card {
         return false;
     }
 
-    public void activate (PlayerBoard player){
-        if (requirements.satisfied(player))
-            active = true;
+    public boolean activate (PlayerBoard player){
+        if (requirements.satisfied(player)) {//TODO: satisfied da null pointer exception
+            this.active = true;
+            return true;
+        }
+        return false;
     }
 
     public ResourceType getOutputResourceType() throws WrongLeaderCardException {
@@ -40,5 +45,18 @@ public abstract class LeaderCard extends Card {
                 "active=" + active +
                 ", requirements=" + requirements +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LeaderCard)) return false;
+        LeaderCard that = (LeaderCard) o;
+        return requirements.equals(that.requirements);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(requirements);
     }
 }

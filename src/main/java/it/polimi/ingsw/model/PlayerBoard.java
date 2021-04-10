@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.storage.Warehouse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PlayerBoard {
 
@@ -19,7 +20,7 @@ public class PlayerBoard {
     protected Warehouse warehouse;
     protected Strongbox strongbox;
 
-    private DevelopmentCardSlot[] developmentCardSlots;
+    private final DevelopmentCardSlot[] developmentCardSlots;
     private List<LeaderCard> leaderCards;
 
     public PlayerBoard(String username,Match match){
@@ -83,6 +84,34 @@ public class PlayerBoard {
 
     public void addLeaderCard(LeaderCard card){
         this.leaderCards.add(card);
+    }
+
+    public Warehouse getWarehouse() {
+        return warehouse;
+    }
+
+    public Strongbox getStrongbox() {
+        return strongbox;
+    }
+
+    public boolean activateLeaderCard(LeaderCard leaderCard){
+        for(LeaderCard x: leaderCards){
+            if(x.equals(leaderCard))
+               return x.activate(this);
+        }
+        return false;
+    }
+
+    public List<LeaderCard> getLeaderCards() {
+        return leaderCards;
+    }
+
+    /**
+     * Returns the leader cards that can be activated or discarded
+     * @return a list of leader cards that can be activated or discarded
+     */
+    public List<LeaderCard> getAvailableLeaderCards(){
+        return leaderCards.stream().filter(x->!x.isActive()).collect(Collectors.toList());
     }
 
     @Override

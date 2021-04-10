@@ -3,9 +3,13 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.PlayerBoard;
+import it.polimi.ingsw.model.cards.LeaderCardsChooser;
 import it.polimi.ingsw.view.VirtualView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PlayerController {
 
@@ -26,9 +30,19 @@ public class PlayerController {
      */
     private VirtualView virtualView;
     /**
-     * Rapresent the current status of the player
+     * Represent the current status of the player
      */
     private PlayerStatus currentStatus;
+
+    /**
+     * A list of observers of the player status
+     */
+    private final List<PlayerStatusListener> observers = new ArrayList<>();
+
+    /**
+     * Strategy pattern used to get the user's cards choice
+     */
+    private LeaderCardsChooser leaderCardsChooser;
 
     /**
      * Initialize a new player controller active and waiting for his turn.
@@ -41,7 +55,7 @@ public class PlayerController {
         this.playerBoard = playerBoard;
         this.active = true;
         this.virtualView = virtualView;
-        this.currentStatus = PlayerStatus.WAITING;
+        this.currentStatus = PlayerStatus.TURN_ENDED;
     }
 
     /**
@@ -79,7 +93,7 @@ public class PlayerController {
      * Mark the player as currently playing and notify the status update to the virtual view
      */
     public void yourTurn(){
-        this.currentStatus = PlayerStatus.YOUR_TURN;
+        changeStatus(PlayerStatus.YOUR_TURN);
         virtualView.yourTurn();
     }
 
@@ -87,7 +101,7 @@ public class PlayerController {
      * Mark the player as waiting for others and notify the status update to the virtual view
      */
     public void turnEnded(){
-        this.currentStatus = PlayerStatus.WAITING;
+        changeStatus(PlayerStatus.TURN_ENDED);
     }
 
     /**
@@ -121,29 +135,38 @@ public class PlayerController {
     public void listLeaderCards(){
         List<LeaderCard> leaderCardList = playerBoard.getMatch().drawLeaderCards(4);
         if(isActive()){
-            virtualView.listLeaderCards(leaderCardList);
+            virtualView.listLeaderCards(leaderCardList,2);
         }else {
             chooseLeaderCards(leaderCardList.get(0),leaderCardList.get(1));
             //TODO: ricontrollare riconnessione utente
         }
+        leaderCardsChooser = cards -> {
+            for (LeaderCard card : cards) {
+                playerBoard.addLeaderCard(card);
+            }
+            this.changeStatus(PlayerStatus.TURN_ENDED);
+        };
     }
 
     /**
-     * Puts the given leader cards into the player's hand
-     * @param cards the cards to keep in the hand
+     * Receive the leader cards chosen by the user and execute the action indicated by the leaderCardsChooser
+     * @param cards the cards chosen by the user
      */
     public void chooseLeaderCards(LeaderCard ... cards){
-        for (LeaderCard card : cards) {
-            playerBoard.addLeaderCard(card);
-        }
+        this.leaderCardsChooser.chooseLeaderCards(cards);
     }
 
     /**
      * Ask to the user which action want to perform
      */
     public void askForAction(){
-        virtualView.askForAction(Action.values());
-        this.currentStatus = PlayerStatus.PERFORMING_ACTION;
+        //TODO: capire perché questa azione viene eseguita prima dell'arrivo della scelta dell'utente
+        virtualView.askForAction(
+                Arrays.stream(Action.values())
+                        .filter(x -> x != Action.CANCEL)
+                        .filter(x -> !((x == Action.PLAY_LEADER || x == Action.DISCARD_LEADER) && this.playerBoard.getAvailableLeaderCards().isEmpty())) //If no leader cards are available, the options are removed from the list
+                        .toArray(Action[]::new));
+        changeStatus(PlayerStatus.PERFORMING_ACTION);
     }
 
     /**
@@ -152,31 +175,90 @@ public class PlayerController {
      */
     public void performAction(Action action) {
         switch (action) {
+            case CANCEL:
+                break;
             case PLAY_LEADER:
-                //TODO: play leader;
+                listLeaderCardsToPlay();
                 break;
             case DISCARD_LEADER:
                 //TODO: discard leader
+                listLeaderCardsToDiscard();
                 break;
             case MOVE_RESOURCES:
                 //TODO: move resources
                 break;
             default:
-                this.currentStatus = this.currentStatus.next();
+                changeStatus(this.currentStatus.next());
+                return;
         }
+        this.askForAction();
+    }
+
+
+    /**
+     * Send the cards in the hand of the user so that he can choose a card to activate
+     */
+    public void listLeaderCardsToPlay(){
+        virtualView.listLeaderCards(this.playerBoard.getAvailableLeaderCards(), 1);
+        this.leaderCardsChooser = cards -> {
+            System.out.println("carte scelte da giocare");
+            for(LeaderCard card : cards){
+                this.playerBoard.activateLeaderCard(card);//TODO: controllare carta non attivabile
+                System.out.println(card);
+            }
+        };
+    }
+
+    /**
+     * Send the inactive cards in the hand of the user so that he can choose a card to discard
+     */
+    public void listLeaderCardsToDiscard(){
+        virtualView.listLeaderCards(this.playerBoard.getAvailableLeaderCards(), 1);
+        this.leaderCardsChooser = cards -> {
+            System.out.println("carte scelte da giocare");
+            for(LeaderCard card : cards){
+                System.out.println(card);
+            }
+        };
+    }
+
+    /**
+     * Change the current status of the controller and notify the change to the observers
+     * @param newStatus the new status of the player controller
+     */
+    protected void changeStatus(PlayerStatus newStatus){
+        this.currentStatus = newStatus;
+        for (PlayerStatusListener x : this.observers) {
+            x.onPlayerStatusChanged(this);
+        }
+    }
+
+    /**
+     * Add the specified observer to the list of observers
+     * @param playerStatusListener the observer to add
+     */
+    public void addObserver(PlayerStatusListener playerStatusListener){
+        observers.add(playerStatusListener);
+    }
+
+    /**
+     * Remove the specified observer from the list of observers
+     * @param playerStatusListener the observer to remove
+     */
+    public void removeObserver(PlayerStatusListener playerStatusListener){
+        observers.remove(playerStatusListener);
     }
 
     public enum PlayerStatus {
         PERFORMING_ACTION,
         YOUR_TURN,
-        WAITING;
+        TURN_ENDED;
 
-        private static final PlayerStatus[] vals = values();
+        private static final PlayerStatus[] vals = {PERFORMING_ACTION,YOUR_TURN,PERFORMING_ACTION,TURN_ENDED};
 
-        //TODO: rivedere il flusso perché ripassi per PERFORMING_ACTION due volte
         public PlayerStatus next()
         {
-            return vals[(this.ordinal()+1) % vals.length];
+            return vals[(this.ordinal()+1) % vals.length];//TODO: rivedere flusso perché passi due volte da performing action
         }
     }
 }

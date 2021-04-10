@@ -13,7 +13,7 @@ import it.polimi.ingsw.view.VirtualView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameController {
+public class GameController implements PlayerStatusListener {
 
     /**
      * The match managed by the controller
@@ -84,11 +84,11 @@ public class GameController {
      */
     public void leaderCardsChoice(String username,List<LeaderCard> leaderCards){
         getPlayerController(username).chooseLeaderCards(leaderCards.toArray(new LeaderCard[]{}));
-        nextTurn();
     }
 
     /**
      * Adds the player to the match and creates the instance of the relative player controller. An associated virtual view is also connected to the clientHandler.
+     * Add this object as observer of the new Player Controller
      * @param username the username of the player to add
      * @param clientHandler the clientHandler that manage the socket connection with the client
      * @return the player controller containing the reference of the virtual view
@@ -103,6 +103,7 @@ public class GameController {
             players.add(playerController);
         }
         this.connect(username);
+        playerController.addObserver(this);
         return playerController;
     }
 
@@ -176,12 +177,12 @@ public class GameController {
      * Move the current player to the next one
      */
     public void nextTurn(){
-        players.get(currentPlayerIndex).turnEnded(); // Notify to the player controller that the turn is ended
+       // players.get(currentPlayerIndex).turnEnded(); // Notify to the player controller that the turn is ended
         currentPlayerIndex = (currentPlayerIndex+1)%players.size();
         if(players.stream().noneMatch(PlayerController::isActive)) // No one is active
             return;
         if(!players.get(currentPlayerIndex).isActive()) // The current player is inactive
-            nextTurn();
+            players.get(currentPlayerIndex).turnEnded();
         players.get(currentPlayerIndex).yourTurn();
         currentPhase.incrementCurrentPhasePlayers();
         if(currentPhase.getCurrentPhasePlayers() >= players.size()) // If all the users have finished the turn, move the phase to the next one
@@ -197,6 +198,15 @@ public class GameController {
         onStatusChanged();
     }
 
+    @Override
+    public void onPlayerStatusChanged(PlayerController player) {
+        System.out.println("The player "+player.getUsername()+" has changed his status to "+player.getCurrentStatus());
+        if (player.getCurrentStatus() == PlayerController.PlayerStatus.TURN_ENDED) {
+            nextTurn();
+        }
+
+    }
+
     public enum GamePhase {
         ADDING_PLAYERS,
         PLAYERS_SETUP,
@@ -210,9 +220,16 @@ public class GameController {
          */
         private int currentPhasePlayers = 0;
 
-        public int getCurrentPhasePlayers(){return currentPhasePlayers;}
+        /**
+         * Returns the number of players that have finished the current phase
+         * @return the number of players that have finished the current phase
+         */
+        public synchronized int getCurrentPhasePlayers(){return currentPhasePlayers;}
 
-        public void incrementCurrentPhasePlayers(){
+        /**
+         * Increment the number of players that have finished the current phase
+         */
+        public synchronized void incrementCurrentPhasePlayers(){
             this.currentPhasePlayers++;
         }
 
@@ -251,7 +268,7 @@ public class GameController {
             if(user.getUsername().equals(username)) {
                 user.deactivate();
                 if(user.getCurrentStatus() == PlayerController.PlayerStatus.YOUR_TURN)
-                    nextTurn();
+                    user.turnEnded();
             }
             user.getVirtualView().userDisconnected(username);
         });

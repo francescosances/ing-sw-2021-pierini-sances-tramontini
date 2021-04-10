@@ -12,6 +12,7 @@ import java.io.PrintStream;
 import java.util.List;
 import java.util.Scanner;
 
+//TODO: lo scanner deve essere eseguito in un thread diverso dal printstream
 public class CLI implements View {
 
     /**
@@ -130,21 +131,25 @@ public class CLI implements View {
     }
 
     @Override
-    public void listLeaderCards(List<LeaderCard> leaderCardList) {
-        output.println("Choose two leader cards:");
+    public void listLeaderCards(List<LeaderCard> leaderCardList,int cardsToChoice) {
+        output.println("Choose "+cardsToChoice+" leader cards:");
         for (int i = 0; i < leaderCardList.size(); i++) {
             output.print("[" + i + "] ");
             LeaderCard temp = leaderCardList.get(i);
             output.println(temp.toString());
         }
-        int choiceA = input.nextInt();
-        int choiceB = input.nextInt();
-        if (choiceA >= 0 && choiceA <= leaderCardList.size() && choiceB >= 0 && choiceB < leaderCardList.size())
-            clientController.leaderCardsChoice(leaderCardList.get(choiceA),leaderCardList.get(choiceB));
-        else{
-            output.println("Invalid choice");
-            listLeaderCards(leaderCardList);
+        int[] choices = new int[cardsToChoice];
+        LeaderCard[] cardsChosen = new LeaderCard[cardsToChoice];
+        for(int i=0;i<cardsToChoice;i++) {
+            choices[i] = input.nextInt();
+            if(choices[i] <0 || choices[i] >= leaderCardList.size()){
+                output.println("Invalid choice");
+                listLeaderCards(leaderCardList,cardsToChoice);
+                return;
+            }
+            cardsChosen[i] = leaderCardList.get(choices[i]);
         }
+        clientController.leaderCardsChoice(cardsChosen);
     }
 
     @Override

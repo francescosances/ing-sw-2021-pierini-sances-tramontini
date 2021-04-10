@@ -53,7 +53,7 @@ public interface View {
 
     void userDisconnected(String username);
 
-    void listLeaderCards(List<LeaderCard> leaderCardList);
+    void listLeaderCards(List<LeaderCard> leaderCardList,int cardsToChoice);
 
     /**
      * Shows the actions that the user can choose to perform
