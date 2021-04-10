@@ -103,10 +103,7 @@ public class Warehouse implements Storage {
         return toBeStored.remove(toBeStored.size() - 1);
     }
 
-    /**
-     * Returns all the resources present in the warehouse.
-     * @return all the resources present in the warehouse
-     */
+    @Override
     public Requirements getAllResources(){
         Requirements ret = new Requirements();
         for(Depot x:depots){

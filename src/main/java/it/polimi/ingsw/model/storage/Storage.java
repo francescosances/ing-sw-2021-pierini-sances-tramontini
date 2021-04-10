@@ -10,4 +10,9 @@ public interface Storage {
      */
     Requirements removeResources(Requirements requirements);
 
+    /**
+     * Returns all the resources present in the storage.
+     * @return all the resources present in the storage
+     */
+    Requirements getAllResources();
 }

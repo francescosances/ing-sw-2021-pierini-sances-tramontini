@@ -50,10 +50,7 @@ public class Strongbox implements Storage {
         return this.resources.getOrDefault(resource,0);
     }
 
-    /**
-     * Returns all the resources present in the strongbox.
-     * @return all the resources present in the strongbox
-     */
+    @Override
     public Requirements getAllResources(){
         Requirements ret = new Requirements();
         resources.forEach(ret::addResourceRequirement);
