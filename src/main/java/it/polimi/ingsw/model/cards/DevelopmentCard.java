@@ -91,4 +91,13 @@ public class DevelopmentCard extends Card implements Producer {
 
     }
 
+    @Override
+    public boolean equals(Object other){
+        if (!(other instanceof DevelopmentCard))
+            return false;
+        DevelopmentCard o = (DevelopmentCard) other;
+        return this.color.equals(o.color) && this.cost.equals(o.cost) && this.productionCost.equals(o.productionCost)
+                && this.productionGain.equals(o.productionGain) && this.level == o.level;
+    }
+
 }

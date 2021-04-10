@@ -94,4 +94,20 @@ public class Market {
         slideMarble = allMarbles.get(allMarbles.size()-1);
     }
 
+    @Override
+    public boolean equals (Object other){
+        if (!(other instanceof  Market))
+            return false;
+
+        Market o = (Market) other;
+        for (int row = 0; row < ROWS; row++) {
+            for (int column = 0; column < COLUMNS; column++) {
+                if (!(this.getMarble(row, column).equals(o.getMarble(row, column))))
+                    return false;
+            }
+
+        }
+        return this.slideMarble.equals(o.slideMarble);
+    }
+
 }
