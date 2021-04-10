@@ -3,10 +3,10 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.PlayerBoard;
+import it.polimi.ingsw.model.cards.LeaderCardsChooser;
 import it.polimi.ingsw.view.VirtualView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class PlayerController {
@@ -36,6 +36,11 @@ public class PlayerController {
      * A list of observers of the player status
      */
     private final List<PlayerStatusListener> observers = new ArrayList<>();
+
+    /**
+     * Strategy pattern used to get the user's cards choice
+     */
+    private LeaderCardsChooser leaderCardsChooser;
 
     /**
      * Initialize a new player controller active and waiting for his turn.
@@ -128,21 +133,25 @@ public class PlayerController {
     public void listLeaderCards(){
         List<LeaderCard> leaderCardList = playerBoard.getMatch().drawLeaderCards(4);
         if(isActive()){
-            virtualView.listLeaderCards(leaderCardList);
+            virtualView.listLeaderCards(leaderCardList,2);
         }else {
             chooseLeaderCards(leaderCardList.get(0),leaderCardList.get(1));
             //TODO: ricontrollare riconnessione utente
         }
+        leaderCardsChooser = cards -> {
+            for (LeaderCard card : cards) {
+                playerBoard.addLeaderCard(card);
+            }
+            this.changeStatus(PlayerStatus.TURN_ENDED);
+        };
     }
 
     /**
-     * Puts the given leader cards into the player's hand
-     * @param cards the cards to keep in the hand
+     * Receive the leader cards chosen by the user and execute the action indicated by the leaderCardsChooser
+     * @param cards the cards chosen by the user
      */
     public void chooseLeaderCards(LeaderCard ... cards){
-        for (LeaderCard card : cards) {
-            playerBoard.addLeaderCard(card);
-        }
+        this.leaderCardsChooser.chooseLeaderCards(cards);
     }
 
     /**
@@ -160,7 +169,7 @@ public class PlayerController {
     public void performAction(Action action) {
         switch (action) {
             case PLAY_LEADER:
-                //TODO: play leader;
+                listLeaderCardsToPlay();
                 break;
             case DISCARD_LEADER:
                 //TODO: discard leader
@@ -170,7 +179,22 @@ public class PlayerController {
                 break;
             default:
                 changeStatus(this.currentStatus.next());
+                return;
         }
+        this.askForAction();
+    }
+
+    /**
+     * Send the cards in the hand of the user so that he can choose a card to activate
+     */
+    public void listLeaderCardsToPlay(){
+        virtualView.listLeaderCards(playerBoard.getLeaderCards(),1);
+        this.leaderCardsChooser = cards -> {
+            System.out.println("carte scelte da giocare");
+            for(LeaderCard card : cards){
+                System.out.println(card);
+            }
+        };
     }
 
     /**

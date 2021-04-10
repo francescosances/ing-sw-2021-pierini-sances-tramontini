@@ -84,7 +84,7 @@ public class ClientController {
                 break;
             case LIST_LEADER_CARDS:
                 List<LeaderCard> leaderCardList = Serializer.deserializeLeaderCards(message.getData("leaderCards"));
-                view.listLeaderCards(leaderCardList);
+                view.listLeaderCards(leaderCardList,Integer.parseInt(message.getData("cardsToChoice")));
                 break;
             case ASK_FOR_ACTION:
                 List<Action> actions = gson.fromJson(message.getData("availableActions"),new TypeToken<List<Action>>(){}.getType());

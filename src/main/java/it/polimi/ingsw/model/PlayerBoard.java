@@ -19,7 +19,7 @@ public class PlayerBoard {
     protected Warehouse warehouse;
     protected Strongbox strongbox;
 
-    private DevelopmentCardSlot[] developmentCardSlots;
+    private final DevelopmentCardSlot[] developmentCardSlots;
     private List<LeaderCard> leaderCards;
 
     public PlayerBoard(String username,Match match){
@@ -83,6 +83,18 @@ public class PlayerBoard {
 
     public void addLeaderCard(LeaderCard card){
         this.leaderCards.add(card);
+    }
+
+    public Warehouse getWarehouse() {
+        return warehouse;
+    }
+
+    public Strongbox getStrongbox() {
+        return strongbox;
+    }
+
+    public List<LeaderCard> getLeaderCards() {
+        return leaderCards;
     }
 
     @Override
