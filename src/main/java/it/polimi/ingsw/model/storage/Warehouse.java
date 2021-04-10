@@ -7,9 +7,20 @@ import java.util.Arrays;
 import java.util.Map;
 
 public class Warehouse implements Storage {
+    /**
+     * The list of the depots in the warehouse.
+     */
     private final ArrayList<Depot> depots;
+
+    /**
+     * The list of resources taken from the market that need to be stored in the depots.
+     */
     private final ArrayList<Resource> toBeStored;
 
+
+    /**
+     * Creates a new warehouse with 3 empty standard depots.
+     */
     public Warehouse(){
         depots = new ArrayList<>();
         depots.add(new StandardDepot(1));
@@ -18,6 +29,12 @@ public class Warehouse implements Storage {
         toBeStored = new ArrayList<>();
     }
 
+    /**
+     * Adds the specified resources to the specified depot.
+     * @param depotNumber the number of the depot where to add the resources
+     * @param res the type of the resources to be added
+     * @param num the amount of the resources to be added
+     */
     public void addResource(int depotNumber, ResourceType res, int num) {
         for (int i = 0; i < num; i++)
             depots.get(depotNumber).addResource(res);
@@ -38,10 +55,19 @@ public class Warehouse implements Storage {
         return newRequirements;
     }
 
+    /**
+     * Adds the specified resources to the toBeStored storage, that will need to be stored in the depots or discarded.
+     * @param resources the resources to be added
+     */
     public void toBeStored(Resource[] resources) {
         toBeStored.addAll(Arrays.asList(resources));
     }
 
+    /**
+     * Swaps the content of the two specified depots.
+     * @param first the number of the first depot
+     * @param second the number of the second depot
+     */
     public void swapDepots(int first, int second) {
         if (depots.get(first).getOccupied() > depots.get(second).getSize() || depots.get(second).getOccupied() > depots.get(first).getSize())
             throw new IllegalArgumentException("Unable to swap selected depots");
@@ -61,14 +87,26 @@ public class Warehouse implements Storage {
             depots.get(second).addResource(firstResourceType);
     }
 
+    /**
+     * Returns true if the toBeStored storage contains some resources that need to be stored in the depots or discarded.
+     * @return true if the toBeStored storage contains some resources that need to be stored in the depots or discarded
+     */
     public boolean hasResourcesToStore() {
         return !toBeStored.isEmpty();
     }
 
+    /**
+     * Returns and removes the first resource in the toBeStored storage that needs to be stored in a depot or discarded.
+     * @return the first resource in the toBeStored storage that needs to be stored in a depot or discarded
+     */
     public Resource popResourceToBeStored(){
         return toBeStored.remove(toBeStored.size() - 1);
     }
 
+    /**
+     * Returns all the resources present in the warehouse.
+     * @return all the resources present in the warehouse
+     */
     public Requirements getAllResources(){
         Requirements ret = new Requirements();
         for(Depot x:depots){

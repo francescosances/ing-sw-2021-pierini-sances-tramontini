@@ -1,22 +1,34 @@
 package it.polimi.ingsw.model.storage;
 
-import java.util.Optional;
-
 public class StandardDepot implements Depot {
-    private Optional<ResourceType> resourceType;
+    /**
+     * The type of the resource inside the depot or null in case of an empty depot.
+     */
+    private ResourceType resourceType;
+
+    /**
+     * The amount of resources inside the depot.
+     */
     private int occupied;
+
+    /**
+     * The size of the depot.
+     */
     private final int size;
 
+    /**
+     * Creates an empty depot.
+     * @param size the size of the new depot
+     */
     public StandardDepot(int size){
-        resourceType = Optional.empty();
+        resourceType = null;
         this.size = size;
         this.occupied = 0;
     }
 
-
     @Override
     public ResourceType getResourceType() {
-        return resourceType.orElse(null);
+        return resourceType;
     }
 
     @Override
@@ -32,11 +44,11 @@ public class StandardDepot implements Depot {
     @Override
     public void addResource(ResourceType res){
         if (occupied == 0)
-            this.resourceType = Optional.of(res);
+            this.resourceType = res;
         else{
-            if (!this.resourceType.isPresent())
+            if (this.resourceType == null)
                 throw new IllegalStateException("Depot occupied but Resource Type not defined");
-            else if (this.resourceType.get() != res)
+            else if (this.resourceType != res)
                 throw new IllegalArgumentException("Resource Type not compatible with depot");
         }
         occupied++;
@@ -48,6 +60,6 @@ public class StandardDepot implements Depot {
             throw new IndexOutOfBoundsException();
         occupied--;
         if (occupied == 0)
-            this.resourceType = Optional.empty();
+            this.resourceType = null;
     }
 }
