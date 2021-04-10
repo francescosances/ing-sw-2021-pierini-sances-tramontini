@@ -4,6 +4,8 @@ import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.*;
+import it.polimi.ingsw.model.storage.Strongbox;
+import it.polimi.ingsw.model.storage.Warehouse;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -123,6 +125,23 @@ public class Serializer {
 
     public static ActionToken deserializeActionToken(String json){
         return new Gson().fromJson(json, ActionToken.class);
+    }
+
+    public static String serializeStrongbox(Strongbox strongbox){
+        return new Gson().toJson(strongbox);
+    }
+
+    public static Strongbox deserializeStrongbox(String json){
+        return new Gson().fromJson(json, Strongbox.class);
+    }
+
+    public static String serializeWarehouse(Warehouse warehouse) {
+        return new Gson().toJson(warehouse);
+    }
+
+    public static Warehouse deserializeWarehouse(String json) {
+        //TODO: DepotCreator class per gestire le interfacce di tipo leader card e standard depot
+        return new Gson().fromJson(json, Warehouse.class);
     }
 }
 

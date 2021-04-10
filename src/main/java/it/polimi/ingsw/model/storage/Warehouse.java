@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.cards.Requirements;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 
 public class Warehouse implements Storage {
     private final ArrayList<Depot> depots;
@@ -78,4 +79,11 @@ public class Warehouse implements Storage {
         return ret;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Warehouse warehouse = (Warehouse) o;
+        return Objects.equals(depots, warehouse.depots) && Objects.equals(toBeStored, warehouse.toBeStored);
+    }
 }

@@ -1,15 +1,15 @@
 package it.polimi.ingsw.network.serialization;
 
-import it.polimi.ingsw.model.ActionToken;
-import it.polimi.ingsw.model.Market;
-import it.polimi.ingsw.model.Match;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.*;
-import it.polimi.ingsw.model.storage.ResourceType;
+import it.polimi.ingsw.model.storage.*;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Pair;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -45,5 +45,25 @@ public class SerializerTest {
         actionToken = new ActionToken(2);
         json = Serializer.serializeActionToken(actionToken);
         assertEquals(actionToken, Serializer.deserializeActionToken(json));
+    }
+
+    @Test
+    public void serializeStrongbox(){
+        Strongbox strongbox = new Strongbox();
+        Map<ResourceType, Integer> map = new HashMap<>();
+        map.put(ResourceType.STONE, 2);
+        map.put(ResourceType.COIN, 1);
+        strongbox.addResources(map);
+        String json = Serializer.serializeStrongbox(strongbox);
+        assertEquals(strongbox, Serializer.deserializeStrongbox(json));
+    }
+
+    @Test
+    public void serializeWarehouse(){
+        Warehouse warehouse= new Warehouse();
+        warehouse.addResource(0, ResourceType.COIN, 1);
+        warehouse.addResource(2, ResourceType.STONE, 2);
+        String json = Serializer.serializeWarehouse(warehouse);
+        assertEquals(warehouse, Serializer.deserializeWarehouse(json));
     }
 }

@@ -93,6 +93,7 @@ public class DevelopmentCard extends Card implements Producer {
 
     @Override
     public boolean equals(Object other){
+        if (this == other) return true;
         if (!(other instanceof DevelopmentCard))
             return false;
         DevelopmentCard o = (DevelopmentCard) other;
