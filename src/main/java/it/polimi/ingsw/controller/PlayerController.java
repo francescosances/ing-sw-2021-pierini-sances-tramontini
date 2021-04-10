@@ -7,7 +7,9 @@ import it.polimi.ingsw.model.cards.LeaderCardsChooser;
 import it.polimi.ingsw.view.VirtualView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PlayerController {
 
@@ -158,7 +160,12 @@ public class PlayerController {
      * Ask to the user which action want to perform
      */
     public void askForAction(){
-        virtualView.askForAction(Action.values());
+        //TODO: capire perché questa azione viene eseguita prima dell'arrivo della scelta dell'utente
+        virtualView.askForAction(
+                Arrays.stream(Action.values())
+                        .filter(x -> x != Action.CANCEL)
+                        .filter(x -> !((x == Action.PLAY_LEADER || x == Action.DISCARD_LEADER) && this.playerBoard.getAvailableLeaderCards().isEmpty())) //If no leader cards are available, the options are removed from the list
+                        .toArray(Action[]::new));
         changeStatus(PlayerStatus.PERFORMING_ACTION);
     }
 
@@ -168,11 +175,14 @@ public class PlayerController {
      */
     public void performAction(Action action) {
         switch (action) {
+            case CANCEL:
+                break;
             case PLAY_LEADER:
                 listLeaderCardsToPlay();
                 break;
             case DISCARD_LEADER:
                 //TODO: discard leader
+                listLeaderCardsToDiscard();
                 break;
             case MOVE_RESOURCES:
                 //TODO: move resources
@@ -184,11 +194,26 @@ public class PlayerController {
         this.askForAction();
     }
 
+
     /**
      * Send the cards in the hand of the user so that he can choose a card to activate
      */
     public void listLeaderCardsToPlay(){
-        virtualView.listLeaderCards(playerBoard.getLeaderCards(),1);
+        virtualView.listLeaderCards(this.playerBoard.getAvailableLeaderCards(), 1);
+        this.leaderCardsChooser = cards -> {
+            System.out.println("carte scelte da giocare");
+            for(LeaderCard card : cards){
+                this.playerBoard.activateLeaderCard(card);//TODO: controllare carta non attivabile
+                System.out.println(card);
+            }
+        };
+    }
+
+    /**
+     * Send the inactive cards in the hand of the user so that he can choose a card to discard
+     */
+    public void listLeaderCardsToDiscard(){
+        virtualView.listLeaderCards(this.playerBoard.getAvailableLeaderCards(), 1);
         this.leaderCardsChooser = cards -> {
             System.out.println("carte scelte da giocare");
             for(LeaderCard card : cards){

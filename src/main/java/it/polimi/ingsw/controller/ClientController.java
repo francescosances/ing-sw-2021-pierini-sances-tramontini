@@ -63,6 +63,9 @@ public class ClientController {
             case GENERIC:
                 view.showMessage(message.getData("text"));
                 break;
+            case ERROR:
+                view.showErrorMessage(message.getData("text"));
+                break;
             case YOUR_TURN:
                 view.yourTurn();
                 break;

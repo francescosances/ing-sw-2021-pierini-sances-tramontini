@@ -4,7 +4,8 @@ public enum Action {
     SKIP("Go ahead / Skip"),
     MOVE_RESOURCES("Move resources"),
     DISCARD_LEADER ("Discard leader card"),
-    PLAY_LEADER ("Play leader card");
+    PLAY_LEADER ("Play leader card"),
+    CANCEL("Cancel");
 
     private final String label;
 
