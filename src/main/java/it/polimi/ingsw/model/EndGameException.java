@@ -1,4 +1,4 @@
 package it.polimi.ingsw.model;
 
-public class EndGameException extends Exception{
+public class EndGameException extends RuntimeException{
 }

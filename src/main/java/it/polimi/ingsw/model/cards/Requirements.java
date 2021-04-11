@@ -56,7 +56,7 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
         //Resources check
         Requirements playerResources = player.getAllResources();
         for(Map.Entry<Resource,Integer> x : playerResources){
-            if(getResources((ResourceType) x.getKey()) > x.getValue())
+            if(getResources(x.getKey()) > x.getValue())
                 return false;
         }
 
