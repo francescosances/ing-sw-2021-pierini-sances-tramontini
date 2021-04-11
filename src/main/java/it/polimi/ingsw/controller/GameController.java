@@ -211,7 +211,6 @@ public class GameController implements PlayerStatusListener {
         ADDING_PLAYERS,
         PLAYERS_SETUP,
         ACTION_CHOICE,
-        //TODO: aggiungere fase intermedia per scartare carte leader / spostare risorse
         NORMAL_ACTION,
         END_GAME;
 
