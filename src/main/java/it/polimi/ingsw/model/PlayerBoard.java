@@ -8,8 +8,10 @@ import it.polimi.ingsw.model.storage.Strongbox;
 import it.polimi.ingsw.model.storage.Warehouse;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PlayerBoard {
 
@@ -29,7 +31,7 @@ public class PlayerBoard {
         warehouse = new Warehouse();
         strongbox = new Strongbox();
         faithTrack = new FaithTrack(match);
-        developmentCardSlots = new DevelopmentCardSlot[3];
+        developmentCardSlots = Stream.generate(DevelopmentCardSlot::new).limit(3).toArray(DevelopmentCardSlot[]::new);
         leaderCards = new ArrayList<>();
     }
 
