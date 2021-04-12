@@ -186,6 +186,7 @@ public class PlayerController {
                 listLeaderCardsToDiscard();
                 break;
             case MOVE_RESOURCES:
+                showDepotsStatus();
                 //TODO: move resources
                 break;
             default:
@@ -203,11 +204,7 @@ public class PlayerController {
         virtualView.listLeaderCards(this.playerBoard.getAvailableLeaderCards(), 1);
         this.leaderCardsChooser = cards -> {
             for(LeaderCard card : cards){
-                try {
-                    this.playerBoard.activateLeaderCard(card);
-                }catch (NotSatisfiedRequirementsException e){
-                    virtualView.showErrorMessage("You cannot attivate this card.");
-                }
+                this.playerBoard.activateLeaderCard(card);
             }
         };
     }
@@ -222,6 +219,13 @@ public class PlayerController {
                 this.playerBoard.discardLeaderCard(card);
             }
         };
+    }
+
+    /**
+     * List the resources stored in the warehouse depots
+     */
+    public void showDepotsStatus(){
+        virtualView.showWarehouseStatus(playerBoard.getWarehouse());
     }
 
     /**

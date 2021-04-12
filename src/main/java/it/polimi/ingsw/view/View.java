@@ -3,6 +3,8 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.cards.LeaderCard;
+import it.polimi.ingsw.model.storage.Storage;
+import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.utils.Triple;
 
 import java.util.List;
@@ -56,9 +58,14 @@ public interface View {
     void listLeaderCards(List<LeaderCard> leaderCardList,int cardsToChoice);
 
     /**
-     * Shows the actions that the user can choose to perform
-     * @param availableActions the array of available actions which the user can choose
+     * List the resources stored in the warehouse
      */
+     void showWarehouseStatus(Warehouse warehouse);
+
+     /**
+      * Shows the actions that the user can choose to perform
+      * @param availableActions the array of available actions which the user can choose
+      */
     void askForAction(Action... availableActions);
 
 

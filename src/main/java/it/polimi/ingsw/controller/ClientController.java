@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.cards.LeaderCard;
+import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
@@ -92,6 +93,10 @@ public class ClientController {
             case ASK_FOR_ACTION:
                 List<Action> actions = gson.fromJson(message.getData("availableActions"),new TypeToken<List<Action>>(){}.getType());
                 view.askForAction(actions.toArray(new Action[0]));
+                break;
+            case SHOW_WAREHOUSE_STATUS:
+                Warehouse warehouse = Serializer.deserializeWarehouse(message.getData("warehouse"));
+                view.showWarehouseStatus(warehouse);
                 break;
             default:
                 client.log("Received unexpected message");
