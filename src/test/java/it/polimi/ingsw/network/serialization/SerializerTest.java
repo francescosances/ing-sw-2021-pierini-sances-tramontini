@@ -40,7 +40,7 @@ public class SerializerTest {
         ret.add(new DepotLeaderCard(3,new Requirements(new Pair<>(ResourceType.STONE,5)),ResourceType.SERVANT));
         ret.add(new DepotLeaderCard(3,new Requirements(new Pair<>(ResourceType.SERVANT,5)),ResourceType.SHIELD));
         ret.add(new DepotLeaderCard(3,new Requirements(new Pair<>(ResourceType.SHIELD,5)),ResourceType.COIN));
-        String json = Serializer.serializeLeaderCardDeck(ret);
+        String json = Serializer.serializeLeaderCardDeck(ret.toArray(new LeaderCard[0]));
         assertEquals(ret, Serializer.deserializeLeaderCardDeck(json));
     }
 

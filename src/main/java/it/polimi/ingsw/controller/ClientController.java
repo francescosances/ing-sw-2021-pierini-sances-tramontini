@@ -16,6 +16,7 @@ import it.polimi.ingsw.view.cli.CLI;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ClientController {
@@ -149,7 +150,7 @@ public class ClientController {
      */
     public void leaderCardsChoice(LeaderCard ... leaderCards){
         Message message = new Message(Message.MessageType.LEADER_CARDS_CHOICE);
-        message.addData("leaderCards", Serializer.serializeLeaderCards(leaderCards));
+        message.addData("leaderCards", Serializer.serializeLeaderCardDeck(leaderCards));
         client.sendMessage(message);
     }
 
