@@ -149,7 +149,7 @@ public class ClientController {
      */
     public void leaderCardsChoice(LeaderCard ... leaderCards){
         Message message = new Message(Message.MessageType.LEADER_CARDS_CHOICE);
-        message.addData("leaderCards",leaderCards,new Gson());
+        message.addData("leaderCards", Serializer.serializeLeaderCards(leaderCards));
         client.sendMessage(message);
     }
 
