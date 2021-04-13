@@ -8,7 +8,9 @@ import it.polimi.ingsw.utils.Pair;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -26,8 +28,20 @@ public class SerializerTest {
     @Test
     public void serializeLeaderCard(){
         LeaderCard leaderCard = new DepotLeaderCard(3,new Requirements(new Pair<>(ResourceType.SERVANT,5)),ResourceType.SHIELD);
+
         String json = Serializer.serializeLeaderCard(leaderCard);
         assertEquals(leaderCard, Serializer.deserializeLeaderCard(json));
+    }
+
+    @Test
+    public void serializeLeaderCardDeck(){
+        List <LeaderCard> ret = new ArrayList<>();
+        ret.add(new DepotLeaderCard(3,new Requirements(new Pair<>(ResourceType.COIN,5)),ResourceType.STONE));
+        ret.add(new DepotLeaderCard(3,new Requirements(new Pair<>(ResourceType.STONE,5)),ResourceType.SERVANT));
+        ret.add(new DepotLeaderCard(3,new Requirements(new Pair<>(ResourceType.SERVANT,5)),ResourceType.SHIELD));
+        ret.add(new DepotLeaderCard(3,new Requirements(new Pair<>(ResourceType.SHIELD,5)),ResourceType.COIN));
+        String json = Serializer.serializeLeaderCardDeck(ret);
+        assertEquals(ret, Serializer.deserializeLeaderCardDeck(json));
     }
 
     @Test

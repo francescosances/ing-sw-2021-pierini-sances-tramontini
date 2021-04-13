@@ -101,7 +101,11 @@ public class Serializer {
         return deckList;
     }
 
-    public static List<LeaderCard> deserializeLeaderCards(String serializedCard) {
+    public static String serializeLeaderCardDeck(List<LeaderCard> list) {
+        return new Gson().toJson(list);
+    }
+
+    public static List<LeaderCard> deserializeLeaderCardDeck(String serializedCard) {
         GsonBuilder gsonbuilder = new GsonBuilder();
         gsonbuilder.registerTypeAdapter(Requirements.class, new RequirementsCreator());
         gsonbuilder.registerTypeAdapter(LeaderCard.class, new LeaderCardCreator());
