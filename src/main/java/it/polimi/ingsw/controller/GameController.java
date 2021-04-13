@@ -58,7 +58,7 @@ public class GameController implements PlayerStatusListener {
                     start();
                     break;
                 case LEADER_CARDS_CHOICE:
-                    leaderCardsChoice(username, Serializer.deserializeLeaderCards(message.getData("leaderCards")));
+                    leaderCardsChoice(username, Serializer.deserializeLeaderCardDeck(message.getData("leaderCards")));
                     break;
                 case PERFORM_ACTION:
                     getPlayerController(username).performAction(gson.fromJson(message.getData("action"), Action.class));
