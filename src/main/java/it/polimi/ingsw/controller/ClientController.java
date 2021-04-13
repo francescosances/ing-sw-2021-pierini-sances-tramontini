@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.storage.Warehouse;
-import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.network.ClientSocket;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.utils.Triple;
@@ -15,15 +15,13 @@ import it.polimi.ingsw.view.cli.CLI;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ClientController {
     /**
      * The socket connection to the server
      */
-    private final Client client;
+    private final ClientSocket clientSocket;
 
     /**
      * The view used to interact with the user
@@ -32,10 +30,10 @@ public class ClientController {
 
     /**
      * Initialize a new ClientController connected to the server through the specified Client object
-     * @param client the socket connection reference
+     * @param clientSocket the socket connection reference
      */
-    public ClientController(Client client) {
-        this.client = client;
+    public ClientController(ClientSocket clientSocket) {
+        this.clientSocket = clientSocket;
     }
 
     /**
@@ -100,8 +98,8 @@ public class ClientController {
                 view.showWarehouseStatus(warehouse);
                 break;
             default:
-                client.log("Received unexpected message");
-                client.log(message.serialize());
+                clientSocket.log("Received unexpected message");
+                clientSocket.log(message.serialize());
         }
     }
 
@@ -112,8 +110,8 @@ public class ClientController {
      * @throws IOException if the connection is interrupted
      */
     public void connect(String ip, int port) throws IOException {
-        client.setupSocket(ip, port);
-        new Thread(client).start();
+        clientSocket.setupSocket(ip, port);
+        new Thread(clientSocket).start();
         view.askLogin();
     }
 
@@ -124,7 +122,7 @@ public class ClientController {
     public void login(String username){
         Message message = new Message(Message.MessageType.LOGIN_REQUEST);
         message.addData("username", username);
-        client.sendMessage(message);
+        clientSocket.sendMessage(message);
     }
 
     /**
@@ -134,14 +132,14 @@ public class ClientController {
     public void lobbyChoice(String matchName) {
         Message message = new Message(Message.MessageType.LOBBY_CHOICE);
         message.addData("matchOwner", matchName);
-        client.sendMessage(message);
+        clientSocket.sendMessage(message);
     }
 
     /**
      * Sends to the server the message that communicate that the match can start
      */
     public void startMatch(){
-        client.sendMessage(new Message(Message.MessageType.START_MATCH));
+        clientSocket.sendMessage(new Message(Message.MessageType.START_MATCH));
     }
 
     /**
@@ -151,7 +149,7 @@ public class ClientController {
     public void leaderCardsChoice(LeaderCard ... leaderCards){
         Message message = new Message(Message.MessageType.LEADER_CARDS_CHOICE);
         message.addData("leaderCards", Serializer.serializeLeaderCardDeck(leaderCards));
-        client.sendMessage(message);
+        clientSocket.sendMessage(message);
     }
 
     /**
@@ -162,7 +160,7 @@ public class ClientController {
         Gson gson = new Gson();
         Message message = new Message(Message.MessageType.PERFORM_ACTION);
         message.addData("action",gson.toJson(action));
-        client.sendMessage(message);
+        clientSocket.sendMessage(message);
     }
 
     /**

@@ -31,7 +31,6 @@ public class Serializer {
     }
 
 
-
     public static void serializeDevelopmentCard(DevelopmentCard developmentCard, File file) throws IOException {
         Writer writer = Files.newBufferedWriter(Paths.get(file.getPath()));
         Gson gson = new Gson();

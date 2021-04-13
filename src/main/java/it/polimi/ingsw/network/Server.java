@@ -44,6 +44,7 @@ public class Server {
         return players.values().stream()
                 .filter(Objects::nonNull)
                 .filter(x->!x.isFull())
+                .filter(x->!x.isStarted())
                 .distinct()
                 .collect(Collectors.toList());
     }
