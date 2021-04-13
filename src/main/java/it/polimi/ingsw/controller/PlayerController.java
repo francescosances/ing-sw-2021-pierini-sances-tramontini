@@ -4,10 +4,12 @@ import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.LeaderCardsChooser;
+import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
 import it.polimi.ingsw.view.VirtualView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -181,10 +183,10 @@ public class PlayerController {
                 listLeaderCardsToPlay();
                 break;
             case DISCARD_LEADER:
-                //TODO: discard leader
                 listLeaderCardsToDiscard();
                 break;
             case MOVE_RESOURCES:
+                showDepotsStatus();
                 //TODO: move resources
                 break;
             default:
@@ -201,10 +203,8 @@ public class PlayerController {
     public void listLeaderCardsToPlay(){
         virtualView.listLeaderCards(this.playerBoard.getAvailableLeaderCards(), 1);
         this.leaderCardsChooser = cards -> {
-            System.out.println("carte scelte da giocare");
             for(LeaderCard card : cards){
-                this.playerBoard.activateLeaderCard(card);//TODO: controllare carta non attivabile
-                System.out.println(card);
+                this.playerBoard.activateLeaderCard(card);
             }
         };
     }
@@ -215,11 +215,17 @@ public class PlayerController {
     public void listLeaderCardsToDiscard(){
         virtualView.listLeaderCards(this.playerBoard.getAvailableLeaderCards(), 1);
         this.leaderCardsChooser = cards -> {
-            System.out.println("carte scelte da giocare");
             for(LeaderCard card : cards){
-                System.out.println(card);
+                this.playerBoard.discardLeaderCard(card);
             }
         };
+    }
+
+    /**
+     * List the resources stored in the warehouse depots
+     */
+    public void showDepotsStatus(){
+        virtualView.showWarehouseStatus(playerBoard.getWarehouse());
     }
 
     /**
@@ -247,6 +253,10 @@ public class PlayerController {
      */
     public void removeObserver(PlayerStatusListener playerStatusListener){
         observers.remove(playerStatusListener);
+    }
+
+    public void endGame(){
+        virtualView.showMessage("MATCH ENDED");//TODO: gestire messaggi sul vincitore
     }
 
     public enum PlayerStatus {

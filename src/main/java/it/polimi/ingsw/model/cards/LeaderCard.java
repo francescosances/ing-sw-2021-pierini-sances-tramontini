@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.model.PlayerBoard;
+import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
+import it.polimi.ingsw.model.cards.exceptions.WrongLeaderCardException;
 import it.polimi.ingsw.model.storage.ResourceType;
 
 import java.util.Objects;
@@ -23,12 +25,11 @@ public abstract class LeaderCard extends Card {
         return false;
     }
 
-    public boolean activate (PlayerBoard player){
-        if (requirements.satisfied(player)) {//TODO: satisfied da null pointer exception
+    public void activate (PlayerBoard player) throws NotSatisfiedRequirementsException{
+        if (requirements.satisfied(player))
             this.active = true;
-            return true;
-        }
-        return false;
+        else
+            throw new NotSatisfiedRequirementsException("You cannot attivate this card");
     }
 
     public ResourceType getOutputResourceType() throws WrongLeaderCardException {

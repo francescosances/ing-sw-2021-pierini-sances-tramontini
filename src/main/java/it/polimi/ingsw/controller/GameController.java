@@ -2,6 +2,7 @@ package it.polimi.ingsw.controller;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.model.Action;
+import it.polimi.ingsw.model.EndGameException;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.SoloMatch;
 import it.polimi.ingsw.model.cards.LeaderCard;
@@ -51,16 +52,20 @@ public class GameController implements PlayerStatusListener {
      */
     public void handleReceivedGameMessage(Message message, String username){
         Gson gson = new Gson();
-        switch (message.getType()) {
-            case START_MATCH:
-                start();
-                break;
-            case LEADER_CARDS_CHOICE:
-                leaderCardsChoice(username, Serializer.deserializeLeaderCards(message.getData("leaderCards")));
-                break;
-            case PERFORM_ACTION:
-                getPlayerController(username).performAction(gson.fromJson(message.getData("action"),Action.class));
-                break;
+        try {
+            switch (message.getType()) {
+                case START_MATCH:
+                    start();
+                    break;
+                case LEADER_CARDS_CHOICE:
+                    leaderCardsChoice(username, Serializer.deserializeLeaderCards(message.getData("leaderCards")));
+                    break;
+                case PERFORM_ACTION:
+                    getPlayerController(username).performAction(gson.fromJson(message.getData("action"), Action.class));
+                    break;
+            }
+        }catch (EndGameException e){
+            players.forEach(PlayerController::endGame);
         }
     }
 
@@ -211,7 +216,6 @@ public class GameController implements PlayerStatusListener {
         ADDING_PLAYERS,
         PLAYERS_SETUP,
         ACTION_CHOICE,
-        //TODO: aggiungere fase intermedia per scartare carte leader / spostare risorse
         NORMAL_ACTION,
         END_GAME;
 

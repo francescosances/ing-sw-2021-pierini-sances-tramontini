@@ -3,13 +3,17 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.Requirements;
+import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.Strongbox;
 import it.polimi.ingsw.model.storage.Warehouse;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PlayerBoard {
 
@@ -29,7 +33,7 @@ public class PlayerBoard {
         warehouse = new Warehouse();
         strongbox = new Strongbox();
         faithTrack = new FaithTrack(match);
-        developmentCardSlots = new DevelopmentCardSlot[3];
+        developmentCardSlots = Stream.generate(DevelopmentCardSlot::new).limit(3).toArray(DevelopmentCardSlot[]::new);
         leaderCards = new ArrayList<>();
     }
 
@@ -94,12 +98,23 @@ public class PlayerBoard {
         return strongbox;
     }
 
-    public boolean activateLeaderCard(LeaderCard leaderCard){
+    public void activateLeaderCard(LeaderCard leaderCard) throws NotSatisfiedRequirementsException {
         for(LeaderCard x: leaderCards){
             if(x.equals(leaderCard))
-               return x.activate(this);
+                x.activate(this);
         }
-        return false;
+    }
+
+    public void discardLeaderCard(LeaderCard leaderCard) throws EndGameException {
+        for (Iterator<LeaderCard> iterator = leaderCards.iterator(); iterator.hasNext();) {
+            LeaderCard temp = iterator.next();
+            if(temp.equals(leaderCard)) {
+                if (temp.isActive())
+                    throw new IllegalArgumentException("You cannot discard active cards");
+                iterator.remove();
+                this.gainFaithPoints(1);
+            }
+        }
     }
 
     public List<LeaderCard> getLeaderCards() {

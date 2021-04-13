@@ -2,10 +2,7 @@ package it.polimi.ingsw.model.storage;
 
 import it.polimi.ingsw.model.cards.Requirements;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class Warehouse implements Storage {
     /**
@@ -17,7 +14,6 @@ public class Warehouse implements Storage {
      * The list of resources taken from the market that need to be stored in the depots.
      */
     private final ArrayList<Resource> toBeStored;
-
 
     /**
      * Creates a new warehouse with 3 empty standard depots.
@@ -35,8 +31,13 @@ public class Warehouse implements Storage {
      * @param depotNumber the number of the depot where to add the resources
      * @param res the type of the resources to be added
      * @param num the amount of the resources to be added
+     * @throws IllegalStateException if is already existing a depot with the same resource type
      */
-    public void addResource(int depotNumber, ResourceType res, int num) {
+    public void addResource(int depotNumber, ResourceType res, int num) throws IllegalStateException{
+        int depotIndex = 0;
+        for(Depot depot : depots)
+            if(depotIndex++ != depotNumber && depot.getOccupied() > 0 && depot.getResourceType() == res)
+                throw new IllegalStateException("You can’t place the same type of Resource in two different depots.");
         for (int i = 0; i < num; i++)
             depots.get(depotNumber).addResource(res);
     }
@@ -112,6 +113,14 @@ public class Warehouse implements Storage {
                 ret.addResourceRequirement(x.getResourceType(),x.getOccupied());
         }
         return ret;
+    }
+
+    /**
+     * Returns the list of depots that compose the warehouse
+     * @return the list of depots that compose the warehouse
+     */
+    public List<Depot> getDepots(){
+        return this.depots;
     }
 
     @Override

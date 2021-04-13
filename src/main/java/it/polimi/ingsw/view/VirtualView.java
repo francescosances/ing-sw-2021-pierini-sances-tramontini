@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.cards.LeaderCard;
+import it.polimi.ingsw.model.storage.Storage;
+import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.network.ClientHandler;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
@@ -87,6 +89,13 @@ public class VirtualView implements View {
         Message message = new Message(Message.MessageType.LIST_LEADER_CARDS);
         message.addData("leaderCards",gson.toJson(leaderCardList));
         message.addData("cardsToChoice",String.valueOf(cardsToChoice));
+        sendMessage(message);
+    }
+
+    @Override
+    public void showWarehouseStatus(Warehouse warehouse){
+        Message message = new Message(Message.MessageType.SHOW_WAREHOUSE_STATUS);
+        message.addData("warehouse",Serializer.serializeWarehouse(warehouse));
         sendMessage(message);
     }
 

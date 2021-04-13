@@ -4,6 +4,9 @@ import it.polimi.ingsw.controller.ClientController;
 import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.cards.LeaderCard;
+import it.polimi.ingsw.model.storage.Depot;
+import it.polimi.ingsw.model.storage.Storage;
+import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
 
@@ -150,6 +153,11 @@ public class CLI implements View {
             cardsChosen[i] = leaderCardList.get(choices[i]);
         }
         clientController.leaderCardsChoice(cardsChosen);
+    }
+
+    @Override
+    public void showWarehouseStatus(Warehouse warehouse){
+        System.out.println(warehouse);
     }
 
     @Override

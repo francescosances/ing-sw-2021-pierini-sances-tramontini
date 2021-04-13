@@ -15,4 +15,6 @@ public interface Storage {
      * @return all the resources present in the storage
      */
     Requirements getAllResources();
+
+
 }
