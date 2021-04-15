@@ -32,7 +32,6 @@ public class Serializer {
     }
 
 
-
     public static void serializeDevelopmentCard(DevelopmentCard developmentCard, File file) throws IOException {
         Writer writer = Files.newBufferedWriter(Paths.get(file.getPath()));
         Gson gson = new Gson();
@@ -85,29 +84,13 @@ public class Serializer {
         return new Gson().toJson(leaderCard);
     }
 
-    public static String serializeLeaderCards(LeaderCard[] leaderCards){
-        //TODO
-        return null;
-    }
-
     public static LeaderCard deserializeLeaderCard(String serializedCard) {
         GsonBuilder gsonbuilder = new GsonBuilder().registerTypeAdapter(Requirements.class, new RequirementsCreator());
         Gson gson = gsonbuilder.registerTypeAdapter(LeaderCard.class, new LeaderCardCreator()).create();
         return gson.fromJson(serializedCard, LeaderCard.class);
     }
 
-    public static List<Deck<DevelopmentCard>> deserializeDevelopmentCardDecks(File file) throws IOException {
-        Reader reader = Files.newBufferedReader(Paths.get(file.getPath()));
-        RequirementsCreator requirementsCreator = new RequirementsCreator();
-        Gson gson = new GsonBuilder().registerTypeAdapter(Requirements.class, requirementsCreator).create();
-
-        List<Deck<DevelopmentCard>> deckList = Arrays.asList(gson.fromJson(reader, Deck[].class));
-        reader.close();
-
-        return deckList;
-    }
-
-    public static String serializeLeaderCardDeck(List<LeaderCard> list) {
+    public static String serializeLeaderCardDeck(LeaderCard[] list) {
         return new Gson().toJson(list);
     }
 
@@ -119,6 +102,17 @@ public class Serializer {
         Gson gson = gsonbuilder.create();
         Type type = new TypeToken<List<LeaderCard>>(){}.getType();
         return gson.fromJson(serializedCard, type);
+    }
+
+    public static List<Deck<DevelopmentCard>> deserializeDevelopmentCardDecks(File file) throws IOException {
+        Reader reader = Files.newBufferedReader(Paths.get(file.getPath()));
+        RequirementsCreator requirementsCreator = new RequirementsCreator();
+        Gson gson = new GsonBuilder().registerTypeAdapter(Requirements.class, requirementsCreator).create();
+
+        List<Deck<DevelopmentCard>> deckList = Arrays.asList(gson.fromJson(reader, Deck[].class));
+        reader.close();
+
+        return deckList;
     }
 
     public static String serializeMarket(Market market) {

@@ -8,7 +8,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Client implements Runnable{
+public class ClientSocket implements Runnable{
     /**
      * The socket connection to the server
      */
@@ -29,7 +29,7 @@ public class Client implements Runnable{
     /**
      * Initialize a new Client with and empty ClientController
      */
-    public Client(){
+    public ClientSocket(){
         this.clientController = new ClientController(this);
     }
 

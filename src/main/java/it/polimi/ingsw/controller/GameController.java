@@ -22,6 +22,11 @@ public class GameController implements PlayerStatusListener {
     private Match match;
 
     /**
+     * True if the match has already started
+     */
+    private boolean matchStarted = false;
+
+    /**
      * A list containing the PlayerControllers of the players of the match
      */
     private final List<PlayerController> players;
@@ -79,6 +84,7 @@ public class GameController implements PlayerStatusListener {
             match.addPlayer(players.get(0).getUsername());//TODO: gestire salvataggio istanza match single player
         }
         currentPlayerIndex = (int) (Math.random() * players.size());
+        this.matchStarted = true;
         nextPhase();
     }
 
@@ -154,6 +160,14 @@ public class GameController implements PlayerStatusListener {
      */
     public boolean isFull(){
         return match.isFull();
+    }
+
+    /**
+     * Returns true if the match has already started
+     * @return true if the match has already started
+     */
+    public boolean isStarted(){
+        return matchStarted;
     }
 
     /**
