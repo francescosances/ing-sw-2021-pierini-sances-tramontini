@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.*;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Pair;
+import it.polimi.ingsw.utils.Triple;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -26,10 +27,32 @@ public class SerializerTest {
     }
 
     @Test
-    public void serializeLeaderCard(){
+    public void serializeDepotLeaderCard(){
         LeaderCard leaderCard = new DepotLeaderCard(3,new Requirements(new Pair<>(ResourceType.SERVANT,5)),ResourceType.SHIELD);
-
         String json = Serializer.serializeLeaderCard(leaderCard);
+        assertEquals(leaderCard, Serializer.deserializeLeaderCard(json));
+    }
+
+    @Test
+    public void serializeDiscountLeaderCard(){
+        LeaderCard leaderCard = new DiscountLeaderCard(2,new Requirements(new Triple<>(DevelopmentColorType.YELLOW,1,1),new Triple<>(DevelopmentColorType.GREEN,1,1)),ResourceType.SERVANT);
+        String json = Serializer.serializeLeaderCard(leaderCard);
+        assertEquals(leaderCard, Serializer.deserializeLeaderCard(json));
+    }
+
+    @Test
+    public void serializeProductionLeaderCard(){
+        LeaderCard leaderCard = new ProductionLeaderCard(4,new Requirements(new Triple<>(DevelopmentColorType.YELLOW,2,1)),new Requirements(new Pair<>(ResourceType.SHIELD,1)));
+        String json = Serializer.serializeLeaderCard(leaderCard);
+        assertEquals(leaderCard, Serializer.deserializeLeaderCard(json));
+    }
+
+    @Test
+    public void serializeWhiteMarbleLeaderCard(){
+        LeaderCard leaderCard = new WhiteMarbleLeaderCard(5,new Requirements(new Triple<>(DevelopmentColorType.GREEN,1,2),new Triple<>(DevelopmentColorType.PURPLE,1,1)),ResourceType.SHIELD);
+        leaderCard.activate();
+        String json = Serializer.serializeLeaderCard(leaderCard);
+        System.out.println(json);
         assertEquals(leaderCard, Serializer.deserializeLeaderCard(json));
     }
 
@@ -77,6 +100,8 @@ public class SerializerTest {
         Warehouse warehouse= new Warehouse();
         warehouse.addResource(0, ResourceType.COIN, 1);
         warehouse.addResource(2, ResourceType.STONE, 2);
+        LeaderCard leaderDepot = new DepotLeaderCard(3,new Requirements(new Pair<>(ResourceType.COIN,5)),ResourceType.STONE);
+        warehouse.addDepotLeaderCard(leaderDepot);
         String json = Serializer.serializeWarehouse(warehouse);
         assertEquals(warehouse, Serializer.deserializeWarehouse(json));
     }

@@ -113,6 +113,8 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
 
     @Override
     public boolean equals(Object other) {
+        if (this == other)
+            return true;
         if (other instanceof Requirements) {
             Requirements otherRequirements = (Requirements) other;
             return this.resources.equals(otherRequirements.resources) && this.developmentCards.equals(otherRequirements.developmentCards);

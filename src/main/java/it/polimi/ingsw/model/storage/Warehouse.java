@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.storage;
 
+import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.Requirements;
 
 import java.util.*;
@@ -129,5 +130,18 @@ public class Warehouse implements Storage {
         if (o == null || getClass() != o.getClass()) return false;
         Warehouse warehouse = (Warehouse) o;
         return Objects.equals(depots, warehouse.depots) && Objects.equals(toBeStored, warehouse.toBeStored);
+    }
+
+    public void addDepotLeaderCard(LeaderCard leaderCard){
+        Depot depotLeaderCard = (Depot) leaderCard;
+        depots.add(depotLeaderCard);
+    }
+
+    @Override
+    public String toString() {
+        return "Warehouse{" +
+                "depots=" + depots +
+                ", toBeStored=" + toBeStored +
+                '}';
     }
 }

@@ -25,11 +25,16 @@ public abstract class LeaderCard extends Card {
         return false;
     }
 
+    public void activate(){
+        active = true;
+    }
+
+
     public void activate (PlayerBoard player) throws NotSatisfiedRequirementsException{
         if (requirements.satisfied(player))
             this.active = true;
         else
-            throw new NotSatisfiedRequirementsException("You cannot attivate this card");
+            throw new NotSatisfiedRequirementsException("You cannot activate this card");
     }
 
     public ResourceType getOutputResourceType() throws WrongLeaderCardException {
@@ -53,11 +58,12 @@ public abstract class LeaderCard extends Card {
         if (this == o) return true;
         if (!(o instanceof LeaderCard)) return false;
         LeaderCard that = (LeaderCard) o;
-        return requirements.equals(that.requirements);
+        return requirements.equals(that.requirements) && active == that.active;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(requirements);
     }
+
 }

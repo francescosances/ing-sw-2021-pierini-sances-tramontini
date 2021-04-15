@@ -34,4 +34,16 @@ public class ProductionLeaderCard extends LeaderCard implements Producer {
                 ", productionGain=" + productionGain +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other)
+            return true;
+        if (!(other instanceof ProductionLeaderCard))
+            return false;
+        ProductionLeaderCard that = (ProductionLeaderCard) other;
+        return this.productionCost.equals(that.productionCost) && this.requirements.equals(that.requirements)
+                && this.active == that.active && this.getVictoryPoints() == that.getVictoryPoints();
+
+    }
 }

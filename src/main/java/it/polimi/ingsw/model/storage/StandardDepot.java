@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.storage;
 
+import java.util.Objects;
+
 public class StandardDepot implements Depot {
     /**
      * The type of the resource inside the depot or null in case of an empty depot.
@@ -62,4 +64,22 @@ public class StandardDepot implements Depot {
         if (occupied == 0)
             this.resourceType = null;
     }
+
+    @Override
+    public String toString() {
+        return "StandardDepot{" +
+                "resourceType=" + resourceType +
+                ", occupied=" + occupied +
+                ", size=" + size +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StandardDepot that = (StandardDepot) o;
+        return occupied == that.occupied && size == that.size && resourceType == that.resourceType;
+    }
+
 }

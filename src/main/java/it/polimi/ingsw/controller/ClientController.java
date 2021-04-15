@@ -87,7 +87,7 @@ public class ClientController {
                 resumeMatch(Serializer.deserializeMatchState(message.getData("match")));
                 break;
             case LIST_LEADER_CARDS:
-                List<LeaderCard> leaderCardList = Serializer.deserializeLeaderCards(message.getData("leaderCards"));
+                List<LeaderCard> leaderCardList = Serializer.deserializeLeaderCardDeck(message.getData("leaderCards"));
                 view.listLeaderCards(leaderCardList,Integer.parseInt(message.getData("cardsToChoice")));
                 break;
             case ASK_FOR_ACTION:

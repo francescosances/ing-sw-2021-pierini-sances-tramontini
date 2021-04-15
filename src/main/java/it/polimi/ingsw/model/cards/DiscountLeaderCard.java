@@ -37,4 +37,16 @@ public class DiscountLeaderCard extends LeaderCard {
                 ", requirements=" + requirements +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other)
+            return true;
+        if (!(other instanceof DiscountLeaderCard))
+            return false;
+        DiscountLeaderCard that = (DiscountLeaderCard) other;
+        return this.discount == that.discount && this.discountResourceType.equals(that.discountResourceType) && this.requirements.equals(that.requirements)
+                && this.active == that.active && this.getVictoryPoints() == that.getVictoryPoints();
+
+    }
 }

@@ -29,4 +29,16 @@ public class WhiteMarbleLeaderCard extends LeaderCard {
                 ", outputResourceType=" + outputResourceType +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other)
+            return true;
+        if (!(other instanceof WhiteMarbleLeaderCard))
+            return false;
+        WhiteMarbleLeaderCard that = (WhiteMarbleLeaderCard) other;
+        return this.outputResourceType.equals(that.outputResourceType) && this.requirements.equals(that.requirements)
+                && this.active == that.active && this.getVictoryPoints() == that.getVictoryPoints();
+
+    }
 }
