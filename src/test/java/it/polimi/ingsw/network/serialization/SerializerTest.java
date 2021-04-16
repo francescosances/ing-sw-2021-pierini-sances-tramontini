@@ -8,11 +8,7 @@ import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.Triple;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -110,5 +106,40 @@ public class SerializerTest {
         warehouse.addDepotLeaderCard(leaderDepot);
         String json = Serializer.serializeWarehouse(warehouse);
         assertEquals(warehouse, Serializer.deserializeWarehouse(json));
+    }
+
+    @Test
+    public void serializePlayerBoard(){
+        Match match = new Match("Match Test");
+        PlayerBoard playerBoard = new PlayerBoard("PlayerBoard Test", match);
+        playerBoard.gainFaithPoints(15);
+        PopeFavorTile[] popeFavorTiles = playerBoard.getFaithTrack().getPopeFavorTiles();
+        popeFavorTiles[0].uncover();
+        playerBoard.getWarehouse().addResource(0,ResourceType.COIN,1);
+        LeaderCard leaderCard = new DepotLeaderCard(3,new Requirements(new Pair<>(ResourceType.STONE,5)),ResourceType.SERVANT);
+        playerBoard.addLeaderCard(leaderCard);
+        playerBoard.activateLeaderCard(leaderCard);
+        playerBoard.getWarehouse().addResource(3, ResourceType.SERVANT,2);
+        Map<ResourceType, Integer> resourcesMap = new HashMap<>();
+        resourcesMap.put(ResourceType.SHIELD, 3);
+        resourcesMap.put(ResourceType.STONE, 7);
+        playerBoard.getStrongbox().addResources(resourcesMap);
+        DevelopmentCard developmentCard = new DevelopmentCard(1,new Requirements(new Pair<>(ResourceType.SHIELD,2)),1,DevelopmentColorType.GREEN,new Requirements(new Pair<>(ResourceType.COIN,1)),new Pair<>(NonPhysicalResourceType.FAITH_POINT,1));
+        DevelopmentCardSlot[] developmentCardSlots = playerBoard.getDevelopmentCardSlots();
+        developmentCardSlots[1].addCard(developmentCard);
+
+        String json = Serializer.serializePlayerBoard(playerBoard);
+
+        PlayerBoard deserialized = Serializer.deserializePlayerBoard(json);
+
+        assertEquals(playerBoard.getUsername(), deserialized.getUsername());
+        assertEquals(playerBoard.getFaithTrack(), deserialized.getFaithTrack());
+        assertArrayEquals(playerBoard.getDevelopmentCardSlots(), deserialized.getDevelopmentCardSlots());
+        assertEquals(playerBoard.getWarehouse(), deserialized.getWarehouse());
+        assertEquals(playerBoard.getStrongbox(), deserialized.getStrongbox());
+        assertEquals(playerBoard.getLeaderCards(), deserialized.getLeaderCards());
+
+        assertEquals(playerBoard, deserialized);
+
     }
 }

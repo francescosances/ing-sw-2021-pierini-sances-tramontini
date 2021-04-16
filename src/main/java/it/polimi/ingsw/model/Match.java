@@ -216,9 +216,9 @@ public class Match {
     public void vaticanReport(int popeSpace){
         for(PlayerBoard p : players){
             if(p.getFaithTrack().getFaithMarker() >= popeSpace-3-vaticanReportsCount){
-                p.getFaithTrack().getPopeFavoreTiles()[vaticanReportsCount].uncover();
+                p.getFaithTrack().getPopeFavorTiles()[vaticanReportsCount].uncover();
             }else{
-                p.getFaithTrack().getPopeFavoreTiles()[vaticanReportsCount] = null;
+                p.getFaithTrack().getPopeFavorTiles()[vaticanReportsCount] = null;
             }
         }
         vaticanReportsCount++;

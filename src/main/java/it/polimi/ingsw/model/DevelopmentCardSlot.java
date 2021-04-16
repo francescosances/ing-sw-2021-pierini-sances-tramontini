@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.cards.DevelopmentCard;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 public class DevelopmentCardSlot implements Iterable<DevelopmentCard>{
 
@@ -41,5 +42,21 @@ public class DevelopmentCardSlot implements Iterable<DevelopmentCard>{
     @Override
     public Iterator<DevelopmentCard> iterator() {
         return developmentCards.iterator();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DevelopmentCardSlot that = (DevelopmentCardSlot) o;
+        return Objects.equals(developmentCards, that.developmentCards);
+    }
+
+    @Override
+    public String toString() {
+
+        return "DevelopmentCardSlot{" +
+                "developmentCards=" + developmentCards +
+                '}';
     }
 }

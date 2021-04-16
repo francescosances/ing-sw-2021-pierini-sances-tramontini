@@ -101,4 +101,14 @@ public class DevelopmentCard extends Card implements Producer {
                 && this.productionGain.equals(o.productionGain) && this.level == o.level;
     }
 
+    @Override
+    public String toString() {
+        return "DevelopmentCard{" +
+                "cost=" + cost +
+                ", level=" + level +
+                ", color=" + color +
+                ", productionCost=" + productionCost +
+                ", productionGain=" + productionGain +
+                '}';
+    }
 }

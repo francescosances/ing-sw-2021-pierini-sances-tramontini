@@ -15,20 +15,21 @@ public class Strongbox implements Storage {
     /**
      * Creates a new empty strongbox.
      */
-    public Strongbox(){
+    public Strongbox() {
         resources = new HashMap<>();
     }
 
     /**
      * Adds the given resources to the strongbox.
+     *
      * @param resources the resources to be added to the strongbox, with each resource type mapped to its amount
      */
-    public void addResources(Map<ResourceType, Integer> resources){
+    public void addResources(Map<ResourceType, Integer> resources) {
         resources.forEach((res, num) -> this.resources.put(res, this.resources.containsKey(res) ? this.resources.get(res) + num : num));
     }
 
     @Override
-    public Requirements removeResources(Requirements resources){
+    public Requirements removeResources(Requirements resources) {
         Requirements newRequirements = (Requirements) resources.clone();
         for (Map.Entry<Resource, Integer> res : resources) {
             int toBeRemoved = res.getValue();
@@ -44,15 +45,16 @@ public class Strongbox implements Storage {
 
     /**
      * Returns the amount of the specified resource present in the strongbox.
+     *
      * @param resource the resource to return the amount of
      * @return the amount of the specified resource present in the strongbox
      */
-    public int getResourcesNum(ResourceType resource){
-        return this.resources.getOrDefault(resource,0);
+    public int getResourcesNum(ResourceType resource) {
+        return this.resources.getOrDefault(resource, 0);
     }
 
     @Override
-    public Requirements getAllResources(){
+    public Requirements getAllResources() {
         Requirements ret = new Requirements();
         resources.forEach(ret::addResourceRequirement);
         return ret;
@@ -64,5 +66,12 @@ public class Strongbox implements Storage {
         if (o == null || getClass() != o.getClass()) return false;
         Strongbox strongbox = (Strongbox) o;
         return Objects.equals(resources, strongbox.resources);
+    }
+
+    @Override
+    public String toString() {
+        return "Strongbox{" +
+                "resources=" + resources +
+                '}';
     }
 }

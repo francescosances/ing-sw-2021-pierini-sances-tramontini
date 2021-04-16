@@ -1,22 +1,21 @@
 package it.polimi.ingsw.model;
 
 import java.util.Arrays;
-
 public class FaithTrack {
 
     public static final int[] POPE_SPACES = {8,16,24};
     public static final int SIZE = 24;
 
-    private Match match;
+    private transient Match match;
     private int faithMarker;
-    private PopeFavorTile[] popeFavorTiles;
-    private boolean[] vaticanReports;
+    private final PopeFavorTile[] popeFavorTiles;
+    private final boolean[] vaticanReports;
 
     public FaithTrack(Match match){
         this.match = match;
         popeFavorTiles = new PopeFavorTile[POPE_SPACES.length];
         for(int i=0;i<POPE_SPACES.length;i++){
-            popeFavorTiles[i] = new PopeFavorTile();
+            popeFavorTiles[i] = new PopeFavorTile(2+i);
         }
         faithMarker = 0;
         vaticanReports = new boolean[POPE_SPACES.length];
@@ -57,9 +56,9 @@ public class FaithTrack {
 
     public int getVictoryPoints(){
         int res = getTrackVictoryPoints();
-        for(int i=0;i<popeFavorTiles.length;i++) {
-            if(popeFavorTiles[i] != null)
-                res += popeFavorTiles[i].getVictoryPoints();
+        for (PopeFavorTile popeFavorTile : popeFavorTiles) {
+            if (popeFavorTile != null)
+                res += popeFavorTile.getVictoryPoints();
         }
         return res;
     }
@@ -75,7 +74,7 @@ public class FaithTrack {
 
     }
 
-    public PopeFavorTile[] getPopeFavoreTiles(){
+    public PopeFavorTile[] getPopeFavorTiles(){
         return popeFavorTiles;
     }
 
@@ -83,4 +82,20 @@ public class FaithTrack {
         this.match = match;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FaithTrack that = (FaithTrack) o;
+        return faithMarker == that.faithMarker && Arrays.equals(popeFavorTiles, that.popeFavorTiles) && Arrays.equals(vaticanReports, that.vaticanReports);
+    }
+
+    @Override
+    public String toString() {
+        return "FaithTrack{" +
+                ", faithMarker=" + faithMarker +
+                ", popeFavorTiles=" + Arrays.toString(popeFavorTiles) +
+                ", vaticanReports=" + Arrays.toString(vaticanReports) +
+                '}';
+    }
 }

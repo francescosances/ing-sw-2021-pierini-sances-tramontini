@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 public class PlayerBoard {
 
-    private Match match;
+    private transient final Match match;
     protected String username;
     protected FaithTrack faithTrack;
 
@@ -25,7 +25,7 @@ public class PlayerBoard {
     protected Strongbox strongbox;
 
     private final DevelopmentCardSlot[] developmentCardSlots;
-    private List<LeaderCard> leaderCards;
+    private final List<LeaderCard> leaderCards;
 
     public PlayerBoard(String username,Match match){
         this.match = match;
@@ -62,8 +62,7 @@ public class PlayerBoard {
     }
 
     public int getVictoryPoints(){
-        int res = faithTrack.getVictoryPoints();
-        return res;
+        return faithTrack.getVictoryPoints();
     }
 
     public Match getMatch() {
@@ -134,6 +133,23 @@ public class PlayerBoard {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PlayerBoard that = (PlayerBoard) o;
-        return username.equals(that.username);
+        return  username.equals(that.username) &&
+                this.getFaithTrack().equals(that.getFaithTrack()) &&
+                Arrays.equals(this.getDevelopmentCardSlots(), that.getDevelopmentCardSlots()) &&
+                this.getStrongbox().equals(that.getStrongbox()) &&
+                this.getWarehouse().equals(that.getWarehouse()) &&
+                this.getLeaderCards().equals(that.getLeaderCards());
+    }
+
+    @Override
+    public String toString() {
+        return "PlayerBoard{" +
+                "username='" + username + '\'' +
+                ", faithTrack=" + faithTrack +
+                ", warehouse=" + warehouse +
+                ", strongbox=" + strongbox +
+                ", developmentCardSlots=" + Arrays.toString(developmentCardSlots) +
+                ", leaderCards=" + leaderCards +
+                '}';
     }
 }

@@ -56,10 +56,7 @@ public class Serializer {
 
     public static DevelopmentCard deserializeDevelopmentCard(String json) {
         Gson gson = new GsonBuilder().registerTypeAdapter(Requirements.class, new RequirementsCreator()).create();
-
-        DevelopmentCard card = gson.fromJson(json, DevelopmentCard.class);
-
-        return card;
+        return gson.fromJson(json, DevelopmentCard.class);
     }
 
     public static void serializeDevelopmentCardDecks(Match match, File file) throws IOException {
@@ -148,6 +145,18 @@ public class Serializer {
         gsonBuilder.registerTypeAdapter(Depot.class, new DepotCreator());
         gsonBuilder.registerTypeAdapter(LeaderCard.class, new LeaderCardCreator());
         return gsonBuilder.create().fromJson(json, Warehouse.class);
+    }
+
+    public static String serializePlayerBoard(PlayerBoard playerBoard){
+        return new Gson().toJson(playerBoard);
+    }
+
+    public static PlayerBoard deserializePlayerBoard(String json){
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Depot.class, new DepotCreator());
+        gsonBuilder.registerTypeAdapter(LeaderCard.class, new LeaderCardCreator());
+        gsonBuilder.registerTypeAdapter(Requirements.class, new RequirementsCreator());
+        return gsonBuilder.create().fromJson(json, PlayerBoard.class);
     }
 }
 
