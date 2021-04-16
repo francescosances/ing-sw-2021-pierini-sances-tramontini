@@ -8,13 +8,12 @@ import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.Triple;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class SerializerTest {
 

@@ -92,7 +92,6 @@ public class PlayerController {
      */
     public void startTurn(){
         askForAction();
-        virtualView.yourTurn();
     }
 
     /**
