@@ -34,9 +34,9 @@ public class DevelopmentCardSlot implements Iterable<DevelopmentCard>{
     }
 
     public DevelopmentCard getFromLevel(int level) throws IllegalArgumentException{
-        if(developmentCards.size() <= level)
+        if(developmentCards.size() < level)
             throw new IllegalStateException("No card for this level");
-        return developmentCards.get(level);
+        return developmentCards.get(level - 1);
     }
 
     @Override
