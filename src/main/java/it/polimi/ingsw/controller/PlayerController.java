@@ -33,7 +33,7 @@ public class PlayerController {
     /**
      * Represent the current status of the player
      */
-    private PlayerStatus currentStatus;
+    private PlayerStatusIndex currentStatus;
 
     /**
      * A list of observers of the player status
@@ -56,7 +56,7 @@ public class PlayerController {
         this.playerBoard = playerBoard;
         this.active = true;
         this.virtualView = virtualView;
-        this.currentStatus = PlayerStatus.TURN_ENDED;
+        currentStatus = new PlayerStatusIndex(PlayerStatus.TURN_ENDED);
     }
 
     /**
@@ -124,7 +124,7 @@ public class PlayerController {
      * @return the current status of the player
      */
     public PlayerStatus getCurrentStatus() {
-        return currentStatus;
+        return currentStatus.getCurrentStatus();
     }
 
     /**
@@ -184,9 +184,8 @@ public class PlayerController {
             case MOVE_RESOURCES:
                 showWarehouseStatus();
                 break;
-                //TODO: move resources
             default:
-                changeStatus(this.currentStatus.next());
+                changeStatus(this.currentStatus.nextStatus());
         }
     }
 
@@ -237,7 +236,7 @@ public class PlayerController {
      * @param newStatus the new status of the player controller
      */
     protected void changeStatus(PlayerStatus newStatus){
-        this.currentStatus = newStatus;
+        currentStatus.setStatus(newStatus);
         for (PlayerStatusListener x : this.observers) {
             x.onPlayerStatusChanged(this);
         }
@@ -281,19 +280,16 @@ public class PlayerController {
         PERFORMING_ACTION,
         NORMAL_ACTION,
         TURN_ENDED;
-
-        private static final PlayerStatus[] vals = {CHOOSING_LEADER_CARDS,PERFORMING_ACTION, NORMAL_ACTION,PERFORMING_ACTION,TURN_ENDED};
-
-        public PlayerStatus next()
-        {
-            return vals[(this.ordinal()+1) % vals.length];//TODO: rivedere flusso perché passi due volte da performing action
-        }
     }
 
     public class PlayerStatusIndex{
 
         private int currentIndex = 0;
         private final PlayerStatus[] vals = {PlayerStatus.CHOOSING_LEADER_CARDS,PlayerStatus.PERFORMING_ACTION, PlayerStatus.NORMAL_ACTION,PlayerStatus.PERFORMING_ACTION,PlayerStatus.TURN_ENDED};
+
+        public PlayerStatusIndex(PlayerStatus playerStatus){
+            this.setStatus(playerStatus);
+        }
 
         public PlayerStatus nextStatus(){
             currentIndex = (currentIndex+1)%vals.length;
@@ -302,6 +298,10 @@ public class PlayerController {
 
         public PlayerStatus getCurrentStatus(){
             return vals[currentIndex];
+        }
+
+        public void setStatus(PlayerStatus playerStatus){
+            currentIndex = Arrays.asList(vals).indexOf(playerStatus);
         }
 
     }
