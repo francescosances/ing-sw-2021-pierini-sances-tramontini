@@ -57,7 +57,7 @@ public class CLI implements View {
     public void showMessage(String message) {
         output.println(message);
     }
-    
+
     @Override
     public void showErrorMessage(String message) {
         errorOutput.println(ANSI_RED+message+ANSI_RESET);
@@ -156,7 +156,7 @@ public class CLI implements View {
         for(int i=0;i<cardsToChoose;i++) {
             choices[i] = input.nextInt();
             if(choices[i] <0 || choices[i] >= leaderCardList.size()){
-                output.println("Invalid choice");
+                showErrorMessage("Invalid choice");
                 listLeaderCards(leaderCardList,cardsToChoose);
                 return;
             }
@@ -172,13 +172,27 @@ public class CLI implements View {
             Depot depot = warehouse.getDepots().get(i);
             System.out.printf("[%d] ",i);
             for(int j=0;j<depot.getSize();j++)
-                System.out.printf("["+((depot.getOccupied()>i)?"*":" ")+"]");
+                System.out.printf("["+((depot.getOccupied()>j)?"*":" ")+"]");
             for(int j=10-depot.getSize()*3;j>0;j--)
                 System.out.printf(" ");
             System.out.printf(depot.getResourceType() == null?"Empty":depot.getResourceType().toString());
             System.out.println();
         }
         System.out.println(warehouse);
+    }
+
+    @Override
+    public void askToSwapDepots(Warehouse warehouse) {
+        this.showWarehouseStatus(warehouse);
+        System.out.println("Select 2 depots to swap:");
+        int depotA = input.nextInt();
+        int depotB = input.nextInt();
+        if(depotA < 0 || depotA >= warehouse.getDepots().size() || depotB < 0 || depotB >= warehouse.getDepots().size()){
+            showErrorMessage("Invalid choice");
+            askToSwapDepots(warehouse);
+        }else{
+            clientController.swapDepots(depotA,depotB);
+        }
     }
 
     @Override
@@ -192,7 +206,7 @@ public class CLI implements View {
         if (choice >= 0 && choice <= availableActions.length)
             clientController.performAction(availableActions[choice] );
         else{
-            output.println("Invalid choice");
+            showErrorMessage("Invalid choice");
             askForAction(availableActions);
         }
     }

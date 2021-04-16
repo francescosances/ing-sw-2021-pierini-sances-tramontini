@@ -73,6 +73,11 @@ public class GameController implements PlayerStatusListener {
                 case PERFORM_ACTION:
                     getPlayerController(username).performAction(gson.fromJson(message.getData("action"), Action.class));
                     break;
+                case SWAP_DEPOTS:
+                    int depotA = Integer.parseInt(message.getData("depotA"));
+                    int depotB = Integer.parseInt(message.getData("depotB"));
+                    getPlayerController(username).swapDepots(depotA,depotB);
+                    break;
             }
         }catch (EndGameException e){
             setPhase(GamePhase.END_GAME);

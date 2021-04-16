@@ -93,9 +93,12 @@ public class ClientController {
                 List<Action> actions = gson.fromJson(message.getData("availableActions"),new TypeToken<List<Action>>(){}.getType());
                 view.askForAction(actions.toArray(new Action[0]));
                 break;
-            case SHOW_WAREHOUSE_STATUS:
+            case SWAP_DEPOTS:
                 Warehouse warehouse = Serializer.deserializeWarehouse(message.getData("warehouse"));
-                view.showWarehouseStatus(warehouse);
+                view.askToSwapDepots(warehouse);
+                break;
+            case SHOW_PLAYER_STATUS:
+                //TODO: aggiungere funzioni che mostrano playerboard
                 break;
             default:
                 clientSocket.log("Received unexpected message");
@@ -163,6 +166,13 @@ public class ClientController {
         clientSocket.sendMessage(message);
     }
 
+    public void swapDepots(int depotA, int depotB) {
+        Message message = new Message(Message.MessageType.SWAP_DEPOTS);
+        message.addData("depotA",String.valueOf(depotA));
+        message.addData("depotB",String.valueOf(depotB));
+        clientSocket.sendMessage(message);
+    }
+
     /**
      * Resumes a match suspended after a network disconnection
      * @param match the match to be resumed
@@ -170,4 +180,5 @@ public class ClientController {
     public void resumeMatch(Match match){
         throw new IllegalStateException("Not implemented yet");
     }
+
 }

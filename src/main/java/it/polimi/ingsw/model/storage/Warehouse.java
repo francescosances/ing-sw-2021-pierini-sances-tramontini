@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.storage;
 
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.Requirements;
+import it.polimi.ingsw.model.storage.exceptions.UnswappableDepotsException;
 
 import java.util.*;
 
@@ -25,6 +26,10 @@ public class Warehouse implements Storage {
         depots.add(new StandardDepot(2));
         depots.add(new StandardDepot(3));
         toBeStored = new ArrayList<>();
+
+        depots.get(0).addResource(ResourceType.STONE);
+        depots.get(1).addResource(ResourceType.COIN);
+        depots.get(1).addResource(ResourceType.COIN);
     }
 
     /**
@@ -72,8 +77,8 @@ public class Warehouse implements Storage {
      * @param second the number of the second depot
      */
     public void swapDepots(int first, int second) {
-        if (depots.get(first).getOccupied() > depots.get(second).getSize() || depots.get(second).getOccupied() > depots.get(first).getSize())
-            throw new IllegalArgumentException("Unable to swap selected depots");
+        if (first == second || depots.get(first).getOccupied() > depots.get(second).getSize() || depots.get(second).getOccupied() > depots.get(first).getSize())
+            throw new UnswappableDepotsException("Unable to swap selected depots");
 
         ResourceType firstResourceType = depots.get(first).getResourceType();
         ResourceType secondResourceType = depots.get(second).getResourceType();

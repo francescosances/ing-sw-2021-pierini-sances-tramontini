@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.LeaderCardsChooser;
 import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
+import it.polimi.ingsw.model.storage.exceptions.UnswappableDepotsException;
 import it.polimi.ingsw.view.VirtualView;
 
 import java.util.ArrayList;
@@ -258,8 +259,21 @@ public class PlayerController {
         observers.remove(playerStatusListener);
     }
 
+    public PlayerBoard getPlayerBoard() {
+        return playerBoard;
+    }
+
     public void endGame(){
         virtualView.showMessage("MATCH ENDED");//TODO: gestire messaggi sul vincitore
+    }
+
+    public void swapDepots(int depotA, int depotB) {
+        try {
+            playerBoard.getWarehouse().swapDepots(depotA, depotB);
+        }catch (UnswappableDepotsException e){
+            virtualView.showErrorMessage(e.getMessage());
+        }
+        askForAction();
     }
 
     public enum PlayerStatus {

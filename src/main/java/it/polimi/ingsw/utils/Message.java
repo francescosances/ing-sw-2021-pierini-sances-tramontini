@@ -100,7 +100,8 @@ public class Message{
         YOUR_TURN,
         LIST_LEADER_CARDS,
         ASK_FOR_ACTION,
-        SHOW_WAREHOUSE_STATUS,
+        SWAP_DEPOTS,
+        SHOW_PLAYER_STATUS,
 
         // from client to server
         LOGIN_REQUEST,

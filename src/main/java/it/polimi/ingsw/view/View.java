@@ -62,6 +62,8 @@ public interface View {
      */
      void showWarehouseStatus(Warehouse warehouse);
 
+     void askToSwapDepots(Warehouse warehouse);
+
      /**
       * Shows the actions that the user can choose to perform
       * @param availableActions the array of available actions which the user can choose

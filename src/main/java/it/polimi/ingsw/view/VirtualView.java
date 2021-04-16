@@ -93,7 +93,12 @@ public class VirtualView implements View {
 
     @Override
     public void showWarehouseStatus(Warehouse warehouse){
-        Message message = new Message(Message.MessageType.SHOW_WAREHOUSE_STATUS);
+        askToSwapDepots(warehouse);
+    }
+
+    @Override
+    public void askToSwapDepots(Warehouse warehouse) {
+        Message message = new Message(Message.MessageType.SWAP_DEPOTS);
         message.addData("warehouse",Serializer.serializeWarehouse(warehouse));
         sendMessage(message);
     }
