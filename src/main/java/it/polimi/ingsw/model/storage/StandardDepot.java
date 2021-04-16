@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model.storage;
 
-import java.util.Objects;
-
 public class StandardDepot implements Depot {
     /**
      * The type of the resource inside the depot or null in case of an empty depot.

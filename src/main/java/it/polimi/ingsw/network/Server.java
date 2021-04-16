@@ -2,6 +2,7 @@ package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.controller.PlayerController;
+import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
@@ -77,7 +78,11 @@ public class Server {
                 login(message.getData("username"), clientHandler);
                 break;
             case LOBBY_CHOICE:
-                lobbyChoice(message.getData("matchOwner"), clientHandler);
+                if(message.getData("matchOwner") == null)
+                    createNewLobby(Integer.parseInt(message.getData("playersNumber")),clientHandler);
+                else
+                    joinLobby(message.getData("matchOwner"), clientHandler);
+                getGameController(clientHandler.getUsername()).connect(clientHandler.getUsername());
                 break;
             default:
                 getGameController(clientHandler.getUsername()).handleReceivedGameMessage(message,clientHandler.getUsername());
@@ -134,28 +139,30 @@ public class Server {
 
     /**
      * Associate the user to the chosen lobby. It also connects the user to the realative game controller or crete a new one.
-     * @param matchName the name of the match that the user wants to join.
-     *                  If this param is null, a new match is created. The name of the new match is the username of the current user
+     * The name of the new match is the username of the current user
+     * @param playersNumber the number of players that can join the match
      * @param clientHandler the ClientHandler that manages the socket connection with the client
      */
-    private void lobbyChoice(String matchName, ClientHandler clientHandler) {
-        if (matchName == null){
-            // new match
-            GameController match = new GameController(clientHandler.getUsername());
+    private void createNewLobby(int playersNumber, ClientHandler clientHandler) {
+        if(playersNumber > Match.MAX_PLAYERS || playersNumber <= 0)
+            new VirtualView(clientHandler).showErrorMessage("Invalid choice");
+        else {
+            GameController match = new GameController(clientHandler.getUsername(), playersNumber);
             addPlayerToMatch(clientHandler.getUsername(), match, clientHandler);
-            new VirtualView(clientHandler).waitForStart();
-        } else {
-            // join existing match
-            View view = new VirtualView(clientHandler);
-            if (getGameController(matchName) == null || getGameController(matchName).isFull()){
-                view.showMessage("Selected match is full or does not exist");
-                listLobbies(clientHandler);
-            } else {
-                GameController gameController = getGameController(matchName);
-                addPlayerToMatch(clientHandler.getUsername(), gameController,clientHandler);
-            }
         }
-        getGameController(clientHandler.getUsername()).connect(clientHandler.getUsername());
+    }
+
+    private void joinLobby(String matchName, ClientHandler clientHandler){
+        View view = new VirtualView(clientHandler);
+        if (getGameController(matchName) == null || getGameController(matchName).isFull()){
+            view.showMessage("Selected match is full or does not exist");
+            listLobbies(clientHandler);
+        } else {
+            GameController gameController = getGameController(matchName);
+            addPlayerToMatch(clientHandler.getUsername(), gameController,clientHandler);
+            if(getGameController(matchName).isFull())
+                getGameController(matchName).start();
+        }
     }
 
     /**

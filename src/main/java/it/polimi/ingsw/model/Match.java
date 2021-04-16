@@ -12,6 +12,8 @@ public class Match {
 
     public static final int MAX_PLAYERS = 4;
 
+    private int maxPlayersNumber;
+
     protected Market market;
 
     protected List<PlayerBoard> players;
@@ -24,6 +26,10 @@ public class Match {
     protected String matchName;
 
     public Match(String matchName){
+        this(matchName,MAX_PLAYERS);
+    }
+
+    public Match(String matchName,int maxPlayersNumber){
         this.players = new ArrayList<>();
         this.market = new Market();
         this.developmentDecks = new ArrayList<>();
@@ -31,6 +37,7 @@ public class Match {
         this.leaderCards = generateLeaderCards();
         this.vaticanReportsCount = 0;
         this.matchName = matchName;
+        this.maxPlayersNumber = maxPlayersNumber;
     }
 
     public PlayerBoard getPlayerBoard(String username){
@@ -229,7 +236,11 @@ public class Match {
     }
 
     public boolean isFull(){
-        return players.size() == MAX_PLAYERS;
+        return players.size() == maxPlayersNumber;
+    }
+
+    public int getMaxPlayersNumber() {
+        return maxPlayersNumber;
     }
 
     public void endTurn(){

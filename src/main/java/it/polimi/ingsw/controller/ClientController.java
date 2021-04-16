@@ -79,9 +79,6 @@ public class ClientController {
                 List<Triple<String, Integer, Integer>> matches = gson.fromJson(availableMessages, listType);
                 view.listLobbies(matches);
                 break;
-            case WAIT_FOR_START:
-                view.waitForStart();
-                break;
             case RESUME_MATCH:
                 resumeMatch(Serializer.deserializeMatchState(message.getData("match")));
                 break;
@@ -133,16 +130,19 @@ public class ClientController {
      * @param matchName the name of the match chosen by the user
      */
     public void lobbyChoice(String matchName) {
-        Message message = new Message(Message.MessageType.LOBBY_CHOICE);
-        message.addData("matchOwner", matchName);
-        clientSocket.sendMessage(message);
+        lobbyChoice(matchName,-1);
     }
 
-    /**
-     * Sends to the server the message that communicate that the match can start
-     */
-    public void startMatch(){
-        clientSocket.sendMessage(new Message(Message.MessageType.START_MATCH));
+    public void createNewLobby(int playersNumber){
+        lobbyChoice(null,playersNumber);
+    }
+
+    public void lobbyChoice(String matchName,int playersNumber){
+        Message message = new Message(Message.MessageType.LOBBY_CHOICE);
+        message.addData("matchOwner", matchName);
+        if(playersNumber > 0)
+            message.addData("playersNumber", String.valueOf(playersNumber));
+        clientSocket.sendMessage(message);
     }
 
     /**

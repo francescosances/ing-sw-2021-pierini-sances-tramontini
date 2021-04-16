@@ -49,8 +49,8 @@ public class GameController implements PlayerStatusListener {
      * Constructor that initialize a new match without players
      * @param matchName the name of the match that will be created
      */
-    public GameController(String matchName){
-        match = new Match(matchName);
+    public GameController(String matchName,int playersNumber){
+        match = new Match(matchName,playersNumber);
         players = new ArrayList<>();
         currentPhase = GamePhase.ADDING_PLAYERS;
     }
@@ -64,9 +64,6 @@ public class GameController implements PlayerStatusListener {
         Gson gson = new Gson();
         try {
             switch (message.getType()) {
-                case START_MATCH:
-                    start();
-                    break;
                 case LEADER_CARDS_CHOICE:
                     leaderCardsChoice(username, Serializer.deserializeLeaderCardDeck(message.getData("leaderCards")));
                     break;
@@ -83,7 +80,6 @@ public class GameController implements PlayerStatusListener {
             setPhase(GamePhase.END_GAME);
         }
     }
-
 
     /**
      * Starts the match ending the phase of adding players. The firt player is chosen randomly.
@@ -161,7 +157,7 @@ public class GameController implements PlayerStatusListener {
      * @return the maximum number of players that can join the match
      */
     public int getTotalPlayers(){
-        return Match.MAX_PLAYERS;
+        return match.getMaxPlayersNumber();
     }
 
     /**

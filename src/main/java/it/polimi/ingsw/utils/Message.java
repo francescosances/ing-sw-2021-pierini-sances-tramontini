@@ -95,7 +95,6 @@ public class Message{
         ERROR,
         LOGIN_FAILED,
         LOBBY_INFO,
-        WAIT_FOR_START,
         RESUME_MATCH,
         YOUR_TURN,
         LIST_LEADER_CARDS,
@@ -105,7 +104,6 @@ public class Message{
 
         // from client to server
         LOGIN_REQUEST,
-        START_MATCH,
         LOBBY_CHOICE,
         LEADER_CARDS_CHOICE,
         PERFORM_ACTION;

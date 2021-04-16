@@ -33,10 +33,6 @@ public interface View {
      */
     void listLobbies(List<Triple<String, Integer, Integer>> availableLobbies);
 
-    /**
-     * Shows a message that requires to the user to start the match
-     */
-    void waitForStart();
 
     /**
      * Reset the view to the state indicated by the match object

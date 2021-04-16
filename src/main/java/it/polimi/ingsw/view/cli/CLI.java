@@ -104,24 +104,20 @@ public class CLI implements View {
             choice = input.nextInt();
         }else
             choice = 0;
-        if (choice == 0)
-            clientController.lobbyChoice(null);
-        else if (choice > 0 && choice <= availableLobbies.size())
+        if (choice == 0) {
+            int playersNumber;
+            do {
+                output.println("Insert number of players:");
+                playersNumber = input.nextInt();
+            }while(playersNumber <= 0 || playersNumber > Match.MAX_PLAYERS);
+            clientController.createNewLobby(playersNumber);
+        } else if (choice > 0 && choice <= availableLobbies.size())
             clientController.lobbyChoice(availableLobbies.get(choice - 1).getFirst());
         else{
             output.println("Invalid choice");
             listLobbies(availableLobbies);
         }
     }
-
-    @Override
-    public void waitForStart() {
-        do {
-            System.out.println("Type \"START\" to start the match");
-        }while(!input.nextLine().equals("START"));
-        clientController.startMatch();
-    }
-
 
     @Override
     public void resumeMatch(Match match) {

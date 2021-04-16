@@ -44,11 +44,6 @@ public class VirtualView implements View {
     }
 
     @Override
-    public void waitForStart() {
-        sendMessage(new Message(Message.MessageType.WAIT_FOR_START));
-    }
-
-    @Override
     public void resumeMatch(Match match) {
         Message message = new Message(Message.MessageType.RESUME_MATCH);
         message.addData("match", Serializer.serializeMatchState(match));
