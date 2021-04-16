@@ -81,13 +81,13 @@ public class VirtualView implements View {
     }
 
     @Override
-    public void listLeaderCards(List<LeaderCard> leaderCardList,int cardsToChoice) {
+    public void listLeaderCards(List<LeaderCard> leaderCardList,int cardsToChoose) {
         if(leaderCardList.isEmpty())
             throw new IllegalArgumentException("No leader cards given");
         Gson gson = new Gson();
         Message message = new Message(Message.MessageType.LIST_LEADER_CARDS);
         message.addData("leaderCards",gson.toJson(leaderCardList));
-        message.addData("cardsToChoice",String.valueOf(cardsToChoice));
+        message.addData("cardsToChoose",String.valueOf(cardsToChoose));
         sendMessage(message);
     }
 

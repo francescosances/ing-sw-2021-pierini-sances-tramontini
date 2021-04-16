@@ -55,7 +55,7 @@ public interface View {
 
     void userDisconnected(String username);
 
-    void listLeaderCards(List<LeaderCard> leaderCardList,int cardsToChoice);
+    void listLeaderCards(List<LeaderCard> leaderCardList,int cardsToChoose);
 
     /**
      * List the resources stored in the warehouse

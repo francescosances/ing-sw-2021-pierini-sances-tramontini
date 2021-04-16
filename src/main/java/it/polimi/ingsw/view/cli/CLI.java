@@ -134,20 +134,20 @@ public class CLI implements View {
     }
 
     @Override
-    public void listLeaderCards(List<LeaderCard> leaderCardList,int cardsToChoice) {
-        output.println("Choose "+cardsToChoice+" leader cards:");
+    public void listLeaderCards(List<LeaderCard> leaderCardList,int cardsToChoose) {
+        output.println("Choose "+cardsToChoose+" leader cards:");
         for (int i = 0; i < leaderCardList.size(); i++) {
             output.print("[" + i + "] ");
             LeaderCard temp = leaderCardList.get(i);
             output.println(temp.toString());
         }
-        int[] choices = new int[cardsToChoice];
-        LeaderCard[] cardsChosen = new LeaderCard[cardsToChoice];
-        for(int i=0;i<cardsToChoice;i++) {
+        int[] choices = new int[cardsToChoose];
+        LeaderCard[] cardsChosen = new LeaderCard[cardsToChoose];
+        for(int i=0;i<cardsToChoose;i++) {
             choices[i] = input.nextInt();
             if(choices[i] <0 || choices[i] >= leaderCardList.size()){
                 output.println("Invalid choice");
-                listLeaderCards(leaderCardList,cardsToChoice);
+                listLeaderCards(leaderCardList,cardsToChoose);
                 return;
             }
             cardsChosen[i] = leaderCardList.get(choices[i]);
