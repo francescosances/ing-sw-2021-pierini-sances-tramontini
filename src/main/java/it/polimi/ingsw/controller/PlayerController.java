@@ -181,7 +181,7 @@ public class PlayerController {
                 listLeaderCardsToDiscard();
                 break;
             case MOVE_RESOURCES:
-                showDepotsStatus();
+                showWarehouseStatus();
                 break;
                 //TODO: move resources
             default:
@@ -204,10 +204,8 @@ public class PlayerController {
                     this.playerBoard.activateLeaderCard(card);
                 }
             }catch (NotSatisfiedRequirementsException e){
-                System.out.println("pippo pluto");
                 virtualView.showErrorMessage(e.getMessage());
             } finally {
-                System.out.println("paperino");
                 askForAction();
             }
         };
@@ -229,7 +227,7 @@ public class PlayerController {
     /**
      * List the resources stored in the warehouse depots
      */
-    public void showDepotsStatus(){
+    public void showWarehouseStatus(){
         virtualView.showWarehouseStatus(playerBoard.getWarehouse());
     }
 
