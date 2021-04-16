@@ -14,24 +14,19 @@ public class DepotCreator implements JsonDeserializer<Depot> {
         JsonObject jsonObject = json.getAsJsonObject();
         Depot depot;
 
-        if (jsonObject.has("victoryPoints")) {
-            depot = new DepotLeaderCard(
-                    jsonObject.get("victoryPoints").getAsInt(),
-                    new RequirementsCreator().deserialize(jsonObject.get("requirements"), Requirements.class, context),
-                    ResourceType.valueOf(jsonObject.get("resourceType").getAsString())
-            );
-            DepotLeaderCard depotLeaderCard = (DepotLeaderCard) depot;
-            for (int i = 0; i < jsonObject.get("occupied").getAsInt(); i++) {
-                depotLeaderCard.addResource(ResourceType.valueOf(jsonObject.get("resourceType").getAsString()));
-            }
-        }
+        if (jsonObject.has("victoryPoints"))
+            depot = new LeaderCardCreator().depotLeaderCard(jsonObject, context);
 
-        else {
-            depot = new StandardDepot(jsonObject.get("size").getAsInt());
-            for (int i = 0; i < jsonObject.get("occupied").getAsInt(); i++)
+        else
+            depot = standardDepot(jsonObject);
+
+        return depot;
+    }
+
+    protected StandardDepot standardDepot(JsonObject jsonObject){
+        StandardDepot depot = new StandardDepot(jsonObject.get("size").getAsInt());
+        for (int i = 0; i < jsonObject.get("occupied").getAsInt(); i++)
             depot.addResource(ResourceType.valueOf(jsonObject.get("resourceType").getAsString()));
-        }
-
         return depot;
     }
 }

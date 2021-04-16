@@ -12,43 +12,60 @@ public class LeaderCardCreator implements JsonDeserializer<LeaderCard> {
         JsonObject jsonObject = json.getAsJsonObject();
         LeaderCard leaderCard;
 
-        if (jsonObject.has("resourceType")) {
-            leaderCard = new DepotLeaderCard(
-                    jsonObject.get("victoryPoints").getAsInt(),
-                    new RequirementsCreator().deserialize(jsonObject.get("requirements"), Requirements.class, context),
-                    ResourceType.valueOf(jsonObject.get("resourceType").getAsString())
-            );
-            DepotLeaderCard depotLeaderCard = (DepotLeaderCard) leaderCard;
-            for (int i = 0; i < jsonObject.get("occupied").getAsInt(); i++) {
-                depotLeaderCard.addResource(ResourceType.valueOf(jsonObject.get("resourceType").getAsString()));
-            }
-        }
+        if (jsonObject.has("resourceType"))
+            leaderCard = depotLeaderCard(jsonObject, context);
 
         else if (jsonObject.has("discountResourceType"))
-            leaderCard = new DiscountLeaderCard(
-                    jsonObject.get("victoryPoints").getAsInt(),
-                    new RequirementsCreator().deserialize(jsonObject.get("requirements"), Requirements.class, context),
-                    ResourceType.valueOf(jsonObject.get("discountResourceType").getAsString()),
-                    jsonObject.get("discount").getAsInt()
-            );
+            leaderCard = discountLeaderCard(jsonObject, context);
 
         else if (jsonObject.has("productionCost"))
-            leaderCard = new ProductionLeaderCard(
-                    jsonObject.get("victoryPoints").getAsInt(),
-                    new RequirementsCreator().deserialize(jsonObject.get("requirements"), Requirements.class, context),
-                    new RequirementsCreator().deserialize(jsonObject.get("productionCost"), Requirements.class, context)
-                    );
+            leaderCard = productionLeaderCard(jsonObject, context);
 
         else
-            leaderCard = new WhiteMarbleLeaderCard(
-                    jsonObject.get("victoryPoints").getAsInt(),
-                    new RequirementsCreator().deserialize(jsonObject.get("requirements"), Requirements.class, context),
-                    ResourceType.valueOf(jsonObject.get("outputResourceType").getAsString())
-            );
-
-        if (jsonObject.get("active").getAsBoolean())
-            leaderCard.activate();
+            leaderCard = whiteMarbleLeaderCard(jsonObject, context);
 
         return leaderCard;
+    }
+
+    protected DepotLeaderCard depotLeaderCard(JsonObject jsonObject, JsonDeserializationContext context) {
+        DepotLeaderCard leaderCard = new DepotLeaderCard(
+                jsonObject.get("victoryPoints").getAsInt(),
+                new RequirementsCreator().deserialize(jsonObject.get("requirements"), Requirements.class, context),
+                ResourceType.valueOf(jsonObject.get("resourceType").getAsString()),
+                jsonObject.get("active").getAsBoolean()
+        );
+        for (int i = 0; i < jsonObject.get("occupied").getAsInt(); i++) {
+            leaderCard.addResource(ResourceType.valueOf(jsonObject.get("resourceType").getAsString()));
+        }
+        return leaderCard;
+    }
+
+    protected DiscountLeaderCard discountLeaderCard(JsonObject jsonObject, JsonDeserializationContext context) {
+
+        return new DiscountLeaderCard(
+                jsonObject.get("victoryPoints").getAsInt(),
+                new RequirementsCreator().deserialize(jsonObject.get("requirements"), Requirements.class, context),
+                ResourceType.valueOf(jsonObject.get("discountResourceType").getAsString()),
+                jsonObject.get("discount").getAsInt(),
+                jsonObject.get("active").getAsBoolean()
+        );
+    }
+
+    protected ProductionLeaderCard productionLeaderCard(JsonObject jsonObject, JsonDeserializationContext context) {
+        return new ProductionLeaderCard(
+                jsonObject.get("victoryPoints").getAsInt(),
+                new RequirementsCreator().deserialize(jsonObject.get("requirements"), Requirements.class, context),
+                new RequirementsCreator().deserialize(jsonObject.get("productionCost"), Requirements.class, context),
+                jsonObject.get("active").getAsBoolean()
+        );
+    }
+
+    protected WhiteMarbleLeaderCard whiteMarbleLeaderCard(JsonObject jsonObject, JsonDeserializationContext context) {
+        return new WhiteMarbleLeaderCard(
+                jsonObject.get("victoryPoints").getAsInt(),
+                new RequirementsCreator().deserialize(jsonObject.get("requirements"), Requirements.class, context),
+                ResourceType.valueOf(jsonObject.get("outputResourceType").getAsString()),
+                jsonObject.get("active").getAsBoolean()
+        );
     }
 }

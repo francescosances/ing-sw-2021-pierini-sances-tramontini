@@ -19,6 +19,12 @@ public class DiscountLeaderCard extends LeaderCard {
 
     }
 
+    public DiscountLeaderCard (int victoryPoints, Requirements requirements, ResourceType resourceType, int discount, boolean active) {
+        super(victoryPoints, requirements, active);
+        this.discountResourceType = resourceType;
+        this.discount = discount;
+    }
+
     @Override
     public Requirements recalculateRequirements(Requirements requirements) {
         requirements = super.recalculateRequirements(requirements);

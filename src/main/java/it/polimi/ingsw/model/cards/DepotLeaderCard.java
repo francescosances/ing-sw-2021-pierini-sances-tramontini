@@ -28,6 +28,11 @@ public class DepotLeaderCard extends LeaderCard implements Depot {
         this.resourceType = resourceType;
         occupied = 0;
     }
+    public DepotLeaderCard(int victoryPoints, Requirements requirements, ResourceType resourceType, boolean active) {
+        super(victoryPoints, requirements, active);
+        this.resourceType = resourceType;
+        occupied = 0;
+    }
 
     /**
      * Returns the type of resources that can be stored in this depot

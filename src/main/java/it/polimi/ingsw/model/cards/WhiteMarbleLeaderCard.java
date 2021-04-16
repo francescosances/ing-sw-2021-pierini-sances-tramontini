@@ -11,6 +11,11 @@ public class WhiteMarbleLeaderCard extends LeaderCard {
         this.outputResourceType = outputResourceType;
     }
 
+    public WhiteMarbleLeaderCard (int victoryPoints, Requirements requirements, ResourceType outputResourceType, boolean active){
+        super(victoryPoints, requirements, active);
+        this.outputResourceType = outputResourceType;
+    }
+
     @Override
     public boolean isWhiteMarble(){
         return true;

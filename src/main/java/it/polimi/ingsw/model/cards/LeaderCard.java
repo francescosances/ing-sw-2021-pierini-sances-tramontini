@@ -17,6 +17,13 @@ public abstract class LeaderCard extends Card {
         this.requirements = requirements;
     }
 
+    public LeaderCard(int victoryPoints, Requirements requirements, boolean active){
+        super(victoryPoints);
+        this.active = false;
+        this.requirements = requirements;
+        this.active = active;
+    }
+
     public boolean isActive(){
         return active;
     }
@@ -24,11 +31,6 @@ public abstract class LeaderCard extends Card {
     public boolean isWhiteMarble(){
         return false;
     }
-
-    public void activate(){
-        active = true;
-    }
-
 
     public void activate (PlayerBoard player) throws NotSatisfiedRequirementsException{
         if (requirements.satisfied(player))

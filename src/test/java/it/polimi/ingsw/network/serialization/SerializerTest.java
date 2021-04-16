@@ -27,6 +27,14 @@ public class SerializerTest {
     }
 
     @Test
+    public void serializeAllLeaderCards(){
+        serializeDepotLeaderCard();
+        serializeDiscountLeaderCard();
+        serializeProductionLeaderCard();
+        serializeWhiteMarbleLeaderCard();
+    }
+
+    @Test
     public void serializeDepotLeaderCard(){
         LeaderCard leaderCard = new DepotLeaderCard(3,new Requirements(new Pair<>(ResourceType.SERVANT,5)),ResourceType.SHIELD);
         String json = Serializer.serializeLeaderCard(leaderCard);
@@ -50,9 +58,7 @@ public class SerializerTest {
     @Test
     public void serializeWhiteMarbleLeaderCard(){
         LeaderCard leaderCard = new WhiteMarbleLeaderCard(5,new Requirements(new Triple<>(DevelopmentColorType.GREEN,1,2),new Triple<>(DevelopmentColorType.PURPLE,1,1)),ResourceType.SHIELD);
-        leaderCard.activate();
         String json = Serializer.serializeLeaderCard(leaderCard);
-        System.out.println(json);
         assertEquals(leaderCard, Serializer.deserializeLeaderCard(json));
     }
 

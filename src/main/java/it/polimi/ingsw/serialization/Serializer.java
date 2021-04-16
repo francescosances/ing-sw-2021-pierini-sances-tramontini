@@ -144,7 +144,10 @@ public class Serializer {
     }
 
     public static Warehouse deserializeWarehouse(String json) {
-        return new GsonBuilder().registerTypeAdapter(Depot.class, new DepotCreator()).create().fromJson(json, Warehouse.class);
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Depot.class, new DepotCreator());
+        gsonBuilder.registerTypeAdapter(LeaderCard.class, new LeaderCardCreator());
+        return gsonBuilder.create().fromJson(json, Warehouse.class);
     }
 }
 
