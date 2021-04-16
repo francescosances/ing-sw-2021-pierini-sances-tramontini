@@ -4,14 +4,11 @@ import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.LeaderCardsChooser;
-import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
 import it.polimi.ingsw.view.VirtualView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class PlayerController {
 
@@ -90,13 +87,11 @@ public class PlayerController {
         return username;
     }
 
-
     /**
      * Mark the player as currently playing and notify the status update to the virtual view
      */
-    public void yourTurn(){
-        changeStatus(PlayerStatus.YOUR_TURN);
-        virtualView.yourTurn();
+    public void startTurn(){
+        askForAction();
     }
 
     /**
@@ -162,7 +157,6 @@ public class PlayerController {
      * Ask to the user which action want to perform
      */
     public void askForAction(){
-        //TODO: capire perché questa azione viene eseguita prima dell'arrivo della scelta dell'utente
         virtualView.askForAction(
                 Arrays.stream(Action.values())
                         .filter(x -> x != Action.CANCEL)
@@ -187,15 +181,16 @@ public class PlayerController {
                 break;
             case MOVE_RESOURCES:
                 showDepotsStatus();
-                //TODO: move resources
                 break;
+                //TODO: move resources
             default:
                 changeStatus(this.currentStatus.next());
-                return;
         }
-        this.askForAction();
     }
 
+    public void startNormalAction(){
+        virtualView.yourTurn();
+    }
 
     /**
      * Send the cards in the hand of the user so that he can choose a card to activate
@@ -206,6 +201,7 @@ public class PlayerController {
             for(LeaderCard card : cards){
                 this.playerBoard.activateLeaderCard(card);
             }
+            askForAction();
         };
     }
 
@@ -218,6 +214,7 @@ public class PlayerController {
             for(LeaderCard card : cards){
                 this.playerBoard.discardLeaderCard(card);
             }
+            askForAction();
         };
     }
 
@@ -260,11 +257,12 @@ public class PlayerController {
     }
 
     public enum PlayerStatus {
+        CHOOSING_LEADER_CARDS,
         PERFORMING_ACTION,
-        YOUR_TURN,
+        NORMAL_ACTION,
         TURN_ENDED;
 
-        private static final PlayerStatus[] vals = {PERFORMING_ACTION,YOUR_TURN,PERFORMING_ACTION,TURN_ENDED};
+        private static final PlayerStatus[] vals = {CHOOSING_LEADER_CARDS,PERFORMING_ACTION, NORMAL_ACTION,PERFORMING_ACTION,TURN_ENDED};
 
         public PlayerStatus next()
         {

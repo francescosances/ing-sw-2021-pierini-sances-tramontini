@@ -157,6 +157,17 @@ public class CLI implements View {
 
     @Override
     public void showWarehouseStatus(Warehouse warehouse){
+        System.out.println("Depots status:");
+        for(int i=0;i<warehouse.getDepots().size();i++){
+            Depot depot = warehouse.getDepots().get(i);
+            System.out.printf("[%d] ",i);
+            for(int j=0;j<depot.getSize();j++)
+                System.out.printf("["+((depot.getOccupied()>i)?"*":" ")+"]");
+            for(int j=10-depot.getSize()*3;j>0;j--)
+                System.out.printf(" ");
+            System.out.printf(depot.getResourceType() == null?"Empty":depot.getResourceType().toString());
+            System.out.println();
+        }
         System.out.println(warehouse);
     }
 

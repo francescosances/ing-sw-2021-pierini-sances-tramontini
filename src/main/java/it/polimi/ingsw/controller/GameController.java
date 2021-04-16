@@ -41,6 +41,11 @@ public class GameController implements PlayerStatusListener {
     private GamePhase currentPhase;
 
     /**
+     * The number of users that have already chosen the leader cards
+     */
+    private int usersReadyToPlay = 0;
+
+    /**
      * Constructor that initialize a new match without players
      * @param matchName the name of the match that will be created
      */
@@ -70,7 +75,7 @@ public class GameController implements PlayerStatusListener {
                     break;
             }
         }catch (EndGameException e){
-            players.forEach(PlayerController::endGame);
+            setPhase(GamePhase.END_GAME);
         }
     }
 
@@ -85,7 +90,7 @@ public class GameController implements PlayerStatusListener {
         }
         currentPlayerIndex = (int) (Math.random() * players.size());
         this.matchStarted = true;
-        nextPhase();
+        setPhase(GamePhase.PLAYERS_SETUP);
     }
 
     /**
@@ -184,12 +189,36 @@ public class GameController implements PlayerStatusListener {
     protected void onStatusChanged(){
         switch (currentPhase){
             case PLAYERS_SETUP:
+                if(usersReadyToPlay == players.size()) {
+                    setPhase(GamePhase.TURN);
+                    return;
+                }
                 players.get(currentPlayerIndex).listLeaderCards();
+                usersReadyToPlay++;
                 break;
-            case ACTION_CHOICE:
-                players.get(currentPlayerIndex).askForAction();
+            case TURN:
+                players.get(currentPlayerIndex).startTurn();
+                break;
+            case END_GAME:
+                players.forEach(PlayerController::endGame);
                 break;
         }
+    }
+
+    @Override
+    public void onPlayerStatusChanged(PlayerController player) {
+        System.out.println("The player "+player.getUsername()+" has changed his status to "+player.getCurrentStatus());
+        switch (player.getCurrentStatus()) {
+            case TURN_ENDED:
+                nextTurn();
+                break;
+            case NORMAL_ACTION:
+                players.get(currentPlayerIndex).startNormalAction();
+            case PERFORMING_ACTION:
+                this.currentPhase = GamePhase.TURN;
+                break;
+        }
+
     }
 
     /**
@@ -202,10 +231,11 @@ public class GameController implements PlayerStatusListener {
             return;
         if(!players.get(currentPlayerIndex).isActive()) // The current player is inactive
             players.get(currentPlayerIndex).turnEnded();
-        players.get(currentPlayerIndex).yourTurn();
+      //  players.get(currentPlayerIndex).yourTurn();
         currentPhase.incrementCurrentPhasePlayers();
         if(currentPhase.getCurrentPhasePlayers() >= players.size()) // If all the users have finished the turn, move the phase to the next one
             currentPhase = currentPhase.next();
+
         onStatusChanged();
     }
 
@@ -217,20 +247,16 @@ public class GameController implements PlayerStatusListener {
         onStatusChanged();
     }
 
-    @Override
-    public void onPlayerStatusChanged(PlayerController player) {
-        System.out.println("The player "+player.getUsername()+" has changed his status to "+player.getCurrentStatus());
-        if (player.getCurrentStatus() == PlayerController.PlayerStatus.TURN_ENDED) {
-            nextTurn();
-        }
-
+    protected void setPhase(GamePhase phase){
+        this.currentPhase = phase;
+        onStatusChanged();
     }
+
 
     public enum GamePhase {
         ADDING_PLAYERS,
         PLAYERS_SETUP,
-        ACTION_CHOICE,
-        NORMAL_ACTION,
+        TURN,
         END_GAME;
 
         /**
@@ -285,7 +311,7 @@ public class GameController implements PlayerStatusListener {
         players.forEach((user)->{
             if(user.getUsername().equals(username)) {
                 user.deactivate();
-                if(user.getCurrentStatus() == PlayerController.PlayerStatus.YOUR_TURN)
+                if(user.getCurrentStatus() == PlayerController.PlayerStatus.NORMAL_ACTION)
                     user.turnEnded();
             }
             user.getVirtualView().userDisconnected(username);
