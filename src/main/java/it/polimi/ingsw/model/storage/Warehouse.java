@@ -26,10 +26,6 @@ public class Warehouse implements Storage {
         depots.add(new StandardDepot(2));
         depots.add(new StandardDepot(3));
         toBeStored = new ArrayList<>();
-
-        depots.get(0).addResource(ResourceType.STONE);
-        depots.get(1).addResource(ResourceType.COIN);
-        depots.get(1).addResource(ResourceType.COIN);
     }
 
     /**
