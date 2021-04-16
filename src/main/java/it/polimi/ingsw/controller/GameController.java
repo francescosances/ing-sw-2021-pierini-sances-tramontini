@@ -232,10 +232,10 @@ public class GameController implements PlayerStatusListener {
         if(!players.get(currentPlayerIndex).isActive()) // The current player is inactive
             players.get(currentPlayerIndex).turnEnded();
       //  players.get(currentPlayerIndex).yourTurn();
-        currentPhase.incrementCurrentPhasePlayers();
+      /*  currentPhase.incrementCurrentPhasePlayers();
         if(currentPhase.getCurrentPhasePlayers() >= players.size()) // If all the users have finished the turn, move the phase to the next one
             currentPhase = currentPhase.next();
-
+*/
         onStatusChanged();
     }
 

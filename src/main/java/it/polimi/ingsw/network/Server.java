@@ -13,6 +13,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static it.polimi.ingsw.view.cli.CLI.ANSI_BLUE;
+import static it.polimi.ingsw.view.cli.CLI.ANSI_RESET;
+
 public class Server {
 
     /**
@@ -203,7 +206,7 @@ public class Server {
      * @param msg the message to log
      */
     public void log(String msg) {
-        System.out.println(msg);
+        System.out.println(ANSI_BLUE+"Logger: "+msg+ANSI_RESET);
     }
 
 }

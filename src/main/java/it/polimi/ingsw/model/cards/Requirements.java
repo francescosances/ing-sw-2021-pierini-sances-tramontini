@@ -7,6 +7,8 @@ import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.Triple;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -55,9 +57,10 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
     public boolean satisfied(PlayerBoard player){
         //Resources check
         Requirements playerResources = player.getAllResources();
-        for(Map.Entry<Resource,Integer> x : playerResources){
-            if(getResources(x.getKey()) > x.getValue())
+        for(Map.Entry<Resource,Integer> x : this.resources.entrySet()){
+            if(x.getValue() > playerResources.getResources(x.getKey())) {
                 return false;
+            }
         }
 
         //DevelopmentCards check

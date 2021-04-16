@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.LeaderCardsChooser;
+import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
 import it.polimi.ingsw.view.VirtualView;
 
 import java.util.ArrayList;
@@ -198,10 +199,17 @@ public class PlayerController {
     public void listLeaderCardsToPlay(){
         virtualView.listLeaderCards(this.playerBoard.getAvailableLeaderCards(), 1);
         this.leaderCardsChooser = cards -> {
-            for(LeaderCard card : cards){
-                this.playerBoard.activateLeaderCard(card);
+            try {
+                for (LeaderCard card : cards) {
+                    this.playerBoard.activateLeaderCard(card);
+                }
+            }catch (NotSatisfiedRequirementsException e){
+                System.out.println("pippo pluto");
+                virtualView.showErrorMessage(e.getMessage());
+            } finally {
+                System.out.println("paperino");
+                askForAction();
             }
-            askForAction();
         };
     }
 
@@ -268,5 +276,21 @@ public class PlayerController {
         {
             return vals[(this.ordinal()+1) % vals.length];//TODO: rivedere flusso perché passi due volte da performing action
         }
+    }
+
+    public class PlayerStatusIndex{
+
+        private int currentIndex = 0;
+        private final PlayerStatus[] vals = {PlayerStatus.CHOOSING_LEADER_CARDS,PlayerStatus.PERFORMING_ACTION, PlayerStatus.NORMAL_ACTION,PlayerStatus.PERFORMING_ACTION,PlayerStatus.TURN_ENDED};
+
+        public PlayerStatus nextStatus(){
+            currentIndex = (currentIndex+1)%vals.length;
+            return vals[currentIndex];
+        }
+
+        public PlayerStatus getCurrentStatus(){
+            return vals[currentIndex];
+        }
+
     }
 }

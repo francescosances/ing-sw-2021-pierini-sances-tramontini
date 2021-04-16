@@ -8,6 +8,9 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
+import static it.polimi.ingsw.view.cli.CLI.ANSI_BLUE;
+import static it.polimi.ingsw.view.cli.CLI.ANSI_RESET;
+
 public class ClientSocket implements Runnable{
     /**
      * The socket connection to the server
@@ -64,9 +67,9 @@ public class ClientSocket implements Runnable{
     @Override
     public void run(){
         while (!Thread.currentThread().isInterrupted()){
-            String ricevo = socketIn.nextLine();
-            System.out.println("ricevo "+ricevo);
-            Message message = Message.messageFromString(ricevo);
+            String received = socketIn.nextLine();
+            log("ricevo"+received);
+            Message message = Message.messageFromString(received);
             clientController.handleReceivedMessage(message);
         }
         socketIn.close();
@@ -93,7 +96,7 @@ public class ClientSocket implements Runnable{
      * @param msg the message to be logged
      */
     public void log(String msg) {
-        System.out.println(msg);
+        System.out.println(ANSI_BLUE+"Logger: "+msg+ANSI_RESET);
     }
 
 }
