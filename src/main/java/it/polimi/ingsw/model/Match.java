@@ -235,4 +235,17 @@ public class Match {
     public void endTurn(){
 
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Match that = (Match) o;
+        return  vaticanReportsCount == that.vaticanReportsCount &&
+                market.equals(that.market) &&
+                players.equals(that.players) &&
+                developmentDecks.equals(that.developmentDecks) &&
+                leaderCards.equals(that.leaderCards) &&
+                matchName.equals(that.matchName);
+    }
 }

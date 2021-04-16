@@ -1,9 +1,6 @@
 package it.polimi.ingsw.model.cards;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class Deck <E> implements Iterable<E>{
 
@@ -100,4 +97,11 @@ public class Deck <E> implements Iterable<E>{
         return cards.isEmpty();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Deck<?> deck = (Deck<?>) o;
+        return cards.equals(deck.cards);
+    }
 }

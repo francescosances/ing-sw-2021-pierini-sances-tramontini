@@ -63,4 +63,12 @@ public class SoloMatch extends Match{
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        SoloMatch that = (SoloMatch) o;
+        return  super.equals(o) &&
+                this.blackCross.equals(that.blackCross) &&
+                this.actionTokens.equals(that.actionTokens);
+    }
+
 }

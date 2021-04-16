@@ -141,5 +141,64 @@ public class SerializerTest {
 
         assertEquals(playerBoard, deserialized);
 
+        match = null;
+        playerBoard = null;
+
     }
+
+    @Test
+    public void serializeMatchState(){
+        Match match = new Match("Match Test");
+        PlayerBoard playerBoard = new PlayerBoard("PlayerBoard Test", match);
+        match.addPlayer(playerBoard.getUsername());
+        playerBoard.gainFaithPoints(15);
+        PopeFavorTile[] popeFavorTiles = playerBoard.getFaithTrack().getPopeFavorTiles();
+        popeFavorTiles[0].uncover();
+        playerBoard.getWarehouse().addResource(0,ResourceType.COIN,1);
+        LeaderCard leaderCard = new DepotLeaderCard(3,new Requirements(new Pair<>(ResourceType.STONE,5)),ResourceType.SERVANT);
+        playerBoard.addLeaderCard(leaderCard);
+        playerBoard.activateLeaderCard(leaderCard);
+        playerBoard.getWarehouse().addResource(3, ResourceType.SERVANT,2);
+        Map<ResourceType, Integer> resourcesMap = new HashMap<>();
+        resourcesMap.put(ResourceType.SHIELD, 3);
+        resourcesMap.put(ResourceType.STONE, 7);
+        playerBoard.getStrongbox().addResources(resourcesMap);
+        DevelopmentCard developmentCard = new DevelopmentCard(1,new Requirements(new Pair<>(ResourceType.SHIELD,2)),1,DevelopmentColorType.GREEN,new Requirements(new Pair<>(ResourceType.COIN,1)),new Pair<>(NonPhysicalResourceType.FAITH_POINT,1));
+        DevelopmentCardSlot[] developmentCardSlots = playerBoard.getDevelopmentCardSlots();
+        developmentCardSlots[1].addCard(developmentCard);
+        String json = Serializer.serializeMatchState(match);
+        assertEquals(match, Serializer.deserializeMatchState(json));
+
+        match = null;
+        playerBoard = null;
+    }
+
+    @Test
+    public void serializeSoloMatchState(){
+        SoloMatch match = new SoloMatch("Match Test");
+        PlayerBoard playerBoard = new PlayerBoard("PlayerBoard Test", match);
+        match.addPlayer(playerBoard.getUsername());
+        playerBoard.gainFaithPoints(15);
+        PopeFavorTile[] popeFavorTiles = playerBoard.getFaithTrack().getPopeFavorTiles();
+        popeFavorTiles[0].uncover();
+        playerBoard.getWarehouse().addResource(0,ResourceType.COIN,1);
+        LeaderCard leaderCard = new DepotLeaderCard(3,new Requirements(new Pair<>(ResourceType.STONE,5)),ResourceType.SERVANT);
+        playerBoard.addLeaderCard(leaderCard);
+        playerBoard.activateLeaderCard(leaderCard);
+        playerBoard.getWarehouse().addResource(3, ResourceType.SERVANT,2);
+        Map<ResourceType, Integer> resourcesMap = new HashMap<>();
+        resourcesMap.put(ResourceType.SHIELD, 3);
+        resourcesMap.put(ResourceType.STONE, 7);
+        playerBoard.getStrongbox().addResources(resourcesMap);
+        DevelopmentCard developmentCard = new DevelopmentCard(1,new Requirements(new Pair<>(ResourceType.SHIELD,2)),1,DevelopmentColorType.GREEN,new Requirements(new Pair<>(ResourceType.COIN,1)),new Pair<>(NonPhysicalResourceType.FAITH_POINT,1));
+        DevelopmentCardSlot[] developmentCardSlots = playerBoard.getDevelopmentCardSlots();
+        developmentCardSlots[1].addCard(developmentCard);
+        match.moveBlackCross(10);
+        String json = Serializer.serializeMatchState(match);
+        assertEquals(match, Serializer.deserializeSoloMatchState(json));
+
+        match = null;
+        playerBoard = null;
+    }
+
 }
