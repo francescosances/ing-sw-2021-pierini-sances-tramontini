@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.cards.DevelopmentCard;
+import it.polimi.ingsw.model.cards.DevelopmentColorType;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -31,6 +32,18 @@ public class DevelopmentCardSlot implements Iterable<DevelopmentCard>{
 
     public int getSize(){
         return developmentCards.size();
+    }
+
+    public int getCardsNum(DevelopmentColorType color, int level) {
+        if (level == 0) // any level
+            return developmentCards.stream()
+                .filter(card -> card.getColor() == color)
+                .mapToInt(x -> 1).sum();
+        else // exact level
+            return developmentCards.stream()
+                    .filter(card -> card.getColor() == color)
+                    .filter(card -> card.getLevel() == level)
+                    .mapToInt(x -> 1).sum();
     }
 
     public DevelopmentCard getFromLevel(int level) throws IllegalArgumentException{

@@ -153,20 +153,20 @@ public class Match {
 
     private static Deck<LeaderCard> generateLeaderCards(){
         Deck<LeaderCard> ret = new Deck<>();
-        ret.add(new DiscountLeaderCard(2,new Requirements(new Triple<>(DevelopmentColorType.YELLOW,1,1),new Triple<>(DevelopmentColorType.GREEN,1,1)),ResourceType.SERVANT));
-        ret.add(new DiscountLeaderCard(2,new Requirements(new Triple<>(DevelopmentColorType.BLUE,1,1),new Triple<>(DevelopmentColorType.PURPLE,1,1)),ResourceType.SHIELD));
-        ret.add(new DiscountLeaderCard(2,new Requirements(new Triple<>(DevelopmentColorType.GREEN,1,1),new Triple<>(DevelopmentColorType.BLUE,1,1)),ResourceType.STONE));
-        ret.add(new DiscountLeaderCard(2,new Requirements(new Triple<>(DevelopmentColorType.YELLOW,1,1),new Triple<>(DevelopmentColorType.PURPLE,1,1)),ResourceType.COIN));
+        ret.add(new DiscountLeaderCard(2,new Requirements(new Triple<>(DevelopmentColorType.YELLOW,0,1),new Triple<>(DevelopmentColorType.GREEN,0,1)),ResourceType.SERVANT));
+        ret.add(new DiscountLeaderCard(2,new Requirements(new Triple<>(DevelopmentColorType.BLUE,0,1),new Triple<>(DevelopmentColorType.PURPLE,0,1)),ResourceType.SHIELD));
+        ret.add(new DiscountLeaderCard(2,new Requirements(new Triple<>(DevelopmentColorType.GREEN,0,1),new Triple<>(DevelopmentColorType.BLUE,0,1)),ResourceType.STONE));
+        ret.add(new DiscountLeaderCard(2,new Requirements(new Triple<>(DevelopmentColorType.YELLOW,0,1),new Triple<>(DevelopmentColorType.PURPLE,0,1)),ResourceType.COIN));
 
         ret.add(new DepotLeaderCard(3,new Requirements(new Pair<>(ResourceType.COIN,5)),ResourceType.STONE));
         ret.add(new DepotLeaderCard(3,new Requirements(new Pair<>(ResourceType.STONE,5)),ResourceType.SERVANT));
         ret.add(new DepotLeaderCard(3,new Requirements(new Pair<>(ResourceType.SERVANT,5)),ResourceType.SHIELD));
         ret.add(new DepotLeaderCard(3,new Requirements(new Pair<>(ResourceType.SHIELD,5)),ResourceType.COIN));
 
-        ret.add(new WhiteMarbleLeaderCard(5,new Requirements(new Triple<>(DevelopmentColorType.YELLOW,1,2),new Triple<>(DevelopmentColorType.BLUE,1,1)),ResourceType.SERVANT));
-        ret.add(new WhiteMarbleLeaderCard(5,new Requirements(new Triple<>(DevelopmentColorType.GREEN,1,2),new Triple<>(DevelopmentColorType.PURPLE,1,1)),ResourceType.SHIELD));
-        ret.add(new WhiteMarbleLeaderCard(5,new Requirements(new Triple<>(DevelopmentColorType.BLUE,1,2),new Triple<>(DevelopmentColorType.YELLOW,1,1)),ResourceType.STONE));
-        ret.add(new WhiteMarbleLeaderCard(5,new Requirements(new Triple<>(DevelopmentColorType.PURPLE,1,2),new Triple<>(DevelopmentColorType.GREEN,1,1)),ResourceType.COIN));
+        ret.add(new WhiteMarbleLeaderCard(5,new Requirements(new Triple<>(DevelopmentColorType.YELLOW,0,2),new Triple<>(DevelopmentColorType.BLUE,0,1)),ResourceType.SERVANT));
+        ret.add(new WhiteMarbleLeaderCard(5,new Requirements(new Triple<>(DevelopmentColorType.GREEN,0,2),new Triple<>(DevelopmentColorType.PURPLE,0,1)),ResourceType.SHIELD));
+        ret.add(new WhiteMarbleLeaderCard(5,new Requirements(new Triple<>(DevelopmentColorType.BLUE,0,2),new Triple<>(DevelopmentColorType.YELLOW,0,1)),ResourceType.STONE));
+        ret.add(new WhiteMarbleLeaderCard(5,new Requirements(new Triple<>(DevelopmentColorType.PURPLE,0,2),new Triple<>(DevelopmentColorType.GREEN,0,1)),ResourceType.COIN));
 
         ret.add(new ProductionLeaderCard(4,new Requirements(new Triple<>(DevelopmentColorType.YELLOW,2,1)),new Requirements(new Pair<>(ResourceType.SHIELD,1))));
         ret.add(new ProductionLeaderCard(4,new Requirements(new Triple<>(DevelopmentColorType.BLUE,2,1)),new Requirements(new Pair<>(ResourceType.SERVANT,1))));

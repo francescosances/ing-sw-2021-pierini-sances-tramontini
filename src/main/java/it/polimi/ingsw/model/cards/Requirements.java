@@ -18,7 +18,7 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
     private Map<Resource, Integer> resources;
 
     /**
-     * tipo, livello, quantita richiesta
+     * tipo, livello (0 se qualsiasi), quantita richiesta
      */
     private Map<DevelopmentColorType,Map<Integer,Integer>> developmentCards;
 
@@ -68,12 +68,8 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
             Map<Integer,Integer> temp = entry.getValue();
             for(Map.Entry<Integer,Integer> x : temp.entrySet()) {
                 int toBeFound = x.getValue();
-                for(DevelopmentCardSlot slot : player.getDevelopmentCardSlots()){
-                    try {
-                        if(slot.getFromLevel(x.getKey()).getColor() == entry.getKey())
-                            toBeFound--;
-                    }catch (IllegalStateException ignored){}
-                }
+                for(DevelopmentCardSlot slot : player.getDevelopmentCardSlots())
+                    toBeFound -= slot.getCardsNum(entry.getKey(), x.getKey());
                 if(toBeFound > 0)
                     return false;
             }

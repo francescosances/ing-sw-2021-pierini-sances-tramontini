@@ -52,7 +52,24 @@ class RequirementsTest {
 
     @Test
     void satisfied_DevelopmentCards() {
-        //TODO
+        player.getDevelopmentCardSlots()[2].addCard(new DevelopmentCard(0, new Requirements(), 1, DevelopmentColorType.BLUE, null));
+        player.getDevelopmentCardSlots()[2].addCard(new DevelopmentCard(0, new Requirements(), 2, DevelopmentColorType.GREEN, null));
+        player.getDevelopmentCardSlots()[2].addCard(new DevelopmentCard(0, new Requirements(), 3, DevelopmentColorType.YELLOW, null));
+
+        req1.addDevelopmentCardRequirement(DevelopmentColorType.GREEN, 0, 1);
+        req1.addDevelopmentCardRequirement(DevelopmentColorType.GREEN, 2, 1);
+        req1.addDevelopmentCardRequirement(DevelopmentColorType.YELLOW, 3, 1);
+
+        assertTrue(req1.satisfied(player));
+
+        req2.addDevelopmentCardRequirement(DevelopmentColorType.BLUE, 2, 1);
+
+        assertFalse(req2.satisfied(player));
+
+        req3.addDevelopmentCardRequirement(DevelopmentColorType.BLUE, 1, 1);
+        req3.addDevelopmentCardRequirement(DevelopmentColorType.PURPLE, 1, 1);
+
+        assertFalse(req3.satisfied(player));
     }
 
     @Test
@@ -79,13 +96,11 @@ class RequirementsTest {
         req1.addResourceRequirement(ResourceType.SERVANT, 3);
         req1.addResourceRequirement(ResourceType.STONE, 3);
 
-        assertTrue(req1.satisfied(player));
-
-        //TODO req1.addDevelopmentCardRequirement(DevelopmentColorType.BLUE, 1, 3);
+        req1.addDevelopmentCardRequirement(DevelopmentColorType.BLUE, 0, 3);
         req1.addDevelopmentCardRequirement(DevelopmentColorType.GREEN, 2, 1);
         req1.addDevelopmentCardRequirement(DevelopmentColorType.YELLOW, 3, 1);
 
-        //assertTrue(req1.satisfied(player));
+        assertTrue(req1.satisfied(player));
 
         req2.addResourceRequirement(ResourceType.COIN, 4);
 
