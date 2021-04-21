@@ -7,10 +7,10 @@ import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.network.ClientSocket;
+import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.view.cli.CLI;
 
 import java.io.IOException;

@@ -33,7 +33,7 @@ public class PlayerController {
     /**
      * Represent the current status of the player
      */
-    private PlayerStatusIndex currentStatus;
+    private final PlayerStatusIndex currentStatus;
 
     /**
      * A list of observers of the player status
@@ -160,7 +160,7 @@ public class PlayerController {
      */
     public void askForAction(){
         virtualView.askForAction(
-                Arrays.stream(Action.values())
+                Arrays.stream(Action.EXTRA_ACTIONS)
                         .filter(x -> x != Action.CANCEL)
                         .filter(x -> !((x == Action.PLAY_LEADER || x == Action.DISCARD_LEADER) && this.playerBoard.getAvailableLeaderCards().isEmpty())) //If no leader cards are available, the options are removed from the list
                         .toArray(Action[]::new));
@@ -191,6 +191,14 @@ public class PlayerController {
 
     public void startNormalAction(){
         virtualView.yourTurn();
+        askForNormalAction();
+    }
+
+    public void askForNormalAction(){
+        virtualView.askForAction(
+                Arrays.stream(Action.NORMAL_ACTIONS)
+                        .toArray(Action[]::new));
+        changeStatus(PlayerStatus.NORMAL_ACTION);
     }
 
     /**
