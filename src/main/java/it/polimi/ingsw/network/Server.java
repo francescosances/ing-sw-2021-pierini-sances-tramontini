@@ -65,6 +65,8 @@ public class Server {
             throw new IllegalStateException("Match full");
         players.put(username,gameController);
         gameController.addPlayer(username,clientHandler);
+        if(gameController.isFull())
+            gameController.start();
     }
 
     /**
@@ -160,8 +162,6 @@ public class Server {
         } else {
             GameController gameController = getGameController(matchName);
             addPlayerToMatch(clientHandler.getUsername(), gameController,clientHandler);
-            if(getGameController(matchName).isFull())
-                getGameController(matchName).start();
         }
     }
 

@@ -2,8 +2,10 @@ package it.polimi.ingsw.view;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.model.Action;
+import it.polimi.ingsw.model.Market;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.cards.LeaderCard;
+import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.network.ClientHandler;
 import it.polimi.ingsw.serialization.Serializer;
@@ -99,12 +101,38 @@ public class VirtualView implements View {
     }
 
     @Override
+    public void askToChooseMarketRowOrColumn(Market market) {
+        Message message = new Message(Message.MessageType.SHOW_MARKET);
+        message.addData("market",Serializer.serializeMarket(market));
+        sendMessage(message);
+    }
+
+    @Override
+    public void showMarketStatus(Market market) {
+        askToChooseMarketRowOrColumn(market);
+    }
+
+    @Override
+    public void showResources(Resource[] resources) {
+        Message message = new Message(Message.MessageType.SHOW_RESOURCES);
+        message.addData("resources",Serializer.serializeResources(resources));
+        sendMessage(message);
+    }
+
+    @Override
+    public void askToStoreResource(Resource resource, Warehouse warehouse) {
+        Message message = new Message(Message.MessageType.RESOURCE_TO_STORE);
+        message.addData("warehouse",Serializer.serializeWarehouse(warehouse));
+        message.addData("resource",new Gson().toJson(resource));
+        sendMessage(message);
+    }
+
+    @Override
     public void askForAction(Action... availableActions) {
         Gson gson = new Gson();
         Message message = new Message(Message.MessageType.ASK_FOR_ACTION);
         message.addData("availableActions",gson.toJson(Arrays.asList(availableActions)));
         sendMessage(message);
     }
-
 
 }

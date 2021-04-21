@@ -101,7 +101,11 @@ public class Message{
         ASK_FOR_ACTION,
         SWAP_DEPOTS,
         SHOW_PLAYER_STATUS,
-
+        SHOW_MARKET,
+        SELECT_MARKET_ROW,
+        SELECT_MARKET_COLUMN,
+        SHOW_RESOURCES,
+        RESOURCE_TO_STORE,
         // from client to server
         LOGIN_REQUEST,
         LOBBY_CHOICE,

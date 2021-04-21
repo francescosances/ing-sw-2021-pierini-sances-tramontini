@@ -75,6 +75,14 @@ public class GameController implements PlayerStatusListener {
                     int depotB = Integer.parseInt(message.getData("depotB"));
                     getPlayerController(username).swapDepots(depotA,depotB);
                     break;
+                case SELECT_MARKET_ROW:
+                    int row = Integer.parseInt(message.getData("row"));
+                    getPlayerController(username).selectMarketRow(row);
+                    break;
+                case SELECT_MARKET_COLUMN:
+                    int column = Integer.parseInt(message.getData("column"));
+                    getPlayerController(username).selectMarketColumn(column);
+                    break;
             }
         }catch (EndGameException e){
             setPhase(GamePhase.END_GAME);

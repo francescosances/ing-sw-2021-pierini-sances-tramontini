@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.LeaderCardsChooser;
 import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
+import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.exceptions.UnswappableDepotsException;
 import it.polimi.ingsw.view.VirtualView;
 
@@ -184,6 +185,13 @@ public class PlayerController {
             case MOVE_RESOURCES:
                 showWarehouseStatus();
                 break;
+            case TAKE_RESOURCES_FROM_MARKET:
+                showMarketStatus();
+                break;
+            case BUY_DEVELOPMENT_CARD:
+                break;
+            case ACTIVATE_PRODUCTION:
+                break;
             default:
                 changeStatus(this.currentStatus.nextStatus());
         }
@@ -198,7 +206,7 @@ public class PlayerController {
         virtualView.askForAction(
                 Arrays.stream(Action.NORMAL_ACTIONS)
                         .toArray(Action[]::new));
-        changeStatus(PlayerStatus.NORMAL_ACTION);
+       // changeStatus(PlayerStatus.NORMAL_ACTION);
     }
 
     /**
@@ -237,6 +245,13 @@ public class PlayerController {
      */
     public void showWarehouseStatus(){
         virtualView.showWarehouseStatus(playerBoard.getWarehouse());
+    }
+
+    /**
+     * Show the market tray to the user
+     */
+    public void showMarketStatus(){
+        virtualView.showMarketStatus(playerBoard.getMatch().getMarket());
     }
 
     /**
@@ -281,6 +296,26 @@ public class PlayerController {
             virtualView.showErrorMessage(e.getMessage());
         }
         askForAction();
+    }
+
+    public void selectMarketRow(int row) {
+        Resource[] resources = getPlayerBoard().getMatch().getMarket().chooseRow(row);
+        askToStoreResourcesFromMarket(resources);
+    }
+
+    public void selectMarketColumn(int column){
+        Resource[] resources = getPlayerBoard().getMatch().getMarket().chooseColumn(column);
+        askToStoreResourcesFromMarket(resources);
+    }
+
+    protected void askToStoreResourcesFromMarket(Resource[] resources){
+        getPlayerBoard().getWarehouse().toBeStored(resources);
+        //virtualView.showResourcesToStore(resources);//TODO: riattivare questa parte quando serializza risorse sarà pronto
+    }
+
+    protected void askToStoreResource(){
+       Resource resource = getPlayerBoard().getWarehouse().popResourceToBeStored();
+
     }
 
     public enum PlayerStatus {

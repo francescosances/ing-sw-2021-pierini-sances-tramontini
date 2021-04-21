@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.Depot;
+import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.Strongbox;
 import it.polimi.ingsw.model.storage.Warehouse;
 
@@ -14,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class Serializer {
@@ -116,6 +118,24 @@ public class Serializer {
         gsonBuilder.registerTypeAdapter(LeaderCard.class, new LeaderCardCreator());
         gsonBuilder.registerTypeAdapter(Requirements.class, new RequirementsCreator());
         return gsonBuilder.create().fromJson(json, PlayerBoard.class);
+    }
+
+    public static String serializeResources(Resource[] resources){
+        return new Gson().toJson(resources);
+    }
+
+    public static Resource[] deserializeResources(String json){
+        //TODO
+        return null;
+    }
+
+    public static String serializeResource(Resource resource){
+        return new Gson().toJson(resource);
+    }
+
+    public static Resource deserializeResource(String json){
+        //TODO
+        return null;
     }
 }
 

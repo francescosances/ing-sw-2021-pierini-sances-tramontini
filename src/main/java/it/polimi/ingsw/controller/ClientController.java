@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.model.Action;
+import it.polimi.ingsw.model.Market;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.storage.Warehouse;
@@ -97,6 +98,13 @@ public class ClientController {
             case SHOW_PLAYER_STATUS:
                 //TODO: aggiungere funzioni che mostrano playerboard
                 break;
+            case SHOW_MARKET:
+                Market market = Serializer.deserializeMarket(message.getData("market"));
+                view.askToChooseMarketRowOrColumn(market);
+                break;
+            case SHOW_RESOURCES:
+                view.showResources(Serializer.deserializeResources(message.getData("resources")));
+                break;
             default:
                 clientSocket.log("Received unexpected message");
                 clientSocket.log(message.serialize());
@@ -170,6 +178,18 @@ public class ClientController {
         Message message = new Message(Message.MessageType.SWAP_DEPOTS);
         message.addData("depotA",String.valueOf(depotA));
         message.addData("depotB",String.valueOf(depotB));
+        clientSocket.sendMessage(message);
+    }
+
+    public void chooseMarketRow(int row){
+        Message message = new Message(Message.MessageType.SELECT_MARKET_ROW);
+        message.addData("row",String.valueOf(row));
+        clientSocket.sendMessage(message);
+    }
+
+    public void chooseMarketColumn(int column){
+        Message message = new Message(Message.MessageType.SELECT_MARKET_COLUMN);
+        message.addData("row",String.valueOf(column));
         clientSocket.sendMessage(message);
     }
 

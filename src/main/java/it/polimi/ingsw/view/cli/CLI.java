@@ -2,9 +2,12 @@ package it.polimi.ingsw.view.cli;
 
 import it.polimi.ingsw.controller.ClientController;
 import it.polimi.ingsw.model.Action;
+import it.polimi.ingsw.model.MarbleType;
+import it.polimi.ingsw.model.Market;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.storage.Depot;
+import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
@@ -162,24 +165,24 @@ public class CLI implements View {
 
     @Override
     public void showWarehouseStatus(Warehouse warehouse){
-        System.out.println("Depots status:");
+        output.println("Depots status:");
         for(int i=0;i<warehouse.getDepots().size();i++){
             Depot depot = warehouse.getDepots().get(i);
-            System.out.printf("[%d] ",i);
+            output.printf("[%d] ",i);
             for(int j=0;j<depot.getSize();j++)
-                System.out.printf("["+((depot.getOccupied()>j)?"*":" ")+"]");
+                output.print("["+((depot.getOccupied()>j)?"*":" ")+"]");
             for(int j=10-depot.getSize()*3;j>0;j--)
-                System.out.printf(" ");
-            System.out.printf(depot.getResourceType() == null?"Empty":depot.getResourceType().toString());
-            System.out.println();
+                output.print(" ");
+            output.print(depot.getResourceType() == null?"Empty":depot.getResourceType().toString());
+            output.println();
         }
-        System.out.println(warehouse);
+        output.println(warehouse);
     }
 
     @Override
     public void askToSwapDepots(Warehouse warehouse) {
         this.showWarehouseStatus(warehouse);
-        System.out.println("Select 2 depots to swap:");
+        output.println("Select 2 depots to swap:");
         int depotA = input.nextInt();
         int depotB = input.nextInt();
         if(depotA < 0 || depotA >= warehouse.getDepots().size() || depotB < 0 || depotB >= warehouse.getDepots().size()){
@@ -187,6 +190,98 @@ public class CLI implements View {
             askToSwapDepots(warehouse);
         }else{
             clientController.swapDepots(depotA,depotB);
+        }
+    }
+
+    /**
+     * Show a single marble whose color depends on the type of marble
+     * @param marbleType the type of marble
+     * @return a string containing the colored circle inside two brackets
+     */
+    private String showMarble(MarbleType marbleType){
+        String marble = "[";
+        switch (marbleType){
+            case RED:
+                marble += ANSI_RED + "●";
+                break;
+            case BLUE:
+                marble += ANSI_BLUE + "●";
+                break;
+            case GREY:
+                marble += ANSI_BLACK + "●";
+                break;
+            case YELLOW:
+                marble += ANSI_YELLOW + "●";
+                break;
+            case PURPLE:
+                marble += ANSI_PURPLE + "●";
+                break;
+            case WHITE:
+                marble += ANSI_WHITE + "◯";
+                break;
+            default:
+                marble = " ";
+        }
+        return marble + ANSI_RESET+"]";
+    }
+
+    @Override
+    public void showMarketStatus(Market market) {
+        for(int i=0;i<Market.COLUMNS*3;i++)
+            output.print(" ");
+        output.println(showMarble(market.getSlideMarble()));
+        for(int r=0;r<Market.ROWS;r++){
+            for(int c=0;c<Market.COLUMNS;c++){
+                output.print(showMarble(market.getMarble(r,c)));
+            }
+            output.println();
+        }
+    }
+
+    @Override
+    public void showResources(Resource[] resources) {
+        output.println("you got these resources from the market:");
+        for(Resource resource : resources){
+            output.println(resource);
+        }
+    }
+
+    @Override
+    public void askToStoreResource(Resource resource,Warehouse warehouse) {
+        output.println("Where do you want to store this resource?");
+
+    }
+
+    @Override
+    public void askToChooseMarketRowOrColumn(Market market){
+        showMarketStatus(market);
+        int choice;
+        do {
+            output.println("Do you want to choose a row or a column?");
+            output.println("[0] Row");
+            output.println("[1] Column");
+            choice = input.nextInt();
+        }while (choice !=0 && choice != 1);
+        if(choice == 0){//rows
+            output.print("Which row would you like to choose?");
+            output.println(" [0-"+Market.ROWS+"]");
+            int row = input.nextInt();
+            if(row < 0 || row >= Market.ROWS){
+                showErrorMessage("Invalid choice");
+                askToChooseMarketRowOrColumn(market);
+                return;
+            }
+            clientController.chooseMarketRow(row);
+        }else{//columns
+            output.print("Which column would you like to choose?");
+            output.println(" [0-"+Market.COLUMNS+"]");
+            int column = input.nextInt();
+            if(column < 0 || column >= Market.COLUMNS){
+                showErrorMessage("Invalid choice");
+                askToChooseMarketRowOrColumn(market);
+                return;
+            }
+            clientController.chooseMarketColumn(column);
         }
     }
 
@@ -205,5 +300,4 @@ public class CLI implements View {
             askForAction(availableActions);
         }
     }
-
 }
