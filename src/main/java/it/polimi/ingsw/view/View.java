@@ -3,6 +3,7 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.Market;
 import it.polimi.ingsw.model.Match;
+import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.Warehouse;
@@ -53,6 +54,12 @@ public interface View {
     void userDisconnected(String username);
 
     void listLeaderCards(List<LeaderCard> leaderCardList,int cardsToChoose);
+
+    /**
+     * Shows the entire player board
+     * @param playerBoard the player board to be shown
+     */
+    void showPlayerBoard(PlayerBoard playerBoard);
 
     /**
      * List the resources stored in the warehouse
