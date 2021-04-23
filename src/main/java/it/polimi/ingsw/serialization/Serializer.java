@@ -105,6 +105,7 @@ public class Serializer {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Depot.class, new DepotCreator());
         gsonBuilder.registerTypeAdapter(LeaderCard.class, new LeaderCardCreator());
+        gsonBuilder.registerTypeAdapter(Resource.class, new ResourceCreator());
         return gsonBuilder.create().fromJson(json, Warehouse.class);
     }
 
