@@ -125,8 +125,9 @@ public class Serializer {
     }
 
     public static Resource[] deserializeResources(String json){
-        //TODO
-        return null;
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Resource.class, new ResourceCreator());
+        return gsonBuilder.create().fromJson(json, Resource[].class);
     }
 
     public static String serializeResource(Resource resource){
@@ -134,8 +135,9 @@ public class Serializer {
     }
 
     public static Resource deserializeResource(String json){
-        //TODO
-        return null;
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Resource.class, new ResourceCreator());
+        return gsonBuilder.create().fromJson(json, Resource.class);
     }
 }
 
