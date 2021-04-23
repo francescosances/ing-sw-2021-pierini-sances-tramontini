@@ -16,7 +16,7 @@ public class Warehouse implements Storage {
     /**
      * The list of resources taken from the market that need to be stored in the depots.
      */
-    private final ArrayList<Resource> toBeStored;
+    private final Stack<Resource> toBeStored;
 
     /**
      * Creates a new warehouse with 3 empty standard depots.
@@ -26,7 +26,7 @@ public class Warehouse implements Storage {
         depots.add(new StandardDepot(1));
         depots.add(new StandardDepot(2));
         depots.add(new StandardDepot(3));
-        toBeStored = new ArrayList<>();
+        toBeStored = new Stack<>();
     }
 
     /**
@@ -70,8 +70,10 @@ public class Warehouse implements Storage {
 
     //TODO: javadoc
     public void pushResourceToBeStored(Resource resource){
-        toBeStored.add(0,resource);
-
+        toBeStored.push(resource);
+       /* toBeStored.add(0,resource);
+        System.out.println("PIPPO");
+        System.out.println(toBeStored);*/
     }
 
     /**
@@ -111,7 +113,7 @@ public class Warehouse implements Storage {
      * @return the first resource in the toBeStored storage that needs to be stored in a depot or discarded
      */
     public Resource popResourceToBeStored(){
-        return toBeStored.remove(toBeStored.size() - 1);
+        return toBeStored.pop();
     }
 
     @Override
