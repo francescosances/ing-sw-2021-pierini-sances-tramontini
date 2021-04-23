@@ -105,6 +105,9 @@ public class PlayerController {
      */
     public void turnEnded(){
         this.currentStatus.setEndTurnStatus();
+        for (PlayerStatusListener x : this.observers) {
+            x.onPlayerStatusChanged(this);
+        }
     }
 
     /**
@@ -147,7 +150,7 @@ public class PlayerController {
             for (LeaderCard card : cards) {
                 playerBoard.addLeaderCard(card);
             }
-            nextStatus();
+            turnEnded();
         };
     }
 
@@ -310,27 +313,25 @@ public class PlayerController {
     }
 
     protected void askToStoreResourcesFromMarket(Resource[] resources){
-        List<Resource> resourcesToReturn = new LinkedList<>(Arrays.asList(resources));
         if(playerBoard.getLeaderCards().stream().filter(t->t.isWhiteMarble() && t.isActive()).count() <= 1){
-            Iterator<Resource> i = resourcesToReturn.iterator();
-            while(i.hasNext()){
-                Resource resource = i.next();
+            for(int i=0;i<resources.length;i++){
                 for(LeaderCard card : playerBoard.getLeaderCards()){
-                    resource = card.convertResourceType(resource);
+                    resources[i] = card.convertResourceType(resources[i]);
                 }
-                if(resource == NonPhysicalResourceType.VOID) {
-                    i.remove();
-                }else if(resource == NonPhysicalResourceType.FAITH_POINT){
+                if(resources[i] == NonPhysicalResourceType.VOID) {
+                    resources[i] = null;
+                }else if(resources[i] == NonPhysicalResourceType.FAITH_POINT){
                     playerBoard.gainFaithPoints(1);
                     virtualView.showMessage("You gained a faith point");
-                    i.remove();
+                    resources[i] = null;
                 }
             }
         }
-        resources = resourcesToReturn.toArray(new Resource[0]);
+        resources = Arrays.stream(resources).filter(Objects::nonNull).toArray(Resource[]::new);
         getPlayerBoard().getWarehouse().toBeStored(resources);
-        Collections.reverse(resourcesToReturn);
-        virtualView.showResources(resourcesToReturn.toArray(new Resource[0]));
+        List<Resource> resourcesToStore = Arrays.asList(resources);
+        Collections.reverse(resourcesToStore);
+        virtualView.showResources(resourcesToStore.toArray(new Resource[0]));
         askToStoreResource();
     }
 

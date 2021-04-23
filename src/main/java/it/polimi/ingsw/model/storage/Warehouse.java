@@ -71,9 +71,6 @@ public class Warehouse implements Storage {
     //TODO: javadoc
     public void pushResourceToBeStored(Resource resource){
         toBeStored.push(resource);
-       /* toBeStored.add(0,resource);
-        System.out.println("PIPPO");
-        System.out.println(toBeStored);*/
     }
 
     /**

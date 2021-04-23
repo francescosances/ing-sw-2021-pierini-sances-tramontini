@@ -3,6 +3,7 @@ package it.polimi.ingsw.serialization;
 import com.google.gson.*;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.ResourceType;
+import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 
 import java.lang.reflect.Type;
 
@@ -35,7 +36,11 @@ public class LeaderCardCreator implements JsonDeserializer<LeaderCard> {
                 jsonObject.get("active").getAsBoolean()
         );
         for (int i = 0; i < jsonObject.get("occupied").getAsInt(); i++) {
-            leaderCard.addResource(ResourceType.valueOf(jsonObject.get("resourceType").getAsString()));
+            try {
+                leaderCard.addResource(ResourceType.valueOf(jsonObject.get("resourceType").getAsString()));
+            } catch (IncompatibleDepotException e) {
+                e.printStackTrace();
+            }
         }
         return leaderCard;
     }

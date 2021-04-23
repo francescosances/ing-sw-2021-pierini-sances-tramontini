@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
 import it.polimi.ingsw.model.storage.Depot;
 import it.polimi.ingsw.model.storage.ResourceType;
+import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 
 /**
  * Leader card that extends the standard depot capacity
@@ -68,12 +69,12 @@ public class DepotLeaderCard extends LeaderCard implements Depot {
      * Add the specified resource to the depot
      *
      * @param res The type of resource to be stored
-     * @throws IllegalArgumentException the resource is not compatible with this depot
+     * @throws IncompatibleDepotException the resource is not compatible with this depot
      */
     @Override
-    public void addResource(ResourceType res) {
+    public void addResource(ResourceType res) throws IncompatibleDepotException {
         if (this.resourceType != res)
-            throw new IllegalArgumentException("Resource Type not compatible with depot");
+            throw new IncompatibleDepotException("Resource Type not compatible with depot");
         occupied++;
     }
 
