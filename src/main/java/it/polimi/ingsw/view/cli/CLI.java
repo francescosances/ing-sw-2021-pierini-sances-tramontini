@@ -367,7 +367,7 @@ public class CLI implements View {
             output.println(availableActions[i].toString());
         }
         int choice = input.nextInt();
-        if (choice >= 0 && choice <= availableActions.length)
+        if (choice >= 0 && choice < availableActions.length)
             clientController.performAction(availableActions[choice] );
         else{
             showErrorMessage("Invalid choice");

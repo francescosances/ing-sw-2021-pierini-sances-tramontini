@@ -393,7 +393,7 @@ public class PlayerController {
 
     public class PlayerStatusIndex{
 
-        private int currentIndex = -1;
+        private int currentIndex = 0;
         private final PlayerStatus[] vals = {PlayerStatus.PERFORMING_ACTION, PlayerStatus.NORMAL_ACTION,PlayerStatus.PERFORMING_ACTION,PlayerStatus.TURN_ENDED};
 
         public PlayerStatus nextStatus(){
