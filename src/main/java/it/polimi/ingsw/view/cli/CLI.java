@@ -230,6 +230,7 @@ public class CLI implements View {
         }
     }
 
+
     @Override
     public void askToSwapDepots(Warehouse warehouse) {
         this.showWarehouseStatus(warehouse);
