@@ -45,6 +45,8 @@ public class StandardDepot implements Depot {
 
     @Override
     public void addResource(ResourceType res) throws IncompatibleDepotException {
+        if(occupied == size)
+            throw new IncompatibleDepotException("Depot is full");
         if (occupied == 0)
             this.resourceType = res;
         else{

@@ -60,7 +60,7 @@ public class PlayerController {
         this.playerBoard = playerBoard;
         this.active = true;
         this.virtualView = virtualView;
-        currentStatus = new PlayerStatusIndex(PlayerStatus.TURN_ENDED);
+        currentStatus = new PlayerStatusIndex();
     }
 
     /**
@@ -104,7 +104,7 @@ public class PlayerController {
      * Mark the player as waiting for others and notify the status update to the virtual view
      */
     public void turnEnded(){
-        changeStatus(PlayerStatus.TURN_ENDED);
+        this.currentStatus.setEndTurnStatus();
     }
 
     /**
@@ -147,7 +147,7 @@ public class PlayerController {
             for (LeaderCard card : cards) {
                 playerBoard.addLeaderCard(card);
             }
-            this.changeStatus(PlayerStatus.TURN_ENDED);
+            nextStatus();
         };
     }
 
@@ -168,7 +168,6 @@ public class PlayerController {
                         .filter(x -> x != Action.CANCEL)
                         .filter(x -> !((x == Action.PLAY_LEADER || x == Action.DISCARD_LEADER) && this.playerBoard.getAvailableLeaderCards().isEmpty())) //If no leader cards are available, the options are removed from the list
                         .toArray(Action[]::new));
-        changeStatus(PlayerStatus.PERFORMING_ACTION);
     }
 
     /**
@@ -196,12 +195,11 @@ public class PlayerController {
             case ACTIVATE_PRODUCTION:
                 break;
             default:
-                changeStatus(this.currentStatus.nextStatus());
+                nextStatus();
         }
     }
 
     public void startNormalAction(){
-        virtualView.yourTurn();
         askForNormalAction();
     }
 
@@ -259,10 +257,9 @@ public class PlayerController {
 
     /**
      * Change the current status of the controller and notify the change to the observers
-     * @param newStatus the new status of the player controller
      */
-    protected void changeStatus(PlayerStatus newStatus){
-        currentStatus.setStatus(newStatus);
+    private void nextStatus(){
+        currentStatus.nextStatus();
         for (PlayerStatusListener x : this.observers) {
             x.onPlayerStatusChanged(this);
         }
@@ -338,6 +335,11 @@ public class PlayerController {
     }
 
     public void askToStoreResource(){
+        if(!getPlayerBoard().getWarehouse().hasResourcesToStore()){
+            nextStatus();
+            askForAction();
+            return;
+        }
        currentResourceToStore = getPlayerBoard().getWarehouse().popResourceToBeStored();
        if(currentResourceToStore == NonPhysicalResourceType.VOID){
            virtualView.chooseWhiteMarbleConversion(getPlayerBoard().getLeaderCards().get(0),getPlayerBoard().getLeaderCards().get(1));
@@ -372,8 +374,7 @@ public class PlayerController {
             askToStoreResource();
         else {
             showWarehouseStatus();
-            changeStatus(currentStatus.nextStatus());
-            askForAction();
+            nextStatus();
         }
     }
 
@@ -387,24 +388,20 @@ public class PlayerController {
 
     public class PlayerStatusIndex{
 
-        private int currentIndex = 0;
-        private final PlayerStatus[] vals = {PlayerStatus.CHOOSING_LEADER_CARDS,PlayerStatus.PERFORMING_ACTION, PlayerStatus.NORMAL_ACTION,PlayerStatus.PERFORMING_ACTION,PlayerStatus.TURN_ENDED};
-
-        public PlayerStatusIndex(PlayerStatus playerStatus){
-            this.setStatus(playerStatus);
-        }
+        private int currentIndex = -1;
+        private final PlayerStatus[] vals = {PlayerStatus.PERFORMING_ACTION, PlayerStatus.NORMAL_ACTION,PlayerStatus.PERFORMING_ACTION,PlayerStatus.TURN_ENDED};
 
         public PlayerStatus nextStatus(){
             currentIndex = (currentIndex+1)%vals.length;
             return vals[currentIndex];
         }
 
-        public PlayerStatus getCurrentStatus(){
-            return vals[currentIndex];
+        public void setEndTurnStatus(){
+            this.currentIndex = Arrays.asList(vals).indexOf(PlayerStatus.TURN_ENDED);
         }
 
-        public void setStatus(PlayerStatus playerStatus){
-            currentIndex = Arrays.asList(vals).indexOf(playerStatus);
+        public PlayerStatus getCurrentStatus(){
+            return vals[currentIndex];
         }
 
     }

@@ -229,7 +229,10 @@ public class GameController implements PlayerStatusListener {
                 break;
             case NORMAL_ACTION:
                 players.get(currentPlayerIndex).startNormalAction();
+                this.currentPhase = GamePhase.TURN;
+                break;
             case PERFORMING_ACTION:
+                players.get(currentPlayerIndex).askForAction();
                 this.currentPhase = GamePhase.TURN;
                 break;
         }
