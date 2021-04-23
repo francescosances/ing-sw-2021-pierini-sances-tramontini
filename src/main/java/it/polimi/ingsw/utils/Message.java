@@ -106,6 +106,8 @@ public class Message{
         SELECT_MARKET_COLUMN,
         SHOW_RESOURCES,
         RESOURCE_TO_STORE,
+        WHITE_MARBLE_CONVERSION,
+        SHOW_WAREHOUSE_STATUS,
         // from client to server
         LOGIN_REQUEST,
         LOBBY_CHOICE,

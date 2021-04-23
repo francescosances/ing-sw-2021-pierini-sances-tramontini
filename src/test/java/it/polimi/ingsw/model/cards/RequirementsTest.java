@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.cards;
 import it.polimi.ingsw.model.PlayerBoard;
 
 import it.polimi.ingsw.model.storage.ResourceType;
+import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,7 @@ class RequirementsTest {
     }
 
     @Test
-    void satisfied_Resources() {
+    void satisfied_Resources() throws IncompatibleDepotException {
         player.getWarehouse().addResource(0,ResourceType.STONE,1);
         player.getWarehouse().addResource(1,ResourceType.COIN,1);
 
@@ -73,7 +74,7 @@ class RequirementsTest {
     }
 
     @Test
-    void satisfied_ResourcesAndDevelopmentCards() {
+    void satisfied_ResourcesAndDevelopmentCards() throws IncompatibleDepotException {
         player.getWarehouse().addResource(0,ResourceType.COIN,1);
         player.getWarehouse().addResource(1,ResourceType.SERVANT,2);
         player.getWarehouse().addResource(2,ResourceType.STONE,3);

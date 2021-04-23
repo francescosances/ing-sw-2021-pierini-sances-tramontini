@@ -37,16 +37,6 @@ public class PlayerBoard {
         leaderCards = new ArrayList<>();
     }
 
-    public void takeResourcesFromMarket(int rowOrColumn){
-        Resource[] resources;
-        if(rowOrColumn > Market.ROWS){
-            rowOrColumn -= Market.ROWS;
-            resources = match.getMarket().chooseColumn(rowOrColumn);
-        }else
-            resources = match.getMarket().chooseRow(rowOrColumn);
-        warehouse.toBeStored(resources);
-    }
-
     public void buyDevelopmentCard(DevelopmentCard developmentCard){
         if(!developmentCard.getCost().satisfied(this)){
             throw new IllegalArgumentException("Card not purchasable");

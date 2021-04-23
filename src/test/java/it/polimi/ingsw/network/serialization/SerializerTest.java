@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.*;
+import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.Triple;
@@ -99,7 +100,7 @@ public class SerializerTest {
     }
 
     @Test
-    public void serializeWarehouse() {
+    public void serializeWarehouse() throws IncompatibleDepotException {
         Warehouse warehouse = new Warehouse();
         warehouse.addResource(0, ResourceType.COIN, 1);
         warehouse.addResource(2, ResourceType.STONE, 2);
@@ -110,7 +111,7 @@ public class SerializerTest {
     }
 
     @Test
-    public void serializePlayerBoard() {
+    public void serializePlayerBoard() throws IncompatibleDepotException {
         Match match = new Match("Match Test");
         PlayerBoard playerBoard = new PlayerBoard("PlayerBoard Test", match);
         playerBoard.gainFaithPoints(15);
@@ -148,7 +149,7 @@ public class SerializerTest {
     }
 
     @Test
-    public void serializeMatchState() {
+    public void serializeMatchState() throws IncompatibleDepotException {
         Match match = new Match("Match Test");
         PlayerBoard playerBoard = new PlayerBoard("PlayerBoard Test", match);
         match.addPlayer(playerBoard.getUsername());
@@ -175,7 +176,7 @@ public class SerializerTest {
     }
 
     @Test
-    public void serializeSoloMatchState() {
+    public void serializeSoloMatchState() throws IncompatibleDepotException {
         SoloMatch match = new SoloMatch("Match Test");
         PlayerBoard playerBoard = new PlayerBoard("PlayerBoard Test", match);
         match.addPlayer(playerBoard.getUsername());

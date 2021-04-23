@@ -74,4 +74,6 @@ public interface View {
     void showResources(Resource[] resources);
 
     void askToStoreResource(Resource resource,Warehouse warehouse);
+
+    void chooseWhiteMarbleConversion(LeaderCard leaderCard, LeaderCard leaderCard1);
 }

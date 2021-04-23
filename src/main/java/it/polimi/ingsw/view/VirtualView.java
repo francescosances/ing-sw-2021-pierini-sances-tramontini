@@ -90,7 +90,9 @@ public class VirtualView implements View {
 
     @Override
     public void showWarehouseStatus(Warehouse warehouse){
-        askToSwapDepots(warehouse);
+        Message message = new Message(Message.MessageType.SHOW_WAREHOUSE_STATUS);
+        message.addData("warehouse",Serializer.serializeWarehouse(warehouse));
+        sendMessage(message);
     }
 
     @Override
@@ -123,7 +125,15 @@ public class VirtualView implements View {
     public void askToStoreResource(Resource resource, Warehouse warehouse) {
         Message message = new Message(Message.MessageType.RESOURCE_TO_STORE);
         message.addData("warehouse",Serializer.serializeWarehouse(warehouse));
-        message.addData("resource",new Gson().toJson(resource));
+        message.addData("resource",Serializer.serializeResource(resource));
+        sendMessage(message);
+    }
+
+    @Override
+    public void chooseWhiteMarbleConversion(LeaderCard card1, LeaderCard card2) {
+        Message message = new Message(Message.MessageType.WHITE_MARBLE_CONVERSION);
+        message.addData("card1",Serializer.serializeLeaderCard(card1));
+        message.addData("card2",Serializer.serializeLeaderCard(card2));
         sendMessage(message);
     }
 

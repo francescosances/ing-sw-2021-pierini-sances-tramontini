@@ -5,13 +5,14 @@ import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.LeaderCardsChooser;
 import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
+import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
 import it.polimi.ingsw.model.storage.Resource;
+import it.polimi.ingsw.model.storage.ResourceType;
+import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 import it.polimi.ingsw.model.storage.exceptions.UnswappableDepotsException;
 import it.polimi.ingsw.view.VirtualView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class PlayerController {
 
@@ -45,6 +46,8 @@ public class PlayerController {
      * Strategy pattern used to get the user's cards choice
      */
     private LeaderCardsChooser leaderCardsChooser;
+
+    private Resource currentResourceToStore;
 
     /**
      * Initialize a new player controller active and waiting for his turn.
@@ -183,7 +186,7 @@ public class PlayerController {
                 listLeaderCardsToDiscard();
                 break;
             case MOVE_RESOURCES:
-                showWarehouseStatus();
+                virtualView.askToSwapDepots(getPlayerBoard().getWarehouse());
                 break;
             case TAKE_RESOURCES_FROM_MARKET:
                 showMarketStatus();
@@ -292,7 +295,8 @@ public class PlayerController {
     public void swapDepots(int depotA, int depotB) {
         try {
             playerBoard.getWarehouse().swapDepots(depotA, depotB);
-        }catch (UnswappableDepotsException e){
+            showWarehouseStatus();
+        }catch (UnswappableDepotsException | IncompatibleDepotException e){
             virtualView.showErrorMessage(e.getMessage());
         }
         askForAction();
@@ -309,14 +313,70 @@ public class PlayerController {
     }
 
     protected void askToStoreResourcesFromMarket(Resource[] resources){
+        List<Resource> resourcesToReturn = new LinkedList<>(Arrays.asList(resources));
+        if(playerBoard.getLeaderCards().stream().filter(t->t.isWhiteMarble() && t.isActive()).count() <= 1){
+            Iterator<Resource> i = resourcesToReturn.iterator();
+            while(i.hasNext()){
+                Resource resource = i.next();
+                for(LeaderCard card : playerBoard.getLeaderCards()){
+                    resource = card.convertResourceType(resource);
+                }
+                if(resource == NonPhysicalResourceType.VOID) {
+                    i.remove();
+                }else if(resource == NonPhysicalResourceType.FAITH_POINT){
+                    playerBoard.gainFaithPoints(1);
+                    virtualView.showMessage("You gained a faith point");
+                    i.remove();
+                }
+            }
+        }
+        resources = resourcesToReturn.toArray(new Resource[0]);
         getPlayerBoard().getWarehouse().toBeStored(resources);
-        //virtualView.showResourcesToStore(resources);//TODO: riattivare questa parte quando serializza risorse sarà pronto
+        Collections.reverse(resourcesToReturn);
+        virtualView.showResources(resourcesToReturn.toArray(new Resource[0]));
+        askToStoreResource();
     }
 
-    protected void askToStoreResource(){
-       Resource resource = getPlayerBoard().getWarehouse().popResourceToBeStored();
-
+    public void askToStoreResource(){
+       currentResourceToStore = getPlayerBoard().getWarehouse().popResourceToBeStored();
+       if(currentResourceToStore == NonPhysicalResourceType.VOID){
+           virtualView.chooseWhiteMarbleConversion(getPlayerBoard().getLeaderCards().get(0),getPlayerBoard().getLeaderCards().get(1));
+       }else{
+            virtualView.askToStoreResource(currentResourceToStore,getPlayerBoard().getWarehouse());
+       }
     }
+
+    public void chooseWhiteMarbleConversion(int choice){
+        if(currentResourceToStore != NonPhysicalResourceType.VOID)
+            throw new IllegalStateException("Invalid command");
+        Resource resource = getPlayerBoard().getLeaderCards().get(choice).getOutputResourceType();
+        getPlayerBoard().getWarehouse().pushResourceToBeStored(resource);
+        askToStoreResource();
+    }
+
+    protected void storeResourceToWarehouse(int depot){
+        if(depot < getPlayerBoard().getWarehouse().getDepots().size())
+            try {
+                getPlayerBoard().getWarehouse().addResource(depot, (ResourceType) currentResourceToStore, 1);
+            }catch (IncompatibleDepotException e){
+                virtualView.showErrorMessage(e.getMessage());
+                getPlayerBoard().getWarehouse().pushResourceToBeStored(currentResourceToStore);
+                askToStoreResource();
+                return;
+            }
+        else
+            getPlayerBoard().getMatch().discardResource(getPlayerBoard());
+
+        currentResourceToStore = null;
+        if(getPlayerBoard().getWarehouse().hasResourcesToStore())
+            askToStoreResource();
+        else {
+            showWarehouseStatus();
+            changeStatus(currentStatus.nextStatus());
+            askForAction();
+        }
+    }
+
 
     public enum PlayerStatus {
         CHOOSING_LEADER_CARDS,

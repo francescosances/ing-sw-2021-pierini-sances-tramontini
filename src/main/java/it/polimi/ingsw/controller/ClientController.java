@@ -6,6 +6,8 @@ import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.Market;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.cards.LeaderCard;
+import it.polimi.ingsw.model.storage.Resource;
+import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.network.ClientSocket;
 import it.polimi.ingsw.serialization.Serializer;
@@ -92,11 +94,13 @@ public class ClientController {
                 view.askForAction(actions.toArray(new Action[0]));
                 break;
             case SWAP_DEPOTS:
-                Warehouse warehouse = Serializer.deserializeWarehouse(message.getData("warehouse"));
-                view.askToSwapDepots(warehouse);
+                view.askToSwapDepots(Serializer.deserializeWarehouse(message.getData("warehouse")));
                 break;
             case SHOW_PLAYER_STATUS:
                 //TODO: aggiungere funzioni che mostrano playerboard
+                break;
+            case SHOW_WAREHOUSE_STATUS:
+                view.showWarehouseStatus(Serializer.deserializeWarehouse(message.getData("warehouse")));
                 break;
             case SHOW_MARKET:
                 Market market = Serializer.deserializeMarket(message.getData("market"));
@@ -104,6 +108,12 @@ public class ClientController {
                 break;
             case SHOW_RESOURCES:
                 view.showResources(Serializer.deserializeResources(message.getData("resources")));
+                break;
+            case WHITE_MARBLE_CONVERSION:
+                view.chooseWhiteMarbleConversion(Serializer.deserializeLeaderCard(message.getData("card1")),Serializer.deserializeLeaderCard(message.getData("card2")));
+                break;
+            case RESOURCE_TO_STORE:
+                view.askToStoreResource(Serializer.deserializeResource(message.getData("resource")),Serializer.deserializeWarehouse(message.getData("warehouse")));
                 break;
             default:
                 clientSocket.log("Received unexpected message");
@@ -189,9 +199,22 @@ public class ClientController {
 
     public void chooseMarketColumn(int column){
         Message message = new Message(Message.MessageType.SELECT_MARKET_COLUMN);
-        message.addData("row",String.valueOf(column));
+        message.addData("column",String.valueOf(column));
         clientSocket.sendMessage(message);
     }
+
+    public void chooseWhiteMarbleConversion(int choice) {
+        Message message = new Message(Message.MessageType.WHITE_MARBLE_CONVERSION);
+        message.addData("choice",String.valueOf(choice));
+        clientSocket.sendMessage(message);
+    }
+
+    public void chooseDepot(int choice) {
+        Message message = new Message(Message.MessageType.RESOURCE_TO_STORE);
+        message.addData("choice",String.valueOf(choice));
+        clientSocket.sendMessage(message);
+    }
+
 
     /**
      * Resumes a match suspended after a network disconnection

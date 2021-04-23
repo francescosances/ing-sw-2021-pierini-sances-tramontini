@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.cards;
 
+import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
+import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.ResourceType;
 
 public class WhiteMarbleLeaderCard extends LeaderCard {
@@ -24,6 +26,14 @@ public class WhiteMarbleLeaderCard extends LeaderCard {
     @Override
     public ResourceType getOutputResourceType() {
         return outputResourceType;
+    }
+
+    @Override
+    public Resource convertResourceType(Resource resourceType){
+        if(isActive() && resourceType == NonPhysicalResourceType.VOID)
+            return outputResourceType;
+        else
+            return resourceType;
     }
 
     @Override

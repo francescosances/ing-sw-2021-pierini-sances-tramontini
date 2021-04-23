@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.storage;
 
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.Requirements;
+import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 import it.polimi.ingsw.model.storage.exceptions.UnswappableDepotsException;
 
 import java.util.*;
@@ -33,13 +34,13 @@ public class Warehouse implements Storage {
      * @param depotNumber the number of the depot where to add the resources
      * @param res the type of the resources to be added
      * @param num the amount of the resources to be added
-     * @throws IllegalStateException if is already existing a depot with the same resource type
+     * @throws IncompatibleDepotException if is already existing a depot with the same resource type
      */
-    public void addResource(int depotNumber, ResourceType res, int num) throws IllegalStateException{
+    public void addResource(int depotNumber, ResourceType res, int num) throws IncompatibleDepotException {
         int depotIndex = 0;
         for(Depot depot : depots)
             if(depotIndex++ != depotNumber && depot.getOccupied() > 0 && depot.getResourceType() == res)
-                throw new IllegalStateException("You can’t place the same type of Resource in two different depots.");
+                throw new IncompatibleDepotException("You can’t place the same type of Resource in two different depots.");
         for (int i = 0; i < num; i++)
             depots.get(depotNumber).addResource(res);
     }
@@ -67,12 +68,17 @@ public class Warehouse implements Storage {
         toBeStored.addAll(Arrays.asList(resources));
     }
 
+    //TODO: javadoc
+    public void pushResourceToBeStored(Resource resource){
+        toBeStored.add(0,resource);
+    }
+
     /**
      * Swaps the content of the two specified depots.
      * @param first the number of the first depot
      * @param second the number of the second depot
      */
-    public void swapDepots(int first, int second) {
+    public void swapDepots(int first, int second) throws IncompatibleDepotException {
         if (first == second || depots.get(first).getOccupied() > depots.get(second).getSize() || depots.get(second).getOccupied() > depots.get(first).getSize())
             throw new UnswappableDepotsException("Unable to swap selected depots");
 

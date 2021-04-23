@@ -176,7 +176,6 @@ public class CLI implements View {
             output.print(depot.getResourceType() == null?"Empty":depot.getResourceType().toString());
             output.println();
         }
-        output.println(warehouse);
     }
 
     @Override
@@ -248,8 +247,30 @@ public class CLI implements View {
 
     @Override
     public void askToStoreResource(Resource resource,Warehouse warehouse) {
-        output.println("Where do you want to store this resource?");
+        output.println("Where do you want to store this "+resource+" resource?");
+        showWarehouseStatus(warehouse);
+        output.printf("[%d] Discard\n",warehouse.getDepots().size());
+        int choice = input.nextInt();
+        if(choice < 0 || choice > warehouse.getDepots().size()) {
+            showErrorMessage("Invalid choice");
+            askToStoreResource(resource, warehouse);
+            return;
+        }
+        clientController.chooseDepot(choice);
+    }
 
+    @Override
+    public void chooseWhiteMarbleConversion(LeaderCard card1, LeaderCard card2) {
+        output.println("You have 2 active white marble leader cards. Choose conversion output:");
+        output.println("[0] "+card1.getOutputResourceType());
+        output.println("[1] "+card2.getOutputResourceType());
+        int choice = input.nextInt();
+        if(choice < 0 || choice >= 2) {
+            showErrorMessage("Invalid choice");
+            chooseWhiteMarbleConversion(card1, card2);
+            return;
+        }
+        clientController.chooseWhiteMarbleConversion(choice);
     }
 
     @Override
@@ -264,7 +285,7 @@ public class CLI implements View {
         }while (choice !=0 && choice != 1);
         if(choice == 0){//rows
             output.print("Which row would you like to choose?");
-            output.println(" [0-"+Market.ROWS+"]");
+            output.println(" [0-"+(Market.ROWS-1)+"]");
             int row = input.nextInt();
             if(row < 0 || row >= Market.ROWS){
                 showErrorMessage("Invalid choice");
@@ -274,7 +295,7 @@ public class CLI implements View {
             clientController.chooseMarketRow(row);
         }else{//columns
             output.print("Which column would you like to choose?");
-            output.println(" [0-"+Market.COLUMNS+"]");
+            output.println(" [0-"+(Market.COLUMNS-1)+"]");
             int column = input.nextInt();
             if(column < 0 || column >= Market.COLUMNS){
                 showErrorMessage("Invalid choice");

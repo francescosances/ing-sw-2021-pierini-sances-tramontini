@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.Depot;
 import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.model.storage.StandardDepot;
+import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 
 import java.lang.reflect.Type;
 
@@ -25,8 +26,13 @@ public class DepotCreator implements JsonDeserializer<Depot> {
 
     protected StandardDepot standardDepot(JsonObject jsonObject){
         StandardDepot depot = new StandardDepot(jsonObject.get("size").getAsInt());
-        for (int i = 0; i < jsonObject.get("occupied").getAsInt(); i++)
-            depot.addResource(ResourceType.valueOf(jsonObject.get("resourceType").getAsString()));
+        for (int i = 0; i < jsonObject.get("occupied").getAsInt(); i++) {
+            try {
+                depot.addResource(ResourceType.valueOf(jsonObject.get("resourceType").getAsString()));
+            } catch (IncompatibleDepotException e) {
+                e.printStackTrace();
+            }
+        }
         return depot;
     }
 }

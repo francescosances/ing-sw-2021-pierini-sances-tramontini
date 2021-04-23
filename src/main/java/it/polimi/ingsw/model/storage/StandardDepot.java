@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.storage;
 
+import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
+
 public class StandardDepot implements Depot {
     /**
      * The type of the resource inside the depot or null in case of an empty depot.
@@ -42,14 +44,14 @@ public class StandardDepot implements Depot {
     }
 
     @Override
-    public void addResource(ResourceType res){
+    public void addResource(ResourceType res) throws IncompatibleDepotException {
         if (occupied == 0)
             this.resourceType = res;
         else{
             if (this.resourceType == null)
-                throw new IllegalStateException("Depot occupied but Resource Type not defined");
+                throw new IncompatibleDepotException("Depot occupied but Resource Type not defined");
             else if (this.resourceType != res)
-                throw new IllegalArgumentException("Resource Type not compatible with depot");
+                throw new IncompatibleDepotException("Resource Type not compatible with depot");
         }
         occupied++;
     }

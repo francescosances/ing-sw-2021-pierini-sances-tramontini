@@ -83,6 +83,12 @@ public class GameController implements PlayerStatusListener {
                     int column = Integer.parseInt(message.getData("column"));
                     getPlayerController(username).selectMarketColumn(column);
                     break;
+                case WHITE_MARBLE_CONVERSION:
+                    getPlayerController(username).chooseWhiteMarbleConversion(Integer.parseInt(message.getData("choice")));
+                    break;
+                case RESOURCE_TO_STORE:
+                    getPlayerController(username).storeResourceToWarehouse(Integer.parseInt(message.getData("choice")));
+                    break;
             }
         }catch (EndGameException e){
             setPhase(GamePhase.END_GAME);
@@ -268,24 +274,6 @@ public class GameController implements PlayerStatusListener {
         TURN,
         END_GAME;
 
-        /**
-         * Counter that represent the number of players that have finished the current phase
-         */
-        private int currentPhasePlayers = 0;
-
-        /**
-         * Returns the number of players that have finished the current phase
-         * @return the number of players that have finished the current phase
-         */
-        public synchronized int getCurrentPhasePlayers(){return currentPhasePlayers;}
-
-        /**
-         * Increment the number of players that have finished the current phase
-         */
-        public synchronized void incrementCurrentPhasePlayers(){
-            this.currentPhasePlayers++;
-        }
-
         private static final GamePhase[] vals = values();
 
         /**
@@ -294,7 +282,6 @@ public class GameController implements PlayerStatusListener {
          */
         public GamePhase next()
         {
-            this.currentPhasePlayers = 0;
             return vals[(this.ordinal()+1) % vals.length];
         }
     }

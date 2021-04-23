@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.cards.Requirements;
 import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.ResourceType;
+import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 import it.polimi.ingsw.utils.Pair;
 import org.junit.After;
 import org.junit.Before;
@@ -35,69 +36,6 @@ public class PlayerBoardTest {
     }
 
     @Test
-    public void takeResourcesFromMarket_Row() {
-        Market market = match.getMarket();
-        market.setSlideMarble(MarbleType.WHITE);
-        market.setMarble(0,0, MarbleType.WHITE);
-        market.setMarble(0,1, MarbleType.PURPLE);
-        market.setMarble(0,2, MarbleType.BLUE);
-        market.setMarble(0,3, MarbleType.YELLOW);
-        market.setMarble(1,0, MarbleType.PURPLE);
-        market.setMarble(1,1, MarbleType.YELLOW);
-        market.setMarble(1,2, MarbleType.WHITE);
-        market.setMarble(1,3, MarbleType.GREY);
-        market.setMarble(2,0, MarbleType.WHITE);
-        market.setMarble(2,1, MarbleType.RED);
-        market.setMarble(2,2, MarbleType.GREY);
-        market.setMarble(2,3, MarbleType.BLUE);
-
-        playerBoard.takeResourcesFromMarket(0);
-
-        List<Resource> testList = new ArrayList<>();
-        testList.add(MarbleType.WHITE.toResource());
-        testList.add(MarbleType.PURPLE.toResource());
-        testList.add(MarbleType.BLUE.toResource());
-        testList.add(MarbleType.YELLOW.toResource());
-
-        for (int i = 0; i < 4; i++)
-            assertTrue(testList.remove(playerBoard.warehouse.popResourceToBeStored()));
-
-        assertTrue(testList.isEmpty());
-        assertFalse(playerBoard.warehouse.hasResourcesToStore());
-    }
-
-    @Test
-    public void takeResourcesFromMarket_Column() {
-        Market market = match.getMarket();
-        market.setSlideMarble(MarbleType.WHITE);
-        market.setMarble(0,0, MarbleType.WHITE);
-        market.setMarble(0,1, MarbleType.PURPLE);
-        market.setMarble(0,2, MarbleType.BLUE);
-        market.setMarble(0,3, MarbleType.YELLOW);
-        market.setMarble(1,0, MarbleType.PURPLE);
-        market.setMarble(1,1, MarbleType.YELLOW);
-        market.setMarble(1,2, MarbleType.WHITE);
-        market.setMarble(1,3, MarbleType.GREY);
-        market.setMarble(2,0, MarbleType.WHITE);
-        market.setMarble(2,1, MarbleType.RED);
-        market.setMarble(2,2, MarbleType.GREY);
-        market.setMarble(2,3, MarbleType.BLUE);
-
-        playerBoard.takeResourcesFromMarket(6);
-
-        List<Resource> testList = new ArrayList<>();
-        testList.add(MarbleType.YELLOW.toResource());
-        testList.add(MarbleType.GREY.toResource());
-        testList.add(MarbleType.BLUE.toResource());
-
-        for (int i = 0; i < 3; i++)
-            assertTrue(testList.remove(playerBoard.warehouse.popResourceToBeStored()));
-
-        assertTrue(testList.isEmpty());
-        assertFalse(playerBoard.warehouse.hasResourcesToStore());
-    }
-
-    @Test
     public void buyDevelopmentCard_fromStrongboxOnly() {
         Requirements requirements = new Requirements(new Pair<>(ResourceType.SHIELD,2), new Pair<>(ResourceType.COIN,1));
         DevelopmentCard developmentCard = new DevelopmentCard(1, requirements,1, null, null);
@@ -119,7 +57,7 @@ public class PlayerBoardTest {
     }
 
     @Test
-    public void buyDevelopmentCard_fromWarehouseOnly() {
+    public void buyDevelopmentCard_fromWarehouseOnly() throws IncompatibleDepotException {
         Requirements requirements = new Requirements(new Pair<>(ResourceType.SHIELD,2), new Pair<>(ResourceType.COIN,1));
         DevelopmentCard developmentCard = new DevelopmentCard(1, requirements,1, null, null);
 
@@ -138,7 +76,7 @@ public class PlayerBoardTest {
     }
 
     @Test
-    public void buyDevelopmentCard_fromWarehouseAndStrongbox() {
+    public void buyDevelopmentCard_fromWarehouseAndStrongbox() throws IncompatibleDepotException {
         Requirements requirements = new Requirements(new Pair<>(ResourceType.SHIELD,2), new Pair<>(ResourceType.STONE,7), new Pair<>(ResourceType.COIN,1));
         DevelopmentCard developmentCard = new DevelopmentCard(1, requirements,1, null, null);
 

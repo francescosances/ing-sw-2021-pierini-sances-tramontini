@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.cards;
 import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
 import it.polimi.ingsw.model.cards.exceptions.WrongLeaderCardException;
+import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.ResourceType;
 
 import java.util.Objects;
@@ -41,6 +42,10 @@ public abstract class LeaderCard extends Card {
 
     public ResourceType getOutputResourceType() throws WrongLeaderCardException {
         throw new WrongLeaderCardException();
+    }
+
+    public Resource convertResourceType(Resource resourceType){
+        return resourceType;
     }
 
     public Requirements recalculateRequirements(Requirements requirements){
