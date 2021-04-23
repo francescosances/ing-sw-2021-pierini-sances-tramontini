@@ -379,6 +379,10 @@ public class PlayerController {
         }
     }
 
+    public void showPlayerBoard() {
+        this.virtualView.showPlayerBoard(this.playerBoard);
+    }
+
 
     public enum PlayerStatus {
         CHOOSING_LEADER_CARDS,

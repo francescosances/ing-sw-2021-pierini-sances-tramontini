@@ -6,10 +6,6 @@ import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.Market;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.cards.LeaderCard;
-import it.polimi.ingsw.model.cards.WhiteMarbleLeaderCard;
-import it.polimi.ingsw.model.storage.Resource;
-import it.polimi.ingsw.model.storage.ResourceType;
-import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.network.ClientSocket;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
@@ -92,6 +88,7 @@ public class ClientController {
                 break;
             case SHOW_PLAYER_BOARD:
                 view.showPlayerBoard(Serializer.deserializePlayerBoard(message.getData("playerBoard")));
+                break;
             case ASK_FOR_ACTION:
                 List<Action> actions = gson.fromJson(message.getData("availableActions"),new TypeToken<List<Action>>(){}.getType());
                 view.askForAction(actions.toArray(new Action[0]));

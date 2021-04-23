@@ -225,6 +225,7 @@ public class GameController implements PlayerStatusListener {
         System.out.println("The player "+player.getUsername()+" has changed his status to "+player.getCurrentStatus());
         switch (player.getCurrentStatus()) {
             case TURN_ENDED:
+                players.get(currentPlayerIndex).showPlayerBoard();
                 nextTurn();
                 break;
             case NORMAL_ACTION:
