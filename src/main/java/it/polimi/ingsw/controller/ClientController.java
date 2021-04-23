@@ -90,15 +90,14 @@ public class ClientController {
                 List<LeaderCard> leaderCardList = Serializer.deserializeLeaderCardDeck(message.getData("leaderCards"));
                 view.listLeaderCards(leaderCardList,Integer.parseInt(message.getData("cardsToChoose")));
                 break;
+            case SHOW_PLAYER_BOARD:
+                view.showPlayerBoard(Serializer.deserializePlayerBoard(message.getData("playerBoard")));
             case ASK_FOR_ACTION:
                 List<Action> actions = gson.fromJson(message.getData("availableActions"),new TypeToken<List<Action>>(){}.getType());
                 view.askForAction(actions.toArray(new Action[0]));
                 break;
             case SWAP_DEPOTS:
                 view.askToSwapDepots(Serializer.deserializeWarehouse(message.getData("warehouse")));
-                break;
-            case SHOW_PLAYER_STATUS:
-                //TODO: aggiungere funzioni che mostrano playerboard
                 break;
             case SHOW_WAREHOUSE_STATUS:
                 view.showWarehouseStatus(Serializer.deserializeWarehouse(message.getData("warehouse")));

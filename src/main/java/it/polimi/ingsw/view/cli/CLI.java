@@ -1,20 +1,20 @@
 package it.polimi.ingsw.view.cli;
 
 import it.polimi.ingsw.controller.ClientController;
-import it.polimi.ingsw.model.Action;
-import it.polimi.ingsw.model.MarbleType;
-import it.polimi.ingsw.model.Market;
-import it.polimi.ingsw.model.Match;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.storage.Depot;
 import it.polimi.ingsw.model.storage.Resource;
+import it.polimi.ingsw.model.storage.Strongbox;
 import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 //TODO: lo scanner deve essere eseguito in un thread diverso dal printstream
@@ -143,12 +143,8 @@ public class CLI implements View {
 
     @Override
     public void listLeaderCards(List<LeaderCard> leaderCardList,int cardsToChoose) {
-        output.println("Choose "+cardsToChoose+" leader cards:");
-        for (int i = 0; i < leaderCardList.size(); i++) {
-            output.print("[" + i + "] ");
-            LeaderCard temp = leaderCardList.get(i);
-            output.println(temp.toString());
-        }
+        showLeaderCards(leaderCardList);
+        output.println("Choose " + cardsToChoose + " leader cards:");
         int[] choices = new int[cardsToChoose];
         LeaderCard[] cardsChosen = new LeaderCard[cardsToChoose];
         for(int i=0;i<cardsToChoose;i++) {
@@ -164,6 +160,31 @@ public class CLI implements View {
     }
 
     @Override
+    public void showPlayerBoard(PlayerBoard playerBoard){
+        showFaithTrack(playerBoard.getFaithTrack());
+        showWarehouseStatus(playerBoard.getWarehouse());
+        showStrongbox(playerBoard.getStrongbox());
+        showDevelopmentCards(playerBoard.getDevelopmentCardSlots());
+        showLeaderCards(playerBoard.getLeaderCards());
+    }
+
+    private void showFaithTrack(FaithTrack faithTrack){
+        output.println("Faith track:");
+        if (faithTrack.getFaithMarker() == 0)
+            output.print("■  ");
+        for (int i = 1; i <= FaithTrack.SIZE; i++){
+            final int pos = i;
+            if (pos == faithTrack.getFaithMarker())
+                output.print("■");
+            else if (Arrays.stream(FaithTrack.POPE_SPACES).anyMatch(x -> x == pos))
+                output.print(ANSI_RED + "▢" + ANSI_RESET);
+            else
+                output.print("▢");
+        }
+        output.println(" Victory points: " + faithTrack.getVictoryPoints());
+    }
+
+    @Override
     public void showWarehouseStatus(Warehouse warehouse){
         output.println("Depots status:");
         for(int i=0;i<warehouse.getDepots().size();i++){
@@ -175,6 +196,37 @@ public class CLI implements View {
                 output.print(" ");
             output.print(depot.getResourceType() == null?"Empty":depot.getResourceType().toString());
             output.println();
+        }
+    }
+
+    private void showStrongbox(Strongbox strongbox){
+        output.println("Strongbox:");
+        for(Map.Entry<Resource, Integer> res : strongbox.getAllResources())
+            output.println(res.getKey() + ": " + res.getValue());
+    }
+
+    private void showDevelopmentCards(DevelopmentCardSlot[] developmentCardSlots){
+        output.println("Development cards:");
+        for (int i = 0; i< developmentCardSlots.length; i++){
+            final DevelopmentCardSlot developmentCardSlot = developmentCardSlots[i];
+            if (developmentCardSlot.getSize() > 0){
+                output.println("Slot [" + i + "]:");
+                developmentCardSlot.iterator().forEachRemaining(developmentCard -> {
+                    if (developmentCard.equals(developmentCardSlot.getTopCard()))
+                        output.println("Active: " + developmentCard);
+                    else
+                        output.println(developmentCard);
+                });
+            }
+        }
+    }
+
+    private void showLeaderCards(List<LeaderCard> leaderCardList){
+        output.println("Leader cards:");
+        for (int i = 0; i < leaderCardList.size(); i++) {
+            output.print("[" + i + "] ");
+            LeaderCard temp = leaderCardList.get(i);
+            output.println(temp.toString());
         }
     }
 
