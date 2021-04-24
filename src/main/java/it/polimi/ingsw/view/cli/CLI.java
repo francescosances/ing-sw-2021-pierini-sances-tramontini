@@ -315,7 +315,7 @@ public class CLI implements View {
     }
 
     @Override
-    public void takeResourcesFromMarket(Market market) {
+    public void showMarketStatus(Market market) {
         for(int i=0;i<Market.COLUMNS*3;i++)
             output.print(" ");
         output.println(showMarble(market.getSlideMarble()));
@@ -365,13 +365,15 @@ public class CLI implements View {
 
     @Override
     public void askToChooseMarketRowOrColumn(Market market){
-        takeResourcesFromMarket(market);
+        showMarketStatus(market);
         int choice;
         do {
             output.println("Do you want to choose a row or a column?");
             output.println("[0] Row");
             output.println("[1] Column");
             choice = input.nextInt();
+            if (choice !=0 && choice != 1)
+                showErrorMessage("Invalid choice");
         }while (choice !=0 && choice != 1);
         if(choice == 0){//rows
             output.print("Which row would you like to choose?");
@@ -410,5 +412,10 @@ public class CLI implements View {
             showErrorMessage("Invalid choice");
             askForAction(availableActions);
         }
+    }
+
+    @Override
+    public void takeResourcesFromMarket(Market market) {
+        showMarketStatus(market);
     }
 }

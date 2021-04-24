@@ -124,6 +124,13 @@ public class VirtualView implements View {
     }
 
     @Override
+    public void showMarketStatus(Market market) {
+        Message message = new Message(Message.MessageType.SHOW_MARKET);
+        message.addData("market",Serializer.serializeMarket(market));
+        sendMessage(message);
+    }
+
+    @Override
     public void showResources(Resource[] resources) {
         Message message = new Message(Message.MessageType.SHOW_RESOURCES);
         message.addData("resources",Serializer.serializeResources(resources));

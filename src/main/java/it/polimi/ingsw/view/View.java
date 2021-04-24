@@ -78,6 +78,8 @@ public interface View {
 
     void takeResourcesFromMarket(Market market);
 
+    void showMarketStatus(Market market);
+
     void showResources(Resource[] resources);
 
     void askToStoreResource(Resource resource,Warehouse warehouse);
