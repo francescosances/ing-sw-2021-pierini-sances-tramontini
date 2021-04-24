@@ -149,6 +149,13 @@ public class CLI implements View {
         LeaderCard[] cardsChosen = new LeaderCard[cardsToChoose];
         for(int i=0;i<cardsToChoose;i++) {
             choices[i] = input.nextInt();
+            for (int j = 0; j < i; j++) {
+                if (choices[i] == choices[j]){
+                    showErrorMessage("You chose the same card twice");
+                    listLeaderCards(leaderCardList,cardsToChoose);
+                    return;
+                }
+            }
             if(choices[i] <0 || choices[i] >= leaderCardList.size()){
                 showErrorMessage("Invalid choice");
                 listLeaderCards(leaderCardList,cardsToChoose);
