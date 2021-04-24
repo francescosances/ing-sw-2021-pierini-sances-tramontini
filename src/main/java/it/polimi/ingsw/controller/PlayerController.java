@@ -97,7 +97,7 @@ public class PlayerController {
      * Mark the player as currently playing and notify the status update to the virtual view
      */
     public void startTurn(){
-        askForAction();
+         nextStatus();
     }
 
     /**
@@ -385,15 +385,14 @@ public class PlayerController {
 
 
     public enum PlayerStatus {
-        CHOOSING_LEADER_CARDS,
         PERFORMING_ACTION,
         NORMAL_ACTION,
-        TURN_ENDED;
+        TURN_ENDED
     }
 
     public class PlayerStatusIndex{
 
-        private int currentIndex = -1;
+        private int currentIndex;
         private final PlayerStatus[] vals = {PlayerStatus.PERFORMING_ACTION, PlayerStatus.NORMAL_ACTION,PlayerStatus.PERFORMING_ACTION,PlayerStatus.TURN_ENDED};
 
         public PlayerStatus nextStatus(){
