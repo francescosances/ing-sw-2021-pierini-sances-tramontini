@@ -119,7 +119,7 @@ public class VirtualView implements View {
     }
 
     @Override
-    public void showMarketStatus(Market market) {
+    public void takeResourcesFromMarket(Market market) {
         askToChooseMarketRowOrColumn(market);
     }
 

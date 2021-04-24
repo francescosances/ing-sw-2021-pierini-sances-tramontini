@@ -3,10 +3,7 @@ package it.polimi.ingsw.view.cli;
 import it.polimi.ingsw.controller.ClientController;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.LeaderCard;
-import it.polimi.ingsw.model.storage.Depot;
-import it.polimi.ingsw.model.storage.Resource;
-import it.polimi.ingsw.model.storage.Strongbox;
-import it.polimi.ingsw.model.storage.Warehouse;
+import it.polimi.ingsw.model.storage.*;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
 
@@ -48,11 +45,14 @@ public class CLI implements View {
      */
     private final PrintStream errorOutput;
 
-    public CLI(ClientController clientController){
+    private final boolean lightMode;
+
+    public CLI(ClientController clientController, boolean lightMode){
         this.clientController = clientController;
         this.input = new Scanner(System.in);
         this.output = System.out;
         this.errorOutput = System.out;
+        this.lightMode = lightMode;
     }
 
     @Override
@@ -198,12 +198,36 @@ public class CLI implements View {
             Depot depot = warehouse.getDepots().get(i);
             output.printf("[%d] ",i);
             for(int j=0;j<depot.getSize();j++)
-                output.print("["+((depot.getOccupied()>j)?"*":" ")+"]");
+                output.print("["+((depot.getOccupied()>j)?showResource(depot.getResourceType()):" ")+"]");
             for(int j=10-depot.getSize()*3;j>0;j--)
                 output.print(" ");
             output.print(depot.getResourceType() == null?"Empty":depot.getResourceType().toString());
             output.println();
         }
+    }
+
+    private String showResource(ResourceType resource){
+        String res;
+        switch (resource){
+            case SHIELD:
+                res = ANSI_BLUE + "*";
+                break;
+            case STONE:
+                if (lightMode)
+                    res = ANSI_BLACK + "*";
+                else
+                    res = ANSI_WHITE + "*";
+                break;
+            case COIN:
+                res = ANSI_YELLOW + "*";
+                break;
+            case SERVANT:
+                res = ANSI_PURPLE + "*";
+                break;
+            default:
+                res = " ";
+        }
+        return res + ANSI_RESET;
     }
 
     private void showStrongbox(Strongbox strongbox){
@@ -267,8 +291,11 @@ public class CLI implements View {
                 marble += ANSI_BLUE + "●";
                 break;
             case GREY:
-                marble += ANSI_BLACK + "●";
-                break;
+                if (lightMode)
+                    marble += ANSI_BLACK + "●";
+                else
+                    marble += ANSI_WHITE + "◯";
+            break;
             case YELLOW:
                 marble += ANSI_YELLOW + "●";
                 break;
@@ -276,7 +303,10 @@ public class CLI implements View {
                 marble += ANSI_PURPLE + "●";
                 break;
             case WHITE:
-                marble += ANSI_WHITE + "◯";
+                if (lightMode)
+                    marble += ANSI_WHITE + "◯";
+                else
+                    marble += "●";
                 break;
             default:
                 marble = " ";
@@ -285,7 +315,7 @@ public class CLI implements View {
     }
 
     @Override
-    public void showMarketStatus(Market market) {
+    public void takeResourcesFromMarket(Market market) {
         for(int i=0;i<Market.COLUMNS*3;i++)
             output.print(" ");
         output.println(showMarble(market.getSlideMarble()));
@@ -335,7 +365,7 @@ public class CLI implements View {
 
     @Override
     public void askToChooseMarketRowOrColumn(Market market){
-        showMarketStatus(market);
+        takeResourcesFromMarket(market);
         int choice;
         do {
             output.println("Do you want to choose a row or a column?");

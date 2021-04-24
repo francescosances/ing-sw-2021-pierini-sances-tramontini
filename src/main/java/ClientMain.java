@@ -11,7 +11,6 @@ public class ClientMain
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Select 1 for CLI, 2 for GUI:");
-
         // start view and show welcome screen
         if(scanner.nextInt() == 1)
             clientSocket.startCli();

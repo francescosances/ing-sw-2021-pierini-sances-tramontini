@@ -14,8 +14,10 @@ import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cli.CLI;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Scanner;
 
 public class ClientController {
     /**
@@ -40,7 +42,13 @@ public class ClientController {
      * Set the view to Command Line Interface and launch it
      */
     public void startCli() {
-        view = new CLI(this);
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Select 1 if your default view is light, 2 if dark:");
+        //select the correct view
+        if(scanner.nextInt() == 1)
+            view = new CLI(this, true);
+        else
+            view = new CLI(this, false);
         view.init();
     }
 

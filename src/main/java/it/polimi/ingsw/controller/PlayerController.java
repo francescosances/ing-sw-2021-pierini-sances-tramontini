@@ -191,7 +191,7 @@ public class PlayerController {
                 virtualView.askToSwapDepots(getPlayerBoard().getWarehouse());
                 break;
             case TAKE_RESOURCES_FROM_MARKET:
-                showMarketStatus();
+                takeResourcesFromMarket();
                 break;
             case BUY_DEVELOPMENT_CARD:
                 break;
@@ -254,8 +254,8 @@ public class PlayerController {
     /**
      * Show the market tray to the user
      */
-    public void showMarketStatus(){
-        virtualView.showMarketStatus(playerBoard.getMatch().getMarket());
+    public void takeResourcesFromMarket(){
+        virtualView.takeResourcesFromMarket(playerBoard.getMatch().getMarket());
     }
 
     /**

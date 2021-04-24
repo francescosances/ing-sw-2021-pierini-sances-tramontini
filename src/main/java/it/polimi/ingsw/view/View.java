@@ -76,7 +76,7 @@ public interface View {
       */
     void askForAction(Action... availableActions);
 
-    void showMarketStatus(Market market);
+    void takeResourcesFromMarket(Market market);
 
     void showResources(Resource[] resources);
 
