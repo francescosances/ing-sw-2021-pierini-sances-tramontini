@@ -183,8 +183,7 @@ public class Match {
         return developmentDecks.get((level-1)*colors.size()+column);
     }
 
-    public List<LeaderCard> drawLeaderCards(int num)
-    {
+    public List<LeaderCard> drawLeaderCards(int num) {
         List<LeaderCard> ret = new ArrayList<>();
         for(int i=0;i<num;i++)
             ret.add(leaderCards.remove(i));

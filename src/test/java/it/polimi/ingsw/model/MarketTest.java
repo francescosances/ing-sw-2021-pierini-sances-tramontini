@@ -1,12 +1,10 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.storage.Resource;
-import it.polimi.ingsw.model.storage.ResourceType;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.print.attribute.standard.PrinterURI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
