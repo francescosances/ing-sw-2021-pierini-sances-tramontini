@@ -213,10 +213,7 @@ public class CLI implements View {
                 res = ANSI_BLUE + "*";
                 break;
             case STONE:
-                if (lightMode)
-                    res = ANSI_BLACK + "*";
-                else
-                    res = ANSI_WHITE + "*";
+                res = (lightMode) ? ANSI_BLACK + "*" : ANSI_WHITE + "*";
                 break;
             case COIN:
                 res = ANSI_YELLOW + "*";
@@ -291,10 +288,7 @@ public class CLI implements View {
                 marble += ANSI_BLUE + "●";
                 break;
             case GREY:
-                if (lightMode)
-                    marble += ANSI_BLACK + "●";
-                else
-                    marble += ANSI_WHITE + "◯";
+                marble += (lightMode) ? ANSI_BLACK + "●" : ANSI_WHITE + "◯";
             break;
             case YELLOW:
                 marble += ANSI_YELLOW + "●";
@@ -303,10 +297,7 @@ public class CLI implements View {
                 marble += ANSI_PURPLE + "●";
                 break;
             case WHITE:
-                if (lightMode)
-                    marble += ANSI_WHITE + "◯";
-                else
-                    marble += "●";
+                marble += (lightMode) ? ANSI_WHITE + "◯" : "●";
                 break;
             default:
                 marble = " ";

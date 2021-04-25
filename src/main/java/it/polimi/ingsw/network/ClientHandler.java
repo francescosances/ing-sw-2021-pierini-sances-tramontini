@@ -6,6 +6,7 @@ import it.polimi.ingsw.view.VirtualView;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class ClientHandler implements Runnable {
@@ -73,6 +74,7 @@ public class ClientHandler implements Runnable {
         } catch (IOException e) {
             server.log("Received invalid message");
             server.log(e.getMessage());
+        }catch (NoSuchElementException ignored){
         }catch (Exception e){
             e.printStackTrace();
         }finally {

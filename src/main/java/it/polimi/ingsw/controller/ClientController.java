@@ -45,10 +45,7 @@ public class ClientController {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Select 1 if your default view is light, 2 if dark:");
         //select the correct view
-        if(scanner.nextInt() == 1)
-            view = new CLI(this, true);
-        else
-            view = new CLI(this, false);
+        view = new CLI(this,scanner.nextInt() == 1);
         view.init();
     }
 
