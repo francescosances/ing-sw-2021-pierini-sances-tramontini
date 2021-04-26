@@ -100,11 +100,13 @@ class FaithTrackTest {
         for (int i = 0; i < 8; i++)
             faithTrack.moveMarker();
         assertEquals(2, faithTrack.getPopeFavorTiles()[0].getVictoryPoints());
+        assertEquals(2, faithTrack.getPopeFavorTilesVictoryPoints());
         assertEquals(4, faithTrack.getVictoryPoints());
 
         match.vaticanReport(16);
         assertNull(faithTrack.getPopeFavorTiles()[1]);
         assertEquals(4, faithTrack.getVictoryPoints());
+        assertEquals(2, faithTrack.getPopeFavorTilesVictoryPoints());
 
         for (int i = 0; i < 8; i++)
             faithTrack.moveMarker();
@@ -120,6 +122,8 @@ class FaithTrackTest {
         assertEquals(faithTrack.getTrackVictoryPoints() +
                 faithTrack.getPopeFavorTiles()[0].getVictoryPoints() +
                 faithTrack.getPopeFavorTiles()[2].getVictoryPoints(), faithTrack.getVictoryPoints());
+        assertEquals(6, faithTrack.getPopeFavorTilesVictoryPoints());
+
 
         boolean bool = false;
         try {
