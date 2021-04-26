@@ -151,6 +151,11 @@ public class FaithTrack {
         return count < vaticanReports.length && !vaticanReports[count];
     }
 
+    /**
+     * Indicates whether some other object is equal to this one
+     * @param o that is confronted
+     * @return true if o is equal to the object, false elsewhere
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -159,6 +164,10 @@ public class FaithTrack {
         return faithMarker == that.faithMarker && Arrays.equals(popeFavorTiles, that.popeFavorTiles) && Arrays.equals(vaticanReports, that.vaticanReports);
     }
 
+    /**
+     * Returns a string representation of the object
+     * @return a string representation of the object.
+     */
     @Override
     public String toString() {
         return "FaithTrack{" +
