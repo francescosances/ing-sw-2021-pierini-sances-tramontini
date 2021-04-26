@@ -220,14 +220,16 @@ public class Match {
     }
 
     public void vaticanReport(int popeSpace){
-        for(PlayerBoard p : players){
-            if(p.getFaithTrack().getFaithMarker() >= popeSpace-3-vaticanReportsCount){
-                p.getFaithTrack().getPopeFavorTiles()[vaticanReportsCount].uncover();
-            }else{
-                p.getFaithTrack().getPopeFavorTiles()[vaticanReportsCount] = null;
+        if(!players.isEmpty() && players.get(0).getFaithTrack().isValidVaticanReport(popeSpace)) {
+            for (PlayerBoard p : players) {
+                if (p.getFaithTrack().getFaithMarker() >= popeSpace - (3 + vaticanReportsCount))
+                    p.getFaithTrack().getPopeFavorTiles()[vaticanReportsCount].uncover();
+                else
+                    p.getFaithTrack().getPopeFavorTiles()[vaticanReportsCount] = null;
+                p.getFaithTrack().vaticanReportTriggered(vaticanReportsCount);
             }
+            vaticanReportsCount++;
         }
-        vaticanReportsCount++;
     }
 
     public String getMatchName(){

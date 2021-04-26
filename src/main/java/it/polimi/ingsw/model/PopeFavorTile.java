@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model;
 
-import java.util.Objects;
-
 public class PopeFavorTile {
 
     private boolean uncovered = false;
@@ -14,7 +12,7 @@ public class PopeFavorTile {
         uncovered = true;
     }
 
-    public boolean getStatus() {
+    public boolean isUncovered() {
         return uncovered;
     }
 
