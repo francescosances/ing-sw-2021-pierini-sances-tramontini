@@ -194,6 +194,7 @@ public class PlayerController {
                 takeResourcesFromMarket();
                 break;
             case BUY_DEVELOPMENT_CARD:
+                listDevelopmentCardToBuy();
                 break;
             case ACTIVATE_PRODUCTION:
                 break;
@@ -201,6 +202,7 @@ public class PlayerController {
                 nextStatus();
         }
     }
+
 
     public void startNormalAction(){
         askForNormalAction();
@@ -256,6 +258,10 @@ public class PlayerController {
      */
     public void takeResourcesFromMarket(){
         virtualView.takeResourcesFromMarket(playerBoard.getMatch().getMarket());
+    }
+
+    private void listDevelopmentCardToBuy() {
+        virtualView.listDevelopmentCards(getPlayerBoard().getMatch().getDevelopmentDecks(),1,getPlayerBoard());
     }
 
     /**

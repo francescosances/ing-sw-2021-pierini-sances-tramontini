@@ -49,6 +49,20 @@ public class Serializer {
         return gson.fromJson(json, DevelopmentCard.class);
     }
 
+    public static String serializeDevelopmentCardList(List<Deck<DevelopmentCard>> developmentCardList) {
+        return new Gson().toJson(developmentCardList);
+    }
+
+    public static List<Deck<DevelopmentCard>> deserializeDevelopmentCardList(String serializedDeck) {
+        GsonBuilder gsonbuilder = new GsonBuilder();
+        gsonbuilder.registerTypeAdapter(Requirements.class, new RequirementsCreator());
+
+        Gson gson = gsonbuilder.create();
+        Type type = new TypeToken<List<Deck<DevelopmentCard>>>(){}.getType();
+        return gson.fromJson(serializedDeck, type);
+    }
+
+
     public static String serializeLeaderCard(LeaderCard leaderCard){
         return new Gson().toJson(leaderCard);
     }
@@ -140,5 +154,6 @@ public class Serializer {
         gsonBuilder.registerTypeAdapter(Resource.class, new ResourceCreator());
         return gsonBuilder.create().fromJson(json, Resource.class);
     }
+
 }
 

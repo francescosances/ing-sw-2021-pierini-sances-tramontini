@@ -116,6 +116,9 @@ public class ClientController {
             case RESOURCE_TO_STORE:
                 view.askToStoreResource(Serializer.deserializeResource(message.getData("resource")),Serializer.deserializeWarehouse(message.getData("warehouse")));
                 break;
+            case DEVELOPMENT_CARDS_TO_BUY:
+                view.listDevelopmentCards(Serializer.deserializeDevelopmentCardList(message.getData("developmentCards")),Integer.parseInt(message.getData("cardsToChoose")),Serializer.deserializePlayerBoard(message.getData("playerBoard")));
+                break;
             default:
                 clientSocket.log("Received unexpected message");
                 clientSocket.log(message.serialize());

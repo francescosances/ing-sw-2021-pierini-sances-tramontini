@@ -4,6 +4,8 @@ import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.Market;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.PlayerBoard;
+import it.polimi.ingsw.model.cards.Deck;
+import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.Warehouse;
@@ -54,6 +56,8 @@ public interface View {
     void userDisconnected(String username);
 
     void listLeaderCards(List<LeaderCard> leaderCardList,int cardsToChoose);
+
+    void listDevelopmentCards(List<Deck<DevelopmentCard>> developmentCardList, int cardsToChoose, PlayerBoard userBoard);
 
     /**
      * Shows the entire player board

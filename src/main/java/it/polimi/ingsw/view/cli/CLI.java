@@ -2,6 +2,8 @@ package it.polimi.ingsw.view.cli;
 
 import it.polimi.ingsw.controller.ClientController;
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.cards.Deck;
+import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.storage.*;
 import it.polimi.ingsw.utils.Triple;
@@ -166,6 +168,60 @@ public class CLI implements View {
         clientController.leaderCardsChoice(cardsChosen);
     }
 
+    private String developmentCardColor(DevelopmentCard card){
+        switch (card.getColor()){
+            case BLUE:
+                return ANSI_BLUE;
+            case YELLOW:
+                return ANSI_YELLOW;
+            case PURPLE:
+                return ANSI_PURPLE;
+            case GREEN:
+                return ANSI_GREEN;
+        }
+        return "";
+    }
+
+    private void showDevelopmentCardDecks(List<Deck<DevelopmentCard>> developmentCardList,PlayerBoard playerBoard){
+        int index=0;
+        for(Deck<DevelopmentCard> deck : developmentCardList){
+            output.print(developmentCardColor(deck.get(0)));
+            output.printf("%s level %d\n",deck.get(0).getColor(),deck.get(0).getLevel());
+            for(DevelopmentCard developmentCard:deck){
+                if(!developmentCard.getCost().satisfied(playerBoard))
+                    output.print(ANSI_BLACK + "[X]");
+                else output.printf(developmentCardColor(developmentCard) + "[%d]",index++);
+                output.println(developmentCard);
+            }
+            output.print(ANSI_RESET);
+        }
+    }
+
+    @Override
+    public void listDevelopmentCards(List<Deck<DevelopmentCard>> developmentCardList, int cardsToChoose, PlayerBoard userBoard) {
+        showDevelopmentCardDecks(developmentCardList,userBoard);
+        output.println("Choose " + cardsToChoose + " development cards:");
+        int[] choices = new int[cardsToChoose];
+        DevelopmentCard[] cardsChosen = new DevelopmentCard[cardsToChoose];
+        for(int i=0;i<cardsToChoose;i++) {
+            choices[i] = input.nextInt();
+            for (int j = 0; j < i; j++) {
+                if (choices[i] == choices[j]){
+                    showErrorMessage("You chose the same card twice");
+                    listDevelopmentCards(developmentCardList,cardsToChoose,userBoard);
+                    return;
+                }
+            }
+            if(choices[i] <0 || choices[i] >= developmentCardList.size()){
+                showErrorMessage("Invalid choice");
+                listDevelopmentCards(developmentCardList,cardsToChoose,userBoard);
+                return;
+            }
+            cardsChosen[i] = developmentCardList.get(choices[i]/4).get(choices[i]%4);
+        }
+       // clientController.leaderCardsChoice(cardsChosen);
+    }
+
     @Override
     public void showPlayerBoard(PlayerBoard playerBoard){
         showFaithTrack(playerBoard.getFaithTrack());
@@ -279,10 +335,10 @@ public class CLI implements View {
         output.println("Leader cards: " + victoryPoints + " victory points");
         for (int i = 0; i < leaderCardList.size(); i++) {
             output.print("  [" + i + "] ");
-            LeaderCard temp = leaderCardList.get(i);
-            output.println(temp.toString());
+            output.println(leaderCardList.get(i).toString());
         }
     }
+
 
     @Override
     public void askToSwapDepots(Warehouse warehouse) {

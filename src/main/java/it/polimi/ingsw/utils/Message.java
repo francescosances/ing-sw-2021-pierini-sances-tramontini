@@ -108,11 +108,13 @@ public class Message{
         RESOURCE_TO_STORE,
         WHITE_MARBLE_CONVERSION,
         SHOW_WAREHOUSE_STATUS,
+        DEVELOPMENT_CARDS_TO_BUY,
         // from client to server
         LOGIN_REQUEST,
         LOBBY_CHOICE,
         LEADER_CARDS_CHOICE,
         PERFORM_ACTION;
+
     }
 
 }

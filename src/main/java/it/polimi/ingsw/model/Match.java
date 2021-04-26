@@ -248,6 +248,10 @@ public class Match {
 
     }
 
+    public List<Deck<DevelopmentCard>> getDevelopmentDecks() {
+        return developmentDecks;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

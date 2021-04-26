@@ -5,6 +5,8 @@ import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.Market;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.PlayerBoard;
+import it.polimi.ingsw.model.cards.Deck;
+import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.Warehouse;
@@ -84,8 +86,18 @@ public class VirtualView implements View {
             throw new IllegalArgumentException("No leader cards given");
         Gson gson = new Gson();
         Message message = new Message(Message.MessageType.LIST_LEADER_CARDS);
+       // Serializer.serializeLeaderCardDeck(leaderCardList.toArray(new LeaderCard[0])); TODO: verificare se questa riga può essere attivata
         message.addData("leaderCards",gson.toJson(leaderCardList));
         message.addData("cardsToChoose",String.valueOf(cardsToChoose));
+        sendMessage(message);
+    }
+
+    @Override
+    public void listDevelopmentCards(List<Deck<DevelopmentCard>> developmentCardList, int cardsToChoose, PlayerBoard userBoard) {
+        Message message = new Message(Message.MessageType.DEVELOPMENT_CARDS_TO_BUY);
+        message.addData("developmentCards",Serializer.serializeDevelopmentCardList(developmentCardList));
+        message.addData("cardsToChoose",String.valueOf(cardsToChoose));
+        message.addData("playerBoard",Serializer.serializePlayerBoard(userBoard));
         sendMessage(message);
     }
 
