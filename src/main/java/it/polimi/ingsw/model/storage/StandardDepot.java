@@ -20,14 +20,19 @@ public class StandardDepot implements Depot {
 
     /**
      * Creates an empty depot.
+     *
      * @param size the size of the new depot
      */
-    public StandardDepot(int size){
+    public StandardDepot(int size) {
         resourceType = null;
         this.size = size;
         this.occupied = 0;
     }
 
+    /**
+     * Returns the ResourceType that can be stored in that depot, if any is stored
+     * @return the ResourceType that can be stored in that depot, if any is stored
+     */
     @Override
     public ResourceType getResourceType() {
         return resourceType;
@@ -45,11 +50,13 @@ public class StandardDepot implements Depot {
 
     @Override
     public void addResource(ResourceType res) throws IncompatibleDepotException {
-        if(occupied == size)
+        if (res == null)
+            throw new NullPointerException();
+        if (occupied == size)
             throw new IncompatibleDepotException("Depot is full");
         if (occupied == 0)
             this.resourceType = res;
-        else{
+        else {
             if (this.resourceType == null)
                 throw new IncompatibleDepotException("Depot occupied but Resource Type not defined");
             else if (this.resourceType != res)
