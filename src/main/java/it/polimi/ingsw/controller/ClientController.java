@@ -14,7 +14,6 @@ import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cli.CLI;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Scanner;
@@ -102,7 +101,7 @@ public class ClientController {
                 view.askToSwapDepots(Serializer.deserializeWarehouse(message.getData("warehouse")));
                 break;
             case SHOW_WAREHOUSE_STATUS:
-                view.showWarehouseStatus(Serializer.deserializeWarehouse(message.getData("warehouse")));
+                view.showWarehouse(Serializer.deserializeWarehouse(message.getData("warehouse")));
                 break;
             case SHOW_MARKET:
                 Market market = Serializer.deserializeMarket(message.getData("market"));

@@ -52,6 +52,12 @@ public class DevelopmentCardSlot implements Iterable<DevelopmentCard>{
         return developmentCards.get(level - 1);
     }
 
+    public int getVictoryPoints(){
+        return developmentCards.stream()
+                .mapToInt(DevelopmentCard::getVictoryPoints)
+                .sum();
+    }
+
     @Override
     public Iterator<DevelopmentCard> iterator() {
         return developmentCards.iterator();
@@ -67,9 +73,6 @@ public class DevelopmentCardSlot implements Iterable<DevelopmentCard>{
 
     @Override
     public String toString() {
-
-        return "DevelopmentCardSlot{" +
-                "developmentCards=" + developmentCards +
-                '}';
+        return "DevelopmentCardSlot: " + developmentCards;
     }
 }

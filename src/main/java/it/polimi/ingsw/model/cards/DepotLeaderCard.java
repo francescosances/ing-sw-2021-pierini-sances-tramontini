@@ -92,13 +92,10 @@ public class DepotLeaderCard extends LeaderCard implements Depot {
 
     @Override
     public String toString() {
-        return "DepotLeaderCard{" +
-                "resourceType=" + resourceType +
-                ", occupied=" + occupied +
-                ", SIZE=" + SIZE +
-                ", active=" + active +
-                ", requirements=" + requirements +
-                '}';
+        return "DepotLeaderCard: " +
+                (active ? "active" : "inactive") +
+                ", " + occupied + "/" + SIZE + " " + resourceType + " occupied" +
+                ", requirements=" + requirements;
     }
 
     @Override

@@ -1,10 +1,12 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.Requirements;
 import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
 import it.polimi.ingsw.model.storage.Resource;
+import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.model.storage.Strongbox;
 import it.polimi.ingsw.model.storage.Warehouse;
 
@@ -51,8 +53,29 @@ public class PlayerBoard {
             faithTrack.moveMarker();
     }
 
-    public int getVictoryPoints(){
-        return faithTrack.getVictoryPoints();
+    public int getTotalVictoryPoints(){
+        return faithTrack.getVictoryPoints() +
+                getDevelopmentCardsVictoryPoints() +
+                getLeaderCardsVictoryPoints() +
+                getResourcesVictoryPoints();
+    }
+
+    public int getDevelopmentCardsVictoryPoints(){
+        return Arrays.stream(developmentCardSlots)
+                .mapToInt(DevelopmentCardSlot::getVictoryPoints)
+                .sum();
+    }
+
+    public int getLeaderCardsVictoryPoints(){
+        return leaderCards.stream()
+                .filter(LeaderCard::isActive)
+                .mapToInt(Card::getVictoryPoints)
+                .sum();
+    }
+
+    public int getResourcesVictoryPoints(){
+        return Arrays.stream(ResourceType.values())
+                .mapToInt(res -> getAllResources().getResources(res)).sum() / 5;
     }
 
     public Match getMatch() {

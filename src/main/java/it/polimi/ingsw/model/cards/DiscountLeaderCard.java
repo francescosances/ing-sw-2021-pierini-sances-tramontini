@@ -36,12 +36,10 @@ public class DiscountLeaderCard extends LeaderCard {
 
     @Override
     public String toString() {
-        return "DiscountLeaderCard{" +
-                "discountResourceType=" + discountResourceType +
-                ", discount=" + discount +
-                ", active=" + active +
-                ", requirements=" + requirements +
-                '}';
+        return "DiscountLeaderCard: " +
+                (active ? "active" : "inactive") +
+                ", " + discount + " " + discountResourceType + " discount" +
+                ", requirements=" + requirements;
     }
 
     @Override

@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.storage.Resource;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ProductionLeaderCard extends LeaderCard implements Producer {
     private final Requirements productionCost;
@@ -34,12 +35,11 @@ public class ProductionLeaderCard extends LeaderCard implements Producer {
 
     @Override
     public String toString() {
-        return "ProductionLeaderCard{" +
-                "active=" + active +
+        return "ProductionLeaderCard: " +
+                (active ? "active" : "inactive") +
                 ", requirements=" + requirements +
                 ", productionCost=" + productionCost +
-                ", productionGain=" + productionGain +
-                '}';
+                ", productionGain=[" + productionGain.entrySet().stream().map(entry -> entry.getValue() + " " + entry.getKey()).collect(Collectors.joining(", ")) + "]";
     }
 
     @Override

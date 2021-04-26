@@ -248,7 +248,7 @@ public class PlayerController {
      * List the resources stored in the warehouse depots
      */
     public void showWarehouseStatus(){
-        virtualView.showWarehouseStatus(playerBoard.getWarehouse());
+        virtualView.showWarehouse(playerBoard.getWarehouse());
     }
 
     /**
