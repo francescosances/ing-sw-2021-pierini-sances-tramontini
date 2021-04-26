@@ -38,16 +38,29 @@ public class StandardDepot implements Depot {
         return resourceType;
     }
 
+    /**
+     * Returns the size of the depot
+     * @return the size of the depot
+     */
     @Override
     public int getSize() {
         return this.size;
     }
 
+    /**
+     * Returns how many resources are in the depot
+     * @return how many resources are in teh depot
+     */
     @Override
     public int getOccupied() {
         return this.occupied;
     }
 
+    /**
+     * Adds the resource res to the depot
+     * @param res resource to be added to the depot
+     * @throws IncompatibleDepotException if the depot is full or the resource res is not compatible with the depot
+     */
     @Override
     public void addResource(ResourceType res) throws IncompatibleDepotException {
         if (res == null)
@@ -65,6 +78,9 @@ public class StandardDepot implements Depot {
         occupied++;
     }
 
+    /**
+     * Removes one resource from the depot
+     */
     @Override
     public void removeResource() {
         if (this.occupied == 0)
@@ -74,6 +90,10 @@ public class StandardDepot implements Depot {
             this.resourceType = null;
     }
 
+    /**
+     * Returns a string representation of the object
+     * @return a string representation of the object.
+     */
     @Override
     public String toString() {
         return "StandardDepot{" +
@@ -83,6 +103,10 @@ public class StandardDepot implements Depot {
                 '}';
     }
 
+    /**
+     * Returns a string representation of the object
+     * @return a string representation of the object.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

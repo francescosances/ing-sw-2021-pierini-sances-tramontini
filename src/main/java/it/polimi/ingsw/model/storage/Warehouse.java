@@ -68,7 +68,10 @@ public class Warehouse implements Storage {
         toBeStored.addAll(Arrays.asList(resources));
     }
 
-    //TODO: javadoc
+    /**
+     * Adds the resource on top of the toBeStored Stack
+     * @param resource the resource that is pushed
+     */
     public void pushResourceToBeStored(Resource resource){
         toBeStored.push(resource);
     }
@@ -131,6 +134,16 @@ public class Warehouse implements Storage {
         return this.depots;
     }
 
+    public void addDepotLeaderCard(LeaderCard leaderCard){
+        Depot depotLeaderCard = (Depot) leaderCard;
+        depots.add(depotLeaderCard);
+    }
+
+    /**
+     * Indicates whether some other object is equal to this one
+     * @param o that is confronted
+     * @return true if o is equal to the object, false elsewhere
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -139,11 +152,11 @@ public class Warehouse implements Storage {
         return Objects.equals(depots, warehouse.depots) && Objects.equals(toBeStored, warehouse.toBeStored);
     }
 
-    public void addDepotLeaderCard(LeaderCard leaderCard){
-        Depot depotLeaderCard = (Depot) leaderCard;
-        depots.add(depotLeaderCard);
-    }
 
+    /**
+     * Returns a string representation of the object
+     * @return a string representation of the object.
+     */
     @Override
     public String toString() {
         return "Warehouse{" +

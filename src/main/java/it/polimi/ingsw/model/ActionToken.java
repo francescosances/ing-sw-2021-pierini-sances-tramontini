@@ -7,7 +7,7 @@ public class ActionToken {
     /**
      * The DevelopmentCard color that needs to be discarded when the Action Token is drawn
      */
-    private DevelopmentColorType developmentCard;
+    private final DevelopmentColorType developmentCard;
     /**
      * The number of spaces the black cross must move when the Action Token is drawn
      */
@@ -18,6 +18,8 @@ public class ActionToken {
      * @param developmentCard the color of the DevelopmentCards discarded
      */
     public ActionToken(DevelopmentColorType developmentCard){
+        if (developmentCard == null)
+            throw new NullPointerException();
         this.developmentCard = developmentCard;
     }
 
@@ -36,6 +38,9 @@ public class ActionToken {
      * @throws EndGameException if the blackCross moved to the last FaithTrackSpace
      */
     public void show(SoloMatch match) throws EndGameException {
+        if (match == null){
+            throw new NullPointerException();
+        }
         if(developmentCard != null)
             match.discardDevelopmentCards(developmentCard);
         else {

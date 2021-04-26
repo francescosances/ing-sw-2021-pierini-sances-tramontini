@@ -30,6 +30,6 @@ public interface Depot {
     /**
      * Removes a single resource from the depot.
      */
-     void removeResource();
+    void removeResource();
 
 }

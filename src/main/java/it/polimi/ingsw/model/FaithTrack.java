@@ -128,6 +128,8 @@ public class FaithTrack {
      * @param match to be referenced
      */
     public void setMatch(Match match){
+        if (match == null)
+            throw new NullPointerException();
         this.match = match;
     }
 

@@ -26,6 +26,17 @@ class ActionTokenTest {
     }
 
     @Test
+    void show(){
+        boolean bool = false;
+        try {
+            actionToken.show(null);
+        } catch (NullPointerException e){
+            bool = true;
+        }
+        assertTrue(bool);
+    }
+
+    @Test
     void showOneDevelopmentCard() {
         actionToken = new ActionToken(DevelopmentColorType.GREEN);
         Deck<DevelopmentCard> deck = new Deck<>();
