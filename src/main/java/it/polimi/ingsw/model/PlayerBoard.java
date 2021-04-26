@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.Requirements;
 import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
 import it.polimi.ingsw.model.storage.Resource;
+import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.model.storage.Strongbox;
 import it.polimi.ingsw.model.storage.Warehouse;
 
@@ -52,7 +53,12 @@ public class PlayerBoard {
     }
 
     public int getVictoryPoints(){
-        return faithTrack.getVictoryPoints();
+        return faithTrack.getVictoryPoints() + getResourcesVictoryPoints();
+    }
+
+    public int getResourcesVictoryPoints(){
+        //TODO
+        return 0;
     }
 
     public Match getMatch() {

@@ -34,7 +34,7 @@ public class FaithTrack {
         return this.faithMarker;
     }
 
-    protected int getTrackVictoryPoints(){
+    public int getTrackVictoryPoints(){
         if(faithMarker < 3)
             return 0;
         if(faithMarker < 6)
@@ -54,13 +54,12 @@ public class FaithTrack {
         return 20;
     }
 
+    public int getPopeFavorTilesVictoryPoints() {
+        return Arrays.stream(popeFavorTiles).mapToInt(PopeFavorTile::getVictoryPoints).sum();
+    }
+
     public int getVictoryPoints(){
-        int res = getTrackVictoryPoints();
-        for (PopeFavorTile popeFavorTile : popeFavorTiles) {
-            if (popeFavorTile != null)
-                res += popeFavorTile.getVictoryPoints();
-        }
-        return res;
+        return getTrackVictoryPoints() + getPopeFavorTilesVictoryPoints();
     }
 
     public void moveMarker() throws EndGameException {

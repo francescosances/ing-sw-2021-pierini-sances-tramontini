@@ -103,10 +103,10 @@ public class DevelopmentCard extends Card implements Producer {
 
     @Override
     public String toString() {
-        return "DevelopmentCard{" +
-                "cost=" + cost +
-                ", level=" + level +
-                ", color=" + color +
+        return "DevelopmentCard: " +
+                color +
+                " lv." + level +
+                ", cost=" + cost +
                 ", productionCost=" + productionCost +
                 ", productionGain=" + productionGain +
                 '}';

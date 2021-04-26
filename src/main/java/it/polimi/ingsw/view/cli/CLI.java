@@ -95,11 +95,11 @@ public class CLI implements View {
     public void listLobbies(List<Triple<String, Integer, Integer>> availableLobbies) {
         // TODO possibilità di aggiornare la lista di lobby disponibili
         output.println("Create a new match or join one:");
-        output.println("[0] New match");
+        output.println("  [0] New match");
         int choice;
         if(availableLobbies != null) {
             for (int i = 1; i <= availableLobbies.size(); i++) {
-                output.print("[" + i + "] ");
+                output.print("  [" + i + "] ");
                 output.print(availableLobbies.get(i - 1).getFirst() + "'s match ");
                 output.println("(" + availableLobbies.get(i - 1).getSecond() + "/" + availableLobbies.get(i - 1).getThird() + ")");
             }
@@ -169,34 +169,53 @@ public class CLI implements View {
     @Override
     public void showPlayerBoard(PlayerBoard playerBoard){
         showFaithTrack(playerBoard.getFaithTrack());
-        showWarehouseStatus(playerBoard.getWarehouse());
-        showStrongbox(playerBoard.getStrongbox());
+        showStorage(playerBoard);
         showDevelopmentCards(playerBoard.getDevelopmentCardSlots());
         showLeaderCards(playerBoard.getLeaderCards());
     }
 
     private void showFaithTrack(FaithTrack faithTrack){
-        output.println("Faith track:");
-        if (faithTrack.getFaithMarker() == 0)
-            output.print("■  ");
-        for (int i = 1; i <= FaithTrack.SIZE; i++){
-            final int pos = i;
-            if (pos == faithTrack.getFaithMarker())
-                output.print("■");
-            else if (Arrays.stream(FaithTrack.POPE_SPACES).anyMatch(x -> x == pos))
+        output.println("Faith track: " + faithTrack.getTrackVictoryPoints() + " victory points");
+
+        output.print(" ");
+        for (int i = 0; i < faithTrack.getFaithMarker(); i++){
+            output.print(" ");
+        }
+        output.println(ANSI_RED + "†" + ANSI_RESET);
+
+        output.print("  ");
+        int vaticanReportCount = 0;
+        for (int pos = 1; pos <= FaithTrack.SIZE; pos++){
+            if (pos == FaithTrack.POPE_SPACES[vaticanReportCount]){
                 output.print(ANSI_RED + "▢" + ANSI_RESET);
+                vaticanReportCount++;
+            }else if ((pos >= FaithTrack.POPE_SPACES[vaticanReportCount] - 3 - vaticanReportCount) && (pos <= FaithTrack.POPE_SPACES[vaticanReportCount] - 1))
+                output.print(ANSI_YELLOW + "▢" + ANSI_RESET);
             else
                 output.print("▢");
         }
-        output.println(" Victory points: " + faithTrack.getVictoryPoints());
+        output.println();
+
+        showPopeFavorTiles(faithTrack);
+    }
+
+    private void showPopeFavorTiles(FaithTrack faithTrack){
+        output.println("Pope favor tiles: " + faithTrack.getPopeFavorTilesVictoryPoints() + " victory points");
+        Arrays.stream(faithTrack.getPopeFavorTiles()).forEach(tile -> output.println("  " + tile));
+    }
+
+    private void showStorage(PlayerBoard playerBoard){
+        output.println("Storage: " + playerBoard.getResourcesVictoryPoints() + " victory points");
+        showWarehouse(playerBoard.getWarehouse());
+        showStrongbox(playerBoard.getStrongbox());
     }
 
     @Override
-    public void showWarehouseStatus(Warehouse warehouse){
-        output.println("Depots status:");
+    public void showWarehouse(Warehouse warehouse){
+        output.println("Depots:");
         for(int i=0;i<warehouse.getDepots().size();i++){
             Depot depot = warehouse.getDepots().get(i);
-            output.printf("[%d] ",i);
+            output.printf("  [%d] ",i);
             for(int j=0;j<depot.getSize();j++)
                 output.print("["+((depot.getOccupied()>j)?showResource(depot.getResourceType()):" ")+"]");
             for(int j=10-depot.getSize()*3;j>0;j--)
@@ -230,7 +249,7 @@ public class CLI implements View {
     private void showStrongbox(Strongbox strongbox){
         output.println("Strongbox:");
         for(Map.Entry<Resource, Integer> res : strongbox.getAllResources())
-            output.println(res.getKey() + ": " + res.getValue());
+            output.println("  " + res.getKey() + ": " + res.getValue());
     }
 
     private void showDevelopmentCards(DevelopmentCardSlot[] developmentCardSlots){
@@ -238,12 +257,12 @@ public class CLI implements View {
         for (int i = 0; i< developmentCardSlots.length; i++){
             final DevelopmentCardSlot developmentCardSlot = developmentCardSlots[i];
             if (developmentCardSlot.getSize() > 0){
-                output.println("Slot [" + i + "]:");
+                output.println("  Slot [" + i + "]:");
                 developmentCardSlot.iterator().forEachRemaining(developmentCard -> {
                     if (developmentCard.equals(developmentCardSlot.getTopCard()))
-                        output.println("Active: " + developmentCard);
+                        output.println("    Active: " + developmentCard);
                     else
-                        output.println(developmentCard);
+                        output.println("    " + developmentCard);
                 });
             }
         }
@@ -252,7 +271,7 @@ public class CLI implements View {
     private void showLeaderCards(List<LeaderCard> leaderCardList){
         output.println("Leader cards:");
         for (int i = 0; i < leaderCardList.size(); i++) {
-            output.print("[" + i + "] ");
+            output.print("  [" + i + "] ");
             LeaderCard temp = leaderCardList.get(i);
             output.println(temp.toString());
         }
@@ -261,7 +280,7 @@ public class CLI implements View {
 
     @Override
     public void askToSwapDepots(Warehouse warehouse) {
-        this.showWarehouseStatus(warehouse);
+        this.showWarehouse(warehouse);
         output.println("Select 2 depots to swap:");
         int depotA = input.nextInt();
         int depotB = input.nextInt();
@@ -306,7 +325,7 @@ public class CLI implements View {
     }
 
     @Override
-    public void showMarketStatus(Market market) {
+    public void showMarket(Market market) {
         for(int i=0;i<Market.COLUMNS*3;i++)
             output.print(" ");
         output.println(showMarble(market.getSlideMarble()));
@@ -322,15 +341,15 @@ public class CLI implements View {
     public void showResources(Resource[] resources) {
         output.println("you got these resources from the market:");
         for(Resource resource : resources){
-            output.println(resource);
+            output.println("  " + resource);
         }
     }
 
     @Override
     public void askToStoreResource(Resource resource,Warehouse warehouse) {
         output.println("Where do you want to store this "+resource+" resource?");
-        showWarehouseStatus(warehouse);
-        output.printf("[%d] Discard\n",warehouse.getDepots().size());
+        showWarehouse(warehouse);
+        output.printf("  [%d] Discard\n",warehouse.getDepots().size());
         int choice = input.nextInt();
         if(choice < 0 || choice > warehouse.getDepots().size()) {
             showErrorMessage("Invalid choice");
@@ -343,8 +362,8 @@ public class CLI implements View {
     @Override
     public void chooseWhiteMarbleConversion(LeaderCard card1, LeaderCard card2) {
         output.println("You have 2 active white marble leader cards. Choose conversion output:");
-        output.println("[0] "+card1.getOutputResourceType());
-        output.println("[1] "+card2.getOutputResourceType());
+        output.println("  [0] "+card1.getOutputResourceType());
+        output.println("  [1] "+card2.getOutputResourceType());
         int choice = input.nextInt();
         if(choice < 0 || choice >= 2) {
             showErrorMessage("Invalid choice");
@@ -356,12 +375,12 @@ public class CLI implements View {
 
     @Override
     public void askToChooseMarketRowOrColumn(Market market){
-        showMarketStatus(market);
+        showMarket(market);
         int choice;
         do {
             output.println("Do you want to choose a row or a column?");
-            output.println("[0] Row");
-            output.println("[1] Column");
+            output.println("  [0] Row");
+            output.println("  [1] Column");
             choice = input.nextInt();
             if (choice !=0 && choice != 1)
                 showErrorMessage("Invalid choice");
@@ -393,7 +412,7 @@ public class CLI implements View {
     public void askForAction(Action... availableActions) {
         output.println("Which action do you want to perform?");
         for (int i = 0; i < availableActions.length; i++) {
-            output.print("[" + (i) + "] ");
+            output.print("  [" + (i) + "] ");
             output.println(availableActions[i].toString());
         }
         int choice = input.nextInt();
@@ -407,6 +426,6 @@ public class CLI implements View {
 
     @Override
     public void takeResourcesFromMarket(Market market) {
-        showMarketStatus(market);
+        showMarket(market);
     }
 }

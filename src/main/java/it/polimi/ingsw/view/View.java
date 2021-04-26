@@ -64,9 +64,9 @@ public interface View {
     /**
      * List the resources stored in the warehouse
      */
-     void showWarehouseStatus(Warehouse warehouse);
+    void showWarehouse(Warehouse warehouse);
 
-     void askToSwapDepots(Warehouse warehouse);
+    void askToSwapDepots(Warehouse warehouse);
 
     void askToChooseMarketRowOrColumn(Market market);
 
@@ -78,7 +78,7 @@ public interface View {
 
     void takeResourcesFromMarket(Market market);
 
-    void showMarketStatus(Market market);
+    void showMarket(Market market);
 
     void showResources(Resource[] resources);
 

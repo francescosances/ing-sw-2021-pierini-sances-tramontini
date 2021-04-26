@@ -67,9 +67,6 @@ public class DevelopmentCardSlot implements Iterable<DevelopmentCard>{
 
     @Override
     public String toString() {
-
-        return "DevelopmentCardSlot{" +
-                "developmentCards=" + developmentCards +
-                '}';
+        return "DevelopmentCardSlot: " + developmentCards;
     }
 }

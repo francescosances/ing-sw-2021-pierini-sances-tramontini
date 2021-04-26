@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Integer>> {
 
@@ -142,9 +143,15 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
 
     @Override
     public String toString() {
-        return "Requirements{" +
-                "resources=" + resources +
-                ", developmentCards=" + developmentCards +
-                '}';
+        String res = "resources=(" +
+                resources.entrySet().stream().map(entry -> entry.getValue() + " " + entry.getKey()).collect(Collectors.joining(", "))
+                + ")";
+        String devCards = "developmentCards=(" +
+                developmentCards.entrySet().stream().map(entry1 -> entry1.getValue().entrySet().stream().map(entry2 -> entry2.getValue() + (entry2.getKey()==0 ? " any lv." : (" lv. " + entry2.getKey())) + " " + entry1.getKey()).collect(Collectors.joining(", "))).collect(Collectors.joining(", "))
+                + ")";
+
+        return "[" +
+                (resources.isEmpty() ? (developmentCards.isEmpty() ? "" : devCards) : (developmentCards.isEmpty() ? res : res + ", " + devCards))
+                + ']';
     }
 }

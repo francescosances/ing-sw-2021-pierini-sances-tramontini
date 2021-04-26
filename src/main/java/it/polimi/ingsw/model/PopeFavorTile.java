@@ -5,7 +5,7 @@ import java.util.Objects;
 public class PopeFavorTile {
 
     private boolean uncovered = false;
-    private int victoryPoints;
+    private final int victoryPoints;
 
     public PopeFavorTile(int victoryPoints){
         this.victoryPoints = victoryPoints;
@@ -26,10 +26,9 @@ public class PopeFavorTile {
 
     @Override
     public String toString() {
-        return "PopeFavorTile{" +
-                "uncovered=" + uncovered +
-                ", victoryPoints=" + victoryPoints +
-                '}';
+        return "PopeFavorTile: " +
+                (uncovered ? "uncovered" : "covered") +
+                ", " + victoryPoints + " victory points";
     }
 
     @Override

@@ -98,7 +98,7 @@ public class VirtualView implements View {
     }
 
     @Override
-    public void showWarehouseStatus(Warehouse warehouse){
+    public void showWarehouse(Warehouse warehouse){
         Message message = new Message(Message.MessageType.SHOW_WAREHOUSE_STATUS);
         message.addData("warehouse",Serializer.serializeWarehouse(warehouse));
         sendMessage(message);
@@ -124,7 +124,7 @@ public class VirtualView implements View {
     }
 
     @Override
-    public void showMarketStatus(Market market) {
+    public void showMarket(Market market) {
         Message message = new Message(Message.MessageType.SHOW_MARKET);
         message.addData("market",Serializer.serializeMarket(market));
         sendMessage(message);

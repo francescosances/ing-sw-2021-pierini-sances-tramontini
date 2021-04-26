@@ -54,10 +54,9 @@ public abstract class LeaderCard extends Card {
 
     @Override
     public String toString() {
-        return "LeaderCard{" +
-                "active=" + active +
-                ", requirements=" + requirements +
-                '}';
+        return "LeaderCard: " +
+                (active ? "active" : "inactive") +
+                ", requirements=" + requirements;
     }
 
     @Override
