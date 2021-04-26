@@ -253,7 +253,10 @@ public class CLI implements View {
     }
 
     private void showDevelopmentCards(DevelopmentCardSlot[] developmentCardSlots){
-        output.println("Development cards:");
+        int victoryPoints = Arrays.stream(developmentCardSlots)
+                .mapToInt(DevelopmentCardSlot::getVictoryPoints)
+                .sum();
+        output.println("Development cards: " + victoryPoints + " victory points");
         for (int i = 0; i< developmentCardSlots.length; i++){
             final DevelopmentCardSlot developmentCardSlot = developmentCardSlots[i];
             if (developmentCardSlot.getSize() > 0){
@@ -269,14 +272,17 @@ public class CLI implements View {
     }
 
     private void showLeaderCards(List<LeaderCard> leaderCardList){
-        output.println("Leader cards:");
+        int victoryPoints = leaderCardList.stream()
+                .filter(LeaderCard::isActive)
+                .mapToInt(LeaderCard::getVictoryPoints)
+                .sum();
+        output.println("Leader cards: " + victoryPoints + " victory points");
         for (int i = 0; i < leaderCardList.size(); i++) {
             output.print("  [" + i + "] ");
             LeaderCard temp = leaderCardList.get(i);
             output.println(temp.toString());
         }
     }
-
 
     @Override
     public void askToSwapDepots(Warehouse warehouse) {

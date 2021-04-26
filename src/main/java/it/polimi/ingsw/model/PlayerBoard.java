@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.Requirements;
@@ -52,13 +53,29 @@ public class PlayerBoard {
             faithTrack.moveMarker();
     }
 
-    public int getVictoryPoints(){
-        return faithTrack.getVictoryPoints() + getResourcesVictoryPoints();
+    public int getTotalVictoryPoints(){
+        return faithTrack.getVictoryPoints() +
+                getDevelopmentCardsVictoryPoints() +
+                getLeaderCardsVictoryPoints() +
+                getResourcesVictoryPoints();
+    }
+
+    public int getDevelopmentCardsVictoryPoints(){
+        return Arrays.stream(developmentCardSlots)
+                .mapToInt(DevelopmentCardSlot::getVictoryPoints)
+                .sum();
+    }
+
+    public int getLeaderCardsVictoryPoints(){
+        return leaderCards.stream()
+                .filter(LeaderCard::isActive)
+                .mapToInt(Card::getVictoryPoints)
+                .sum();
     }
 
     public int getResourcesVictoryPoints(){
-        //TODO
-        return 0;
+        return Arrays.stream(ResourceType.values())
+                .mapToInt(res -> getAllResources().getResources(res)).sum() / 5;
     }
 
     public Match getMatch() {
