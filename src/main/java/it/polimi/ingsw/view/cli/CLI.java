@@ -11,10 +11,7 @@ import it.polimi.ingsw.view.View;
 
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 //TODO: lo scanner deve essere eseguito in un thread diverso dal printstream
 public class CLI implements View {
@@ -182,24 +179,24 @@ public class CLI implements View {
         return "";
     }
 
-    private void showDevelopmentCardDecks(List<Deck<DevelopmentCard>> developmentCardList,PlayerBoard playerBoard){
-        int index=0;
+
+    @Override
+    public void listDevelopmentCards(List<Deck<DevelopmentCard>> developmentCardList, int cardsToChoose, PlayerBoard playerBoard) {
+        List<DevelopmentCard> availableCards = new ArrayList<>();
         for(Deck<DevelopmentCard> deck : developmentCardList){
             output.print(developmentCardColor(deck.get(0)));
             output.printf("%s level %d\n",deck.get(0).getColor(),deck.get(0).getLevel());
             for(DevelopmentCard developmentCard:deck){
                 if(!developmentCard.getCost().satisfied(playerBoard))
                     output.print(ANSI_BLACK + "[X]");
-                else output.printf(developmentCardColor(developmentCard) + "[%d]",index++);
+                else {
+                    output.printf(developmentCardColor(developmentCard) + "[%d]", availableCards.size());
+                    availableCards.add(developmentCard);
+                }
                 output.println(developmentCard);
             }
             output.print(ANSI_RESET);
         }
-    }
-
-    @Override
-    public void listDevelopmentCards(List<Deck<DevelopmentCard>> developmentCardList, int cardsToChoose, PlayerBoard userBoard) {
-        showDevelopmentCardDecks(developmentCardList,userBoard);
         output.println("Choose " + cardsToChoose + " development cards:");
         int[] choices = new int[cardsToChoose];
         DevelopmentCard[] cardsChosen = new DevelopmentCard[cardsToChoose];
@@ -208,18 +205,38 @@ public class CLI implements View {
             for (int j = 0; j < i; j++) {
                 if (choices[i] == choices[j]){
                     showErrorMessage("You chose the same card twice");
-                    listDevelopmentCards(developmentCardList,cardsToChoose,userBoard);
+                    listDevelopmentCards(developmentCardList,cardsToChoose,playerBoard);
                     return;
                 }
             }
-            if(choices[i] <0 || choices[i] >= developmentCardList.size()){
+            if(choices[i] < 0 || choices[i] >= availableCards.size()){
                 showErrorMessage("Invalid choice");
-                listDevelopmentCards(developmentCardList,cardsToChoose,userBoard);
+                listDevelopmentCards(developmentCardList,cardsToChoose,playerBoard);
                 return;
             }
-            cardsChosen[i] = developmentCardList.get(choices[i]/4).get(choices[i]%4);
+            cardsChosen[i] = availableCards.get(choices[i]);
         }
-       // clientController.leaderCardsChoice(cardsChosen);
+        clientController.chooseDevelopmentCards(cardsChosen);
+    }
+
+    @Override
+    public void askToChooseDevelopmentCardSlot(DevelopmentCardSlot[] slots, DevelopmentCard developmentCard) {
+        output.println("Where do you want to put the chosen card?");
+        int index = 0;
+        for(DevelopmentCardSlot slot : slots) {
+            if(slot.accepts(developmentCard))
+                output.printf("[%d] %s\n", index, slot);
+            else
+                output.printf("[X] %s\n",slot);
+            index++;
+        }
+        int choice = input.nextInt();
+        if(choice < 0 || choice >= slots.length){
+            showErrorMessage("Invalid choice");
+            askToChooseDevelopmentCardSlot(slots, developmentCard);
+            return;
+        }
+        clientController.chooseDevelopmentCardsSlot(choice);
     }
 
     @Override
@@ -434,6 +451,7 @@ public class CLI implements View {
         }
         clientController.chooseWhiteMarbleConversion(choice);
     }
+
 
     @Override
     public void askToChooseMarketRowOrColumn(Market market){

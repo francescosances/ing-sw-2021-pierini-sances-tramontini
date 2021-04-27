@@ -248,8 +248,19 @@ public class Match {
 
     }
 
-    public List<Deck<DevelopmentCard>> getDevelopmentDecks() {
+    public List<Deck<DevelopmentCard>> getDevelopmentCardDecks() {
         return developmentDecks;
+    }
+
+    protected void removeDevelopmentCardFromDeck(DevelopmentCard developmentCard){
+        for(Deck<DevelopmentCard> deck : developmentDecks){
+            for(int i=0;i<deck.size();i++){
+                if(deck.get(i).equals(developmentCard)) {
+                    deck.remove(i);
+                    return;
+                }
+            }
+        }
     }
 
     @Override

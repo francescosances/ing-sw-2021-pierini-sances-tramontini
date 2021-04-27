@@ -89,6 +89,12 @@ public class GameController implements PlayerStatusListener {
                 case RESOURCE_TO_STORE:
                     getPlayerController(username).storeResourceToWarehouse(Integer.parseInt(message.getData("choice")));
                     break;
+                case DEVELOPMENT_CARDS_TO_BUY:
+                    getPlayerController(username).buyDevelopmentCard(Serializer.deserializeDevelopmentCardsList(message.getData("developmentCards")).get(0));
+                    break;
+                case CHOOSE_DEVELOPMENT_CARD_SLOT:
+                    getPlayerController(username).chooseDevelopmentCardSlot(Integer.parseInt(message.getData("slotIndex")));
+                    break;
             }
         }catch (EndGameException e){
             setPhase(GamePhase.END_GAME);

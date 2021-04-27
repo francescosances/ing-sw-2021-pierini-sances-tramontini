@@ -1,9 +1,6 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.Action;
-import it.polimi.ingsw.model.Market;
-import it.polimi.ingsw.model.Match;
-import it.polimi.ingsw.model.PlayerBoard;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.Deck;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.LeaderCard;
@@ -89,4 +86,6 @@ public interface View {
     void askToStoreResource(Resource resource,Warehouse warehouse);
 
     void chooseWhiteMarbleConversion(LeaderCard leaderCard, LeaderCard leaderCard1);
+
+    void askToChooseDevelopmentCardSlot(DevelopmentCardSlot[] slots, DevelopmentCard developmentCard);
 }

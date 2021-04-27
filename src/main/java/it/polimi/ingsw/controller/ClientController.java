@@ -3,8 +3,10 @@ package it.polimi.ingsw.controller;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.model.Action;
+import it.polimi.ingsw.model.DevelopmentCardSlot;
 import it.polimi.ingsw.model.Market;
 import it.polimi.ingsw.model.Match;
+import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.network.ClientSocket;
 import it.polimi.ingsw.serialization.Serializer;
@@ -15,6 +17,7 @@ import it.polimi.ingsw.view.cli.CLI;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -117,7 +120,10 @@ public class ClientController {
                 view.askToStoreResource(Serializer.deserializeResource(message.getData("resource")),Serializer.deserializeWarehouse(message.getData("warehouse")));
                 break;
             case DEVELOPMENT_CARDS_TO_BUY:
-                view.listDevelopmentCards(Serializer.deserializeDevelopmentCardList(message.getData("developmentCards")),Integer.parseInt(message.getData("cardsToChoose")),Serializer.deserializePlayerBoard(message.getData("playerBoard")));
+                view.listDevelopmentCards(Serializer.deserializeDevelopmentCardsDeckList(message.getData("developmentCards")),Integer.parseInt(message.getData("cardsToChoose")),Serializer.deserializePlayerBoard(message.getData("playerBoard")));
+                break;
+            case CHOOSE_DEVELOPMENT_CARD_SLOT:
+                view.askToChooseDevelopmentCardSlot(Serializer.deserializaDevelopmentCardsSlots(message.getData("slots")).toArray(new DevelopmentCardSlot[0]),Serializer.deserializeDevelopmentCard(message.getData("developmentCard")));
                 break;
             default:
                 clientSocket.log("Received unexpected message");
@@ -174,6 +180,18 @@ public class ClientController {
     public void leaderCardsChoice(LeaderCard ... leaderCards){
         Message message = new Message(Message.MessageType.LEADER_CARDS_CHOICE);
         message.addData("leaderCards", Serializer.serializeLeaderCardDeck(leaderCards));
+        clientSocket.sendMessage(message);
+    }
+
+    public void chooseDevelopmentCards(DevelopmentCard ... cardsChosen) {
+        Message message = new Message(Message.MessageType.DEVELOPMENT_CARDS_TO_BUY);
+        message.addData("developmentCards",Serializer.serializeDevelopmentCardsList(Arrays.asList(cardsChosen)));
+        clientSocket.sendMessage(message);
+    }
+
+    public void chooseDevelopmentCardsSlot(int choice) {
+        Message message = new Message(Message.MessageType.CHOOSE_DEVELOPMENT_CARD_SLOT);
+        message.addData("slotIndex",String.valueOf(choice));
         clientSocket.sendMessage(message);
     }
 

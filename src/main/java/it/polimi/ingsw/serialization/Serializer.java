@@ -49,17 +49,32 @@ public class Serializer {
         return gson.fromJson(json, DevelopmentCard.class);
     }
 
-    public static String serializeDevelopmentCardList(List<Deck<DevelopmentCard>> developmentCardList) {
+    public static String serializeDevelopmentCardsDeckList(List<Deck<DevelopmentCard>> developmentCardList) {
         return new Gson().toJson(developmentCardList);
     }
 
-    public static List<Deck<DevelopmentCard>> deserializeDevelopmentCardList(String serializedDeck) {
+    public static String serializeDevelopmentCardsList(List<DevelopmentCard> developmentCardList) {
+        return new Gson().toJson(developmentCardList);
+    }
+
+    public static List<Deck<DevelopmentCard>> deserializeDevelopmentCardsDeckList(String serializedDeck) {
         GsonBuilder gsonbuilder = new GsonBuilder();
         gsonbuilder.registerTypeAdapter(Requirements.class, new RequirementsCreator());
 
         Gson gson = gsonbuilder.create();
         Type type = new TypeToken<List<Deck<DevelopmentCard>>>(){}.getType();
         return gson.fromJson(serializedDeck, type);
+    }
+
+    public static List<DevelopmentCard> deserializeDevelopmentCardsList(String serializedList) {
+        System.out.println("QUI");
+        System.out.println(serializedList);
+        GsonBuilder gsonbuilder = new GsonBuilder();
+        gsonbuilder.registerTypeAdapter(Requirements.class, new RequirementsCreator());
+
+        Gson gson = gsonbuilder.create();
+        Type type = new TypeToken<List<DevelopmentCard>>(){}.getType();
+        return gson.fromJson(serializedList, type);
     }
 
 
@@ -155,5 +170,17 @@ public class Serializer {
         return gsonBuilder.create().fromJson(json, Resource.class);
     }
 
+    public static String serializeDevelopmentCardSlots(List<DevelopmentCardSlot> availableSlots) {
+        return new Gson().toJson(availableSlots);
+    }
+
+    public static List<DevelopmentCardSlot> deserializaDevelopmentCardsSlots(String slots) {
+        GsonBuilder gsonbuilder = new GsonBuilder();
+        gsonbuilder.registerTypeAdapter(Requirements.class, new RequirementsCreator());
+
+        Gson gson = gsonbuilder.create();
+        Type type = new TypeToken<List<DevelopmentCardSlot>>(){}.getType();
+        return gson.fromJson(slots, type);
+    }
 }
 

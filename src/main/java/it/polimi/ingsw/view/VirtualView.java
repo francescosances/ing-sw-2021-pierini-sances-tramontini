@@ -1,10 +1,7 @@
 package it.polimi.ingsw.view;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.model.Action;
-import it.polimi.ingsw.model.Market;
-import it.polimi.ingsw.model.Match;
-import it.polimi.ingsw.model.PlayerBoard;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.Deck;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.LeaderCard;
@@ -95,7 +92,7 @@ public class VirtualView implements View {
     @Override
     public void listDevelopmentCards(List<Deck<DevelopmentCard>> developmentCardList, int cardsToChoose, PlayerBoard userBoard) {
         Message message = new Message(Message.MessageType.DEVELOPMENT_CARDS_TO_BUY);
-        message.addData("developmentCards",Serializer.serializeDevelopmentCardList(developmentCardList));
+        message.addData("developmentCards",Serializer.serializeDevelopmentCardsDeckList(developmentCardList));
         message.addData("cardsToChoose",String.valueOf(cardsToChoose));
         message.addData("playerBoard",Serializer.serializePlayerBoard(userBoard));
         sendMessage(message);
@@ -162,6 +159,14 @@ public class VirtualView implements View {
         Message message = new Message(Message.MessageType.WHITE_MARBLE_CONVERSION);
         message.addData("card1",Serializer.serializeLeaderCard(card1));
         message.addData("card2",Serializer.serializeLeaderCard(card2));
+        sendMessage(message);
+    }
+
+    @Override
+    public void askToChooseDevelopmentCardSlot(DevelopmentCardSlot[] slots, DevelopmentCard developmentCard) {
+        Message message = new Message(Message.MessageType.CHOOSE_DEVELOPMENT_CARD_SLOT);
+        message.addData("slots",Serializer.serializeDevelopmentCardSlots(Arrays.asList(slots)));
+        message.addData("developmentCard",Serializer.serializeDevelopmentCard(developmentCard));
         sendMessage(message);
     }
 

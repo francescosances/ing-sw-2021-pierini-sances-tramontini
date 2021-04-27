@@ -109,6 +109,7 @@ public class Message{
         WHITE_MARBLE_CONVERSION,
         SHOW_WAREHOUSE_STATUS,
         DEVELOPMENT_CARDS_TO_BUY,
+        CHOOSE_DEVELOPMENT_CARD_SLOT,
         // from client to server
         LOGIN_REQUEST,
         LOBBY_CHOICE,

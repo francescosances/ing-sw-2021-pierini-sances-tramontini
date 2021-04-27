@@ -46,6 +46,7 @@ public class PlayerBoard {
         Requirements requirements = developmentCard.getCost();
         requirements = warehouse.removeResources(requirements);
         strongbox.removeResources(requirements);
+        match.removeDevelopmentCardFromDeck(developmentCard);
     }
 
     public void gainFaithPoints(int points) throws EndGameException {

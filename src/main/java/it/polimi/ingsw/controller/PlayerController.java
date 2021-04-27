@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Action;
+import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.LeaderCardsChooser;
@@ -48,6 +49,8 @@ public class PlayerController {
     private LeaderCardsChooser leaderCardsChooser;
 
     private Resource currentResourceToStore;
+
+    private DevelopmentCard currentDevelopmentCardToStore;
 
     /**
      * Initialize a new player controller active and waiting for his turn.
@@ -261,7 +264,17 @@ public class PlayerController {
     }
 
     private void listDevelopmentCardToBuy() {
-        virtualView.listDevelopmentCards(getPlayerBoard().getMatch().getDevelopmentDecks(),1,getPlayerBoard());
+        if(getPlayerBoard().getMatch().getDevelopmentCardDecks().stream().noneMatch(t->{
+            for (DevelopmentCard d: t) {
+                if(d.getCost().satisfied(getPlayerBoard()))//TODO: aggiungere controllo: se tutti gli slot sono pieni
+                    return true;
+            }
+            return false;
+        })) {
+            virtualView.showErrorMessage("You can not buy any card");
+            askForNormalAction();
+        }else
+            virtualView.listDevelopmentCards(getPlayerBoard().getMatch().getDevelopmentCardDecks(),1,getPlayerBoard());
     }
 
     /**
@@ -387,6 +400,28 @@ public class PlayerController {
 
     public void showPlayerBoard() {
         this.virtualView.showPlayerBoard(this.playerBoard);
+    }
+
+    public void buyDevelopmentCard(DevelopmentCard developmentCard) {
+        if(!developmentCard.getCost().satisfied(getPlayerBoard())){
+            virtualView.showErrorMessage("You cannot buy this card");
+            listDevelopmentCardToBuy();
+            return;
+        }
+        playerBoard.buyDevelopmentCard(developmentCard);
+        this.currentDevelopmentCardToStore = developmentCard;
+        virtualView.askToChooseDevelopmentCardSlot(playerBoard.getDevelopmentCardSlots(),developmentCard);
+    }
+
+    public void chooseDevelopmentCardSlot(int slotIndex) {
+        if(!playerBoard.getDevelopmentCardSlots()[slotIndex].accepts(currentDevelopmentCardToStore)){
+            virtualView.showErrorMessage("You cannot choose this slot");
+            virtualView.askToChooseDevelopmentCardSlot(playerBoard.getDevelopmentCardSlots(),currentDevelopmentCardToStore);
+            return;
+        }
+        playerBoard.getDevelopmentCardSlots()[slotIndex].addCard(currentDevelopmentCardToStore);
+        currentDevelopmentCardToStore = null;
+        nextStatus();
     }
 
 
