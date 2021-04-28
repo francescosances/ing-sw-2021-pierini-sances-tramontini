@@ -52,6 +52,10 @@ public class PlayerController {
 
     private DevelopmentCard currentDevelopmentCardToStore;
 
+    private Runnable afterDepotsSwapAction;
+
+    private Runnable skipAction;
+
     /**
      * Initialize a new player controller active and waiting for his turn.
      * @param username the username of the player associated with the player controller
@@ -64,6 +68,7 @@ public class PlayerController {
         this.active = true;
         this.virtualView = virtualView;
         currentStatus = new PlayerStatusIndex();
+        skipAction = this::nextStatus;
     }
 
     /**
@@ -201,6 +206,9 @@ public class PlayerController {
                 break;
             case ACTIVATE_PRODUCTION:
                 break;
+            case SKIP:
+                skipAction.run();
+                break;
             default:
                 nextStatus();
         }
@@ -314,11 +322,10 @@ public class PlayerController {
     public void swapDepots(int depotA, int depotB) {
         try {
             playerBoard.getWarehouse().swapDepots(depotA, depotB);
-            showWarehouseStatus();
         }catch (UnswappableDepotsException | IncompatibleDepotException e){
             virtualView.showErrorMessage(e.getMessage());
         }
-        askForAction();
+        afterDepotsSwapAction.run();
     }
 
     public void selectMarketRow(int row) {
@@ -356,6 +363,7 @@ public class PlayerController {
 
     public void askToStoreResource(){
         if(!getPlayerBoard().getWarehouse().hasResourcesToStore()){
+            setSkipAction(this::nextStatus);
             nextStatus();
             askForAction();
             return;
@@ -364,7 +372,7 @@ public class PlayerController {
        if(currentResourceToStore == NonPhysicalResourceType.VOID){
            virtualView.chooseWhiteMarbleConversion(getPlayerBoard().getLeaderCards().get(0),getPlayerBoard().getLeaderCards().get(1));
        }else{
-            virtualView.askToStoreResource(currentResourceToStore,getPlayerBoard().getWarehouse());
+           askToConfirmDepotsStatus();
        }
     }
 
@@ -374,6 +382,16 @@ public class PlayerController {
         Resource resource = getPlayerBoard().getLeaderCards().get(choice).getOutputResourceType();
         getPlayerBoard().getWarehouse().pushResourceToBeStored(resource);
         askToStoreResource();
+    }
+
+    protected void askToConfirmDepotsStatus(){
+        setAfterDepotsSwapAction(() -> virtualView.askToStoreResource(currentResourceToStore,getPlayerBoard().getWarehouse()));
+        setSkipAction(() -> virtualView.askToStoreResource(currentResourceToStore,getPlayerBoard().getWarehouse()));
+        //TODO: comntrollare setafterdepotsactione  ripristinare valore di default
+        Action[] actions = {Action.MOVE_RESOURCES,Action.SKIP};
+        virtualView.showMessage("You have to store a "+currentResourceToStore);
+        showWarehouseStatus();
+        virtualView.askForAction(actions);
     }
 
     protected void storeResourceToWarehouse(int depot){
@@ -391,8 +409,9 @@ public class PlayerController {
 
         currentResourceToStore = null;
         if(getPlayerBoard().getWarehouse().hasResourcesToStore())
-            askToStoreResource();
+           askToStoreResource();
         else {
+            setSkipAction(this::nextStatus);
             showWarehouseStatus();
             nextStatus();
         }
@@ -422,6 +441,14 @@ public class PlayerController {
         playerBoard.getDevelopmentCardSlots()[slotIndex].addCard(currentDevelopmentCardToStore);
         currentDevelopmentCardToStore = null;
         nextStatus();
+    }
+
+    public void setAfterDepotsSwapAction(Runnable afterDepotsSwapAction) {
+        this.afterDepotsSwapAction = afterDepotsSwapAction;
+    }
+
+    public void setSkipAction(Runnable skipAction){
+        this.skipAction = skipAction;
     }
 
 

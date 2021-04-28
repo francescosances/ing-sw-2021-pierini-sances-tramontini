@@ -63,37 +63,42 @@ public class GameController implements PlayerStatusListener {
     public void handleReceivedGameMessage(Message message, String username){
         Gson gson = new Gson();
         try {
+            final PlayerController currentPlayerController = getPlayerController(username);
             switch (message.getType()) {
                 case LEADER_CARDS_CHOICE:
                     leaderCardsChoice(username, Serializer.deserializeLeaderCardDeck(message.getData("leaderCards")));
                     break;
                 case PERFORM_ACTION:
-                    getPlayerController(username).performAction(gson.fromJson(message.getData("action"), Action.class));
+                    currentPlayerController.performAction(gson.fromJson(message.getData("action"), Action.class));
                     break;
                 case SWAP_DEPOTS:
                     int depotA = Integer.parseInt(message.getData("depotA"));
                     int depotB = Integer.parseInt(message.getData("depotB"));
-                    getPlayerController(username).swapDepots(depotA,depotB);
+                    currentPlayerController.setAfterDepotsSwapAction(() -> {
+                        currentPlayerController.showWarehouseStatus();
+                        currentPlayerController.askForAction();
+                    });
+                    currentPlayerController.swapDepots(depotA,depotB);
                     break;
                 case SELECT_MARKET_ROW:
                     int row = Integer.parseInt(message.getData("row"));
-                    getPlayerController(username).selectMarketRow(row);
+                    currentPlayerController.selectMarketRow(row);
                     break;
                 case SELECT_MARKET_COLUMN:
                     int column = Integer.parseInt(message.getData("column"));
-                    getPlayerController(username).selectMarketColumn(column);
+                    currentPlayerController.selectMarketColumn(column);
                     break;
                 case WHITE_MARBLE_CONVERSION:
-                    getPlayerController(username).chooseWhiteMarbleConversion(Integer.parseInt(message.getData("choice")));
+                    currentPlayerController.chooseWhiteMarbleConversion(Integer.parseInt(message.getData("choice")));
                     break;
                 case RESOURCE_TO_STORE:
-                    getPlayerController(username).storeResourceToWarehouse(Integer.parseInt(message.getData("choice")));
+                    currentPlayerController.storeResourceToWarehouse(Integer.parseInt(message.getData("choice")));
                     break;
                 case DEVELOPMENT_CARDS_TO_BUY:
-                    getPlayerController(username).buyDevelopmentCard(Serializer.deserializeDevelopmentCardsList(message.getData("developmentCards")).get(0));
+                    currentPlayerController.buyDevelopmentCard(Serializer.deserializeDevelopmentCardsList(message.getData("developmentCards")).get(0));
                     break;
                 case CHOOSE_DEVELOPMENT_CARD_SLOT:
-                    getPlayerController(username).chooseDevelopmentCardSlot(Integer.parseInt(message.getData("slotIndex")));
+                    currentPlayerController.chooseDevelopmentCardSlot(Integer.parseInt(message.getData("slotIndex")));
                     break;
             }
         }catch (EndGameException e){
