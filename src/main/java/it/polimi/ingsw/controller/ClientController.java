@@ -73,8 +73,8 @@ public class ClientController {
             case ERROR:
                 view.showErrorMessage(message.getData("text"));
                 break;
-            case YOUR_TURN:
-                view.yourTurn();
+            case CURRENT_ACTIVE_USER:
+                view.showCurrentActiveUser(message.getData("username"));
                 break;
             case LOGIN_FAILED:
                 view.showErrorMessage("Login failed, try with another username");

@@ -216,14 +216,22 @@ public class GameController implements PlayerStatusListener {
                 }
                 players.get(currentPlayerIndex).listLeaderCards();
                 usersReadyToPlay++;
+                showCurrentActiveUser();
                 break;
             case TURN:
                 players.get(currentPlayerIndex).startTurn();
+                showCurrentActiveUser();
                 break;
             case END_GAME:
                 players.forEach(PlayerController::endGame);
                 break;
         }
+    }
+
+    private void showCurrentActiveUser(){
+        for(int i=0;i<players.size();i++)
+            if(i != currentPlayerIndex)
+                players.get(i).getVirtualView().showCurrentActiveUser(players.get(currentPlayerIndex).getUsername());
     }
 
     @Override
@@ -243,32 +251,17 @@ public class GameController implements PlayerStatusListener {
                 this.currentPhase = GamePhase.TURN;
                 break;
         }
-
     }
 
     /**
      * Move the current player to the next one
      */
     public void nextTurn(){
-       // players.get(currentPlayerIndex).turnEnded(); // Notify to the player controller that the turn is ended
         currentPlayerIndex = (currentPlayerIndex+1)%players.size();
         if(players.stream().noneMatch(PlayerController::isActive)) // No one is active
             return;
         if(!players.get(currentPlayerIndex).isActive()) // The current player is inactive
             players.get(currentPlayerIndex).turnEnded();
-      //  players.get(currentPlayerIndex).yourTurn();
-      /*  currentPhase.incrementCurrentPhasePlayers();
-        if(currentPhase.getCurrentPhasePlayers() >= players.size()) // If all the users have finished the turn, move the phase to the next one
-            currentPhase = currentPhase.next();
-*/
-        onStatusChanged();
-    }
-
-    /**
-     * Move the current phase to the next one
-     */
-    protected void nextPhase(){
-        this.currentPhase = this.currentPhase.next();
         onStatusChanged();
     }
 
@@ -276,7 +269,6 @@ public class GameController implements PlayerStatusListener {
         this.currentPhase = phase;
         onStatusChanged();
     }
-
 
     public enum GamePhase {
         ADDING_PLAYERS,

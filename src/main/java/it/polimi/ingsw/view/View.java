@@ -41,9 +41,6 @@ public interface View {
      */
     void resumeMatch(Match match);
 
-
-    void yourTurn();
-
     void init();
 
     void askLogin();
@@ -88,4 +85,6 @@ public interface View {
     void chooseWhiteMarbleConversion(LeaderCard leaderCard, LeaderCard leaderCard1);
 
     void askToChooseDevelopmentCardSlot(DevelopmentCardSlot[] slots, DevelopmentCard developmentCard);
+
+    void showCurrentActiveUser(String username);
 }

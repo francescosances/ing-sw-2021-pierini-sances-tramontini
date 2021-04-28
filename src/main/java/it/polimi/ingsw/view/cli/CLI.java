@@ -126,11 +126,6 @@ public class CLI implements View {
     }
 
     @Override
-    public void yourTurn() {
-        output.println("It's your turn");
-    }
-
-    @Override
     public void userConnected(String username) {
         output.println(username + " has joined the match");
     }
@@ -237,6 +232,13 @@ public class CLI implements View {
             return;
         }
         clientController.chooseDevelopmentCardsSlot(choice);
+    }
+
+    @Override
+    public void showCurrentActiveUser(String username) {
+        output.println("************");
+        output.println("It's "+username+"'s turn");
+        output.println("************");
     }
 
     @Override

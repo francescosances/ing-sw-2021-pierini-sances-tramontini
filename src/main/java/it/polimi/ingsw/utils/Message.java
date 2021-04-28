@@ -96,7 +96,7 @@ public class Message{
         LOGIN_FAILED,
         LOBBY_INFO,
         RESUME_MATCH,
-        YOUR_TURN,
+        CURRENT_ACTIVE_USER,
         LIST_LEADER_CARDS,
         SHOW_PLAYER_BOARD,
         ASK_FOR_ACTION,

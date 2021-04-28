@@ -53,11 +53,6 @@ public class VirtualView implements View {
     }
 
     @Override
-    public void yourTurn() {
-        sendMessage(new Message(Message.MessageType.YOUR_TURN));
-    }
-
-    @Override
     public void init() {
         System.out.println("Initialized virtual view");
     }
@@ -167,6 +162,13 @@ public class VirtualView implements View {
         Message message = new Message(Message.MessageType.CHOOSE_DEVELOPMENT_CARD_SLOT);
         message.addData("slots",Serializer.serializeDevelopmentCardSlots(Arrays.asList(slots)));
         message.addData("developmentCard",Serializer.serializeDevelopmentCard(developmentCard));
+        sendMessage(message);
+    }
+
+    @Override
+    public void showCurrentActiveUser(String username) {
+        Message message = new Message(Message.MessageType.CURRENT_ACTIVE_USER);
+        message.addData("username",username);
         sendMessage(message);
     }
 
