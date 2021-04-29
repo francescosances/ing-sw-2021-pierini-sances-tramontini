@@ -120,7 +120,7 @@ public class FaithTrack {
                 !vaticanReports[match.getVaticanReportsCount()] && isPopeSpace(faithMarker))
             match.vaticanReport(faithMarker);
         if(faithMarker == SIZE)
-            throw new EndGameException();
+            throw new EndGameException(true);
     }
 
     /**

@@ -66,6 +66,20 @@ public class SoloMatch extends Match{
     }
 
     @Override
+    protected void buyDevelopmentCard(DevelopmentCard developmentCard, PlayerBoard player) {
+        for(Deck<DevelopmentCard> deck : developmentDecks){
+            for(int i=0;i<deck.size();i++){
+                if(deck.get(i).equals(developmentCard) && deck.size() <= 1) {
+                    throw new EndGameException(false);
+                }
+            }
+        }
+        if(player.getBoughtDevelopmentCardsCounter() >= 7)
+            throw new EndGameException(true);
+        super.buyDevelopmentCard(developmentCard, player);
+    }
+
+    @Override
     public boolean equals(Object o) {
         SoloMatch that = (SoloMatch) o;
         return  super.equals(o) &&

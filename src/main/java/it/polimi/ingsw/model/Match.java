@@ -252,7 +252,7 @@ public class Match {
         return developmentDecks;
     }
 
-    protected void removeDevelopmentCardFromDeck(DevelopmentCard developmentCard){
+    protected void buyDevelopmentCard(DevelopmentCard developmentCard, PlayerBoard player){
         for(Deck<DevelopmentCard> deck : developmentDecks){
             for(int i=0;i<deck.size();i++){
                 if(deck.get(i).equals(developmentCard)) {

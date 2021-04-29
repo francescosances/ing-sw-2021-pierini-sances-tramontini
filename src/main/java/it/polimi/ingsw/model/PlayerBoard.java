@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.Requirements;
 import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
-import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.model.storage.Strongbox;
 import it.polimi.ingsw.model.storage.Warehouse;
@@ -29,6 +28,8 @@ public class PlayerBoard {
     private final DevelopmentCardSlot[] developmentCardSlots;
     private final List<LeaderCard> leaderCards;
 
+    private int boughtDevelopmentCardsCounter = 0;
+
     public PlayerBoard(String username,Match match){
         this.match = match;
         this.username = username;
@@ -46,7 +47,8 @@ public class PlayerBoard {
         Requirements requirements = developmentCard.getCost();
         requirements = warehouse.removeResources(requirements);
         strongbox.removeResources(requirements);
-        match.removeDevelopmentCardFromDeck(developmentCard);
+        boughtDevelopmentCardsCounter++;
+        match.buyDevelopmentCard(developmentCard, this);
     }
 
     public void gainFaithPoints(int points) throws EndGameException {
@@ -153,6 +155,10 @@ public class PlayerBoard {
                 this.getStrongbox().equals(that.getStrongbox()) &&
                 this.getWarehouse().equals(that.getWarehouse()) &&
                 this.getLeaderCards().equals(that.getLeaderCards());
+    }
+
+    public int getBoughtDevelopmentCardsCounter() {
+        return boughtDevelopmentCardsCounter;
     }
 
     @Override
