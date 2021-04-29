@@ -24,11 +24,25 @@ public class DepotLeaderCard extends LeaderCard implements Depot {
      */
     private final int SIZE = 2;
 
+    /**
+     * Initializes a new DepotLeaderCard
+     * @param victoryPoints the victory points associated with the card
+     * @param requirements the requirements the player must satisfy so as to play the card
+     * @param resourceType the resource the card can store
+     */
     public DepotLeaderCard(int victoryPoints, Requirements requirements, ResourceType resourceType) {
         super(victoryPoints, requirements);
         this.resourceType = resourceType;
         occupied = 0;
     }
+
+    /**
+     * Initializes a new DepotLeaderCard. Should be called by Serializer class only.
+     * @param victoryPoints the victory points associated with the card
+     * @param requirements the requirements the player must satisfy so as to play the card
+     * @param resourceType the resource the card can store
+     * @param active manually sets the status of the card
+     */
     public DepotLeaderCard(int victoryPoints, Requirements requirements, ResourceType resourceType, boolean active) {
         super(victoryPoints, requirements, active);
         this.resourceType = resourceType;
@@ -90,6 +104,22 @@ public class DepotLeaderCard extends LeaderCard implements Depot {
         occupied--;
     }
 
+
+    /**
+     * Activates the card if the requirements are satisfied
+     * @param player the player that wants to activate the card
+     * @throws NotSatisfiedRequirementsException if the player doesn't satisfy the requirements
+     */
+    @Override
+    public void activate(PlayerBoard player) throws NotSatisfiedRequirementsException {
+        super.activate(player);
+        player.getWarehouse().addDepotLeaderCard(this);
+    }
+
+    /**
+     * Returns a string representation of the object
+     * @return a string representation of the object.
+     */
     @Override
     public String toString() {
         return "DepotLeaderCard: " +
@@ -98,12 +128,11 @@ public class DepotLeaderCard extends LeaderCard implements Depot {
                 ", requirements=" + requirements;
     }
 
-    @Override
-    public void activate(PlayerBoard player) throws NotSatisfiedRequirementsException {
-        super.activate(player);
-        player.getWarehouse().addDepotLeaderCard(this);
-    }
-
+    /**
+     * Indicates whether some other object is equal to this one
+     * @param other that is confronted
+     * @return true if o is equal to the object, false elsewhere
+     */
     @Override
     public boolean equals(Object other) {
         if (this == other)

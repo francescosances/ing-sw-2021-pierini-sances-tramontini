@@ -28,6 +28,7 @@ class RequirementsTest {
         player = null;
         req1 = null;
         req2 = null;
+        req3 = null;
     }
 
     @Test
@@ -110,6 +111,12 @@ class RequirementsTest {
         req3.addDevelopmentCardRequirement(DevelopmentColorType.PURPLE, 1, 1);
 
         assertFalse(req3.satisfied(player));
+    }
+
+    @Test
+    void getResources_nullValue(){
+        req1.addDevelopmentCardRequirement(DevelopmentColorType.GREEN, 1,1);
+        assertEquals(0, req1.getResources(ResourceType.SERVANT));
     }
 
 }

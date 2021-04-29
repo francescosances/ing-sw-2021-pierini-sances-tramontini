@@ -12,9 +12,21 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ProductionLeaderCard extends LeaderCard implements Producer {
+    /**
+     * The cost that a player has to pay to trigger the production
+     */
     private final Requirements productionCost;
+    /**
+     * What the player gains if the production is triggered
+     */
     private final Map<Resource, Integer>  productionGain;
 
+    /**
+     * Initializes a new ProductionLeaderCard
+     * @param victoryPoints the victory points associated with the card
+     * @param requirements the requirements the player has to satisfy so as to play the card
+     * @param productionCost cost that a player has to pay to trigger the production
+     */
     public ProductionLeaderCard (int victoryPoints, Requirements requirements, Requirements productionCost) {
         super(victoryPoints, requirements);
         this.productionCost = productionCost;
@@ -22,6 +34,14 @@ public class ProductionLeaderCard extends LeaderCard implements Producer {
         productionGain.put(NonPhysicalResourceType.ON_DEMAND,1);
         productionGain.put(NonPhysicalResourceType.FAITH_POINT,1);
     }
+
+    /**
+     * Initializes a new ProductionLeaderCard. Manually sets the active status
+     * @param victoryPoints the victory points associated with the card
+     * @param requirements the requirements the player has to satisfy so as to play the card
+     * @param productionCost cost that a player has to pay to trigger the production
+     * @param active the status of the card
+     */
     public ProductionLeaderCard (int victoryPoints, Requirements requirements, Requirements productionCost, boolean active) {
         super(victoryPoints, requirements, active);
         this.productionCost = productionCost;
@@ -33,6 +53,10 @@ public class ProductionLeaderCard extends LeaderCard implements Producer {
     @Override
     public void produce(){}
 
+    /**
+     * Returns a string representation of the object
+     * @return a string representation of the object.
+     */
     @Override
     public String toString() {
         return "ProductionLeaderCard: " +
@@ -42,6 +66,11 @@ public class ProductionLeaderCard extends LeaderCard implements Producer {
                 ", productionGain=[" + productionGain.entrySet().stream().map(entry -> entry.getValue() + " " + entry.getKey()).collect(Collectors.joining(", ")) + "]";
     }
 
+    /**
+     * Indicates whether some other object is equal to this one
+     * @param other that is confronted
+     * @return true if o is equal to the object, false elsewhere
+     */
     @Override
     public boolean equals(Object other) {
         if (this == other)

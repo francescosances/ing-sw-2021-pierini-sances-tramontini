@@ -19,15 +19,23 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
     private Map<Resource, Integer> resources;
 
     /**
-     * tipo, livello (0 se qualsiasi), quantita richiesta
+     * Stores the development card the player needs to have to satisfy the requirement
+     * DevelopmentColorType, level (0 if not specified), quantity
      */
     private Map<DevelopmentColorType,Map<Integer,Integer>> developmentCards;
 
+    /**
+     * Sets a new empty requirements object
+     */
     public Requirements(){
         resources = new HashMap<>();
         developmentCards = new HashMap<>();
     }
 
+    /**
+     * Sets a new Requirements object, needing development card so as to be satisfied
+     * @param developmentCards the DevelopmentCards the player must own so as to satisfy the Requirements
+     */
     public Requirements(Triple<DevelopmentColorType,Integer,Integer> ... developmentCards){
         this();
         for(Triple<DevelopmentColorType,Integer,Integer> x: developmentCards){
@@ -36,6 +44,10 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
         }
     }
 
+    /**
+     * Sets a new Requirements object, needing resources so as to be satisfied
+     * @param resources the resources needed
+     */
     public Requirements(Pair<Resource,Integer>... resources){
         this();
         for(Pair<Resource,Integer> x: resources){
@@ -43,6 +55,11 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
         }
     }
 
+    /**
+     * Sets a new Requirements object needing both development cards and resources so as to be satisfied
+     * @param resources the resources needed
+     * @param developmentCards the development cards needed
+     */
     public Requirements (Map<Resource,Integer> resources, Map<DevelopmentColorType,Map<Integer,Integer>> developmentCards){
         this();
         if (resources != null)
@@ -55,6 +72,11 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
             });
     }
 
+    /**
+     * Checks if the player satisfies the requirements
+     * @param player the player who owns the cards or the resources
+     * @return true if the requirements are satisfied, false elsewhere
+     */
     public boolean satisfied(PlayerBoard player){
         //Resources check
         Requirements playerResources = player.getAllResources();
@@ -78,10 +100,21 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
         return true;
     }
 
+    /**
+     * Returns how many units of the resource specified the requirements needs to satisfy
+     * @param resource the resource whose units requested are asked
+     * @return the number of the units asked
+     */
     public int getResources(Resource resource){
         return resources.getOrDefault(resource, 0);
     }
 
+    /**
+     * Returns the sum of the two Requirements
+     * @param first one of the two Requirements to sum
+     * @param second the other Requirements to sum
+     * @return the sum of the two Requirements
+     */
     public static Requirements sum(Requirements first,Requirements second){
         Requirements ret = (Requirements) first.clone();
         second.resources.forEach(ret::addResourceRequirement);
@@ -89,21 +122,43 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
         return ret;
     }
 
+    /**
+     * Adds a resource to the Requirements
+     * @param resource the ResourceType to add
+     * @param quantity the quantity of the resource to add
+     */
     public void addResourceRequirement(Resource resource, int quantity){
         resources.put(resource, resources.getOrDefault(resource,0)+quantity);
     }
 
+    /**
+     * Removes a resource to the Requirements
+     * @param resource the ResourceType to remove
+     * @param quantity the quantity of the resource to remove
+     */
     public void removeResourceRequirement(ResourceType resource,int quantity){
         resources.put(resource,resources.getOrDefault(resource,quantity)-quantity);
         if(resources.get(resource) <= 0)
             resources.remove(resource);
     }
 
+    /**
+     * adds a development card to the requirements
+     * @param type the DevelopmentColorType of the card
+     * @param level the level of the card
+     * @param quantity the quantity of the cards needed
+     */
     public void addDevelopmentCardRequirement(DevelopmentColorType type,int level,int quantity){
         developmentCards.computeIfAbsent(type, k -> new HashMap<>());
         developmentCards.get(type).put(level,quantity);
     }
 
+    /**
+     * Returns how many DevelopmentCards with the specified DevelopmentColorType and the specified level are needed so as to satisfy the requirements
+     * @param color the DevelopmentColorType of the card
+     * @param level the level of the card
+     * @return the number needed
+     */
     public int getDevelopmentCards(DevelopmentColorType color,int level){
         Map<Integer,Integer> temp = developmentCards.get(color);
         if(temp == null || temp.get(level) == null)
@@ -111,6 +166,11 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
         return temp.get(level);
     }
 
+    /**
+     * Indicates whether some other object is equal to this one
+     * @param other that is confronted
+     * @return true if o is equal to the object, false elsewhere
+     */
     @Override
     public boolean equals(Object other) {
         if (this == other)
@@ -122,6 +182,10 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
         return false;
     }
 
+    /**
+     * Returns a clone of the object
+     * @return a clone of the object
+     */
     @Override
     public Object clone(){
         Requirements ris = new Requirements();
@@ -136,11 +200,19 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
         return ris;
     }
 
+    /**
+     * Returns an Iterator of the Requirements class
+     * @return an Iterator of the Requirements class
+     */
     @Override
     public Iterator<Map.Entry<Resource, Integer>> iterator() {
         return resources.entrySet().iterator();
     }
 
+    /**
+     * Returns a string representation of the object
+     * @return a string representation of the object.
+     */
     @Override
     public String toString() {
         String res = "resources=(" +

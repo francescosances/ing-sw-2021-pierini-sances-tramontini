@@ -30,10 +30,15 @@ public class DevelopmentCard extends Card implements Producer {
      */
     private Requirements productionGain;
 
-    private DevelopmentCard(int victoryPoints){
-        super(victoryPoints);
-    }
-
+    /**
+     * Initializes a new DevelopmentCard
+     * @param victoryPoints the victory points associated with the card
+     * @param cost the cost the player has to pay if they want to buy the card
+     * @param level the level of the card
+     * @param color the color of the card
+     * @param productionCost the cost to pay so as to activate the production
+     * @param productionGain what the card returns when production is activated
+     */
     public DevelopmentCard(int victoryPoints, Requirements cost, int level, DevelopmentColorType color, Requirements productionCost, Pair<Resource,Integer> ... productionGain) {
         super(victoryPoints);
         this.cost = cost;
@@ -41,9 +46,9 @@ public class DevelopmentCard extends Card implements Producer {
         this.color = color;
         this.productionCost = productionCost;
         this.productionGain = new Requirements();
-        for(Pair<Resource,Integer> x : productionGain){
+        for(Pair<Resource,Integer> x : productionGain)
             this.productionGain.addResourceRequirement(x.fst,x.snd);
-        }
+
     }
 
     /**
@@ -86,11 +91,19 @@ public class DevelopmentCard extends Card implements Producer {
         return productionGain;
     }
 
+    /**
+     * Activates the card production
+     */
     @Override
     public void produce() {
 
     }
 
+    /**
+     * Indicates whether some other object is equal to this one
+     * @param other that is confronted
+     * @return true if o is equal to the object, false elsewhere
+     */
     @Override
     public boolean equals(Object other){
         if (this == other) return true;
@@ -101,6 +114,10 @@ public class DevelopmentCard extends Card implements Producer {
                 && this.productionGain.equals(o.productionGain) && this.level == o.level;
     }
 
+    /**
+     * Returns a string representation of the object
+     * @return a string representation of the object.
+     */
     @Override
     public String toString() {
         return "DevelopmentCard: " +
