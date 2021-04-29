@@ -68,7 +68,8 @@ public class PlayerController {
         this.active = true;
         this.virtualView = virtualView;
         currentStatus = new PlayerStatusIndex();
-        skipAction = this::nextStatus;
+        resetSkipAction();
+        resetAfterDepotsSwapAction();
     }
 
     /**
@@ -174,6 +175,7 @@ public class PlayerController {
      * Ask to the user which action want to perform
      */
     public void askForAction(){
+        resetAfterDepotsSwapAction();
         virtualView.askForAction(
                 Arrays.stream(Action.EXTRA_ACTIONS)
                         .filter(x -> x != Action.CANCEL)
@@ -262,13 +264,6 @@ public class PlayerController {
      */
     public void showWarehouseStatus(){
         virtualView.showWarehouse(playerBoard.getWarehouse());
-    }
-
-    /**
-     * Show the market tray to the user
-     */
-    public void takeResourcesFromMarket(){
-        virtualView.takeResourcesFromMarket(playerBoard.getMatch().getMarket());
     }
 
     private void listDevelopmentCardToBuy() {
@@ -361,9 +356,16 @@ public class PlayerController {
         askToStoreResource();
     }
 
+    /**
+     * Show the market tray to the user
+     */
+    public void takeResourcesFromMarket(){
+        virtualView.takeResourcesFromMarket(playerBoard.getMatch().getMarket());
+    }
+
     public void askToStoreResource(){
         if(!getPlayerBoard().getWarehouse().hasResourcesToStore()){
-            setSkipAction(this::nextStatus);
+            resetSkipAction();
             nextStatus();
             askForAction();
             return;
@@ -411,7 +413,7 @@ public class PlayerController {
         if(getPlayerBoard().getWarehouse().hasResourcesToStore())
            askToStoreResource();
         else {
-            setSkipAction(this::nextStatus);
+            resetSkipAction();
             showWarehouseStatus();
             nextStatus();
         }
@@ -443,14 +445,24 @@ public class PlayerController {
         nextStatus();
     }
 
-    public void setAfterDepotsSwapAction(Runnable afterDepotsSwapAction) {
+    private void setAfterDepotsSwapAction(Runnable afterDepotsSwapAction) {
         this.afterDepotsSwapAction = afterDepotsSwapAction;
     }
 
-    public void setSkipAction(Runnable skipAction){
+    private void resetAfterDepotsSwapAction(){
+        setAfterDepotsSwapAction(()->{
+                showWarehouseStatus();
+                askForAction();
+        });
+    }
+
+    private void setSkipAction(Runnable skipAction){
         this.skipAction = skipAction;
     }
 
+    private void resetSkipAction(){
+        setSkipAction(this::nextStatus);
+    }
 
     public enum PlayerStatus {
         PERFORMING_ACTION,

@@ -74,10 +74,6 @@ public class GameController implements PlayerStatusListener {
                 case SWAP_DEPOTS:
                     int depotA = Integer.parseInt(message.getData("depotA"));
                     int depotB = Integer.parseInt(message.getData("depotB"));
-                    currentPlayerController.setAfterDepotsSwapAction(() -> {
-                        currentPlayerController.showWarehouseStatus();
-                        currentPlayerController.askForAction();
-                    });
                     currentPlayerController.swapDepots(depotA,depotB);
                     break;
                 case SELECT_MARKET_ROW:
