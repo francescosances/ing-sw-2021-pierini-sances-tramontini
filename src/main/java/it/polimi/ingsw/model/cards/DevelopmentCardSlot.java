@@ -1,7 +1,4 @@
-package it.polimi.ingsw.model;
-
-import it.polimi.ingsw.model.cards.DevelopmentCard;
-import it.polimi.ingsw.model.cards.DevelopmentColorType;
+package it.polimi.ingsw.model.cards;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,7 +24,7 @@ public class DevelopmentCardSlot implements Iterable<DevelopmentCard>{
     }
 
     public boolean accepts(DevelopmentCard developmentCard){
-        return getTopCard() == null || getTopCard().getLevel() == developmentCard.getLevel()-1;
+        return (getTopCard() == null && developmentCard.getLevel() == 1) || getTopCard().getLevel() == developmentCard.getLevel()-1;
     }
 
     public int getSize(){

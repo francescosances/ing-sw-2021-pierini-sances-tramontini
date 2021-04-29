@@ -263,13 +263,15 @@ public class PlayerController {
         virtualView.showWarehouse(playerBoard.getWarehouse());
     }
 
+    //TODO: aggiungere controlli anche quando la carta viene selezionata
+    //TODO: verificare perché permette di comprare carte di livello 2 anche su slot di livello 1
     private void listDevelopmentCardToBuy() {
         if(getPlayerBoard().getMatch().getDevelopmentCardDecks().stream().noneMatch(t->{
             for (DevelopmentCard d: t) {
                 Requirements requirements = d.getCost();
                 for(LeaderCard card : getPlayerBoard().getLeaderCards())
                     requirements = card.recalculateRequirements(requirements);
-                if(requirements.satisfied(getPlayerBoard()))//TODO: aggiungere controllo: se tutti gli slot sono pieni
+                if(requirements.satisfied(getPlayerBoard()) && getPlayerBoard().acceptsDevelopmentCard(d))
                     return true;
             }
             return false;

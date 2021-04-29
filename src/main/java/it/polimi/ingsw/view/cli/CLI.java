@@ -4,6 +4,7 @@ import it.polimi.ingsw.controller.ClientController;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.Deck;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
+import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.storage.*;
 import it.polimi.ingsw.utils.Triple;
@@ -182,7 +183,7 @@ public class CLI implements View {
             output.print(developmentCardColor(deck.get(0)));
             output.printf("%s level %d\n",deck.get(0).getColor(),deck.get(0).getLevel());
             for(DevelopmentCard developmentCard:deck){
-                if(!developmentCard.getCost().satisfied(playerBoard))
+                if(!developmentCard.getCost().satisfied(playerBoard) || !playerBoard.acceptsDevelopmentCard(developmentCard))
                     output.print(ANSI_BLACK + "[X]");
                 else {
                     output.printf(developmentCardColor(developmentCard) + "[%d]", availableCards.size());

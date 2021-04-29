@@ -1,9 +1,6 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.cards.Card;
-import it.polimi.ingsw.model.cards.DevelopmentCard;
-import it.polimi.ingsw.model.cards.LeaderCard;
-import it.polimi.ingsw.model.cards.Requirements;
+import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
 import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.model.storage.Strongbox;
@@ -38,6 +35,10 @@ public class PlayerBoard {
         faithTrack = new FaithTrack(match);
         developmentCardSlots = Stream.generate(DevelopmentCardSlot::new).limit(3).toArray(DevelopmentCardSlot[]::new);
         leaderCards = new ArrayList<>();
+    }
+
+    public boolean acceptsDevelopmentCard(DevelopmentCard developmentCard){
+        return Arrays.stream(getDevelopmentCardSlots()).anyMatch(t->t.accepts(developmentCard));
     }
 
     public void buyDevelopmentCard(DevelopmentCard developmentCard){

@@ -1,14 +1,11 @@
 package it.polimi.ingsw.model.cards;
 
-import it.polimi.ingsw.model.DevelopmentCardSlot;
 import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.Triple;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;

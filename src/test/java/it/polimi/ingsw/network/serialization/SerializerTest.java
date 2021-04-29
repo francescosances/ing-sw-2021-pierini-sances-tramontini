@@ -1,6 +1,5 @@
 package it.polimi.ingsw.network.serialization;
 
-import com.google.gson.Gson;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.*;
