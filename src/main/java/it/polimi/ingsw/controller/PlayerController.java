@@ -1,10 +1,8 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Action;
-import it.polimi.ingsw.model.cards.DevelopmentCard;
-import it.polimi.ingsw.model.cards.LeaderCard;
+import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.PlayerBoard;
-import it.polimi.ingsw.model.cards.LeaderCardsChooser;
 import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
 import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
 import it.polimi.ingsw.model.storage.Resource;
@@ -225,7 +223,6 @@ public class PlayerController {
         virtualView.askForAction(
                 Arrays.stream(Action.NORMAL_ACTIONS)
                         .toArray(Action[]::new));
-       // changeStatus(PlayerStatus.NORMAL_ACTION);
     }
 
     /**
@@ -269,15 +266,33 @@ public class PlayerController {
     private void listDevelopmentCardToBuy() {
         if(getPlayerBoard().getMatch().getDevelopmentCardDecks().stream().noneMatch(t->{
             for (DevelopmentCard d: t) {
-                if(d.getCost().satisfied(getPlayerBoard()))//TODO: aggiungere controllo: se tutti gli slot sono pieni
+                Requirements requirements = d.getCost();
+                for(LeaderCard card : getPlayerBoard().getLeaderCards())
+                    requirements = card.recalculateRequirements(requirements);
+                if(requirements.satisfied(getPlayerBoard()))//TODO: aggiungere controllo: se tutti gli slot sono pieni
                     return true;
             }
             return false;
         })) {
             virtualView.showErrorMessage("You can not buy any card");
             askForNormalAction();
-        }else
-            virtualView.listDevelopmentCards(getPlayerBoard().getMatch().getDevelopmentCardDecks(),1,getPlayerBoard());
+        }else {
+            List<Deck<DevelopmentCard>> cards = getPlayerBoard().getMatch().getDevelopmentCardDecks();
+            List<Deck<DevelopmentCard>> newCards = new ArrayList<>();
+            for(Deck<DevelopmentCard> deck : cards){
+                Deck<DevelopmentCard> newDeck = new Deck<>();
+                newCards.add(newDeck);
+                for(DevelopmentCard card : deck){
+                    DevelopmentCard newCard = card.clone();
+                    Requirements requirements = newCard.getCost();
+                    for(LeaderCard leaderCard : getPlayerBoard().getLeaderCards())
+                        requirements = leaderCard.recalculateRequirements(requirements);
+                    newCard.setCost(requirements);
+                    newDeck.add(newCard);
+                }
+            }
+            virtualView.listDevelopmentCards(newCards, 1, getPlayerBoard());
+        }
     }
 
     /**
@@ -389,8 +404,7 @@ public class PlayerController {
     protected void askToConfirmDepotsStatus(){
         setAfterDepotsSwapAction(() -> virtualView.askToStoreResource(currentResourceToStore,getPlayerBoard().getWarehouse()));
         setSkipAction(() -> virtualView.askToStoreResource(currentResourceToStore,getPlayerBoard().getWarehouse()));
-        //TODO: comntrollare setafterdepotsactione  ripristinare valore di default
-        Action[] actions = {Action.MOVE_RESOURCES,Action.SKIP};
+        Action[] actions = {Action.SKIP,Action.MOVE_RESOURCES};
         virtualView.showMessage("You have to store a "+currentResourceToStore);
         showWarehouseStatus();
         virtualView.askForAction(actions);

@@ -75,7 +75,6 @@ public class Deck <E> implements Iterable<E> {
         return temp;
     }
 
-
     /**
      * Appends the specified element to the end of this deck
      *
@@ -102,6 +101,7 @@ public class Deck <E> implements Iterable<E> {
     public boolean isEmpty() {
         return cards.isEmpty();
     }
+
 
     /**
      * Returns true if the specified element is equal to the deck

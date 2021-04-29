@@ -41,10 +41,12 @@ public class PlayerBoard {
     }
 
     public void buyDevelopmentCard(DevelopmentCard developmentCard){
-        if(!developmentCard.getCost().satisfied(this)){
+        Requirements requirements = developmentCard.getCost();
+        for(LeaderCard leaderCard:leaderCards)
+            requirements = leaderCard.recalculateRequirements(requirements);
+        if(!requirements.satisfied(this)){
             throw new IllegalArgumentException("Card not purchasable");
         }
-        Requirements requirements = developmentCard.getCost();
         requirements = warehouse.removeResources(requirements);
         strongbox.removeResources(requirements);
         boughtDevelopmentCardsCounter++;

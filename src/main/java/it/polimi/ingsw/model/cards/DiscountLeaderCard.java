@@ -12,7 +12,6 @@ public class DiscountLeaderCard extends LeaderCard {
      */
     private final int discount;
 
-
     /**
      * Initializes a new DiscountLeaderCardObject. Automatically sets the discount to 1 unit.
      * @param victoryPoints the victory points associated with the card
@@ -22,7 +21,6 @@ public class DiscountLeaderCard extends LeaderCard {
     public DiscountLeaderCard (int victoryPoints, Requirements requirements, ResourceType resourceType) {
         this (victoryPoints, requirements, resourceType, 1);
     }
-
 
     /**
      * Initializes a new DiscountLeaderCardObject

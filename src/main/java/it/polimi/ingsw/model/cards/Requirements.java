@@ -187,7 +187,7 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
      * @return a clone of the object
      */
     @Override
-    public Object clone(){
+    public Requirements clone(){
         Requirements ris = new Requirements();
         ris.resources.putAll(this.resources);
         for(Map.Entry<DevelopmentColorType,Map<Integer,Integer>> entry: developmentCards.entrySet()){

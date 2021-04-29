@@ -97,7 +97,7 @@ public abstract class LeaderCard extends Card {
      * @return the discounted Requirments
      */
     public Requirements recalculateRequirements(Requirements requirements){
-        return (Requirements) requirements.clone();
+        return requirements.clone();
     }
 
     /**

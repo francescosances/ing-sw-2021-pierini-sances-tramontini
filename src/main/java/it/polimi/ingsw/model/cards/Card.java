@@ -26,4 +26,9 @@ public abstract class Card {
     public void setVictoryPoints(int victoryPoints) {
         this.victoryPoints = victoryPoints;
     }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+       return super.clone();
+    }
 }

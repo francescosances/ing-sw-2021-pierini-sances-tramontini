@@ -52,11 +52,19 @@ public class DevelopmentCard extends Card implements Producer {
     }
 
     /**
-     * Returns the amount of resources to be paid in order to start the production
-     * @return a Requirements object containin the amount of resources to be paid in order to start the production
+     * Returns the amount of resources to be paid in order to buy this card
+     * @return a Requirements object containin the amount of resources to be paid in order to buy this card
      */
     public Requirements getCost() {
         return cost;
+    }
+
+    /**
+     * Set the amount of resources to be paid in order to buy this card
+     * @param cost the amount of resources to be paid in order to buy this card
+     */
+    public void setCost(Requirements cost) {
+        this.cost = cost;
     }
 
     /**
@@ -99,6 +107,21 @@ public class DevelopmentCard extends Card implements Producer {
 
     }
 
+    private DevelopmentCard(int victoryPoints){
+        super(victoryPoints);
+    }
+
+    @Override
+    public DevelopmentCard clone(){
+        DevelopmentCard ret = new DevelopmentCard(getVictoryPoints());
+        ret.setCost(getCost().clone());
+        ret.productionCost = getProductionCost().clone();
+        ret.productionGain = getProductionGain().clone();
+        ret.level = getLevel();
+        ret.color = getColor();
+        return ret;
+    }
+
     /**
      * Indicates whether some other object is equal to this one
      * @param other that is confronted
@@ -110,7 +133,7 @@ public class DevelopmentCard extends Card implements Producer {
         if (!(other instanceof DevelopmentCard))
             return false;
         DevelopmentCard o = (DevelopmentCard) other;
-        return this.color.equals(o.color) && this.cost.equals(o.cost) && this.productionCost.equals(o.productionCost)
+        return this.color.equals(o.color) && this.productionCost.equals(o.productionCost)
                 && this.productionGain.equals(o.productionGain) && this.level == o.level;
     }
 
