@@ -184,7 +184,7 @@ public class CLI implements View {
             output.printf("%s level %d\n",deck.get(0).getColor(),deck.get(0).getLevel());
             for(DevelopmentCard developmentCard:deck){
                 if(!developmentCard.getCost().satisfied(playerBoard) || !playerBoard.acceptsDevelopmentCard(developmentCard))
-                    output.print(ANSI_BLACK + "[X]");
+                    output.print(ANSI_WHITE + "[X]");
                 else {
                     output.printf(developmentCardColor(developmentCard) + "[%d]", availableCards.size());
                     availableCards.add(developmentCard);
@@ -235,20 +235,57 @@ public class CLI implements View {
         clientController.chooseDevelopmentCardsSlot(choice);
     }
 
+    private String formatResourceString(String original){
+        String temp = "           "+original;
+        return temp.substring(temp.length()-11);
+    }
+
+    private String getProductionFirstRow(Map<Resource,Integer> map){
+        Map.Entry<Resource,Integer> entry = map.entrySet().iterator().next();
+        if(map.size() == 1)
+            return " "+formatResourceString("");
+        return entry.getValue()+" "+formatResourceString(entry.getKey().toString());
+    }
+
+    private String getProductionSecondRow(Map<Resource,Integer> map){
+        Iterator<Map.Entry<Resource,Integer>> iterator = map.entrySet().iterator();
+        Map.Entry<Resource,Integer> entry = iterator.next();
+        if(map.size() != 2) {
+            if(map.size() == 3)
+                entry = iterator.next();
+            return entry.getValue() + " " + formatResourceString(entry.getKey().toString());
+        }return " "+formatResourceString("");
+    }
+
+    private String getProductionThirdRow(Map<Resource,Integer> map){
+        Iterator<Map.Entry<Resource,Integer>> iterator = map.entrySet().iterator();
+        Map.Entry<Resource,Integer> entry = null;
+        if(map.size() > 1) {
+            for(int i=0;i<map.size();i++)
+                entry = iterator.next();
+            return entry.getValue() + " " + formatResourceString(entry.getKey().toString());
+        }
+        return "  "+formatResourceString("");
+    }
+
     private void printProduction(int index,Producer producer){
         output.printf("[%d] ",index);
-        output.printf("               ╟ ON DEMAND \n");
-        output.printf("     ON DEMAND ╝ \n");
+        Map<Resource,Integer> cost = producer.getProductionCost();
+        Map<Resource,Integer> gain = producer.getProductionGain();
+
+        output.printf(" %s ╗ %s\n", getProductionFirstRow(cost), getProductionFirstRow(gain));
+        output.printf("    %s ╟> %s\n", getProductionSecondRow(cost), getProductionSecondRow(gain));
+        output.printf("    %s ╝ %s\n", getProductionThirdRow(cost), getProductionThirdRow(gain));
     }
 
     @Override
     public void listAvailableProductions(List<Producer> availableProductions) {
         int counter=1;
-        output.printf("[0]  ON DEMAND ╗ \n");
-        output.printf("               ╟ ON DEMAND \n");
-        output.printf("     ON DEMAND ╝ \n");
+        output.printf("[0]  1 %s ╗ \n",formatResourceString(NonPhysicalResourceType.ON_DEMAND.toString()));
+        output.printf("                   ╟> 1 %s \n",formatResourceString(NonPhysicalResourceType.ON_DEMAND.toString()));
+        output.printf("     1 %s ╝ \n",formatResourceString(NonPhysicalResourceType.ON_DEMAND.toString()));
         for(Producer producer : availableProductions){
-            output.printf("[%d] %s\n",counter++,producer.toString());
+            printProduction(counter++,producer);
         }
     }
 
