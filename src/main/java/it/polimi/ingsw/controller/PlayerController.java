@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.Producer;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
+import it.polimi.ingsw.model.storage.Depot;
 import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.ResourceType;
@@ -168,6 +169,22 @@ public class PlayerController {
      */
     public void chooseLeaderCards(LeaderCard ... cards){
         this.leaderCardsChooser.chooseLeaderCards(cards);
+    }
+
+    //TODO: collegare start resources
+    public void askToChooseStartResources(int resourcesToChoose){
+        virtualView.askToChooseStartResources(ResourceType.values(),resourcesToChoose);
+    }
+
+    public void chooseStartResources(Resource[] resources) {
+        Iterator<Depot> depotIterator = getPlayerBoard().getWarehouse().getDepots().iterator();
+        for(Resource resource : resources){
+            try {
+                depotIterator.next().addResource((ResourceType) resource);
+            } catch (IncompatibleDepotException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -493,6 +510,7 @@ public class PlayerController {
     private void resetSkipAction(){
         setSkipAction(this::nextStatus);
     }
+
 
     public enum PlayerStatus {
         PERFORMING_ACTION,

@@ -111,6 +111,7 @@ public class Message{
         DEVELOPMENT_CARDS_TO_BUY,
         CHOOSE_DEVELOPMENT_CARD_SLOT,
         PRODUCTION,
+        START_RESOURCES,
         // from client to server
         LOGIN_REQUEST,
         LOBBY_CHOICE,

@@ -336,6 +336,25 @@ public class CLI implements View {
     }
 
     @Override
+    public void askToChooseStartResources(Resource[] values, int resourcesToChoose) {
+        output.printf("You have to select %d resources of your choosing\n",resourcesToChoose);
+        showResources(values);
+        int[] choices = new int[resourcesToChoose];
+        Resource[] resourcesChosen = new Resource[resourcesToChoose];
+        for(int i=0;i<resourcesToChoose;i++) {
+            choices[i] = input.nextInt();
+            if(choices[i] <0 || choices[i] >= values.length){
+                showErrorMessage("Invalid choice");
+                askToChooseStartResources(values,resourcesToChoose);
+                return;
+            }
+            resourcesChosen[i] = values[choices[i]];
+        }
+        clientController.chooseStartResources(resourcesChosen);
+    }
+
+
+    @Override
     public void showPlayerBoard(PlayerBoard playerBoard){
         showFaithTrack(playerBoard.getFaithTrack());
         showStorage(playerBoard);

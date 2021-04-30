@@ -10,6 +10,7 @@ import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.Requirements;
+import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.network.ClientSocket;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
@@ -94,6 +95,9 @@ public class ClientController {
             case LIST_LEADER_CARDS:
                 List<LeaderCard> leaderCardList = Serializer.deserializeLeaderCardDeck(message.getData("leaderCards"));
                 view.listLeaderCards(leaderCardList,Integer.parseInt(message.getData("cardsToChoose")));
+                break;
+            case START_RESOURCES:
+                view.askToChooseStartResources(Serializer.deserializeResources(message.getData("resources")),Integer.parseInt(message.getData("resourcesToChoose")));
                 break;
             case SHOW_PLAYER_BOARD:
                 view.showPlayerBoard(Serializer.deserializePlayerBoard(message.getData("playerBoard")));
@@ -247,6 +251,12 @@ public class ClientController {
         Message message = new Message(Message.MessageType.PRODUCTION);
         message.addData("costs",Serializer.serializeRequirements(costs));
         message.addData("gains",Serializer.serializeRequirements(gains));
+        clientSocket.sendMessage(message);
+    }
+
+    public void chooseStartResources(Resource[] resourcesChosen) {
+        Message message = new Message(Message.MessageType.START_RESOURCES);
+        message.addData("resources",Serializer.serializeResources(resourcesChosen));
         clientSocket.sendMessage(message);
     }
 

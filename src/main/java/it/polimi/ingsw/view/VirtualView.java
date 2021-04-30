@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.storage.Resource;
+import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.network.ClientHandler;
 import it.polimi.ingsw.serialization.Serializer;
@@ -170,6 +171,14 @@ public class VirtualView implements View {
     public void showCurrentActiveUser(String username) {
         Message message = new Message(Message.MessageType.CURRENT_ACTIVE_USER);
         message.addData("username",username);
+        sendMessage(message);
+    }
+
+    @Override
+    public void askToChooseStartResources(Resource[] values,int resourcesToChoose) {
+        Message message = new Message(Message.MessageType.START_RESOURCES);
+        message.addData("resources",Serializer.serializeResources(values));
+        message.addData("resourcesToChoose",Integer.toString(resourcesToChoose));
         sendMessage(message);
     }
 

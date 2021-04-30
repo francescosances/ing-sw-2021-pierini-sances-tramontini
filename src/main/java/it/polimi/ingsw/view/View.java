@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.storage.Resource;
+import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.utils.Triple;
 
@@ -90,4 +91,6 @@ public interface View {
     void chooseProductions(List<Producer> availableProductions,PlayerBoard playerBoard);
 
     void showCurrentActiveUser(String username);
+
+    void askToChooseStartResources(Resource[] values,int resourcesToChoose);
 }
