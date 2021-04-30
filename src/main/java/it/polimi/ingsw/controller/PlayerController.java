@@ -266,14 +266,11 @@ public class PlayerController {
     //TODO: aggiungere controlli anche quando la carta viene selezionata
     private void listDevelopmentCardToBuy() {
         if(getPlayerBoard().getMatch().getDevelopmentCardDecks().stream().noneMatch(t->{
-            for (DevelopmentCard d: t) {
+                DevelopmentCard d = t.get(0);
                 Requirements requirements = d.getCost();
                 for(LeaderCard card : getPlayerBoard().getLeaderCards())
                     requirements = card.recalculateRequirements(requirements);
-                if(requirements.satisfied(getPlayerBoard()) && getPlayerBoard().acceptsDevelopmentCard(d))
-                    return true;
-            }
-            return false;
+                return requirements.satisfied(getPlayerBoard()) && getPlayerBoard().acceptsDevelopmentCard(d);
         })) {
             virtualView.showErrorMessage("You can not buy any card");
             askForNormalAction();
