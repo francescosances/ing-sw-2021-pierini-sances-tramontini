@@ -19,7 +19,7 @@ public class ProductionLeaderCard extends LeaderCard implements Producer {
     /**
      * What the player gains if the production is triggered
      */
-    private final Map<Resource, Integer> productionGain;
+    private final Requirements productionGain;
 
     /**
      * Initializes a new ProductionLeaderCard
@@ -28,11 +28,7 @@ public class ProductionLeaderCard extends LeaderCard implements Producer {
      * @param productionCost cost that a player has to pay to trigger the production
      */
     public ProductionLeaderCard (int victoryPoints, Requirements requirements, Requirements productionCost) {
-        super(victoryPoints, requirements);
-        this.productionCost = productionCost;
-        this.productionGain = new HashMap<>();
-        productionGain.put(NonPhysicalResourceType.ON_DEMAND,1);
-        productionGain.put(NonPhysicalResourceType.FAITH_POINT,1);
+        this(victoryPoints, requirements, productionCost, false);
     }
 
     /**
@@ -45,9 +41,9 @@ public class ProductionLeaderCard extends LeaderCard implements Producer {
     public ProductionLeaderCard (int victoryPoints, Requirements requirements, Requirements productionCost, boolean active) {
         super(victoryPoints, requirements, active);
         this.productionCost = productionCost;
-        this.productionGain = new HashMap<>();
-        productionGain.put(NonPhysicalResourceType.ON_DEMAND,1);
-        productionGain.put(NonPhysicalResourceType.FAITH_POINT,1);
+        this.productionGain = new Requirements();
+        productionGain.addResourceRequirement(NonPhysicalResourceType.ON_DEMAND,1);
+        productionGain.addResourceRequirement(NonPhysicalResourceType.FAITH_POINT,1);
     }
 
     @Override
@@ -56,12 +52,12 @@ public class ProductionLeaderCard extends LeaderCard implements Producer {
     }
 
     @Override
-    public Map<Resource, Integer> getProductionCost() {
-        return productionCost.getResourcesMap();
+    public Requirements getProductionCost() {
+        return productionCost;
     }
 
     @Override
-    public Map<Resource, Integer> getProductionGain() {
+    public Requirements getProductionGain() {
         return productionGain;
     }
 
@@ -75,7 +71,7 @@ public class ProductionLeaderCard extends LeaderCard implements Producer {
                 (active ? "active" : "inactive") +
                 ", requirements=" + requirements +
                 ", productionCost=" + productionCost +
-                ", productionGain=[" + productionGain.entrySet().stream().map(entry -> entry.getValue() + " " + entry.getKey()).collect(Collectors.joining(", ")) + "]";
+                ", productionGain=" + productionGain;
     }
 
     /**

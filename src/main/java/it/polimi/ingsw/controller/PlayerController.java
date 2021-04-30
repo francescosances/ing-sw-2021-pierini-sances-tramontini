@@ -456,15 +456,21 @@ public class PlayerController {
         nextStatus();
     }
 
-    public void chooseProductions(List<Integer> choices) {
-        List<Producer> availableProductions = playerBoard.getAvailableProductions();
-        Requirements costs = new Requirements();
-        Requirements gains = new Requirements();
-        for(Integer i : choices) {
-            Producer producer = availableProductions.get(i);
-            costs.sum(new Requirements(producer.getProductionCost()));
-            gains.sum(new Requirements(producer.getProductionGain()));
+    public void chooseProductions(Requirements costs,Requirements gains) {
+        if(!costs.satisfied(playerBoard)){
+            virtualView.showErrorMessage("You cannot activate these productions");
+            askForNormalAction();
+            return;
         }
+        playerBoard.payResources(costs);
+        Map<ResourceType,Integer> newGains = new HashMap<>();
+        gains.forEach(entry->{
+            if(entry.getKey() == NonPhysicalResourceType.FAITH_POINT)
+                playerBoard.gainFaithPoints(1);
+            else if(entry.getKey() instanceof ResourceType)
+                newGains.put((ResourceType) entry.getKey(),entry.getValue());
+        });
+        playerBoard.getStrongbox().addResources(newGains);
     }
 
     private void setAfterDepotsSwapAction(Runnable afterDepotsSwapAction) {

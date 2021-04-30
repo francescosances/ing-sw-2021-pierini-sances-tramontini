@@ -218,6 +218,10 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
         return ris;
     }
 
+    public int getResourceRequirementsSize(){
+        return resources.size();
+    }
+
     /**
      * Returns an Iterator of the Requirements class
      * @return an Iterator of the Requirements class

@@ -52,14 +52,14 @@ public class Warehouse implements Storage {
      */
     @Override
     public Requirements removeResources(Requirements requirements) {
-        Requirements newRequirements = (Requirements) requirements.clone();
+        Requirements newRequirements = requirements.clone();
         for (Map.Entry<Resource, Integer> res : requirements) {
             int toBeRemoved = res.getValue();
             for (Depot dep : depots)
                 while (dep.getOccupied() > 0 && dep.getResourceType() == res.getKey() && toBeRemoved > 0) {
                     dep.removeResource();
                     toBeRemoved--;
-                    newRequirements.removeResourceRequirement((ResourceType) res.getKey(), 1);
+                    newRequirements.removeResourceRequirement(res.getKey(), 1);
                 }
         }
         return newRequirements;

@@ -107,7 +107,7 @@ public class GameController implements PlayerStatusListener {
                     currentPlayerController.chooseDevelopmentCardSlot(Integer.parseInt(message.getData("slotIndex")));
                     break;
                 case PRODUCTION:
-                    currentPlayerController.chooseProductions(Serializer.deserializeIntegers(message.getData("choices")));
+                    currentPlayerController.chooseProductions(Serializer.deserializeRequirements(message.getData("costs")),Serializer.deserializeRequirements(message.getData("gains")));
                     break;
             }
         }catch (EndGameException e){

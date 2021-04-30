@@ -177,6 +177,11 @@ public class PlayerBoard {
         return producers;
     }
 
+    public void payResources(Requirements costs) {
+        costs = warehouse.removeResources(costs);
+        strongbox.removeResources(costs);
+    }
+
     @Override
     public String toString() {
         return "PlayerBoard{" +

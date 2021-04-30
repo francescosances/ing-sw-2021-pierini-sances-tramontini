@@ -35,7 +35,7 @@ public class Strongbox implements Storage {
      */
     @Override
     public Requirements removeResources(Requirements resources) {
-        Requirements newRequirements = (Requirements) resources.clone();
+        Requirements newRequirements = resources.clone();
         for (Map.Entry<Resource, Integer> res : resources) {
             int toBeRemoved = res.getValue();
             int previousValue = getResourcesNum((ResourceType) res.getKey());
@@ -43,7 +43,7 @@ public class Strongbox implements Storage {
                 toBeRemoved = previousValue;
             }
             this.resources.put((ResourceType) res.getKey(), previousValue - toBeRemoved);
-            newRequirements.removeResourceRequirement((ResourceType) res.getKey(), toBeRemoved);
+            newRequirements.removeResourceRequirement(res.getKey(), toBeRemoved);
         }
         return newRequirements;
     }

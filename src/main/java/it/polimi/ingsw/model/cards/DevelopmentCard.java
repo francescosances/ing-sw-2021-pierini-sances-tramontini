@@ -8,8 +8,6 @@ import java.util.Map;
 
 public class DevelopmentCard extends Card implements Producer {
 
-    public static final int MAX_LEVEL = 3;
-
     /**
      * The requirements to be met in order to buy this card
      */
@@ -90,13 +88,13 @@ public class DevelopmentCard extends Card implements Producer {
     }
 
     @Override
-    public Map<Resource, Integer> getProductionCost() {
-        return productionCost.getResourcesMap();
+    public Requirements getProductionCost() {
+        return productionCost;
     }
 
     @Override
-    public Map<Resource, Integer> getProductionGain() {
-        return productionGain.getResourcesMap();
+    public Requirements getProductionGain() {
+        return productionGain;
     }
 
     private DevelopmentCard(int victoryPoints){

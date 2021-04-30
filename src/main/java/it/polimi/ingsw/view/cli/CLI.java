@@ -237,28 +237,28 @@ public class CLI implements View {
         return temp.substring(temp.length()-11);
     }
 
-    private String getProductionFirstRow(Map<Resource,Integer> map){
-        Map.Entry<Resource,Integer> entry = map.entrySet().iterator().next();
-        if(map.size() == 1)
+    private String getProductionFirstRow(Requirements requirements){
+        Map.Entry<Resource,Integer> entry = requirements.iterator().next();
+        if(requirements.getResourceRequirementsSize() == 1)
             return " "+formatResourceString("");
         return entry.getValue()+" "+formatResourceString(entry.getKey().toString());
     }
 
-    private String getProductionSecondRow(Map<Resource,Integer> map){
-        Iterator<Map.Entry<Resource,Integer>> iterator = map.entrySet().iterator();
+    private String getProductionSecondRow(Requirements requirements){
+        Iterator<Map.Entry<Resource,Integer>> iterator = requirements.iterator();
         Map.Entry<Resource,Integer> entry = iterator.next();
-        if(map.size() != 2) {
-            if(map.size() == 3)
+        if(requirements.getResourceRequirementsSize() != 2) {
+            if(requirements.getResourceRequirementsSize() == 3)
                 entry = iterator.next();
             return entry.getValue() + " " + formatResourceString(entry.getKey().toString());
         }return " "+formatResourceString("");
     }
 
-    private String getProductionThirdRow(Map<Resource,Integer> map){
-        Iterator<Map.Entry<Resource,Integer>> iterator = map.entrySet().iterator();
+    private String getProductionThirdRow(Requirements requirements){
+        Iterator<Map.Entry<Resource,Integer>> iterator = requirements.iterator();
         Map.Entry<Resource,Integer> entry = null;
-        if(map.size() > 1) {
-            for(int i=0;i<map.size();i++)
+        if(requirements.getResourceRequirementsSize() > 1) {
+            for(int i=0;i<requirements.getResourceRequirementsSize();i++)
                 entry = iterator.next();
             return entry.getValue() + " " + formatResourceString(entry.getKey().toString());
         }
@@ -267,8 +267,8 @@ public class CLI implements View {
 
     private void printProduction(int index,Producer producer){
         output.printf("[%d] ",index);
-        Map<Resource,Integer> cost = producer.getProductionCost();
-        Map<Resource,Integer> gain = producer.getProductionGain();
+        Requirements cost = producer.getProductionCost();
+        Requirements gain = producer.getProductionGain();
 
         output.printf(" %s ╗ %s\n", getProductionFirstRow(cost), getProductionFirstRow(gain));
         output.printf("    %s ╟> %s\n", getProductionSecondRow(cost), getProductionSecondRow(gain));
@@ -298,8 +298,8 @@ public class CLI implements View {
             if(temp >= 0 && temp < availableProductions.size()){
                 choices.add(temp);
                 Producer producer = availableProductions.get(temp);
-                costs.sum(new Requirements(producer.getProductionCost()));
-                gains.sum(new Requirements(producer.getProductionGain()));
+                costs.sum(producer.getProductionCost());
+                gains.sum(producer.getProductionGain());
             }
         }while(temp >= 0);
         while(costs.getResources(NonPhysicalResourceType.ON_DEMAND) > 0){
