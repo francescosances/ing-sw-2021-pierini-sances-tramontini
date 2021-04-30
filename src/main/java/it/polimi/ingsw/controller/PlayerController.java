@@ -264,7 +264,6 @@ public class PlayerController {
     }
 
     //TODO: aggiungere controlli anche quando la carta viene selezionata
-    //TODO: verificare perché permette di comprare carte di livello 2 anche su slot di livello 1
     private void listDevelopmentCardToBuy() {
         if(getPlayerBoard().getMatch().getDevelopmentCardDecks().stream().noneMatch(t->{
             for (DevelopmentCard d: t) {
@@ -284,14 +283,12 @@ public class PlayerController {
             for(Deck<DevelopmentCard> deck : cards){
                 Deck<DevelopmentCard> newDeck = new Deck<>();
                 newCards.add(newDeck);
-                for(DevelopmentCard card : deck){
-                    DevelopmentCard newCard = card.clone();
-                    Requirements requirements = newCard.getCost();
-                    for(LeaderCard leaderCard : getPlayerBoard().getLeaderCards())
-                        requirements = leaderCard.recalculateRequirements(requirements);
-                    newCard.setCost(requirements);
-                    newDeck.add(newCard);
-                }
+                DevelopmentCard newCard = deck.get(0).clone();
+                Requirements requirements = newCard.getCost();
+                for(LeaderCard leaderCard : getPlayerBoard().getLeaderCards())
+                    requirements = leaderCard.recalculateRequirements(requirements);
+                newCard.setCost(requirements);
+                newDeck.add(newCard);
             }
             virtualView.listDevelopmentCards(newCards, 1, getPlayerBoard());
         }
