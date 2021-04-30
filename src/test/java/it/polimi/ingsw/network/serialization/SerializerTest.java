@@ -142,9 +142,6 @@ public class SerializerTest {
 
         assertEquals(playerBoard, deserialized);
 
-        match = null;
-        playerBoard = null;
-
     }
 
     @Test
@@ -170,8 +167,6 @@ public class SerializerTest {
         String json = Serializer.serializeMatchState(match);
         assertEquals(match, Serializer.deserializeMatchState(json));
 
-        match = null;
-        playerBoard = null;
     }
 
     @Test
@@ -198,8 +193,6 @@ public class SerializerTest {
         String json = Serializer.serializeMatchState(match);
         assertEquals(match, Serializer.deserializeSoloMatchState(json));
 
-        match = null;
-        playerBoard = null;
     }
 
     @Test
@@ -218,8 +211,15 @@ public class SerializerTest {
         String json = Serializer.serializeResources(resources);
         assertArrayEquals(resources, Serializer.deserializeResources(json));
 
-        resources = null;
-        resourceOne = null;
-        resourceTwo = null;
+    }
+
+    @Test
+    public void serializeRequirements(){
+        Requirements resourceRequirements = new Requirements(new Pair<>(ResourceType.STONE, 5));
+        Requirements cardRequirements = new Requirements(new Triple<>(DevelopmentColorType.GREEN, 1, 2), new Triple<>(DevelopmentColorType.PURPLE, 1, 1));
+        String json = Serializer.serializeRequirements(resourceRequirements);
+        String json2 = Serializer.serializeRequirements(cardRequirements);
+        assertEquals(resourceRequirements, Serializer.deserializeRequirements(json));
+        assertEquals(cardRequirements, Serializer.deserializeRequirements(json2));
     }
 }

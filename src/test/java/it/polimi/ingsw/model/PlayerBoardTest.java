@@ -101,4 +101,14 @@ public class PlayerBoardTest {
         assertEquals(2, playerBoard.strongbox.getResourcesNum(ResourceType.STONE));
     }
 
+    @Test
+    public void acceptsDevelopmentCard(){
+        DevelopmentCard developmentCard = new DevelopmentCard(1, null, 1, DevelopmentColorType.GREEN, null, (Requirements) null);
+        playerBoard.getDevelopmentCardSlots()[0].addCard(developmentCard);
+        assertFalse(playerBoard.getDevelopmentCardSlots()[0].accepts(new DevelopmentCard(1, null, 1, DevelopmentColorType.GREEN, null, (Requirements) null)));
+        assertTrue(playerBoard.getDevelopmentCardSlots()[1].accepts(new DevelopmentCard(1, null, 1, DevelopmentColorType.GREEN, null, (Requirements) null)));
+        assertFalse(playerBoard.getDevelopmentCardSlots()[1].accepts(new DevelopmentCard(1, null, 2, DevelopmentColorType.GREEN, null, (Requirements) null)));
+        assertTrue(playerBoard.getDevelopmentCardSlots()[0].accepts(new DevelopmentCard(2, null, 2, DevelopmentColorType.GREEN, null, (Requirements) null)));
+    }
+
 }
