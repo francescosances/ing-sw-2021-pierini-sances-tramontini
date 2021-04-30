@@ -166,13 +166,29 @@ public class Serializer {
         return new Gson().toJson(availableSlots);
     }
 
+    //TODO modificare il nome della classe, errore di battitura
     public static List<DevelopmentCardSlot> deserializaDevelopmentCardsSlots(String slots) {
-        GsonBuilder gsonbuilder = new GsonBuilder();
-        gsonbuilder.registerTypeAdapter(Requirements.class, new RequirementsCreator());
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Requirements.class, new RequirementsCreator());
 
-        Gson gson = gsonbuilder.create();
+        Gson gson = gsonBuilder.create();
         Type type = new TypeToken<List<DevelopmentCardSlot>>(){}.getType();
         return gson.fromJson(slots, type);
+    }
+
+    public static String serializeProducerList(List<Producer> producerList){
+        return new Gson().toJson(producerList);
+    }
+
+    public static List deserialize(String json){
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Requirements.class, new RequirementsCreator());
+        gsonBuilder.registerTypeAdapter(LeaderCard.class, new LeaderCardCreator());
+        gsonBuilder.registerTypeAdapter(Producer.class, new ProducerCreator());
+
+        Gson gson = gsonBuilder.create();
+        Type type = new TypeToken<List<Producer>>(){}.getType();
+        return gson.fromJson(json, type);
     }
 }
 

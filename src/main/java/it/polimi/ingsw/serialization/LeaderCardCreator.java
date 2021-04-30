@@ -56,7 +56,7 @@ public class LeaderCardCreator implements JsonDeserializer<LeaderCard> {
         );
     }
 
-    protected ProductionLeaderCard productionLeaderCard(JsonObject jsonObject, JsonDeserializationContext context) {
+    protected static ProductionLeaderCard productionLeaderCard(JsonObject jsonObject, JsonDeserializationContext context) {
         return new ProductionLeaderCard(
                 jsonObject.get("victoryPoints").getAsInt(),
                 new RequirementsCreator().deserialize(jsonObject.get("requirements"), Requirements.class, context),

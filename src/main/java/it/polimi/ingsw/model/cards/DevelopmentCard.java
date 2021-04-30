@@ -42,16 +42,20 @@ public class DevelopmentCard extends Card implements Producer {
      * @param productionGain what the card returns when production is activated
      */
     public DevelopmentCard(int victoryPoints, Requirements cost, int level, DevelopmentColorType color, Requirements productionCost, Pair<Resource,Integer> ... productionGain) {
+        this(victoryPoints,cost, level, color, productionCost, new Requirements());
+        for(Pair<Resource,Integer> x : productionGain)
+            this.productionGain.addResourceRequirement(x.fst,x.snd);
+    }
+
+    public DevelopmentCard(int victoryPoints, Requirements cost, int level, DevelopmentColorType color, Requirements productionCost, Requirements productionGain) {
         super(victoryPoints);
         this.cost = cost;
         this.level = level;
         this.color = color;
         this.productionCost = productionCost;
-        this.productionGain = new Requirements();
-        for(Pair<Resource,Integer> x : productionGain)
-            this.productionGain.addResourceRequirement(x.fst,x.snd);
-
+        this.productionGain = productionGain;
     }
+
 
     /**
      * Returns the amount of resources to be paid in order to buy this card
