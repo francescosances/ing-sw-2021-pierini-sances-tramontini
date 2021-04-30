@@ -24,7 +24,7 @@ public class DevelopmentCardSlot implements Iterable<DevelopmentCard>{
     }
 
     public boolean accepts(DevelopmentCard developmentCard){
-        return (getTopCard() == null && developmentCard.getLevel() == 1) || getTopCard().getLevel() == developmentCard.getLevel()-1;
+        return (getTopCard() == null && developmentCard.getLevel() == 1) || (getTopCard() != null && getTopCard().getLevel() == developmentCard.getLevel()-1);
     }
 
     public int getSize(){

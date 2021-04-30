@@ -61,8 +61,6 @@ public class Serializer {
     }
 
     public static List<DevelopmentCard> deserializeDevelopmentCardsList(String serializedList) {
-        System.out.println("QUI");
-        System.out.println(serializedList);
         GsonBuilder gsonbuilder = new GsonBuilder();
         gsonbuilder.registerTypeAdapter(Requirements.class, new RequirementsCreator());
 
