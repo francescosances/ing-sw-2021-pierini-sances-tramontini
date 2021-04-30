@@ -1,16 +1,19 @@
 package it.polimi.ingsw.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.EndGameException;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.SoloMatch;
+import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.network.ClientHandler;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.view.VirtualView;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,6 +105,9 @@ public class GameController implements PlayerStatusListener {
                     break;
                 case CHOOSE_DEVELOPMENT_CARD_SLOT:
                     currentPlayerController.chooseDevelopmentCardSlot(Integer.parseInt(message.getData("slotIndex")));
+                    break;
+                case PRODUCTION:
+                    currentPlayerController.chooseProductions(Serializer.deserializeIntegers(message.getData("choices")));
                     break;
             }
         }catch (EndGameException e){

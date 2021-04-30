@@ -55,6 +55,10 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
         }
     }
 
+    public Requirements(Map<Resource,Integer> resources){
+        this(resources,null);
+    }
+
     /**
      * Sets a new Requirements object needing both development cards and resources so as to be satisfied
      * @param resources the resources needed
@@ -123,9 +127,17 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
      */
     public static Requirements sum(Requirements first,Requirements second){
         Requirements ret = first.clone();
-        second.resources.forEach(ret::addResourceRequirement);
-        second.developmentCards.forEach((colorType,k)-> k.forEach((level, num)-> ret.addDevelopmentCardRequirement(colorType,level,num)));
+        ret.sum(second);
         return ret;
+    }
+
+    /**
+     * Sums the parameter to this
+     * @param second the other Requirements to sum
+     */
+    public void sum(Requirements second){
+        second.resources.forEach(this::addResourceRequirement);
+        second.developmentCards.forEach((colorType,k)-> k.forEach((level, num)-> this.addDevelopmentCardRequirement(colorType,level,num)));
     }
 
     /**
@@ -142,7 +154,7 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
      * @param resource the ResourceType to remove
      * @param quantity the quantity of the resource to remove
      */
-    public void removeResourceRequirement(ResourceType resource,int quantity){
+    public void removeResourceRequirement(Resource resource,int quantity){
         resources.put(resource,resources.getOrDefault(resource,quantity)-quantity);
         if(resources.get(resource) <= 0)
             resources.remove(resource);

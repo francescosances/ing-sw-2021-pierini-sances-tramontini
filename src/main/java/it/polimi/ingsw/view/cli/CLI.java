@@ -2,10 +2,7 @@ package it.polimi.ingsw.view.cli;
 
 import it.polimi.ingsw.controller.ClientController;
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.cards.Deck;
-import it.polimi.ingsw.model.cards.DevelopmentCard;
-import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
-import it.polimi.ingsw.model.cards.LeaderCard;
+import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.*;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
@@ -278,8 +275,7 @@ public class CLI implements View {
         output.printf("    %s ╝ %s\n", getProductionThirdRow(cost), getProductionThirdRow(gain));
     }
 
-    @Override
-    public void listAvailableProductions(List<Producer> availableProductions) {
+    private void listAvailableProductions(List<Producer> availableProductions) {
         int counter=1;
         output.printf("[0]  1 %s ╗ \n",formatResourceString(NonPhysicalResourceType.ON_DEMAND.toString()));
         output.printf("                   ╟> 1 %s \n",formatResourceString(NonPhysicalResourceType.ON_DEMAND.toString()));
@@ -287,6 +283,53 @@ public class CLI implements View {
         for(Producer producer : availableProductions){
             printProduction(counter++,producer);
         }
+    }
+
+    @Override
+    public void chooseProductions(List<Producer> availableProductions,PlayerBoard playerBoard) {
+        listAvailableProductions(availableProductions);
+        List<Integer> choices = new ArrayList<>();
+        int temp;
+        output.println("Choose the productions to activate. Insert a negative number to exit.");
+        Requirements costs = new Requirements();
+        Requirements gains = new Requirements();
+        do{
+            temp = input.nextInt();
+            if(temp >= 0 && temp < availableProductions.size()){
+                choices.add(temp);
+                Producer producer = availableProductions.get(temp);
+                costs.sum(new Requirements(producer.getProductionCost()));
+                gains.sum(new Requirements(producer.getProductionGain()));
+            }
+        }while(temp >= 0);
+        while(costs.getResources(NonPhysicalResourceType.ON_DEMAND) > 0){
+            output.println("You have to choose "+costs.getResources(NonPhysicalResourceType.ON_DEMAND)+" resources to spend");
+            output.println("What resource do you want to spend?");
+            this.showResources(ResourceType.values());
+            int choice;
+            do{
+                choice = input.nextInt();
+            }while(choice < 0 || choice > ResourceType.values().length);
+            costs.removeResourceRequirement(NonPhysicalResourceType.ON_DEMAND,1);
+            costs.addResourceRequirement(ResourceType.values()[choice],1);
+        }
+        while(gains.getResources(NonPhysicalResourceType.ON_DEMAND) > 0){
+            output.println("You have to choose "+gains.getResources(NonPhysicalResourceType.ON_DEMAND)+" resources to gain");
+            output.println("What resource do you want to gain?");
+            this.showResources(ResourceType.values());
+            int choice;
+            do{
+                choice = input.nextInt();
+            }while(choice < 0 || choice > ResourceType.values().length);
+            gains.removeResourceRequirement(NonPhysicalResourceType.ON_DEMAND,1);
+            gains.addResourceRequirement(ResourceType.values()[choice],1);
+        }
+        if(!costs.satisfied(playerBoard)){
+            errorOutput.println("You cannot start these productions");
+            chooseProductions(availableProductions,playerBoard);
+            return;
+        }
+        clientController.chooseProductions(costs,gains);
     }
 
     @Override
@@ -474,10 +517,15 @@ public class CLI implements View {
     }
 
     @Override
-    public void showResources(Resource[] resources) {
+    public void showResourcesGainedFromMarket(Resource[] resources) {
         output.println("you got these resources from the market:");
+        showResources(resources);
+    }
+
+    private void showResources(Resource[] resources){
+        int index = 0;
         for(Resource resource : resources){
-            output.println("  " + resource);
+            output.printf("[%d] %s \n",index++,resource);
         }
     }
 

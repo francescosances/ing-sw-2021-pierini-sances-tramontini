@@ -16,4 +16,5 @@ public interface Producer {
      * @return a Requirements object containing the amount of resources gained from the production
      */
     Map<Resource, Integer> getProductionGain();
+
 }

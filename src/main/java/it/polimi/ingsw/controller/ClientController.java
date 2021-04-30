@@ -3,11 +3,13 @@ package it.polimi.ingsw.controller;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.model.Action;
+import it.polimi.ingsw.model.Producer;
 import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
 import it.polimi.ingsw.model.Market;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.LeaderCard;
+import it.polimi.ingsw.model.cards.Requirements;
 import it.polimi.ingsw.network.ClientSocket;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
@@ -111,7 +113,7 @@ public class ClientController {
                 view.askToChooseMarketRowOrColumn(market);
                 break;
             case SHOW_RESOURCES:
-                view.showResources(Serializer.deserializeResources(message.getData("resources")));
+                view.showResourcesGainedFromMarket(Serializer.deserializeResources(message.getData("resources")));
                 break;
             case WHITE_MARBLE_CONVERSION:
                 view.chooseWhiteMarbleConversion(Serializer.deserializeLeaderCard(message.getData("card1")),Serializer.deserializeLeaderCard(message.getData("card2")));
@@ -126,7 +128,8 @@ public class ClientController {
                 view.askToChooseDevelopmentCardSlot(Serializer.deserializeDevelopmentCardsSlots(message.getData("slots")).toArray(new DevelopmentCardSlot[0]),Serializer.deserializeDevelopmentCard(message.getData("developmentCard")));
                 break;
             case PRODUCTION:
-                view.listAvailableProductions(Serializer.deserializeProducerList(message.getData("productions")));
+                List<Producer> producers = Serializer.deserializeProducerList(message.getData("productions"));
+                view.chooseProductions(producers,Serializer.deserializePlayerBoard(message.getData("playerboard")));
                 break;
             default:
                 clientSocket.log("Received unexpected message");
@@ -240,6 +243,12 @@ public class ClientController {
         clientSocket.sendMessage(message);
     }
 
+    public void chooseProductions(Requirements costs,Requirements gains) {
+        Message message = new Message(Message.MessageType.PRODUCTION);
+        message.addData("costs",Serializer.serializeRequirements(costs));
+        message.addData("gains",Serializer.serializeRequirements(gains));
+        clientSocket.sendMessage(message);
+    }
 
     /**
      * Resumes a match suspended after a network disconnection

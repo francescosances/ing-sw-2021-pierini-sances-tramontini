@@ -79,7 +79,7 @@ public interface View {
 
     void showMarket(Market market);
 
-    void showResources(Resource[] resources);
+    void showResourcesGainedFromMarket(Resource[] resources);
 
     void askToStoreResource(Resource resource,Warehouse warehouse);
 
@@ -87,7 +87,7 @@ public interface View {
 
     void askToChooseDevelopmentCardSlot(DevelopmentCardSlot[] slots, DevelopmentCard developmentCard);
 
-    void listAvailableProductions(List<Producer> availableProductions);
+    void chooseProductions(List<Producer> availableProductions,PlayerBoard playerBoard);
 
     void showCurrentActiveUser(String username);
 }

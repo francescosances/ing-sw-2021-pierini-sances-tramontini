@@ -206,7 +206,7 @@ public class PlayerController {
                 listDevelopmentCardToBuy();
                 break;
             case ACTIVATE_PRODUCTION:
-                virtualView.listAvailableProductions(playerBoard.getAvailableProductions());
+                virtualView.chooseProductions(playerBoard.getAvailableProductions(),playerBoard);
                 break;
             case SKIP:
                 skipAction.run();
@@ -364,7 +364,7 @@ public class PlayerController {
         getPlayerBoard().getWarehouse().toBeStored(resources);
         List<Resource> resourcesToStore = Arrays.asList(resources);
         Collections.reverse(resourcesToStore);
-        virtualView.showResources(resourcesToStore.toArray(new Resource[0]));
+        virtualView.showResourcesGainedFromMarket(resourcesToStore.toArray(new Resource[0]));
         askToStoreResource();
     }
 
@@ -454,6 +454,17 @@ public class PlayerController {
         playerBoard.getDevelopmentCardSlots()[slotIndex].addCard(currentDevelopmentCardToStore);
         currentDevelopmentCardToStore = null;
         nextStatus();
+    }
+
+    public void chooseProductions(List<Integer> choices) {
+        List<Producer> availableProductions = playerBoard.getAvailableProductions();
+        Requirements costs = new Requirements();
+        Requirements gains = new Requirements();
+        for(Integer i : choices) {
+            Producer producer = availableProductions.get(i);
+            costs.sum(new Requirements(producer.getProductionCost()));
+            gains.sum(new Requirements(producer.getProductionGain()));
+        }
     }
 
     private void setAfterDepotsSwapAction(Runnable afterDepotsSwapAction) {

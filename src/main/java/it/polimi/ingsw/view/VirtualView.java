@@ -136,7 +136,7 @@ public class VirtualView implements View {
     }
 
     @Override
-    public void showResources(Resource[] resources) {
+    public void showResourcesGainedFromMarket(Resource[] resources) {
         Message message = new Message(Message.MessageType.SHOW_RESOURCES);
         message.addData("resources",Serializer.serializeResources(resources));
         sendMessage(message);
@@ -182,9 +182,10 @@ public class VirtualView implements View {
     }
 
     @Override
-    public void listAvailableProductions(List<Producer> availableProductions) {
+    public void chooseProductions(List<Producer> availableProductions,PlayerBoard playerBoard) {
         Message message = new Message(Message.MessageType.PRODUCTION);
         message.addData("productions",Serializer.serializeProducerList(availableProductions));
+        message.addData("playerboard",Serializer.serializePlayerBoard(playerBoard));
         sendMessage(message);
     }
 

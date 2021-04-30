@@ -189,5 +189,15 @@ public class Serializer {
         Type type = new TypeToken<List<Producer>>(){}.getType();
         return gson.fromJson(json, type);
     }
+
+    public static String serializeIntegers(List<Integer> list){
+        return new Gson().toJson(list);
+    }
+
+    public static List<Integer> deserializeIntegers(String json){
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<Integer>>(){}.getType();
+        return gson.fromJson(json, type);
+    }
 }
 
