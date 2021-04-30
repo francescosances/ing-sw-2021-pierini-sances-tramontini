@@ -123,7 +123,7 @@ public class ClientController {
                 view.listDevelopmentCards(Serializer.deserializeDevelopmentCardsDeckList(message.getData("developmentCards")),Integer.parseInt(message.getData("cardsToChoose")),Serializer.deserializePlayerBoard(message.getData("playerBoard")));
                 break;
             case CHOOSE_DEVELOPMENT_CARD_SLOT:
-                view.askToChooseDevelopmentCardSlot(Serializer.deserializaDevelopmentCardsSlots(message.getData("slots")).toArray(new DevelopmentCardSlot[0]),Serializer.deserializeDevelopmentCard(message.getData("developmentCard")));
+                view.askToChooseDevelopmentCardSlot(Serializer.deserializeDevelopmentCardsSlots(message.getData("slots")).toArray(new DevelopmentCardSlot[0]),Serializer.deserializeDevelopmentCard(message.getData("developmentCard")));
                 break;
             case PRODUCTION:
                 view.listAvailableProductions(Serializer.deserializeProducerList(message.getData("productions")));
