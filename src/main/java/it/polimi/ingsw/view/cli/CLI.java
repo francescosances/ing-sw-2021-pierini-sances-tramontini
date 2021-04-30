@@ -220,7 +220,7 @@ public class CLI implements View {
             if(slot.accepts(developmentCard))
                 output.printf("[%d] %s\n", index, slot);
             else
-                output.printf("[X] %s\n",slot);
+                output.printf(ANSI_WHITE+"[X] %s\n"+ANSI_RESET,slot);
             index++;
         }
         int choice = input.nextInt();
@@ -240,7 +240,7 @@ public class CLI implements View {
     private String getProductionFirstRow(Requirements requirements){
         Map.Entry<Resource,Integer> entry = requirements.iterator().next();
         if(requirements.getResourceRequirementsSize() == 1)
-            return " "+formatResourceString("");
+            return "  "+formatResourceString("");
         return entry.getValue()+" "+formatResourceString(entry.getKey().toString());
     }
 
@@ -251,7 +251,7 @@ public class CLI implements View {
             if(requirements.getResourceRequirementsSize() == 3)
                 entry = iterator.next();
             return entry.getValue() + " " + formatResourceString(entry.getKey().toString());
-        }return " "+formatResourceString("");
+        }return "  "+formatResourceString("");
     }
 
     private String getProductionThirdRow(Requirements requirements){
@@ -266,20 +266,16 @@ public class CLI implements View {
     }
 
     private void printProduction(int index,Producer producer){
-        output.printf("[%d] ",index);
         Requirements cost = producer.getProductionCost();
         Requirements gain = producer.getProductionGain();
 
-        output.printf(" %s ╗ %s\n", getProductionFirstRow(cost), getProductionFirstRow(gain));
-        output.printf("    %s ╟> %s\n", getProductionSecondRow(cost), getProductionSecondRow(gain));
-        output.printf("    %s ╝ %s\n", getProductionThirdRow(cost), getProductionThirdRow(gain));
+        output.printf("[%d]  %s ╗  %s\n",index, getProductionFirstRow(cost), getProductionFirstRow(gain));
+        output.printf("     %s ╟> %s\n", getProductionSecondRow(cost), getProductionSecondRow(gain));
+        output.printf("     %s ╝  %s\n", getProductionThirdRow(cost), getProductionThirdRow(gain));
     }
 
     private void listAvailableProductions(List<Producer> availableProductions) {
-        int counter=1;
-        output.printf("[0]  1 %s ╗ \n",formatResourceString(NonPhysicalResourceType.ON_DEMAND.toString()));
-        output.printf("                   ╟> 1 %s \n",formatResourceString(NonPhysicalResourceType.ON_DEMAND.toString()));
-        output.printf("     1 %s ╝ \n",formatResourceString(NonPhysicalResourceType.ON_DEMAND.toString()));
+        int counter=0;
         for(Producer producer : availableProductions){
             printProduction(counter++,producer);
         }
@@ -325,7 +321,7 @@ public class CLI implements View {
             gains.addResourceRequirement(ResourceType.values()[choice],1);
         }
         if(!costs.satisfied(playerBoard)){
-            errorOutput.println("You cannot start these productions");
+            showErrorMessage("You cannot start these productions");
             chooseProductions(availableProductions,playerBoard);
             return;
         }

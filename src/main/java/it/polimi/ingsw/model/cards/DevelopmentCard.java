@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.model.Producer;
+import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.utils.Pair;
 
@@ -30,6 +31,7 @@ public class DevelopmentCard extends Card implements Producer {
      */
     private Requirements productionGain;
 
+
     /**
      * Initializes a new DevelopmentCard
      * @param victoryPoints the victory points associated with the card
@@ -54,6 +56,15 @@ public class DevelopmentCard extends Card implements Producer {
         this.productionGain = productionGain;
     }
 
+    public static DevelopmentCard getBaseProduction(){
+        DevelopmentCard ret = new DevelopmentCard(0);
+        ret.level = 0;
+        ret.color = DevelopmentColorType.YELLOW;
+        ret.cost = new Requirements();
+        ret.productionCost = new Requirements(new Pair<>(NonPhysicalResourceType.ON_DEMAND,2));
+        ret.productionGain = new Requirements(new Pair<>(NonPhysicalResourceType.ON_DEMAND,1));
+        return ret;
+    }
 
     /**
      * Returns the amount of resources to be paid in order to buy this card

@@ -456,6 +456,7 @@ public class PlayerController {
         nextStatus();
     }
 
+    //TODO: se non scelgo nulla non devo andare avanti
     public void chooseProductions(Requirements costs,Requirements gains) {
         if(!costs.satisfied(playerBoard)){
             virtualView.showErrorMessage("You cannot activate these productions");
@@ -471,6 +472,7 @@ public class PlayerController {
                 newGains.put((ResourceType) entry.getKey(),entry.getValue());
         });
         playerBoard.getStrongbox().addResources(newGains);
+        nextStatus();
     }
 
     private void setAfterDepotsSwapAction(Runnable afterDepotsSwapAction) {

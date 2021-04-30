@@ -2,9 +2,8 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
-import it.polimi.ingsw.model.storage.ResourceType;
-import it.polimi.ingsw.model.storage.Strongbox;
-import it.polimi.ingsw.model.storage.Warehouse;
+import it.polimi.ingsw.model.storage.*;
+import it.polimi.ingsw.utils.Pair;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -166,6 +165,7 @@ public class PlayerBoard {
 
     public List<Producer> getAvailableProductions() {
         List<Producer> producers = new ArrayList<>();
+        producers.add(DevelopmentCard.getBaseProduction());
         Arrays.stream(developmentCardSlots).forEach(slot->{
             if(slot.getTopCard() != null)
                 producers.add(slot.getTopCard());
