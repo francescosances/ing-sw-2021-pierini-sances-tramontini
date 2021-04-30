@@ -190,14 +190,15 @@ public class Serializer {
         return gson.fromJson(json, type);
     }
 
-    public static String serializeIntegers(List<Integer> list){
-        return new Gson().toJson(list);
+    public static String serializeRequirements(Requirements requirements){
+        return new Gson().toJson(requirements);
     }
 
-    public static List<Integer> deserializeIntegers(String json){
-        Gson gson = new Gson();
-        Type type = new TypeToken<List<Integer>>(){}.getType();
-        return gson.fromJson(json, type);
+    public static Requirements deserializeRequirements(String json){
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Requirements.class, new RequirementsCreator());
+        gsonBuilder.registerTypeAdapter(Resource.class, new ResourceCreator());
+        return gsonBuilder.create().fromJson(json, Requirements.class);
     }
 }
 
