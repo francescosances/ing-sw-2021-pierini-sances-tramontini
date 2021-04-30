@@ -13,10 +13,16 @@ public class DevelopmentCardSlot implements Iterable<DevelopmentCard>{
         developmentCards = new ArrayList<>();
     }
 
-    public DevelopmentCard getTopCard(){
+    public DevelopmentCard getBottomCard(){
         if(developmentCards.isEmpty())
             return null;
         return developmentCards.get(0);
+    }
+
+    public DevelopmentCard getTopCard(){
+        if(developmentCards.isEmpty())
+            return null;
+        return developmentCards.get(getSize()-1);
     }
 
     public void addCard(DevelopmentCard developmentCard){
@@ -43,7 +49,7 @@ public class DevelopmentCardSlot implements Iterable<DevelopmentCard>{
                     .mapToInt(x -> 1).sum();
     }
 
-    public DevelopmentCard getFromLevel(int level) throws IllegalArgumentException{
+    public DevelopmentCard getFromLevel(int level){
         if(developmentCards.size() < level)
             throw new IllegalStateException("No card for this level");
         return developmentCards.get(level - 1);
