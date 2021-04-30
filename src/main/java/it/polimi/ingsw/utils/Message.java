@@ -110,6 +110,7 @@ public class Message{
         SHOW_WAREHOUSE_STATUS,
         DEVELOPMENT_CARDS_TO_BUY,
         CHOOSE_DEVELOPMENT_CARD_SLOT,
+        PRODUCTION,
         // from client to server
         LOGIN_REQUEST,
         LOBBY_CHOICE,

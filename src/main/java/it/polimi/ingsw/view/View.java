@@ -87,5 +87,7 @@ public interface View {
 
     void askToChooseDevelopmentCardSlot(DevelopmentCardSlot[] slots, DevelopmentCard developmentCard);
 
+    void listAvailableProductions(List<Producer> availableProductions);
+
     void showCurrentActiveUser(String username);
 }

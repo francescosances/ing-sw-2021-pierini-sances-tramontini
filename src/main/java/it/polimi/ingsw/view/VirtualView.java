@@ -181,4 +181,11 @@ public class VirtualView implements View {
         sendMessage(message);
     }
 
+    @Override
+    public void listAvailableProductions(List<Producer> availableProductions) {
+        Message message = new Message(Message.MessageType.PRODUCTION);
+        message.addData("productions",Serializer.serializeProducerList(availableProductions));
+        sendMessage(message);
+    }
+
 }

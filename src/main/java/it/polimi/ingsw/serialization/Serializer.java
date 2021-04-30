@@ -180,7 +180,7 @@ public class Serializer {
         return new Gson().toJson(producerList);
     }
 
-    public static List deserialize(String json){
+    public static List<Producer> deserializeProducerList(String json){
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Requirements.class, new RequirementsCreator());
         gsonBuilder.registerTypeAdapter(LeaderCard.class, new LeaderCardCreator());

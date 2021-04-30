@@ -100,6 +100,10 @@ public abstract class LeaderCard extends Card {
         return requirements.clone();
     }
 
+    public boolean isProductionLeaderCards(){
+        return false;
+    }
+
     /**
      * Returns a string representation of the object
      * @return a string representation of the object.

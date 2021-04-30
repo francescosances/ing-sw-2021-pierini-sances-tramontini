@@ -164,6 +164,19 @@ public class PlayerBoard {
         return boughtDevelopmentCardsCounter;
     }
 
+    public List<Producer> getAvailableProductions() {
+        List<Producer> producers = new ArrayList<>();
+        Arrays.stream(developmentCardSlots).forEach(slot->{
+            if(slot.getTopCard() != null)
+                producers.add(slot.getTopCard());
+        });
+        leaderCards.forEach(card -> {
+            if(card.isActive() && card.isProductionLeaderCards())
+                producers.add((ProductionLeaderCard) card);
+        });
+        return producers;
+    }
+
     @Override
     public String toString() {
         return "PlayerBoard{" +

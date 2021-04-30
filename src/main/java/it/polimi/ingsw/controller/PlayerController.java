@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Action;
+import it.polimi.ingsw.model.Producer;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
@@ -205,6 +206,7 @@ public class PlayerController {
                 listDevelopmentCardToBuy();
                 break;
             case ACTIVATE_PRODUCTION:
+                virtualView.listAvailableProductions(playerBoard.getAvailableProductions());
                 break;
             case SKIP:
                 skipAction.run();
@@ -213,7 +215,6 @@ public class PlayerController {
                 nextStatus();
         }
     }
-
 
     public void startNormalAction(){
         askForNormalAction();
@@ -272,7 +273,7 @@ public class PlayerController {
                     requirements = card.recalculateRequirements(requirements);
                 return requirements.satisfied(getPlayerBoard()) && getPlayerBoard().acceptsDevelopmentCard(d);
         })) {
-            virtualView.showErrorMessage("You can not buy any card");
+            virtualView.showErrorMessage("You can not buy any card");//TODO: mostrare comunque l'elenco di carte
             askForNormalAction();
         }else {
             List<Deck<DevelopmentCard>> cards = getPlayerBoard().getMatch().getDevelopmentCardDecks();

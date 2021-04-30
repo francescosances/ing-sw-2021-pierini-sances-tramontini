@@ -235,6 +235,23 @@ public class CLI implements View {
         clientController.chooseDevelopmentCardsSlot(choice);
     }
 
+    private void printProduction(int index,Producer producer){
+        output.printf("[%d] ",index);
+        output.printf("               ╟ ON DEMAND \n");
+        output.printf("     ON DEMAND ╝ \n");
+    }
+
+    @Override
+    public void listAvailableProductions(List<Producer> availableProductions) {
+        int counter=1;
+        output.printf("[0]  ON DEMAND ╗ \n");
+        output.printf("               ╟ ON DEMAND \n");
+        output.printf("     ON DEMAND ╝ \n");
+        for(Producer producer : availableProductions){
+            output.printf("[%d] %s\n",counter++,producer.toString());
+        }
+    }
+
     @Override
     public void showCurrentActiveUser(String username) {
         output.println("************");

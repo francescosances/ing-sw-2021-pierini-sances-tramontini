@@ -125,6 +125,9 @@ public class ClientController {
             case CHOOSE_DEVELOPMENT_CARD_SLOT:
                 view.askToChooseDevelopmentCardSlot(Serializer.deserializaDevelopmentCardsSlots(message.getData("slots")).toArray(new DevelopmentCardSlot[0]),Serializer.deserializeDevelopmentCard(message.getData("developmentCard")));
                 break;
+            case PRODUCTION:
+                view.listAvailableProductions(Serializer.deserializeProducerList(message.getData("productions")));
+                break;
             default:
                 clientSocket.log("Received unexpected message");
                 clientSocket.log(message.serialize());

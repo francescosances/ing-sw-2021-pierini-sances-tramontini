@@ -51,6 +51,11 @@ public class ProductionLeaderCard extends LeaderCard implements Producer {
     }
 
     @Override
+    public boolean isProductionLeaderCards() {
+        return true;
+    }
+
+    @Override
     public Map<Resource, Integer> getProductionCost() {
         return productionCost.getResourcesMap();
     }
