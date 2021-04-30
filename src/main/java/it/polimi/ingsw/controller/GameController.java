@@ -66,6 +66,10 @@ public class GameController implements PlayerStatusListener {
     public void handleReceivedGameMessage(Message message, String username){
         Gson gson = new Gson();
         try {
+            if(!username.equals(players.get(currentPlayerIndex).getUsername())){
+                System.out.println("Invalid message received from "+username);
+                return;
+            }
             final PlayerController currentPlayerController = getPlayerController(username);
             switch (message.getType()) {
                 case LEADER_CARDS_CHOICE:

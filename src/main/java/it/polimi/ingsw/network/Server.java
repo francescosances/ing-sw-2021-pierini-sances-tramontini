@@ -44,7 +44,7 @@ public class Server {
      * List the matches that the user can join
      * @return a list of game controllers relating to matches that the user can join
      */
-    public List<GameController> getAvailableMatches(){
+    public synchronized List<GameController> getAvailableMatches(){
         return players.values().stream()
                 .filter(Objects::nonNull)
                 .filter(x->!x.isFull())
@@ -60,7 +60,7 @@ public class Server {
      * @param clientHandler the clientHandler that manages the socket connection with the client
      * @throws IllegalStateException if the chosen match is full
      */
-    public void addPlayerToMatch(String username,GameController gameController,ClientHandler clientHandler){
+    public synchronized void addPlayerToMatch(String username,GameController gameController,ClientHandler clientHandler){
         if(gameController.isFull())
             throw new IllegalStateException("Match full");
         players.put(username,gameController);
@@ -98,7 +98,7 @@ public class Server {
      * @param newUsername the username of the new user
      * @param clientHandler the ClientHandler that manages the socket connection with the client
      */
-    private void login(String newUsername, ClientHandler clientHandler) {
+    private synchronized void login(String newUsername, ClientHandler clientHandler) {
         log("Received login request from " + newUsername);
         if (isAvailableUsername(newUsername)){
             // connect
@@ -122,7 +122,7 @@ public class Server {
      * @param username the username to check
      * @return true if the given username is available, false if the chosen username has already been taken by another user
      */
-    private boolean isAvailableUsername(String username) {
+    private synchronized boolean isAvailableUsername(String username) {
         return !players.containsKey(username);
     }
 
@@ -130,7 +130,7 @@ public class Server {
      * Send a list of lobbies that a new user can join to the ClientHandler through a new virtualView specially created
      * @param clientHandler the ClientHandler that manages the socket connection with the client
      */
-    private void listLobbies(ClientHandler clientHandler) {
+    private synchronized void listLobbies(ClientHandler clientHandler) {
             View view = new VirtualView(clientHandler);
             // send the user a list of available matches (with num of joined players and size of the match)
             List<Triple<String, Integer, Integer>> availableMatches = getAvailableMatches().stream()
@@ -145,7 +145,7 @@ public class Server {
      * @param playersNumber the number of players that can join the match
      * @param clientHandler the ClientHandler that manages the socket connection with the client
      */
-    private void createNewLobby(int playersNumber, ClientHandler clientHandler) {
+    private synchronized void createNewLobby(int playersNumber, ClientHandler clientHandler) {
         if(playersNumber > Match.MAX_PLAYERS || playersNumber <= 0)
             new VirtualView(clientHandler).showErrorMessage("Invalid choice");
         else {
@@ -154,7 +154,7 @@ public class Server {
         }
     }
 
-    private void joinLobby(String matchName, ClientHandler clientHandler){
+    private synchronized void joinLobby(String matchName, ClientHandler clientHandler){
         View view = new VirtualView(clientHandler);
         if (getGameController(matchName) == null || getGameController(matchName).isFull()){
             view.showMessage("Selected match is full or does not exist");
@@ -170,7 +170,7 @@ public class Server {
      * @param username the username of the user to check
      * @return true if the user has been disconnected, false if the user is online
      */
-    private boolean isDisconnected(String username) {
+    private synchronized boolean isDisconnected(String username) {
         return players.containsKey(username)
                 && players.get(username) != null
                 && !players.get(username).isConnected(username);
@@ -182,7 +182,7 @@ public class Server {
      * @param username the username to add
      * @param clientHandler the ClientHandler that manages the socket connection with the client
      */
-    private void connect(String username, ClientHandler clientHandler) {
+    private synchronized void connect(String username, ClientHandler clientHandler) {
         players.put(username, null);
         listLobbies(clientHandler);
     }
@@ -193,7 +193,7 @@ public class Server {
      * @param username the username of the reconnected user
      * @param clientHandler the ClientHandler that manages the socket connection with the client
      */
-    private void reconnect(String username, ClientHandler clientHandler) {
+    private synchronized void reconnect(String username, ClientHandler clientHandler) {
         PlayerController playerController = getGameController(username).getPlayerController(username);
         playerController.setVirtualView(new VirtualView(clientHandler)); //Set the virtual view with the new clientHandler reference
         playerController.activate();
@@ -204,7 +204,7 @@ public class Server {
      * Mark the user as inactive
      * @param username the username of the disconnected user
      */
-    public void disconnect(String username){
+    public synchronized void disconnect(String username){
         players.get(username).disconnect(username);
     }
 
