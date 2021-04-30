@@ -19,7 +19,7 @@ public class ProductionLeaderCard extends LeaderCard implements Producer {
     /**
      * What the player gains if the production is triggered
      */
-    private final Map<Resource, Integer>  productionGain;
+    private final Map<Resource, Integer> productionGain;
 
     /**
      * Initializes a new ProductionLeaderCard
@@ -51,7 +51,14 @@ public class ProductionLeaderCard extends LeaderCard implements Producer {
     }
 
     @Override
-    public void produce(){}
+    public Map<Resource, Integer> getProductionCost() {
+        return productionCost.getResourcesMap();
+    }
+
+    @Override
+    public Map<Resource, Integer> getProductionGain() {
+        return productionGain;
+    }
 
     /**
      * Returns a string representation of the object

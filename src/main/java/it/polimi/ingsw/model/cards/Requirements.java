@@ -13,13 +13,16 @@ import java.util.stream.Collectors;
 
 public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Integer>> {
 
-    private Map<Resource, Integer> resources;
+    /**
+     * Stores the amount of each resource the player needs to have to satisfy the requirement
+     */
+    private final Map<Resource, Integer> resources;
 
     /**
      * Stores the development card the player needs to have to satisfy the requirement
-     * DevelopmentColorType, level (0 if not specified), quantity
+     * DevelopmentColorType, level (0 if any level is accepted), quantity
      */
-    private Map<DevelopmentColorType,Map<Integer,Integer>> developmentCards;
+    private final Map<DevelopmentColorType,Map<Integer,Integer>> developmentCards;
 
     /**
      * Sets a new empty requirements object
@@ -107,13 +110,19 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
     }
 
     /**
+     * Returns the map of the resources in the requirements
+     * @return the map of the resources in the requirements
+     */
+    public Map<Resource, Integer> getResourcesMap() { return resources; }
+
+    /**
      * Returns the sum of the two Requirements
      * @param first one of the two Requirements to sum
      * @param second the other Requirements to sum
      * @return the sum of the two Requirements
      */
     public static Requirements sum(Requirements first,Requirements second){
-        Requirements ret = (Requirements) first.clone();
+        Requirements ret = first.clone();
         second.resources.forEach(ret::addResourceRequirement);
         second.developmentCards.forEach((colorType,k)-> k.forEach((level, num)-> ret.addDevelopmentCardRequirement(colorType,level,num)));
         return ret;

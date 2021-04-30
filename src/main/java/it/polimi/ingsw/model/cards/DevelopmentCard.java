@@ -4,6 +4,8 @@ import it.polimi.ingsw.model.Producer;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.utils.Pair;
 
+import java.util.Map;
+
 public class DevelopmentCard extends Card implements Producer {
 
     public static final int MAX_LEVEL = 3;
@@ -83,28 +85,14 @@ public class DevelopmentCard extends Card implements Producer {
         return color;
     }
 
-    /**
-     * Returns the amount of resources to be paid in order to start the production
-     * @return a Requirements object containing the amount of resources to be paid in order to start the production
-     */
-    public Requirements getProductionCost() {
-        return productionCost;
-    }
-
-    /**
-     * Returns the amount of resources gained from the production
-     * @return a Requirements object containing the amount of resources gained from the production
-     */
-    public Requirements getProductionGain() {
-        return productionGain;
-    }
-
-    /**
-     * Activates the card production
-     */
     @Override
-    public void produce() {
+    public Map<Resource, Integer> getProductionCost() {
+        return productionCost.getResourcesMap();
+    }
 
+    @Override
+    public Map<Resource, Integer> getProductionGain() {
+        return productionGain.getResourcesMap();
     }
 
     private DevelopmentCard(int victoryPoints){
@@ -115,8 +103,8 @@ public class DevelopmentCard extends Card implements Producer {
     public DevelopmentCard clone(){
         DevelopmentCard ret = new DevelopmentCard(getVictoryPoints());
         ret.setCost(getCost().clone());
-        ret.productionCost = getProductionCost().clone();
-        ret.productionGain = getProductionGain().clone();
+        ret.productionCost = productionCost.clone();
+        ret.productionGain = productionGain.clone();
         ret.level = getLevel();
         ret.color = getColor();
         return ret;
