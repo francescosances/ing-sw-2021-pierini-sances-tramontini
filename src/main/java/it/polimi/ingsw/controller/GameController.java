@@ -50,7 +50,10 @@ public class GameController implements PlayerStatusListener {
      * @param matchName the name of the match that will be created
      */
     public GameController(String matchName,int playersNumber){
-        match = new Match(matchName,playersNumber);
+        if (playersNumber == 1)
+            match = new SoloMatch(matchName);
+        else
+            match = new Match(matchName,playersNumber);
         players = new ArrayList<>();
         currentPhase = GamePhase.ADDING_PLAYERS;
     }
@@ -106,10 +109,6 @@ public class GameController implements PlayerStatusListener {
      * Starts the match ending the phase of adding players. The firt player is chosen randomly.
      */
     public void start(){
-        if(this.players.size() == 1) {
-            this.match = new SoloMatch(match.getMatchName());
-            match.addPlayer(players.get(0).getUsername());//TODO: gestire salvataggio istanza match single player
-        }
         currentPlayerIndex = (int) (Math.random() * players.size());
         this.matchStarted = true;
         setPhase(GamePhase.PLAYERS_SETUP);
@@ -262,7 +261,7 @@ public class GameController implements PlayerStatusListener {
         if(players.stream().noneMatch(PlayerController::isActive)) // No one is active
             return;
         if(!players.get(currentPlayerIndex).isActive()) // The current player is inactive
-            players.get(currentPlayerIndex).turnEnded();
+            match.endTurn();
         onStatusChanged();
     }
 

@@ -45,6 +45,11 @@ public class Warehouse implements Storage {
             depots.get(depotNumber).addResource(res);
     }
 
+    /**
+     * Removes the specified resources from the storage (as long as there are) and returns the missing resources that couldn't be removed.
+     * @param requirements the resources to be removed from the storage
+     * @return the the missing resources that couldn't be removed
+     */
     @Override
     public Requirements removeResources(Requirements requirements) {
         Requirements newRequirements = (Requirements) requirements.clone();

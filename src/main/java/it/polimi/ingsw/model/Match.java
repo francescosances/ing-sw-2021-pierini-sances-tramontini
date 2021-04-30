@@ -244,9 +244,7 @@ public class Match {
         return maxPlayersNumber;
     }
 
-    public void endTurn(){
-
-    }
+    public void endTurn(){}
 
     public List<Deck<DevelopmentCard>> getDevelopmentCardDecks() {
         return developmentDecks;

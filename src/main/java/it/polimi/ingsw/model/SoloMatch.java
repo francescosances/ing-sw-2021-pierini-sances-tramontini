@@ -10,7 +10,7 @@ public class SoloMatch extends Match{
     private Deck<ActionToken> actionTokens;
 
     public SoloMatch(String matchName){
-        super(matchName);
+        super(matchName, 1);
         blackCross = new FaithTrack(this);
         actionTokens = new Deck<>();
         actionTokens.add(new ActionToken(DevelopmentColorType.BLUE));

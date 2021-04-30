@@ -2,20 +2,42 @@ package it.polimi.ingsw.model;
 
 public class PopeFavorTile {
 
+    /**
+     * Stores the status of the tile. Yet if it hasn't been uncovered yet, true elsewhere
+     */
     private boolean uncovered = false;
+    /**
+     * the vicotry points associated with the tile
+     */
     private final int victoryPoints;
 
+    /**
+     * Initializes a new PopeFavorTile object
+     * @param victoryPoints the victory points associated with the tile
+     */
     public PopeFavorTile(int victoryPoints){
         this.victoryPoints = victoryPoints;
     }
+
+    /**
+     * Sets the uncovered boolean to true
+     */
     public void uncover(){
         uncovered = true;
     }
 
+    /**
+     * Returns the value of uncovered
+     * @return the value of uncovered
+     */
     public boolean isUncovered() {
         return uncovered;
     }
 
+    /**
+     * Returns the victory points associated with the tile, 0 if uncovered
+     * @return the victory points associated with the tile, 0 if uncovered
+     */
     public int getVictoryPoints() {
         if(uncovered)
             return victoryPoints;

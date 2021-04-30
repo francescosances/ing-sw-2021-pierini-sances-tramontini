@@ -28,6 +28,11 @@ public class Strongbox implements Storage {
         resources.forEach((res, num) -> this.resources.put(res, this.resources.containsKey(res) ? this.resources.get(res) + num : num));
     }
 
+    /**
+     * Removes the specified resources from the storage (as long as there are) and returns the missing resources that couldn't be removed.
+     * @param resources the resources to be removed from the storage
+     * @return the the missing resources that couldn't be removed
+     */
     @Override
     public Requirements removeResources(Requirements resources) {
         Requirements newRequirements = (Requirements) resources.clone();
@@ -60,6 +65,11 @@ public class Strongbox implements Storage {
         return ret;
     }
 
+    /**
+     * Indicates whether some other object is equal to this one
+     * @param o that is confronted
+     * @return true if o is equal to the object, false elsewhere
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -68,6 +78,10 @@ public class Strongbox implements Storage {
         return Objects.equals(resources, strongbox.resources);
     }
 
+    /**
+     * Returns a string representation of the object
+     * @return a string representation of the object.
+     */
     @Override
     public String toString() {
         return "Strongbox{" +
