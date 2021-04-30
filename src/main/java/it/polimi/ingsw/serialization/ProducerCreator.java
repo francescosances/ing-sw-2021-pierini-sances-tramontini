@@ -16,7 +16,7 @@ public class ProducerCreator implements JsonDeserializer<Producer> {
     public Producer deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject jsonObject = json.getAsJsonObject();
         Producer producer;
-        if (jsonObject.has("productionCost"))
+        if (jsonObject.has("active"))
             producer = LeaderCardCreator.productionLeaderCard(jsonObject, context);
         else
             producer = developmentCard(jsonObject, context);

@@ -166,8 +166,7 @@ public class Serializer {
         return new Gson().toJson(availableSlots);
     }
 
-    //TODO modificare il nome della classe, errore di battitura
-    public static List<DevelopmentCardSlot> deserializaDevelopmentCardsSlots(String slots) {
+    public static List<DevelopmentCardSlot> deserializeDevelopmentCardsSlots(String slots) {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Requirements.class, new RequirementsCreator());
 
