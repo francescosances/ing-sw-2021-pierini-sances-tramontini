@@ -21,9 +21,9 @@ public class RequirementsCreator implements JsonDeserializer<Requirements> {
         if (jsonObject.has("resources")) {
             JsonObject jsonObjectMap = jsonObject.get("resources").getAsJsonObject();
             for (String stringResource : jsonObjectMap.keySet()) {
-                if (stringResource.equals("FAITH_POINT")) {
-                    requirements.addResourceRequirement(NonPhysicalResourceType.FAITH_POINT, jsonObjectMap.get(stringResource).getAsInt());
-                } else
+                if (stringResource.equals("FAITH_POINT") || stringResource.equals("ON_DEMAND"))
+                    requirements.addResourceRequirement(NonPhysicalResourceType.valueOf(stringResource), jsonObjectMap.get(stringResource).getAsInt());
+                else
                     requirements.addResourceRequirement(ResourceType.valueOf(stringResource), jsonObjectMap.get(stringResource).getAsInt());
             }
         }
