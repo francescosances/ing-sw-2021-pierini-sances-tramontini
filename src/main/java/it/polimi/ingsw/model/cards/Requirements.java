@@ -55,6 +55,10 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
         }
     }
 
+    /**
+     * Sets a new Requirements object, needing resources so as to be satisfied
+     * @param resources the resources needed
+     */
     public Requirements(Map<Resource,Integer> resources){
         this(resources,null);
     }
@@ -185,22 +189,6 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
     }
 
     /**
-     * Indicates whether some other object is equal to this one
-     * @param other that is confronted
-     * @return true if o is equal to the object, false elsewhere
-     */
-    @Override
-    public boolean equals(Object other) {
-        if (this == other)
-            return true;
-        if (other instanceof Requirements) {
-            Requirements otherRequirements = (Requirements) other;
-            return this.resources.equals(otherRequirements.resources) && this.developmentCards.equals(otherRequirements.developmentCards);
-        }
-        return false;
-    }
-
-    /**
      * Returns a clone of the object
      * @return a clone of the object
      */
@@ -218,6 +206,10 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
         return ris;
     }
 
+    /**
+     * Returns the number of different resource types needed
+     * @return the number of different resource types needed
+     */
     public int getResourceRequirementsSize(){
         return resources.size();
     }
@@ -229,6 +221,23 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
     @Override
     public Iterator<Map.Entry<Resource, Integer>> iterator() {
         return resources.entrySet().iterator();
+    }
+
+
+    /**
+     * Indicates whether some other object is equal to this one
+     * @param other that is confronted
+     * @return true if o is equal to the object, false elsewhere
+     */
+    @Override
+    public boolean equals(Object other) {
+        if (this == other)
+            return true;
+        if (other instanceof Requirements) {
+            Requirements otherRequirements = (Requirements) other;
+            return this.resources.equals(otherRequirements.resources) && this.developmentCards.equals(otherRequirements.developmentCards);
+        }
+        return false;
     }
 
     /**
@@ -247,5 +256,14 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
         return "[" +
                 (resources.isEmpty() ? (developmentCards.isEmpty() ? "" : devCards) : (developmentCards.isEmpty() ? res : res + ", " + devCards))
                 + ']';
+    }
+
+    /**
+     * Returns the hash code of the object
+     * @return the hash code of the object
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

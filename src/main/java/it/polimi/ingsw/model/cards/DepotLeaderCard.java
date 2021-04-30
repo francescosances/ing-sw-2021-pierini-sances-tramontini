@@ -144,4 +144,13 @@ public class DepotLeaderCard extends LeaderCard implements Depot {
                 && this.active == that.active && this.getVictoryPoints() == that.getVictoryPoints();
 
     }
+
+    /**
+     * Return the hash code of the object
+     * @return the hash code of the object
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

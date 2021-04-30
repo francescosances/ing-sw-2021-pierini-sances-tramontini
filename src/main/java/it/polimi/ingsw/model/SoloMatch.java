@@ -87,4 +87,13 @@ public class SoloMatch extends Match{
                 this.actionTokens.equals(that.actionTokens);
     }
 
+    /**
+     * Returns the hash code of the object
+     * @return the hash code of the object
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
 }

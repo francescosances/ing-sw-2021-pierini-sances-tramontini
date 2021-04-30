@@ -117,9 +117,9 @@ public class SerializerTest {
         PopeFavorTile[] popeFavorTiles = playerBoard.getFaithTrack().getPopeFavorTiles();
         popeFavorTiles[0].uncover();
         playerBoard.getWarehouse().addResource(0, ResourceType.COIN, 1);
-        LeaderCard leaderCard = new DepotLeaderCard(3, new Requirements(new Pair<>(ResourceType.STONE, 5)), ResourceType.SERVANT);
+        LeaderCard leaderCard = new DepotLeaderCard(3, new Requirements(new Pair<>(ResourceType.STONE, 5)), ResourceType.SERVANT, true);
         playerBoard.addLeaderCard(leaderCard);
-        playerBoard.activateLeaderCard(leaderCard);
+        playerBoard.getWarehouse().addDepotLeaderCard(leaderCard);
         playerBoard.getWarehouse().addResource(3, ResourceType.SERVANT, 2);
         Map<ResourceType, Integer> resourcesMap = new HashMap<>();
         resourcesMap.put(ResourceType.SHIELD, 3);
@@ -156,9 +156,9 @@ public class SerializerTest {
         PopeFavorTile[] popeFavorTiles = playerBoard.getFaithTrack().getPopeFavorTiles();
         popeFavorTiles[0].uncover();
         playerBoard.getWarehouse().addResource(0, ResourceType.COIN, 1);
-        LeaderCard leaderCard = new DepotLeaderCard(3, new Requirements(new Pair<>(ResourceType.STONE, 5)), ResourceType.SERVANT);
+        LeaderCard leaderCard = new DepotLeaderCard(3, new Requirements(new Pair<>(ResourceType.STONE, 5)), ResourceType.SERVANT, true);
         playerBoard.addLeaderCard(leaderCard);
-        playerBoard.activateLeaderCard(leaderCard);
+        playerBoard.getWarehouse().addDepotLeaderCard(leaderCard);
         playerBoard.getWarehouse().addResource(3, ResourceType.SERVANT, 2);
         Map<ResourceType, Integer> resourcesMap = new HashMap<>();
         resourcesMap.put(ResourceType.SHIELD, 3);
@@ -183,9 +183,9 @@ public class SerializerTest {
         PopeFavorTile[] popeFavorTiles = playerBoard.getFaithTrack().getPopeFavorTiles();
         popeFavorTiles[0].uncover();
         playerBoard.getWarehouse().addResource(0, ResourceType.COIN, 1);
-        LeaderCard leaderCard = new DepotLeaderCard(3, new Requirements(new Pair<>(ResourceType.STONE, 5)), ResourceType.SERVANT);
+        LeaderCard leaderCard = new DepotLeaderCard(3, new Requirements(new Pair<>(ResourceType.STONE, 5)), ResourceType.SERVANT, true);
         playerBoard.addLeaderCard(leaderCard);
-        playerBoard.activateLeaderCard(leaderCard);
+        playerBoard.getWarehouse().addDepotLeaderCard(leaderCard);
         playerBoard.getWarehouse().addResource(3, ResourceType.SERVANT, 2);
         Map<ResourceType, Integer> resourcesMap = new HashMap<>();
         resourcesMap.put(ResourceType.SHIELD, 3);

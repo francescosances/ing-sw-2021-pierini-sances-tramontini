@@ -111,4 +111,13 @@ public class Market {
         return this.slideMarble.equals(o.slideMarble);
     }
 
+    /**
+     * Returns the hash code of the object
+     * @return the hash code of the object
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
 }

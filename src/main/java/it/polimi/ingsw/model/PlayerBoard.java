@@ -146,19 +146,6 @@ public class PlayerBoard {
         return leaderCards.stream().filter(x->!x.isActive()).collect(Collectors.toList());
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PlayerBoard that = (PlayerBoard) o;
-        return  username.equals(that.username) &&
-                this.getFaithTrack().equals(that.getFaithTrack()) &&
-                Arrays.equals(this.getDevelopmentCardSlots(), that.getDevelopmentCardSlots()) &&
-                this.getStrongbox().equals(that.getStrongbox()) &&
-                this.getWarehouse().equals(that.getWarehouse()) &&
-                this.getLeaderCards().equals(that.getLeaderCards());
-    }
-
     public int getBoughtDevelopmentCardsCounter() {
         return boughtDevelopmentCardsCounter;
     }
@@ -192,5 +179,27 @@ public class PlayerBoard {
                 ", developmentCardSlots=" + Arrays.toString(developmentCardSlots) +
                 ", leaderCards=" + leaderCards +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PlayerBoard that = (PlayerBoard) o;
+        return  username.equals(that.username) &&
+                this.getFaithTrack().equals(that.getFaithTrack()) &&
+                Arrays.equals(this.getDevelopmentCardSlots(), that.getDevelopmentCardSlots()) &&
+                this.getStrongbox().equals(that.getStrongbox()) &&
+                this.getWarehouse().equals(that.getWarehouse()) &&
+                this.getLeaderCards().equals(that.getLeaderCards());
+    }
+
+    /**
+     * Returns the hash code of the object
+     * @return the hash code of the object
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

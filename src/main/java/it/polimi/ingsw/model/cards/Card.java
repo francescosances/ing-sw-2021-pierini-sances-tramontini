@@ -12,7 +12,7 @@ public abstract class Card {
     }
 
     /**
-     * Returs the victory points provided by this card at the end of the game
+     * Returns the victory points provided by this card at the end of the game
      * @return the victory points provided by this card at the end of the game
      */
     public int getVictoryPoints() {
@@ -27,6 +27,11 @@ public abstract class Card {
         this.victoryPoints = victoryPoints;
     }
 
+    /**
+     * Return a clone of the object
+     * @return a clone of the object
+     * @throws CloneNotSupportedException if the object isn't cloneable
+     */
     @Override
     public Object clone() throws CloneNotSupportedException {
        return super.clone();

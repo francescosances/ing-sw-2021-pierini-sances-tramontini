@@ -115,4 +115,12 @@ public class StandardDepot implements Depot {
         return occupied == that.occupied && size == that.size && resourceType == that.resourceType;
     }
 
+    /**
+     * Returns the hash code of the object
+     * @return the hash code of the object
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

@@ -68,4 +68,13 @@ public class PopeFavorTile {
         PopeFavorTile that = (PopeFavorTile) o;
         return uncovered == that.uncovered && victoryPoints == that.victoryPoints;
     }
+
+    /**
+     * Returns the hash code of the object
+     * @return the hash code of the object
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

@@ -70,4 +70,12 @@ public class ActionToken {
         return false;
     }
 
+    /**
+     * Returns the hash code of the object
+     * @return the hash code of the object
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

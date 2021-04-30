@@ -78,4 +78,13 @@ public class DevelopmentCardSlot implements Iterable<DevelopmentCard>{
     public String toString() {
         return "DevelopmentCardSlot: " + developmentCards;
     }
+
+    /**
+     * Returns the hash code of the object
+     * @return the hash code of the object
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

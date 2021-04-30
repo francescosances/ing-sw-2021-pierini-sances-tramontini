@@ -92,4 +92,13 @@ public class DiscountLeaderCard extends LeaderCard {
                 && this.active == that.active && this.getVictoryPoints() == that.getVictoryPoints();
 
     }
+
+    /**
+     * Returns the hash code of the object
+     * @return the hash code of the object
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }
