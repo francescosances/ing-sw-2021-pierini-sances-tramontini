@@ -190,7 +190,8 @@ public class CLI implements View {
             }
             output.print(ANSI_RESET);
         }
-        output.println("Choose " + cardsToChoose + " development cards:");
+        output.println("Choose " + cardsToChoose + " development card:");
+        output.println("Insert a negative number to reverse the action");
         int[] choices = new int[cardsToChoose];
         DevelopmentCard[] cardsChosen = new DevelopmentCard[cardsToChoose];
         for(int i=0;i<cardsToChoose;i++) {
@@ -202,9 +203,13 @@ public class CLI implements View {
                     return;
                 }
             }
-            if(choices[i] < 0 || choices[i] >= availableCards.size()){
+            if(choices[i] >= availableCards.size()){
                 showErrorMessage("Invalid choice");
                 listDevelopmentCards(developmentCardList,cardsToChoose,playerBoard);
+                return;
+            }
+            else if (choices[i] < 0) {
+                clientController.rollback();
                 return;
             }
             cardsChosen[i] = availableCards.get(choices[i]);
@@ -289,15 +294,19 @@ public class CLI implements View {
         output.println("Choose the productions to activate. Insert a negative number to exit.");
         Requirements costs = new Requirements();
         Requirements gains = new Requirements();
-        do{
+        temp = input.nextInt();
+        if (temp < 0){
+            clientController.rollback();
+            return;
+        }
+        while (temp >= 0) {
+            choices.add(temp);
+            Producer producer = availableProductions.get(temp);
+            costs.sum(producer.getProductionCost());
+            gains.sum(producer.getProductionGain());
             temp = input.nextInt();
-            if(temp >= 0 && temp < availableProductions.size()){
-                choices.add(temp);
-                Producer producer = availableProductions.get(temp);
-                costs.sum(producer.getProductionCost());
-                gains.sum(producer.getProductionGain());
-            }
-        }while(temp >= 0);
+        }
+
         while(costs.getResources(NonPhysicalResourceType.ON_DEMAND) > 0){
             output.println("You have to choose "+costs.getResources(NonPhysicalResourceType.ON_DEMAND)+" resources to spend");
             output.println("What resource do you want to spend?");
@@ -581,8 +590,13 @@ public class CLI implements View {
             output.println("Do you want to choose a row or a column?");
             output.println("  [0] Row");
             output.println("  [1] Column");
+            output.println("Insert negative number to reverse the action");
             choice = input.nextInt();
-            if (choice !=0 && choice != 1)
+            if (choice < 0) {
+                clientController.rollback();
+                return;
+            }
+            else if (choice !=0 && choice != 1)
                 showErrorMessage("Invalid choice");
         }while (choice !=0 && choice != 1);
         if(choice == 0){//rows

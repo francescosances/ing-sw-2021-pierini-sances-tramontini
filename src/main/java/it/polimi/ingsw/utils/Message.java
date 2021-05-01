@@ -116,7 +116,8 @@ public class Message{
         LOGIN_REQUEST,
         LOBBY_CHOICE,
         LEADER_CARDS_CHOICE,
-        PERFORM_ACTION;
+        PERFORM_ACTION,
+        ROLLBACK
 
     }
 

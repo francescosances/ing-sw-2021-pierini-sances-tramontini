@@ -21,11 +21,18 @@ public class Strongbox implements Storage {
 
     /**
      * Adds the given resources to the strongbox.
-     *
      * @param resources the resources to be added to the strongbox, with each resource type mapped to its amount
      */
     public void addResources(Map<ResourceType, Integer> resources) {
         resources.forEach((res, num) -> this.resources.put(res, this.resources.containsKey(res) ? this.resources.get(res) + num : num));
+    }
+
+    /**
+     * Adds the given resource to the strongbox.
+     * @param resource the resources to be added to the strongbox
+     */
+    public void addResource(ResourceType resource){
+        resources.put(resource, resources.containsKey(resource) ? resources.get(resource) + 1 : 1);
     }
 
     /**

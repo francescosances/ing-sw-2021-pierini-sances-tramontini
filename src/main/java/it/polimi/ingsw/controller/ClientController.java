@@ -260,6 +260,11 @@ public class ClientController {
         clientSocket.sendMessage(message);
     }
 
+    public void rollback() {
+        Message message = new Message(Message.MessageType.ROLLBACK);
+        clientSocket.sendMessage(message);
+    }
+
     /**
      * Resumes a match suspended after a network disconnection
      * @param match the match to be resumed

@@ -48,12 +48,24 @@ public class PlayerController {
      */
     private LeaderCardsChooser leaderCardsChooser;
 
+    /**
+     * Holds a resource while it is being stored
+     */
     private Resource currentResourceToStore;
 
+    /**
+     * Holds a DevelopmentCard while it is being stored
+     */
     private DevelopmentCard currentDevelopmentCardToStore;
 
+    /**
+     * Runnable with the action to do after a SwapDepots action
+     */
     private Runnable afterDepotsSwapAction;
 
+    /**
+     * Runnable with the action that allows to skip an action
+     */
     private Runnable skipAction;
 
     /**
@@ -171,19 +183,22 @@ public class PlayerController {
         this.leaderCardsChooser.chooseLeaderCards(cards);
     }
 
+    /**
+     * Asks the player which ResourceType he wants as they're not starting the turn
+     * @param resourcesToChoose the number of resource the player is allowed to choose
+     */
     //TODO: collegare start resources
     public void askToChooseStartResources(int resourcesToChoose){
         virtualView.askToChooseStartResources(ResourceType.values(),resourcesToChoose);
     }
 
+    /**
+     * Stores the resources chosen into the Strongbox
+     * @param resources the resources to store
+     */
     public void chooseStartResources(Resource[] resources) {
-        Iterator<Depot> depotIterator = getPlayerBoard().getWarehouse().getDepots().iterator();
         for(Resource resource : resources){
-            try {
-                depotIterator.next().addResource((ResourceType) resource);
-            } catch (IncompatibleDepotException e) {
-                e.printStackTrace();
-            }
+            playerBoard.getStrongbox().addResource((ResourceType) resource);
         }
     }
 
@@ -206,6 +221,7 @@ public class PlayerController {
     public void performAction(Action action) {
         switch (action) {
             case CANCEL:
+                prevStatus();
                 break;
             case PLAY_LEADER:
                 listLeaderCardsToPlay();
@@ -233,10 +249,16 @@ public class PlayerController {
         }
     }
 
+    /**
+     * Starts a normal Action
+     */
     public void startNormalAction(){
         askForNormalAction();
     }
 
+    /**
+     * Asks the player what normal action they want to perform
+     */
     public void askForNormalAction(){
         virtualView.askForAction(
                 Arrays.stream(Action.NORMAL_ACTIONS)
@@ -281,36 +303,27 @@ public class PlayerController {
         virtualView.showWarehouse(playerBoard.getWarehouse());
     }
 
+    /**
+     * Shows all DevelopmentCards at the top of their Deck.
+     */
     //TODO: aggiungere controlli anche quando la carta viene selezionata
     private void listDevelopmentCardToBuy() {
-        if(getPlayerBoard().getMatch().getDevelopmentCardDecks().stream().noneMatch(t->{
-                DevelopmentCard d = t.get(0);
-                Requirements requirements = d.getCost();
-                for(LeaderCard card : getPlayerBoard().getLeaderCards())
-                    requirements = card.recalculateRequirements(requirements);
-                return requirements.satisfied(getPlayerBoard()) && getPlayerBoard().acceptsDevelopmentCard(d);
-        })) {
-            virtualView.showErrorMessage("You can not buy any card");//TODO: mostrare comunque l'elenco di carte
-            askForNormalAction();
-        }else {
-            List<Deck<DevelopmentCard>> cards = getPlayerBoard().getMatch().getDevelopmentCardDecks();
-            List<Deck<DevelopmentCard>> newCards = new ArrayList<>();
-            for(Deck<DevelopmentCard> deck : cards){
-                Deck<DevelopmentCard> newDeck = new Deck<>();
-                newCards.add(newDeck);
-                DevelopmentCard newCard = deck.get(0).clone();
-                Requirements requirements = newCard.getCost();
-                for(LeaderCard leaderCard : getPlayerBoard().getLeaderCards())
-                    requirements = leaderCard.recalculateRequirements(requirements);
-                newCard.setCost(requirements);
-                newDeck.add(newCard);
-            }
-            virtualView.listDevelopmentCards(newCards, 1, getPlayerBoard());
-        }
+        List<Deck<DevelopmentCard>> cards = getPlayerBoard().getMatch().getDevelopmentCardDecks();
+        List<Deck<DevelopmentCard>> newCards = new ArrayList<>();
+        for(Deck<DevelopmentCard> deck : cards){
+            Deck<DevelopmentCard> newDeck = new Deck<>();
+            newCards.add(newDeck);
+            DevelopmentCard newCard = deck.get(0).clone();
+            Requirements requirements = newCard.getCost();
+            for(LeaderCard leaderCard : getPlayerBoard().getLeaderCards())
+                requirements = leaderCard.recalculateRequirements(requirements);
+            newCard.setCost(requirements);
+            newDeck.add(newCard);
+        }virtualView.listDevelopmentCards(newCards, 1, getPlayerBoard());
     }
 
     /**
-     * Change the current status of the controller and notify the change to the observers
+     * Changes the current status of the controller and notifies the change to the observers
      */
     private void nextStatus(){
         currentStatus.nextStatus();
@@ -318,6 +331,17 @@ public class PlayerController {
             x.onPlayerStatusChanged(this);
         }
     }
+
+    /**
+     * Changes the current status of the controller and notifies the change to the observers
+     */
+    private void prevStatus(){
+        currentStatus.prevStatus();
+        for (PlayerStatusListener x : this.observers) {
+            x.onPlayerStatusChanged(this);
+        }
+    }
+
 
     /**
      * Add the specified observer to the list of observers
@@ -525,6 +549,14 @@ public class PlayerController {
 
         public PlayerStatus nextStatus(){
             currentIndex = (currentIndex+1)%vals.length;
+            return vals[currentIndex];
+        }
+
+        public PlayerStatus prevStatus(){
+            if (currentIndex > 0)
+                currentIndex = currentIndex - 1;
+            else
+                currentIndex = vals.length - 1;
             return vals[currentIndex];
         }
 

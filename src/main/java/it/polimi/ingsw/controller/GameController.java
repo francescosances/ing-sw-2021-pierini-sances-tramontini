@@ -38,6 +38,7 @@ public class GameController implements PlayerStatusListener {
      * The index of the list players representing the active player
      */
     private int currentPlayerIndex;
+
     /**
      * The current phase of the match
      */
@@ -112,6 +113,9 @@ public class GameController implements PlayerStatusListener {
                 case PRODUCTION:
                     currentPlayerController.chooseProductions(Serializer.deserializeRequirements(message.getData("costs")),Serializer.deserializeRequirements(message.getData("gains")));
                     break;
+                case ROLLBACK:
+                    currentPlayerController.performAction(Action.CANCEL);
+                    break;
             }
         }catch (EndGameException e){
             setPhase(GamePhase.END_GAME);
@@ -141,7 +145,7 @@ public class GameController implements PlayerStatusListener {
      * Add this object as observer of the new Player Controller
      * @param username the username of the player to add
      * @param clientHandler the clientHandler that manage the socket connection with the client
-     * @return the player controller containing the reference of the virtual view
+     * @return the player controller containing the reference to the virtual view
      */
     public PlayerController addPlayer(String username, ClientHandler clientHandler){
         PlayerController playerController = getPlayerController(username);
@@ -219,6 +223,7 @@ public class GameController implements PlayerStatusListener {
 
     /**
      * Method that should be called everytime that the game phase or the current player are changed
+     * Organizes the main game phases
      */
     protected void onStatusChanged(){
         switch (currentPhase){
@@ -241,12 +246,19 @@ public class GameController implements PlayerStatusListener {
         }
     }
 
+    /**
+     * Assures every non playing players receive a message showing whose turn is
+     */
     private void showCurrentActiveUser(){
         for(int i=0;i<players.size();i++)
             if(i != currentPlayerIndex)
                 players.get(i).getVirtualView().showCurrentActiveUser(players.get(currentPlayerIndex).getUsername());
     }
 
+    /**
+     * Manages the main turn phases for the current player
+     * @param player the player whose turn is
+     */
     @Override
     public void onPlayerStatusChanged(PlayerController player) {
         System.out.println("The player "+player.getUsername()+" has changed his status to "+player.getCurrentStatus());
@@ -278,27 +290,13 @@ public class GameController implements PlayerStatusListener {
         onStatusChanged();
     }
 
+    /**
+     * Allows to manually set the next phase
+     * @param phase the phase currentPhase should turn into
+     */
     protected void setPhase(GamePhase phase){
         this.currentPhase = phase;
         onStatusChanged();
-    }
-
-    public enum GamePhase {
-        ADDING_PLAYERS,
-        PLAYERS_SETUP,
-        TURN,
-        END_GAME;
-
-        private static final GamePhase[] vals = values();
-
-        /**
-         * Returns the next phase
-         * @return a GamePhase object representing the phase next to this
-         */
-        public GamePhase next()
-        {
-            return vals[(this.ordinal()+1) % vals.length];
-        }
     }
 
     /**
@@ -336,5 +334,26 @@ public class GameController implements PlayerStatusListener {
      */
     public boolean isConnected(String username){
         return players.stream().filter(x->x.getUsername().equals(username)).anyMatch(PlayerController::isActive);
+    }
+
+    public enum GamePhase {
+        ADDING_PLAYERS,
+        PLAYERS_SETUP,
+        TURN,
+        END_GAME;
+
+        /**
+         * An array storing all GamePhase values
+         */
+        private static final GamePhase[] vals = values();
+
+        /**
+         * Returns the next phase
+         * @return a GamePhase object representing the phase next to this
+         */
+        public GamePhase next()
+        {
+            return vals[(this.ordinal()+1) % vals.length];
+        }
     }
 }
