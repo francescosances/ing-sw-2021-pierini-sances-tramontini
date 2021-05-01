@@ -307,10 +307,20 @@ public class CLI implements View {
             return;
         }
         while (temp >= 0) {
-            choices.add(temp);
-            Producer producer = availableProductions.get(temp);
-            costs.sum(producer.getProductionCost());
-            gains.sum(producer.getProductionGain());
+            int finalTemp = temp;
+            if (choices.stream().anyMatch(v-> (v == finalTemp)))
+                showErrorMessage("You have already chosen to produce this");
+            else {
+                try {
+                    Producer producer = availableProductions.get(temp);
+                    choices.add(temp);
+                    costs.sum(producer.getProductionCost());
+                    gains.sum(producer.getProductionGain());
+                } catch (IndexOutOfBoundsException e) {
+                    showErrorMessage("You don't have a Producer associated with this number");
+                }
+            }
+
             temp = input.nextInt();
         }
 
