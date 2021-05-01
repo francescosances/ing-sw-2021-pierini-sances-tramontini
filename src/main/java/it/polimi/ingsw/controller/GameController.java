@@ -267,12 +267,12 @@ public class GameController implements PlayerStatusListener {
                 players.get(currentPlayerIndex).showPlayerBoard();
                 nextTurn();
                 break;
-            case NORMAL_ACTION:
-                players.get(currentPlayerIndex).startNormalAction();
-                this.currentPhase = GamePhase.TURN;
-                break;
             case PERFORMING_ACTION:
                 players.get(currentPlayerIndex).askForAction();
+                this.currentPhase = GamePhase.TURN;
+                break;
+            case ACTION_PERFORMED:
+                players.get(currentPlayerIndex).startNormalAction();
                 this.currentPhase = GamePhase.TURN;
                 break;
         }
@@ -320,7 +320,7 @@ public class GameController implements PlayerStatusListener {
         players.forEach((user)->{
             if(user.getUsername().equals(username)) {
                 user.deactivate();
-                if(user.getCurrentStatus() == PlayerController.PlayerStatus.NORMAL_ACTION)
+                if(user.getCurrentStatus() == PlayerController.PlayerStatus.ACTION_PERFORMED)
                     user.turnEnded();
             }
             user.getVirtualView().userDisconnected(username);

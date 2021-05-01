@@ -564,15 +564,15 @@ public class CLI implements View {
     public void askToStoreResource(Resource resource,Warehouse warehouse) {
         output.println("Where do you want to store this "+resource+" resource?");
         showWarehouse(warehouse);
-        output.printf("  [%d] Discard\n",warehouse.getDepots().size());
-        output.printf("  [%d] Move resources\n",warehouse.getDepots().size() + 1);
+        output.printf("  [%d] Move resources\n",warehouse.getDepots().size());
+        output.printf("  [%d] Discard\n",warehouse.getDepots().size() + 1);
         int choice = input.nextInt();
         if(choice < 0 || choice > warehouse.getDepots().size() + 1) {
             showErrorMessage("Invalid choice");
             askToStoreResource(resource, warehouse);
             return;
         }
-        if (choice == warehouse.getDepots().size() + 1) {
+        if (choice == warehouse.getDepots().size()) {
             askToSwapDepots(warehouse);
             return;
         }

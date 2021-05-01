@@ -1,11 +1,9 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Action;
-import it.polimi.ingsw.model.Producer;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
-import it.polimi.ingsw.model.storage.Depot;
 import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.ResourceType;
@@ -208,7 +206,7 @@ public class PlayerController {
     public void askForAction(){
         resetAfterDepotsSwapAction();
         virtualView.askForAction(
-                Arrays.stream(Action.EXTRA_ACTIONS)
+                Arrays.stream(Action.ALL_ACTIONS)
                         .filter(x -> x != Action.CANCEL)
                         .filter(x -> !((x == Action.PLAY_LEADER || x == Action.DISCARD_LEADER) && this.playerBoard.getAvailableLeaderCards().isEmpty())) //If no leader cards are available, the options are removed from the list
                         .toArray(Action[]::new));
@@ -221,7 +219,7 @@ public class PlayerController {
     public void performAction(Action action) {
         switch (action) {
             case CANCEL:
-                prevStatus();
+                rollback();
                 break;
             case PLAY_LEADER:
                 listLeaderCardsToPlay();
@@ -333,10 +331,9 @@ public class PlayerController {
     }
 
     /**
-     * Changes the current status of the controller and notifies the change to the observers
+     * Makes the controller choose a new action and notifies the observers of the rollback
      */
-    private void prevStatus(){
-        currentStatus.prevStatus();
+    private void rollback(){
         for (PlayerStatusListener x : this.observers) {
             x.onPlayerStatusChanged(this);
         }
@@ -493,7 +490,6 @@ public class PlayerController {
         nextStatus();
     }
 
-    //TODO: se non scelgo nulla non devo andare avanti
     public void chooseProductions(Requirements costs,Requirements gains) {
         if(!costs.satisfied(playerBoard)){
             virtualView.showErrorMessage("You cannot activate these productions");
@@ -534,25 +530,17 @@ public class PlayerController {
 
     public enum PlayerStatus {
         PERFORMING_ACTION,
-        NORMAL_ACTION,
+        ACTION_PERFORMED,
         TURN_ENDED
     }
 
-    public class PlayerStatusIndex{
+    public static class PlayerStatusIndex{
 
         private int currentIndex;
-        private final PlayerStatus[] vals = {PlayerStatus.PERFORMING_ACTION, PlayerStatus.NORMAL_ACTION,PlayerStatus.PERFORMING_ACTION,PlayerStatus.TURN_ENDED};
+        private final PlayerStatus[] vals = {PlayerStatus.PERFORMING_ACTION, PlayerStatus.ACTION_PERFORMED, PlayerStatus.TURN_ENDED};
 
         public PlayerStatus nextStatus(){
             currentIndex = (currentIndex+1)%vals.length;
-            return vals[currentIndex];
-        }
-
-        public PlayerStatus prevStatus(){
-            if (currentIndex > 0)
-                currentIndex = currentIndex - 1;
-            else
-                currentIndex = vals.length - 1;
             return vals[currentIndex];
         }
 

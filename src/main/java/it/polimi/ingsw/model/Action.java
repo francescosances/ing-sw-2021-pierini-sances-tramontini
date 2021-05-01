@@ -24,12 +24,12 @@ Action{
     /**
      * Array that contains all extra actions
      */
-    public static final Action[] EXTRA_ACTIONS = {SKIP,MOVE_RESOURCES,DISCARD_LEADER,PLAY_LEADER};
+    public static final Action[] ALL_ACTIONS = {TAKE_RESOURCES_FROM_MARKET,BUY_DEVELOPMENT_CARD,ACTIVATE_PRODUCTION,MOVE_RESOURCES,DISCARD_LEADER,PLAY_LEADER};
 
     /**
      * Array that contains all normal actions
      */
-    public static final Action[] NORMAL_ACTIONS = {TAKE_RESOURCES_FROM_MARKET,BUY_DEVELOPMENT_CARD,ACTIVATE_PRODUCTION};
+    public static final Action[] NORMAL_ACTIONS = {SKIP,MOVE_RESOURCES,DISCARD_LEADER,PLAY_LEADER};
 
     /**
      * Initialize a new Label Object with its custom label
