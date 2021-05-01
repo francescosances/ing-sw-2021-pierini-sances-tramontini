@@ -356,14 +356,26 @@ public class PlayerController {
         observers.remove(playerStatusListener);
     }
 
+    /**
+     * Returns the PlayerBoard associated with the PlayerController
+     * @return the PlayerBoard associated with the PlayerController
+     */
     public PlayerBoard getPlayerBoard() {
         return playerBoard;
     }
 
+    /**
+     * Organizes the endGame Phase
+     */
     public void endGame(){
         virtualView.showMessage("MATCH ENDED");//TODO: gestire messaggi sul vincitore
     }
 
+    /**
+     * Swaps depotA with depotB
+     * @param depotA the number of the one of the two depots to swap
+     * @param depotB the number of the one of the two depots to swap
+     */
     public void swapDepots(int depotA, int depotB) {
         try {
             playerBoard.getWarehouse().swapDepots(depotA, depotB);
@@ -373,16 +385,28 @@ public class PlayerController {
         afterDepotsSwapAction.run();
     }
 
+    /**
+     * Takes the resources from the chosen row of the market and asks the player where they wants to store them
+     * @param row the row from which take the resources
+     */
     public void selectMarketRow(int row) {
         Resource[] resources = getPlayerBoard().getMatch().getMarket().chooseRow(row);
         askToStoreResourcesFromMarket(resources);
     }
 
+    /**
+     * Takes the resources from the chosen column of the market and asks the player where they wants to store them
+     * @param column the column from which take the resources
+     */
     public void selectMarketColumn(int column){
         Resource[] resources = getPlayerBoard().getMatch().getMarket().chooseColumn(column);
         askToStoreResourcesFromMarket(resources);
     }
 
+    /**
+     * Asks the player where they want to store the resources, any is takenR
+     * @param resources the resources taken from the market
+     */
     protected void askToStoreResourcesFromMarket(Resource[] resources){
         for (int i = 0; i < resources.length; i++) {
             if (playerBoard.getLeaderCards().stream().filter(t -> t.isWhiteMarble() && t.isActive()).count() <= 1) {
@@ -413,21 +437,29 @@ public class PlayerController {
     }
 
     /**
-     * Show the market tray to the user
+     * Starts the "take resources from market" action by showing the player the market
+     * and asking them what they want to choose
      */
     public void takeResourcesFromMarket(){
         virtualView.takeResourcesFromMarket(playerBoard.getMatch().getMarket());
     }
 
+    /**
+     * Asks the player where they want to store the resource
+     */
     public void askToStoreResource(){
        currentResourceToStore = getPlayerBoard().getWarehouse().popResourceToBeStored();
        if(currentResourceToStore == NonPhysicalResourceType.VOID){
            virtualView.chooseWhiteMarbleConversion(getPlayerBoard().getLeaderCards().get(0),getPlayerBoard().getLeaderCards().get(1));
        }else{
-           askToConfirmDepotsStatus();
+           askToConfirmDepot();
        }
     }
 
+    /**
+     * Asks the player with 2 WhiteMarbleLeaderCards what they want to convert their VOID resource into
+     * @param choice the leader card whose conversion is applied
+     */
     public void chooseWhiteMarbleConversion(int choice){
         if(currentResourceToStore != NonPhysicalResourceType.VOID)
             throw new IllegalStateException("Invalid command");
@@ -436,12 +468,19 @@ public class PlayerController {
         askToStoreResource();
     }
 
-    protected void askToConfirmDepotsStatus(){
+    /**
+     * Asks the player what depot they want to store currentResourceToStore into
+     */
+    protected void askToConfirmDepot(){
         setAfterDepotsSwapAction(() -> virtualView.askToStoreResource(currentResourceToStore,getPlayerBoard().getWarehouse()));
         virtualView.showMessage("You have to store a "+currentResourceToStore);
         virtualView.askToStoreResource(currentResourceToStore, getPlayerBoard().getWarehouse());
     }
 
+    /**
+     * Stores the resource into the chosen depot
+     * @param depot the depot that will store the resource
+     */
     protected void storeResourceToWarehouse(int depot){
         if(depot < getPlayerBoard().getWarehouse().getDepots().size())
             try {
@@ -464,10 +503,18 @@ public class PlayerController {
         }
     }
 
+    /**
+     * shows the player their PlayerBoard
+     */
     public void showPlayerBoard() {
         this.virtualView.showPlayerBoard(this.playerBoard);
     }
 
+    /**
+     * Makes the player buy the selected DevelopmentCard.
+     * Makes the player pay the required resources
+     * @param developmentCard the DevelopmentCard the player wants to buy
+     */
     public void buyDevelopmentCard(DevelopmentCard developmentCard) {
         if(!developmentCard.getCost().satisfied(getPlayerBoard())){
             virtualView.showErrorMessage("You cannot buy this card");
@@ -479,6 +526,10 @@ public class PlayerController {
         virtualView.askToChooseDevelopmentCardSlot(playerBoard.getDevelopmentCardSlots(),developmentCard);
     }
 
+    /**
+     * Stores currentDevelopmentCardToStore into the selected slot
+     * @param slotIndex the slot that will store currentDevelopmentCardToStore
+     */
     public void chooseDevelopmentCardSlot(int slotIndex) {
         if(!playerBoard.getDevelopmentCardSlots()[slotIndex].accepts(currentDevelopmentCardToStore)){
             virtualView.showErrorMessage("You cannot choose this slot");
@@ -490,6 +541,12 @@ public class PlayerController {
         nextStatus();
     }
 
+    /**
+     * Checks if the player can pay the resources in parameter cost and removes them from the player
+     * Gives the player the resources in parameter gain
+     * @param costs the Requirements the player must pay to activate the production
+     * @param gains the Resources the player gain if the production is activated
+     */
     public void chooseProductions(Requirements costs,Requirements gains) {
         if(!costs.satisfied(playerBoard)){
             virtualView.showErrorMessage("You cannot activate these productions");
@@ -508,10 +565,17 @@ public class PlayerController {
         nextStatus();
     }
 
+    /**
+     * Sets the afterDepotsSwapAction attribute
+     * @param afterDepotsSwapAction the method the runnable must run when called
+     */
     private void setAfterDepotsSwapAction(Runnable afterDepotsSwapAction) {
         this.afterDepotsSwapAction = afterDepotsSwapAction;
     }
 
+    /**
+     * Resets the afterDepotsSwapAction attribute to its default value
+     */
     private void resetAfterDepotsSwapAction(){
         setAfterDepotsSwapAction(()->{
                 showWarehouseStatus();
@@ -519,37 +583,52 @@ public class PlayerController {
         });
     }
 
+    /**
+     * Sets the skipAction attribute
+     * @param skipAction the method the runnable must run when called
+     */
     private void setSkipAction(Runnable skipAction){
         this.skipAction = skipAction;
     }
 
+    /**
+     * Resets the resetSkipAction attribute to its default value
+     */
     private void resetSkipAction(){
         setSkipAction(this::nextStatus);
     }
 
-
+    /**
+     * Enumerates the status a player can be in
+     */
     public enum PlayerStatus {
         PERFORMING_ACTION,
         ACTION_PERFORMED,
-        TURN_ENDED
+        TURN_ENDED;
     }
 
-    public static class PlayerStatusIndex{
+    /**
+     * A class that enables scrolling through the PlayerStatus values
+     */
+    private static class PlayerStatusIndex{
 
+        /**
+         * Saves a numeric reference to current PlayerStatus
+         */
         private int currentIndex;
-        private final PlayerStatus[] vals = {PlayerStatus.PERFORMING_ACTION, PlayerStatus.ACTION_PERFORMED, PlayerStatus.TURN_ENDED};
+        private final PlayerStatus[] values = {PlayerStatus.PERFORMING_ACTION, PlayerStatus.ACTION_PERFORMED, PlayerStatus.TURN_ENDED};
 
         public PlayerStatus nextStatus(){
-            currentIndex = (currentIndex+1)%vals.length;
-            return vals[currentIndex];
+            currentIndex = (currentIndex+1)% values.length;
+            return values[currentIndex];
         }
 
         public void setEndTurnStatus(){
-            this.currentIndex = Arrays.asList(vals).indexOf(PlayerStatus.TURN_ENDED);
+            this.currentIndex = Arrays.asList(values).indexOf(PlayerStatus.TURN_ENDED);
         }
 
         public PlayerStatus getCurrentStatus(){
-            return vals[currentIndex];
+            return values[currentIndex];
         }
 
     }

@@ -653,6 +653,6 @@ public class CLI implements View {
 
     @Override
     public void takeResourcesFromMarket(Market market) {
-        showMarket(market);
+        askToChooseMarketRowOrColumn(market);
     }
 }

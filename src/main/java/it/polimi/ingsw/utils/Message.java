@@ -101,6 +101,7 @@ public class Message{
         SHOW_PLAYER_BOARD,
         ASK_FOR_ACTION,
         SWAP_DEPOTS,
+        TAKE_RESOURCES_FROM_MARKET,
         SHOW_MARKET,
         SELECT_MARKET_ROW,
         SELECT_MARKET_COLUMN,

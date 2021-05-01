@@ -112,10 +112,13 @@ public class ClientController {
             case SHOW_WAREHOUSE_STATUS:
                 view.showWarehouse(Serializer.deserializeWarehouse(message.getData("warehouse")));
                 break;
-            case SHOW_MARKET:
+            case TAKE_RESOURCES_FROM_MARKET:
                 Market market = Serializer.deserializeMarket(message.getData("market"));
-                view.askToChooseMarketRowOrColumn(market);
+                view.takeResourcesFromMarket(market);
                 break;
+            case SHOW_MARKET:
+                market = Serializer.deserializeMarket(message.getData("market"));
+                view.showMarket(market);
             case SHOW_RESOURCES:
                 view.showResourcesGainedFromMarket(Serializer.deserializeResources(message.getData("resources")));
                 break;

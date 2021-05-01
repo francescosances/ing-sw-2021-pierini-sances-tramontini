@@ -7,7 +7,6 @@ import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.storage.Resource;
-import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.network.ClientHandler;
 import it.polimi.ingsw.serialization.Serializer;
@@ -119,7 +118,7 @@ public class VirtualView implements View {
 
     @Override
     public void askToChooseMarketRowOrColumn(Market market) {
-        Message message = new Message(Message.MessageType.SHOW_MARKET);
+        Message message = new Message(Message.MessageType.TAKE_RESOURCES_FROM_MARKET);
         message.addData("market",Serializer.serializeMarket(market));
         sendMessage(message);
     }
@@ -131,7 +130,7 @@ public class VirtualView implements View {
 
     @Override
     public void showMarket(Market market) {
-        Message message = new Message(Message.MessageType.SHOW_MARKET);
+        Message message = new Message(Message.MessageType.TAKE_RESOURCES_FROM_MARKET);
         message.addData("market",Serializer.serializeMarket(market));
         sendMessage(message);
     }
