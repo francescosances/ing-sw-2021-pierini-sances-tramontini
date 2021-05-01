@@ -384,25 +384,31 @@ public class PlayerController {
     }
 
     protected void askToStoreResourcesFromMarket(Resource[] resources){
-        if(playerBoard.getLeaderCards().stream().filter(t->t.isWhiteMarble() && t.isActive()).count() <= 1){
-            for(int i=0;i<resources.length;i++){
-                for(LeaderCard card : playerBoard.getLeaderCards()){
+        for (int i = 0; i < resources.length; i++) {
+            if (playerBoard.getLeaderCards().stream().filter(t -> t.isWhiteMarble() && t.isActive()).count() <= 1) {
+                for (LeaderCard card : playerBoard.getLeaderCards()) {
                     resources[i] = card.convertResourceType(resources[i]);
                 }
-                if(resources[i] == NonPhysicalResourceType.VOID) {
-                    resources[i] = null;
-                }else if(resources[i] == NonPhysicalResourceType.FAITH_POINT){
-                    playerBoard.gainFaithPoints(1);
-                    virtualView.showMessage("You gained a faith point");
+                if (resources[i] == NonPhysicalResourceType.VOID) {
                     resources[i] = null;
                 }
+            } if (resources[i] == NonPhysicalResourceType.FAITH_POINT) {
+                playerBoard.gainFaithPoints(1);
+                virtualView.showMessage("You gained a faith point");
+                resources[i] = null;
             }
         }
+
         resources = Arrays.stream(resources).filter(Objects::nonNull).toArray(Resource[]::new);
         getPlayerBoard().getWarehouse().toBeStored(resources);
         List<Resource> resourcesToStore = Arrays.asList(resources);
         Collections.reverse(resourcesToStore);
         virtualView.showResourcesGainedFromMarket(resourcesToStore.toArray(new Resource[0]));
+        if(resourcesToStore.isEmpty()){
+            resetSkipAction();
+            nextStatus();
+            return;
+        }
         askToStoreResource();
     }
 
@@ -414,12 +420,6 @@ public class PlayerController {
     }
 
     public void askToStoreResource(){
-        if(!getPlayerBoard().getWarehouse().hasResourcesToStore()){
-            resetSkipAction();
-            nextStatus();
-            askForAction();
-            return;
-        }
        currentResourceToStore = getPlayerBoard().getWarehouse().popResourceToBeStored();
        if(currentResourceToStore == NonPhysicalResourceType.VOID){
            virtualView.chooseWhiteMarbleConversion(getPlayerBoard().getLeaderCards().get(0),getPlayerBoard().getLeaderCards().get(1));
