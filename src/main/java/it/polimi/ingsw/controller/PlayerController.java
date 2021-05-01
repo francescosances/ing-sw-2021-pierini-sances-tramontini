@@ -441,11 +441,8 @@ public class PlayerController {
 
     protected void askToConfirmDepotsStatus(){
         setAfterDepotsSwapAction(() -> virtualView.askToStoreResource(currentResourceToStore,getPlayerBoard().getWarehouse()));
-        setSkipAction(() -> virtualView.askToStoreResource(currentResourceToStore,getPlayerBoard().getWarehouse()));
-        Action[] actions = {Action.SKIP,Action.MOVE_RESOURCES};
         virtualView.showMessage("You have to store a "+currentResourceToStore);
-        showWarehouseStatus();
-        virtualView.askForAction(actions);
+        virtualView.askToStoreResource(currentResourceToStore, getPlayerBoard().getWarehouse());
     }
 
     protected void storeResourceToWarehouse(int depot){
@@ -460,7 +457,6 @@ public class PlayerController {
             }
         else
             getPlayerBoard().getMatch().discardResource(getPlayerBoard());
-
         currentResourceToStore = null;
         if(getPlayerBoard().getWarehouse().hasResourcesToStore())
            askToStoreResource();

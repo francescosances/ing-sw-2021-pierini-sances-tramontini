@@ -137,10 +137,16 @@ public class CLI implements View {
     public void listLeaderCards(List<LeaderCard> leaderCardList,int cardsToChoose) {
         showLeaderCards(leaderCardList);
         output.println("Choose " + cardsToChoose + " leader cards:");
+        if (cardsToChoose == 1)
+            output.println("Insert a negative number to reverse the action");
         int[] choices = new int[cardsToChoose];
         LeaderCard[] cardsChosen = new LeaderCard[cardsToChoose];
         for(int i=0;i<cardsToChoose;i++) {
             choices[i] = input.nextInt();
+            if (choices[i] < 0 && cardsToChoose == 1){
+                clientController.rollback();
+                return;
+            }
             for (int j = 0; j < i; j++) {
                 if (choices[i] == choices[j]){
                     showErrorMessage("You chose the same card twice");
@@ -291,7 +297,8 @@ public class CLI implements View {
         listAvailableProductions(availableProductions);
         List<Integer> choices = new ArrayList<>();
         int temp;
-        output.println("Choose the productions to activate. Insert a negative number to exit.");
+        output.println("Choose the productions to activate.");
+        output.println("Insert a negative number to exit.");
         Requirements costs = new Requirements();
         Requirements gains = new Requirements();
         temp = input.nextInt();
@@ -558,13 +565,19 @@ public class CLI implements View {
         output.println("Where do you want to store this "+resource+" resource?");
         showWarehouse(warehouse);
         output.printf("  [%d] Discard\n",warehouse.getDepots().size());
+        output.printf("  [%d] Move resources\n",warehouse.getDepots().size() + 1);
         int choice = input.nextInt();
-        if(choice < 0 || choice > warehouse.getDepots().size()) {
+        if(choice < 0 || choice > warehouse.getDepots().size() + 1) {
             showErrorMessage("Invalid choice");
             askToStoreResource(resource, warehouse);
             return;
         }
+        if (choice == warehouse.getDepots().size() + 1) {
+            askToSwapDepots(warehouse);
+            return;
+        }
         clientController.chooseDepot(choice);
+
     }
 
     @Override
@@ -590,7 +603,7 @@ public class CLI implements View {
             output.println("Do you want to choose a row or a column?");
             output.println("  [0] Row");
             output.println("  [1] Column");
-            output.println("Insert negative number to reverse the action");
+            output.println("Insert a negative number to reverse the action");
             choice = input.nextInt();
             if (choice < 0) {
                 clientController.rollback();
