@@ -34,7 +34,7 @@ public class PlayerController {
     /**
      * Represent the current status of the player
      */
-    private final PlayerStatusIndex currentStatus;
+    private PlayerStatus currentStatus;
 
     /**
      * A list of observers of the player status
@@ -77,7 +77,7 @@ public class PlayerController {
         this.playerBoard = playerBoard;
         this.active = true;
         this.virtualView = virtualView;
-        currentStatus = new PlayerStatusIndex();
+        currentStatus = PlayerStatus.PERFORMING_ACTION;
         resetSkipAction();
         resetAfterDepotsSwapAction();
     }
@@ -123,7 +123,7 @@ public class PlayerController {
      * Mark the player as waiting for others and notify the status update to the virtual view
      */
     public void turnEnded(){
-        this.currentStatus.setEndTurnStatus();
+        currentStatus = PlayerStatus.TURN_ENDED;
         for (PlayerStatusListener x : this.observers) {
             x.onPlayerStatusChanged(this);
         }
@@ -150,7 +150,7 @@ public class PlayerController {
      * @return the current status of the player
      */
     public PlayerStatus getCurrentStatus() {
-        return currentStatus.getCurrentStatus();
+        return currentStatus;
     }
 
     /**
@@ -324,7 +324,7 @@ public class PlayerController {
      * Changes the current status of the controller and notifies the change to the observers
      */
     private void nextStatus(){
-        currentStatus.nextStatus();
+        currentStatus = currentStatus.nextStatus();
         for (PlayerStatusListener x : this.observers) {
             x.onPlayerStatusChanged(this);
         }
@@ -605,31 +605,21 @@ public class PlayerController {
         PERFORMING_ACTION,
         ACTION_PERFORMED,
         TURN_ENDED;
-    }
-
-    /**
-     * A class that enables scrolling through the PlayerStatus values
-     */
-    private static class PlayerStatusIndex{
 
         /**
-         * Saves a numeric reference to current PlayerStatus
+         * Returns the PlayerStatus that is the actual one
+         * @return the PlayerStatus that is the actual one
          */
-        private int currentIndex;
-        private final PlayerStatus[] values = {PlayerStatus.PERFORMING_ACTION, PlayerStatus.ACTION_PERFORMED, PlayerStatus.TURN_ENDED};
-
-        public PlayerStatus nextStatus(){
-            currentIndex = (currentIndex+1)% values.length;
-            return values[currentIndex];
+        private PlayerStatus nextStatus(){
+            switch (this) {
+                case PERFORMING_ACTION:
+                    return ACTION_PERFORMED;
+                case ACTION_PERFORMED:
+                    return TURN_ENDED;
+                default:
+                    return PERFORMING_ACTION;
+            }
         }
-
-        public void setEndTurnStatus(){
-            this.currentIndex = Arrays.asList(values).indexOf(PlayerStatus.TURN_ENDED);
-        }
-
-        public PlayerStatus getCurrentStatus(){
-            return values[currentIndex];
-        }
-
     }
+
 }
