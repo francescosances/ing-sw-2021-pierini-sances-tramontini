@@ -320,7 +320,6 @@ public class CLI implements View {
                     showErrorMessage("You don't have a Producer associated with this number");
                 }
             }
-
             temp = input.nextInt();
         }
 

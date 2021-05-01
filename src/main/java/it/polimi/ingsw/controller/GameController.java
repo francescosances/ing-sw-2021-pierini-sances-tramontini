@@ -265,6 +265,7 @@ public class GameController implements PlayerStatusListener {
         switch (player.getCurrentStatus()) {
             case TURN_ENDED:
                 players.get(currentPlayerIndex).showPlayerBoard();
+                match.endTurn();
                 nextTurn();
                 break;
             case PERFORMING_ACTION:
@@ -283,7 +284,7 @@ public class GameController implements PlayerStatusListener {
      */
     public void nextTurn(){
         currentPlayerIndex = (currentPlayerIndex+1)%players.size();
-        if(players.stream().noneMatch(PlayerController::isActive)) // No one is active
+        if(players.stream().noneMatch(PlayerController::isActive)) //TODO: No one is active
             return;
         if(!players.get(currentPlayerIndex).isActive()) // The current player is inactive
             match.endTurn();

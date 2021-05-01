@@ -57,6 +57,8 @@ public class SoloMatch extends Match{
     @Override
     public void endTurn(){
         super.endTurn();
+
+        //TODO: comunicare al giocatore che un ActionToken è stato pescato
         try {
             drawActionToken().show(this);
             //TODO: creare metodo endgame per contare i punti
@@ -77,6 +79,11 @@ public class SoloMatch extends Match{
         if(player.getBoughtDevelopmentCardsCounter() >= 7)
             throw new EndGameException(true);
         super.buyDevelopmentCard(developmentCard, player);
+    }
+
+    @Override
+    public void discardResource(PlayerBoard player) throws EndGameException {
+        moveBlackCross(1);
     }
 
     @Override

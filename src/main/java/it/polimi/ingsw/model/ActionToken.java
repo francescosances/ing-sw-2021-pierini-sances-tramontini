@@ -8,6 +8,7 @@ public class ActionToken {
      * The DevelopmentCard color that needs to be discarded when the Action Token is drawn
      */
     private final DevelopmentColorType developmentCard;
+
     /**
      * The number of spaces the black cross must move when the Action Token is drawn
      */
@@ -62,7 +63,7 @@ public class ActionToken {
             return false;
         ActionToken o = (ActionToken) other;
 
-        if (this.blackCrossSpaces == o.blackCrossSpaces) {
+        if (this.blackCrossSpaces.equals(o.blackCrossSpaces)) {
             if (this.developmentCard != null && o.developmentCard != null)
                 return this.developmentCard.equals(o.developmentCard);
             return this.developmentCard == null && o.developmentCard == null;
