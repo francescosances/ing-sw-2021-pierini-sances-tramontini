@@ -67,6 +67,11 @@ public class PlayerController {
     private Runnable skipAction;
 
     /**
+     * True if the user has already choose the start resources
+     */
+    private boolean gotResourcesOfYourChoosing;
+
+    /**
      * Initialize a new player controller active and waiting for his turn.
      * @param username the username of the player associated with the player controller
      * @param playerBoard the playerboard of the user
@@ -78,6 +83,7 @@ public class PlayerController {
         this.active = true;
         this.virtualView = virtualView;
         currentStatus = PlayerStatus.PERFORMING_ACTION;
+        gotResourcesOfYourChoosing = false;
         resetSkipAction();
         resetAfterDepotsSwapAction();
     }
@@ -153,6 +159,33 @@ public class PlayerController {
         return currentStatus;
     }
 
+    public void setup(int playerIndex){
+        int resourcesToChoose = 0;
+        int faithPoints = 0;
+        switch (playerIndex){
+            case 0:
+                gotResourcesOfYourChoosing = true;
+                break;
+            case 1:
+                resourcesToChoose = 1;
+                break;
+            case 2:
+                resourcesToChoose = 1;
+                faithPoints = 1;
+                break;
+            case 3:
+                resourcesToChoose = 2;
+                faithPoints = 1;
+                break;
+        }
+        getPlayerBoard().gainFaithPoints(faithPoints);
+        if(!gotResourcesOfYourChoosing){
+            askToChooseStartResources(resourcesToChoose);
+        }else{
+            listLeaderCards();
+        }
+    }
+
     /**
      * Get 4 leader cards from the match and send it to the client through the virtual view.
      * If the user is inactive, the cards are randomly chosen
@@ -185,7 +218,6 @@ public class PlayerController {
      * Asks the player which ResourceType he wants as they're not starting the turn
      * @param resourcesToChoose the number of resource the player is allowed to choose
      */
-    //TODO: collegare start resources
     public void askToChooseStartResources(int resourcesToChoose){
         virtualView.askToChooseStartResources(ResourceType.values(),resourcesToChoose);
     }
@@ -198,6 +230,7 @@ public class PlayerController {
         for(Resource resource : resources){
             playerBoard.getStrongbox().addResource((ResourceType) resource);
         }
+        gotResourcesOfYourChoosing = true;
     }
 
     /**

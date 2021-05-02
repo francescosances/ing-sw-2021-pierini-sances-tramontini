@@ -80,7 +80,7 @@ public class GameController implements PlayerStatusListener {
                     leaderCardsChoice(username, Serializer.deserializeLeaderCardDeck(message.getData("leaderCards")));
                     break;
                 case START_RESOURCES:
-                    currentPlayerController.chooseStartResources(Serializer.deserializeResources("resources"));
+                    currentPlayerController.chooseStartResources(Serializer.deserializeResources(message.getData("resources")));
                     break;
                 case PERFORM_ACTION:
                     currentPlayerController.performAction(gson.fromJson(message.getData("action"), Action.class));
@@ -232,8 +232,7 @@ public class GameController implements PlayerStatusListener {
                     setPhase(GamePhase.TURN);
                     return;
                 }
-                players.get(currentPlayerIndex).listLeaderCards();
-                usersReadyToPlay++;
+                players.get(currentPlayerIndex).setup(usersReadyToPlay++);
                 showCurrentActiveUser();
                 break;
             case TURN:
