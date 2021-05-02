@@ -186,8 +186,16 @@ public class Match {
     public List<LeaderCard> drawLeaderCards(int num) {
         List<LeaderCard> ret = new ArrayList<>();
         for(int i=0;i<num;i++)
-            ret.add(leaderCards.remove(i));
+            ret.add(leaderCards.get(i));
         return ret;
+    }
+
+    public void chooseLeaderCard(LeaderCard chosenCard){
+        Iterator<LeaderCard> cardIterator = leaderCards.iterator();
+        while(cardIterator.hasNext()){
+            if(cardIterator.next().equals(chosenCard))
+                cardIterator.remove();
+        }
     }
 
     public boolean containsUsername(String username){

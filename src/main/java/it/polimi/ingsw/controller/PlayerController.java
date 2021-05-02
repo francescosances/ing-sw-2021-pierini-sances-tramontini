@@ -196,7 +196,6 @@ public class PlayerController {
      * If the user is inactive, the cards are randomly chosen
      */
     public void listLeaderCards(){
-        //TODO: le carte non scelte devono tornare nel mazzo
         List<LeaderCard> leaderCardList = playerBoard.getMatch().drawLeaderCards(4);
         if(isActive()){
             virtualView.listLeaderCards(leaderCardList,2);
@@ -207,6 +206,7 @@ public class PlayerController {
         leaderCardsChooser = cards -> {
             for (LeaderCard card : cards) {
                 playerBoard.addLeaderCard(card);
+                playerBoard.getMatch().chooseLeaderCard(card);//TODO: controllare che le carte vengano effetivamente rimosse dal mazzo
             }
             turnEnded();
         };
@@ -234,7 +234,7 @@ public class PlayerController {
      */
     public void chooseStartResources(Resource[] resources) {
         for(Resource resource : resources){
-            playerBoard.getStrongbox().addResource((ResourceType) resource);
+            playerBoard.getStrongbox().addResource((ResourceType) resource);//TODO: le risorse iniziale devono finire nei depositi e non nello strongbox
         }
         gotResourcesOfYourChoosing = true;
         setup();
