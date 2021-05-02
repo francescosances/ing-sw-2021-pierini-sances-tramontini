@@ -72,6 +72,11 @@ public class PlayerController {
     private boolean gotResourcesOfYourChoosing;
 
     /**
+     * The index of the player in the players array
+     */
+    private int playerIndex;
+
+    /**
      * Initialize a new player controller active and waiting for his turn.
      * @param username the username of the player associated with the player controller
      * @param playerBoard the playerboard of the user
@@ -159,7 +164,7 @@ public class PlayerController {
         return currentStatus;
     }
 
-    public void setup(int playerIndex){
+    public void setup(){
         int resourcesToChoose = 0;
         int faithPoints = 0;
         switch (playerIndex){
@@ -191,6 +196,7 @@ public class PlayerController {
      * If the user is inactive, the cards are randomly chosen
      */
     public void listLeaderCards(){
+        //TODO: le carte non scelte devono tornare nel mazzo
         List<LeaderCard> leaderCardList = playerBoard.getMatch().drawLeaderCards(4);
         if(isActive()){
             virtualView.listLeaderCards(leaderCardList,2);
@@ -231,6 +237,7 @@ public class PlayerController {
             playerBoard.getStrongbox().addResource((ResourceType) resource);
         }
         gotResourcesOfYourChoosing = true;
+        setup();
     }
 
     /**
@@ -629,6 +636,15 @@ public class PlayerController {
      */
     private void resetSkipAction(){
         setSkipAction(this::nextStatus);
+    }
+
+    /**
+     * Set the index of the player in the players array
+     * @param i the index of the player
+     */
+    public void setPlayerIndex(int i) {
+        this.playerIndex = i;
+        virtualView.showMessage("Sei il giocatore "+i);
     }
 
     /**

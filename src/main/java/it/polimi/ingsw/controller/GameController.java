@@ -128,6 +128,8 @@ public class GameController implements PlayerStatusListener {
     public void start(){
         currentPlayerIndex = (int) (Math.random() * players.size());
         this.matchStarted = true;
+        for(int i=0;i<players.size();i++)
+            players.get((currentPlayerIndex+i)%players.size()).setPlayerIndex(i);
         setPhase(GamePhase.PLAYERS_SETUP);
     }
 
@@ -232,7 +234,8 @@ public class GameController implements PlayerStatusListener {
                     setPhase(GamePhase.TURN);
                     return;
                 }
-                players.get(currentPlayerIndex).setup(usersReadyToPlay++);
+                players.get(currentPlayerIndex).setup();
+                usersReadyToPlay++;
                 showCurrentActiveUser();
                 break;
             case TURN:
