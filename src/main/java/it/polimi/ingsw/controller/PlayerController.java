@@ -69,7 +69,7 @@ public class PlayerController {
     /**
      * True if the user has already choose the start resources
      */
-    private boolean gotResourcesOfYourChoosing;
+    private boolean gotResourcesOfYourChoice;
 
     /**
      * The index of the player in the players array
@@ -88,7 +88,7 @@ public class PlayerController {
         this.active = true;
         this.virtualView = virtualView;
         currentStatus = PlayerStatus.PERFORMING_ACTION;
-        gotResourcesOfYourChoosing = false;
+        gotResourcesOfYourChoice = false;
         resetSkipAction();
         resetAfterDepotsSwapAction();
     }
@@ -169,7 +169,7 @@ public class PlayerController {
         int faithPoints = 0;
         switch (playerIndex){
             case 0:
-                gotResourcesOfYourChoosing = true;
+                gotResourcesOfYourChoice = true;
                 break;
             case 1:
                 resourcesToChoose = 1;
@@ -184,7 +184,7 @@ public class PlayerController {
                 break;
         }
         getPlayerBoard().gainFaithPoints(faithPoints);
-        if(!gotResourcesOfYourChoosing){
+        if(!gotResourcesOfYourChoice){
             askToChooseStartResources(resourcesToChoose);
         }else{
             listLeaderCards();
@@ -236,7 +236,7 @@ public class PlayerController {
         for(Resource resource : resources){
             playerBoard.getStrongbox().addResource((ResourceType) resource);//TODO: le risorse iniziale devono finire nei depositi e non nello strongbox
         }
-        gotResourcesOfYourChoosing = true;
+        gotResourcesOfYourChoice = true;
         setup();
     }
 

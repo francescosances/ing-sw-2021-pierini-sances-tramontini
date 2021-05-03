@@ -16,6 +16,7 @@ import it.polimi.ingsw.view.VirtualView;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class GameController implements PlayerStatusListener {
 
@@ -158,7 +159,6 @@ public class GameController implements PlayerStatusListener {
             playerController = new PlayerController(username, match.addPlayer(username), new VirtualView(clientHandler));
             players.add(playerController);
         }
-        this.connect(username);
         playerController.addObserver(this);
         return playerController;
     }

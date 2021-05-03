@@ -362,7 +362,7 @@ public class CLI implements View {
 
     @Override
     public void askToChooseStartResources(Resource[] values, int resourcesToChoose) {
-        output.printf("You have to select %d resources of your choosing\n",resourcesToChoose);
+        output.printf("You have to select %d resources of your choice\n",resourcesToChoose);
         showResources(values);
         int[] choices = new int[resourcesToChoose];
         Resource[] resourcesChosen = new Resource[resourcesToChoose];
@@ -387,25 +387,33 @@ public class CLI implements View {
         showLeaderCards(playerBoard.getLeaderCards());
     }
 
+    public void printCross(int pos, FaithTrack faithTrack){
+        if (pos == faithTrack.getFaithMarker())
+            output.print(ANSI_RED + "†" + ANSI_RESET);
+        else
+            output.print(" ");
+    }
     private void showFaithTrack(FaithTrack faithTrack){
         output.println("Faith track: " + faithTrack.getTrackVictoryPoints() + " victory points");
 
+        printCross(0, faithTrack);
         output.print(" ");
-        for (int i = 0; i < faithTrack.getFaithMarker(); i++){
-            output.print(" ");
-        }
-        output.println(ANSI_RED + "†" + ANSI_RESET);
-
-        output.print("  ");
         int vaticanReportCount = 0;
         for (int pos = 1; pos <= FaithTrack.SIZE; pos++){
             if (pos == FaithTrack.POPE_SPACES[vaticanReportCount]){
-                output.print(ANSI_RED + "▢" + ANSI_RESET);
+                output.print(ANSI_RED + "[" + ANSI_RESET);
+                printCross(pos, faithTrack);
+                output.print(ANSI_RED + "]" + ANSI_RESET);
                 vaticanReportCount++;
-            }else if ((pos >= FaithTrack.POPE_SPACES[vaticanReportCount] - 3 - vaticanReportCount) && (pos <= FaithTrack.POPE_SPACES[vaticanReportCount] - 1))
-                output.print(ANSI_YELLOW + "▢" + ANSI_RESET);
-            else
-                output.print("▢");
+            }else if ((pos >= FaithTrack.POPE_SPACES[vaticanReportCount] - 3 - vaticanReportCount) && (pos <= FaithTrack.POPE_SPACES[vaticanReportCount] - 1)) {
+                output.print(ANSI_YELLOW + "[" + ANSI_RESET);
+                printCross(pos, faithTrack);
+                output.print(ANSI_YELLOW + "]" + ANSI_RESET);
+            } else{
+                output.print("[");
+                printCross(pos, faithTrack);
+                output.print("]");
+            }
         }
         output.println();
 
