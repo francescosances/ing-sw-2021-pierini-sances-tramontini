@@ -48,8 +48,10 @@ public class Strongbox implements Storage {
             int previousValue = getResourcesNum((ResourceType) res.getKey());
             if (previousValue < toBeRemoved) {
                 toBeRemoved = previousValue;
+                this.resources.remove(res.getKey());
             }
-            this.resources.put((ResourceType) res.getKey(), previousValue - toBeRemoved);
+            else
+                this.resources.put((ResourceType) res.getKey(), previousValue - toBeRemoved);
             newRequirements.removeResourceRequirement(res.getKey(), toBeRemoved);
         }
         return newRequirements;
@@ -65,6 +67,10 @@ public class Strongbox implements Storage {
         return this.resources.getOrDefault(resource, 0);
     }
 
+    /**
+     * Returns all resources in the strongbox
+     * @return all resources in the strongbox
+     */
     @Override
     public Requirements getAllResources() {
         Requirements ret = new Requirements();

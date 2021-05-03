@@ -6,8 +6,8 @@ import it.polimi.ingsw.model.cards.DevelopmentColorType;
 
 public class SoloMatch extends Match{
 
-    private FaithTrack blackCross;
-    private Deck<ActionToken> actionTokens;
+    private final FaithTrack blackCross;
+    private final Deck<ActionToken> actionTokens;
 
     public SoloMatch(String matchName){
         super(matchName, 1);
