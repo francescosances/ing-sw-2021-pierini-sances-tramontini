@@ -14,18 +14,51 @@ import java.util.stream.Stream;
 
 public class PlayerBoard {
 
+    /**
+     * A reference to the match
+     */
     private transient final Match match;
+
+    /**
+     * Player's username
+     */
     protected String username;
+
+    /**
+     * A reference to their faith Track
+     */
     protected FaithTrack faithTrack;
 
+    /**
+     * A reference to their warehouse
+     */
     protected Warehouse warehouse;
+
+    /**
+     * A reference to their strongbox
+     */
     protected Strongbox strongbox;
 
+    /**
+     * An array referencing their DevelopmentCardSlots
+     */
     private final DevelopmentCardSlot[] developmentCardSlots;
+
+    /**
+     * A list referencing their LeaderCards
+     */
     private final List<LeaderCard> leaderCards;
 
+    /**
+     * A counter that stores the number of DevelopmentCards bought
+     */
     private int boughtDevelopmentCardsCounter = 0;
 
+    /**
+     * Initializes a new PlayerBoard object
+     * @param username the player's username
+     * @param match a reference to the match
+     */
     public PlayerBoard(String username,Match match){
         this.match = match;
         this.username = username;
@@ -36,11 +69,20 @@ public class PlayerBoard {
         leaderCards = new ArrayList<>();
     }
 
+    /**
+     * Returns true if the the player has a slot where a DevelopmentCard can be stored into, false elsewhere
+     * @param developmentCard the DevelopmentCard to check
+     * @return true if the the player has a slot where a DevelopmentCard can be stored into, false elsewhere
+     */
     public boolean acceptsDevelopmentCard(DevelopmentCard developmentCard){
         return Arrays.stream(getDevelopmentCardSlots()).anyMatch(t->t.accepts(developmentCard));
     }
 
-    public void buyDevelopmentCard(DevelopmentCard developmentCard){
+    /**
+     * Pays the requirements needed to buy the DevelopmentCard, applying discounts where possible
+     * @param developmentCard the DevelopmentCard to buy
+     */
+    public void buyDevelopmentCard(DevelopmentCard developmentCard) throws EndGameException{
         Requirements requirements = developmentCard.getCost();
         for(LeaderCard leaderCard:leaderCards)
             requirements = leaderCard.recalculateRequirements(requirements);
@@ -50,14 +92,25 @@ public class PlayerBoard {
         requirements = warehouse.removeResources(requirements);
         strongbox.removeResources(requirements);
         boughtDevelopmentCardsCounter++;
+        if (boughtDevelopmentCardsCounter == 7)
+            throw new EndGameException();
         match.buyDevelopmentCard(developmentCard, this);
     }
 
+    /**
+     * Advances the player in their Faith Track
+     * @param points the number of points the player must move
+     * @throws EndGameException if last space is reached
+     */
     public void gainFaithPoints(int points) throws EndGameException {
         for (int i=0;i<points;i++)
             faithTrack.moveMarker();
     }
 
+    /**
+     * Returns the number of total victory points gained by the player
+     * @return the number of total victory points gained by the player
+     */
     public int getTotalVictoryPoints(){
         return faithTrack.getVictoryPoints() +
                 getDevelopmentCardsVictoryPoints() +
@@ -65,12 +118,20 @@ public class PlayerBoard {
                 getResourcesVictoryPoints();
     }
 
+    /**
+     * Returns the number of victory points gained by the DevelopmentCards only
+     * @return the number of victory points gained by the DevelopmentCards only
+     */
     public int getDevelopmentCardsVictoryPoints(){
         return Arrays.stream(developmentCardSlots)
                 .mapToInt(DevelopmentCardSlot::getVictoryPoints)
                 .sum();
     }
 
+    /**
+     * Returns the number of victory points gained by the LeaderCards only
+     * @return the number of victory points gained by the LeaderCards only
+     */
     public int getLeaderCardsVictoryPoints(){
         return leaderCards.stream()
                 .filter(LeaderCard::isActive)
@@ -78,43 +139,84 @@ public class PlayerBoard {
                 .sum();
     }
 
+    /**
+     * Returns the number of victory points gained by the number of resources only
+     * @return the number of victory points gained by the number of resources only
+     */
     public int getResourcesVictoryPoints(){
         return Arrays.stream(ResourceType.values())
                 .mapToInt(res -> getAllResources().getResources(res)).sum() / 5;
     }
 
+    /**
+     * Returns the match reference
+     * @return the match reference
+     */
     public Match getMatch() {
         return match;
     }
 
+    /**
+     * Returns player's username String
+     * @return player's username String
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * Returns player's FaithTrack
+     * @return player's FaithTrack
+     */
     public FaithTrack getFaithTrack() {
         return faithTrack;
     }
 
+    /**
+     * Returns player's DevelopmentCardSlots array
+     * @return player's DevelopmentCardSlots array
+     */
     public DevelopmentCardSlot[] getDevelopmentCardSlots(){
         return developmentCardSlots;
     }
 
+    /**
+     * Returns a Requirements object containing all the resources the player owns
+     * @return a Requirements object containing all the resources the player owns
+     */
     public Requirements getAllResources(){
         return Requirements.sum(strongbox.getAllResources(), warehouse.getAllResources());
     }
 
+    /**
+     * Adds a LeaderCard to player's hand
+     * @param card to be added
+     */
     public void addLeaderCard(LeaderCard card){
         this.leaderCards.add(card);
     }
 
+    /**
+     * Returns player's Warehouse
+     * @return player's Warehouse
+     */
     public Warehouse getWarehouse() {
         return warehouse;
     }
 
+    /**
+     * Returns player's Strongbox
+     * @return player's Strongbox
+     */
     public Strongbox getStrongbox() {
         return strongbox;
     }
 
+    /**
+     * Activates the LeaderCard
+     * @param leaderCard the LeaderCard to be activated
+     * @throws NotSatisfiedRequirementsException if the LeaderCard cannot be activated
+     */
     public void activateLeaderCard(LeaderCard leaderCard) throws NotSatisfiedRequirementsException {
         for(LeaderCard x: leaderCards){
             if(x.equals(leaderCard))
@@ -122,6 +224,11 @@ public class PlayerBoard {
         }
     }
 
+    /**
+     * Discards the LeaderCard, makes the player gain 1 FaithPoint
+     * @param leaderCard the LeaderCard to discard
+     * @throws EndGameException if the player reaches the last space
+     */
     public void discardLeaderCard(LeaderCard leaderCard) throws EndGameException {
         for (Iterator<LeaderCard> iterator = leaderCards.iterator(); iterator.hasNext();) {
             LeaderCard temp = iterator.next();
@@ -134,6 +241,10 @@ public class PlayerBoard {
         }
     }
 
+    /**
+     * Returns a list with all player's LeaderCards
+     * @return a list with all player's LeaderCards
+     */
     public List<LeaderCard> getLeaderCards() {
         return leaderCards;
     }
@@ -146,10 +257,18 @@ public class PlayerBoard {
         return leaderCards.stream().filter(x->!x.isActive()).collect(Collectors.toList());
     }
 
+    /**
+     * Returns the boughtDevelopmentCardsCounter attribute
+     * @return  the boughtDevelopmentCardsCounter
+     */
     public int getBoughtDevelopmentCardsCounter() {
         return boughtDevelopmentCardsCounter;
     }
 
+    /**
+     * Returns a list containing all Available productions
+     * @return a list containing all Available productions
+     */
     public List<Producer> getAvailableProductions() {
         List<Producer> producers = new ArrayList<>();
         producers.add(DevelopmentCard.getBaseProduction());
@@ -164,11 +283,19 @@ public class PlayerBoard {
         return producers;
     }
 
+    /**
+     * Makes the player pay the cost
+     * @param costs the cost player must pay
+     */
     public void payResources(Requirements costs) {
         costs = warehouse.removeResources(costs);
         strongbox.removeResources(costs);
     }
 
+    /**
+     * Returns a String representation of the object
+     * @return a String representation of the object
+     */
     @Override
     public String toString() {
         return "PlayerBoard{" +
@@ -181,6 +308,11 @@ public class PlayerBoard {
                 '}';
     }
 
+    /**
+     * Indicates whether some other object is equal to this one
+     * @param o that is confronted
+     * @return true if o is equal to the object, false elsewhere
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

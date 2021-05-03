@@ -1,13 +1,12 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.cards.DevelopmentCard;
-import it.polimi.ingsw.model.cards.DevelopmentColorType;
-import it.polimi.ingsw.model.cards.Requirements;
+import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 import it.polimi.ingsw.utils.Pair;
+import it.polimi.ingsw.utils.Triple;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -109,6 +108,94 @@ public class PlayerBoardTest {
         assertTrue(playerBoard.getDevelopmentCardSlots()[1].accepts(new DevelopmentCard(1, null, 1, DevelopmentColorType.GREEN, null, (Requirements) null)));
         assertFalse(playerBoard.getDevelopmentCardSlots()[1].accepts(new DevelopmentCard(1, null, 2, DevelopmentColorType.GREEN, null, (Requirements) null)));
         assertTrue(playerBoard.getDevelopmentCardSlots()[0].accepts(new DevelopmentCard(2, null, 2, DevelopmentColorType.GREEN, null, (Requirements) null)));
+    }
+
+    @Test
+    public void gainFaithPoints(){
+        playerBoard.gainFaithPoints(2);
+        assertEquals(2, playerBoard.getFaithTrack().getFaithMarker());
+    }
+
+    @Test
+    public void getTotalVictoryPoints(){
+        playerBoard.getDevelopmentCardSlots()[0].addCard(
+                new DevelopmentCard(3,new Requirements(new Pair<>(ResourceType.SHIELD,3)),1,
+                        DevelopmentColorType.GREEN,new Requirements(new Pair<>(ResourceType.SERVANT,2)),
+                        new Pair<>(ResourceType.COIN,1),new Pair<>(ResourceType.SHIELD,1),new Pair<>(ResourceType.STONE,1)));
+        playerBoard.getDevelopmentCardSlots()[0].addCard(
+                new DevelopmentCard(6,new Requirements(new Pair<>(ResourceType.COIN,3),new Pair<>(ResourceType.STONE,2)),2,
+                        DevelopmentColorType.BLUE,new Requirements(new Pair<>(ResourceType.COIN,1),
+                        new Pair<>(ResourceType.STONE,1)),new Pair<>(ResourceType.SERVANT,3)));
+        playerBoard.getDevelopmentCardSlots()[1].addCard(
+                new DevelopmentCard(1,new Requirements(new Pair<>(ResourceType.STONE,2)),1,
+                        DevelopmentColorType.YELLOW,new Requirements(new Pair<>(ResourceType.SERVANT,1)),
+                        new Pair<>(NonPhysicalResourceType.FAITH_POINT,1)));
+        assertEquals(10, playerBoard.getDevelopmentCardsVictoryPoints());
+    }
+
+    @Test
+    public void getDevelopmentCardsVictoryPoints() throws IncompatibleDepotException {
+        playerBoard.getDevelopmentCardSlots()[0].addCard(
+                        new DevelopmentCard(3,new Requirements(new Pair<>(ResourceType.SHIELD,3)),1,
+                        DevelopmentColorType.GREEN,new Requirements(new Pair<>(ResourceType.SERVANT,2)),
+                        new Pair<>(ResourceType.COIN,1),new Pair<>(ResourceType.SHIELD,1),new Pair<>(ResourceType.STONE,1)));
+        playerBoard.getDevelopmentCardSlots()[0].addCard(
+                        new DevelopmentCard(6,new Requirements(new Pair<>(ResourceType.COIN,3),new Pair<>(ResourceType.STONE,2)),2,
+                        DevelopmentColorType.BLUE,new Requirements(new Pair<>(ResourceType.COIN,1),
+                        new Pair<>(ResourceType.STONE,1)),new Pair<>(ResourceType.SERVANT,3)));
+        playerBoard.getDevelopmentCardSlots()[1].addCard(
+                        new DevelopmentCard(1,new Requirements(new Pair<>(ResourceType.STONE,2)),1,
+                        DevelopmentColorType.YELLOW,new Requirements(new Pair<>(ResourceType.SERVANT,1)),
+                        new Pair<>(NonPhysicalResourceType.FAITH_POINT,1)));
+
+        LeaderCard leaderCard1 = new DepotLeaderCard(3,new Requirements(new Pair<> (ResourceType.COIN, 0)),ResourceType.SHIELD);
+        LeaderCard leaderCard2 = new DiscountLeaderCard(2,new Requirements(new Pair<> (ResourceType.COIN, 0)), ResourceType.STONE);
+        playerBoard.addLeaderCard(leaderCard1);
+        playerBoard.addLeaderCard(leaderCard2);
+        playerBoard.activateLeaderCard(leaderCard1);
+        playerBoard.activateLeaderCard(leaderCard2);
+
+        for (int i = 0; i < 5; i++)
+            playerBoard.getStrongbox().addResource(ResourceType.STONE);
+        for (int i = 0; i < 3; i++)
+            playerBoard.getStrongbox().addResource(ResourceType.COIN);
+        for (int i = 0; i < 4; i++)
+            playerBoard.getStrongbox().addResource(ResourceType.SHIELD);
+        playerBoard.getWarehouse().addResource(0, ResourceType.SERVANT, 1);
+        playerBoard.getWarehouse().addResource(2, ResourceType.SHIELD, 2);
+
+        assertEquals(playerBoard.getLeaderCardsVictoryPoints() + playerBoard.getDevelopmentCardsVictoryPoints() + playerBoard.getResourcesVictoryPoints(),
+                playerBoard.getTotalVictoryPoints());
+    }
+
+    @Test
+    public void getLeaderCardsVictoryPoints(){
+        LeaderCard leaderCard1 = new DepotLeaderCard(3,new Requirements(new Pair<> (ResourceType.COIN, 0)),ResourceType.SHIELD);
+        LeaderCard leaderCard2 = new DiscountLeaderCard(2,new Requirements(new Pair<> (ResourceType.COIN, 0)), ResourceType.STONE);
+        playerBoard.addLeaderCard(leaderCard1);
+        playerBoard.addLeaderCard(leaderCard2);
+        playerBoard.activateLeaderCard(leaderCard1);
+        assertEquals(3, playerBoard.getLeaderCardsVictoryPoints());
+        playerBoard.activateLeaderCard(leaderCard2);
+        assertEquals(5, playerBoard.getLeaderCardsVictoryPoints());
+    }
+
+    @Test
+    public void getResourcesVictoryPoints() throws IncompatibleDepotException {
+        assertEquals(0, playerBoard.getResourcesVictoryPoints());
+        for (int i = 0; i < 5; i++)
+            playerBoard.getStrongbox().addResource(ResourceType.STONE);
+        assertEquals(1, playerBoard.getResourcesVictoryPoints());
+        for (int i = 0; i < 3; i++)
+            playerBoard.getStrongbox().addResource(ResourceType.COIN);
+        assertEquals(1, playerBoard.getResourcesVictoryPoints());
+        for (int i = 0; i < 4; i++)
+            playerBoard.getStrongbox().addResource(ResourceType.SHIELD);
+        assertEquals(2, playerBoard.getResourcesVictoryPoints());
+        playerBoard.getWarehouse().addResource(0, ResourceType.SERVANT, 1);
+        assertEquals(2, playerBoard.getResourcesVictoryPoints());
+        playerBoard.getWarehouse().addResource(2, ResourceType.SHIELD, 2);
+        assertEquals(3, playerBoard.getResourcesVictoryPoints());
     }
 
 }
