@@ -44,6 +44,8 @@ public class CLI implements View {
 
     private final boolean lightMode;
 
+    private String username;
+
     public CLI(ClientController clientController, boolean lightMode){
         this.clientController = clientController;
         this.input = new Scanner(System.in);
@@ -120,7 +122,7 @@ public class CLI implements View {
 
     @Override
     public void resumeMatch(Match match) {
-        // TODO
+        output.println("You are been reconnected to the "+match.getMatchName()+" match");
     }
 
     @Override
@@ -393,6 +395,7 @@ public class CLI implements View {
         else
             output.print(" ");
     }
+
     private void showFaithTrack(FaithTrack faithTrack){
         output.println("Faith track: " + faithTrack.getTrackVictoryPoints() + " victory points");
 

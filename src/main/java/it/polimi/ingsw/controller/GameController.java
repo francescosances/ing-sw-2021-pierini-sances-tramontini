@@ -1,22 +1,18 @@
 package it.polimi.ingsw.controller;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.EndGameException;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.SoloMatch;
-import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.network.ClientHandler;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.view.VirtualView;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class GameController implements PlayerStatusListener {
 
@@ -288,9 +284,15 @@ public class GameController implements PlayerStatusListener {
         currentPlayerIndex = (currentPlayerIndex+1)%players.size();
         if(players.stream().noneMatch(PlayerController::isActive)) //TODO: No one is active
             return;
-        if(!players.get(currentPlayerIndex).isActive()) // The current player is inactive
-            match.endTurn();
+        if(!players.get(currentPlayerIndex).isActive()) { // The current player is inactive
+            broadcastMessage("The player: "+players.get(currentPlayerIndex).username+" is inactive. His turn has been skipped");
+            nextTurn();
+        }
         onStatusChanged();
+    }
+
+    protected void broadcastMessage(String message){
+       players.forEach(player -> {player.getVirtualView().showMessage(message);});
     }
 
     /**

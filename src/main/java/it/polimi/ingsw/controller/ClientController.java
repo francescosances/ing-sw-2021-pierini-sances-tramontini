@@ -273,7 +273,7 @@ public class ClientController {
      * @param match the match to be resumed
      */
     public void resumeMatch(Match match){
-        throw new IllegalStateException("Not implemented yet");
+        view.resumeMatch(match);
     }
 
 }

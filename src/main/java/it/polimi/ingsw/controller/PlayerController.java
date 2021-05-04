@@ -644,7 +644,7 @@ public class PlayerController {
      */
     public void setPlayerIndex(int i) {
         this.playerIndex = i;
-        virtualView.showMessage("Sei il giocatore "+i);
+        virtualView.showMessage("You are the player #"+i);
     }
 
     /**

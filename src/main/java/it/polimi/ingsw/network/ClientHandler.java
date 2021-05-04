@@ -57,7 +57,11 @@ public class ClientHandler implements Runnable {
         try {
             // wait for messages from client
             while(!Thread.currentThread().isInterrupted()){
-                Message message = Message.messageFromString(socketIn.nextLine()); //Read the new message
+                String fromClient = socketIn.nextLine();
+                if(fromClient == null) {
+                    throw new IllegalStateException("Inactive client " + username);
+                }
+                Message message = Message.messageFromString(fromClient); //Read the new message
                 server.log("Message received from " + username);
                 server.log(message.serialize());
                 try {
