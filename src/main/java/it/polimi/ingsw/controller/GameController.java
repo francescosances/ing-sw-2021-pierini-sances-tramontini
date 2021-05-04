@@ -291,6 +291,10 @@ public class GameController implements PlayerStatusListener {
         onStatusChanged();
     }
 
+    /**
+     * Sends a message to all the users connected
+     * @param message the message to be sent
+     */
     protected void broadcastMessage(String message){
        players.forEach(player -> {player.getVirtualView().showMessage(message);});
     }
