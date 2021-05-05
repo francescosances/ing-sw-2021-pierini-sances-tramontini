@@ -18,10 +18,17 @@ import java.util.List;
 
 public class VirtualView implements View {
 
+    /**
+     * The ClientHandler that manages the user which refers to this view
+     */
     private final ClientHandler clientHandler;
 
     public VirtualView(ClientHandler clientHandler) { this.clientHandler = clientHandler; }
 
+    /**
+     * Sends a message to the client
+     * @param message the message to be sent
+     */
     private void sendMessage(Message message){ clientHandler.sendMessage(message); }
 
     @Override
@@ -117,15 +124,10 @@ public class VirtualView implements View {
     }
 
     @Override
-    public void askToChooseMarketRowOrColumn(Market market) {
+    public void takeResourcesFromMarket(Market market) {
         Message message = new Message(Message.MessageType.TAKE_RESOURCES_FROM_MARKET);
         message.addData("market",Serializer.serializeMarket(market));
         sendMessage(message);
-    }
-
-    @Override
-    public void takeResourcesFromMarket(Market market) {
-        askToChooseMarketRowOrColumn(market);
     }
 
     @Override

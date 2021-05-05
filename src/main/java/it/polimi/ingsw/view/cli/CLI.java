@@ -616,7 +616,7 @@ public class CLI implements View {
 
 
     @Override
-    public void askToChooseMarketRowOrColumn(Market market){
+    public void takeResourcesFromMarket(Market market){
         showMarket(market);
         int choice;
         do {
@@ -638,7 +638,7 @@ public class CLI implements View {
             int row = input.nextInt();
             if(row < 0 || row >= Market.ROWS){
                 showErrorMessage("Invalid choice");
-                askToChooseMarketRowOrColumn(market);
+                takeResourcesFromMarket(market);
                 return;
             }
             clientController.chooseMarketRow(row);
@@ -648,7 +648,7 @@ public class CLI implements View {
             int column = input.nextInt();
             if(column < 0 || column >= Market.COLUMNS){
                 showErrorMessage("Invalid choice");
-                askToChooseMarketRowOrColumn(market);
+                takeResourcesFromMarket(market);
                 return;
             }
             clientController.chooseMarketColumn(column);
@@ -669,10 +669,5 @@ public class CLI implements View {
             showErrorMessage("Invalid choice");
             askForAction(availableActions);
         }
-    }
-
-    @Override
-    public void takeResourcesFromMarket(Market market) {
-        askToChooseMarketRowOrColumn(market);
     }
 }
