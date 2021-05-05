@@ -30,7 +30,7 @@ public class PlayerController {
     /**
      * The virtual view connected to the client via socket
      */
-    private VirtualView virtualView;
+    private transient VirtualView virtualView;
     /**
      * Represent the current status of the player
      */
@@ -644,7 +644,7 @@ public class PlayerController {
      */
     public void setPlayerIndex(int i) {
         this.playerIndex = i;
-        virtualView.showMessage("You are the player #"+i);
+        virtualView.showMessage("You are the player #"+(i+1));
     }
 
     /**

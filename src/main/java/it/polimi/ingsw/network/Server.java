@@ -1,8 +1,11 @@
 package it.polimi.ingsw.network;
 
+import com.google.gson.Gson;
 import it.polimi.ingsw.controller.GameController;
+import it.polimi.ingsw.controller.StatusObserver;
 import it.polimi.ingsw.controller.PlayerController;
 import it.polimi.ingsw.model.Match;
+import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
@@ -17,7 +20,7 @@ import java.util.stream.Collectors;
 import static it.polimi.ingsw.view.cli.CLI.ANSI_BLUE;
 import static it.polimi.ingsw.view.cli.CLI.ANSI_RESET;
 
-public class Server {
+public class Server implements StatusObserver {
 
     /**
      * The players connected to the server.
@@ -51,6 +54,23 @@ public class Server {
                 .filter(x->!x.isStarted())
                 .distinct()
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void onStatusChanged(GameController gameController) {
+
+        System.out.println("Serializzo ");
+        try {
+            System.out.println(Serializer.serializeMatchState(gameController.getMatch()));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+       /* Message message = new Message(Message.MessageType.RESUME_MATCH);
+        message.addData("match",Serializer.serializeMatchState(gameController.getMatch()));
+        message.addData("matchStarted",String.valueOf(gameController.isMatchStarted()));
+        message.addData("currentPlayerIndex",String.valueOf(gameController.getCurrentPlayerIndex()));
+        message.addData("gamePhase", String.valueOf(gameController.getCurrentPhase()));
+        System.out.println(message.serialize());*/
     }
 
     /**
@@ -149,7 +169,7 @@ public class Server {
         if(playersNumber > Match.MAX_PLAYERS || playersNumber <= 0)
             new VirtualView(clientHandler).showErrorMessage("Invalid choice");
         else {
-            GameController match = new GameController(clientHandler.getUsername(), playersNumber);
+            GameController match = new GameController(clientHandler.getUsername(), playersNumber,this);
             addPlayerToMatch(clientHandler.getUsername(), match, clientHandler);
         }
     }

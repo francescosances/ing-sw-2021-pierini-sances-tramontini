@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
 import it.polimi.ingsw.model.storage.ResourceType;
@@ -19,11 +20,32 @@ public class Match {
     protected List<PlayerBoard> players;
 
     protected List<Deck<DevelopmentCard>> developmentDecks;
+
     protected Deck<LeaderCard> leaderCards;
 
     private int vaticanReportsCount;
 
     protected String matchName;
+
+    /**
+     * The index of the list players representing the active player
+     */
+    private int currentPlayerIndex;
+
+    /**
+     * The number of users that have already chosen the leader cards and resources of their choice
+     */
+    private int usersReadyToPlay = 0;
+
+    /**
+     * True if the match has already started
+     */
+    private boolean started = false;
+
+    /**
+     * The current phase of the match
+     */
+    private GamePhase currentPhase;
 
     public Match(String matchName){
         this(matchName,MAX_PLAYERS);
@@ -212,6 +234,30 @@ public class Match {
         return temp;
     }
 
+    public int getUsersReadyToPlay() {
+        return usersReadyToPlay;
+    }
+
+    public void setUsersReadyToPlay(int usersReadyToPlay) {
+        this.usersReadyToPlay = usersReadyToPlay;
+    }
+
+    public int getCurrentPlayerIndex() {
+        return currentPlayerIndex;
+    }
+
+    public void setCurrentPlayerIndex(int currentPlayerIndex) {
+        this.currentPlayerIndex = currentPlayerIndex;
+    }
+
+    public boolean isStarted() {
+        return started;
+    }
+
+    public void setStarted(boolean matchStarted) {
+        this.started = matchStarted;
+    }
+
     public Market getMarket(){
         return market;
     }
@@ -289,5 +335,20 @@ public class Match {
     @Override
     public int hashCode() {
         return super.hashCode();
+    }
+
+    public GamePhase getCurrentPhase() {
+        return currentPhase;
+    }
+
+    public void setCurrentPhase(GamePhase phase) {
+        this.currentPhase = phase;
+    }
+
+    public enum GamePhase {
+        ADDING_PLAYERS,
+        PLAYERS_SETUP,
+        TURN,
+        END_GAME;
     }
 }

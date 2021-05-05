@@ -11,6 +11,7 @@ import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.view.VirtualView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,41 +23,27 @@ public class GameController implements PlayerStatusListener {
     private Match match;
 
     /**
-     * True if the match has already started
-     */
-    private boolean matchStarted = false;
-
-    /**
      * A list containing the PlayerControllers of the players of the match
      */
     private final List<PlayerController> players;
 
     /**
-     * The index of the list players representing the active player
+     * An observer that catches all modifies to the match
      */
-    private int currentPlayerIndex;
-
-    /**
-     * The current phase of the match
-     */
-    private GamePhase currentPhase;
-
-    /**
-     * The number of users that have already chosen the leader cards
-     */
-    private int usersReadyToPlay = 0;
+    private transient StatusObserver statusObserver;
 
     /**
      * Constructor that initialize a new match without players
      * @param matchName the name of the match that will be created
      */
-    public GameController(String matchName,int playersNumber){
+    public GameController(String matchName, int playersNumber, StatusObserver statusObserver){
         if (playersNumber == 1)
             match = new SoloMatch(matchName);
         else
             match = new Match(matchName,playersNumber);
         players = new ArrayList<>();
-        currentPhase = GamePhase.ADDING_PLAYERS;
+        match.setCurrentPhase(Match.GamePhase.ADDING_PLAYERS);
+        this.statusObserver = statusObserver;
     }
 
     /**
@@ -67,7 +54,7 @@ public class GameController implements PlayerStatusListener {
     public void handleReceivedGameMessage(Message message, String username){
         Gson gson = new Gson();
         try {
-            if(!username.equals(players.get(currentPlayerIndex).getUsername())){
+            if(!username.equals(players.get(match.getCurrentPlayerIndex()).getUsername())){
                 System.out.println("Invalid message received from "+username);
                 return;
             }
@@ -115,7 +102,7 @@ public class GameController implements PlayerStatusListener {
                     break;
             }
         }catch (EndGameException e){
-            setPhase(GamePhase.END_GAME);
+            setPhase(Match.GamePhase.END_GAME);
         }
     }
 
@@ -123,11 +110,11 @@ public class GameController implements PlayerStatusListener {
      * Starts the match ending the phase of adding players. The firt player is chosen randomly.
      */
     public void start(){
-        currentPlayerIndex = (int) (Math.random() * players.size());
-        this.matchStarted = true;
+        match.setCurrentPlayerIndex((int) (Math.random() * players.size()));
+        match.setStarted(true);
         for(int i=0;i<players.size();i++)
-            players.get((currentPlayerIndex+i)%players.size()).setPlayerIndex(i);
-        setPhase(GamePhase.PLAYERS_SETUP);
+            players.get((match.getCurrentPlayerIndex()+i)%players.size()).setPlayerIndex(i);
+        setPhase(Match.GamePhase.PLAYERS_SETUP);
     }
 
     /**
@@ -208,7 +195,7 @@ public class GameController implements PlayerStatusListener {
      * @return true if the match has already started
      */
     public boolean isStarted(){
-        return matchStarted;
+        return match.isStarted();
     }
 
     /**
@@ -224,24 +211,30 @@ public class GameController implements PlayerStatusListener {
      * Organizes the main game phases
      */
     protected void onStatusChanged(){
-        switch (currentPhase){
+        switch (match.getCurrentPhase()){
             case PLAYERS_SETUP:
-                if(usersReadyToPlay == players.size()) {
-                    setPhase(GamePhase.TURN);
+                if(match.getUsersReadyToPlay() == players.size()) {
+                    setPhase(Match.GamePhase.TURN);
                     return;
                 }
-                players.get(currentPlayerIndex).setup();
-                usersReadyToPlay++;
+                players.get(match.getCurrentPlayerIndex()).setup();
+                match.setUsersReadyToPlay(match.getUsersReadyToPlay()+1);
                 showCurrentActiveUser();
                 break;
             case TURN:
-                players.get(currentPlayerIndex).startTurn();
+                players.get(match.getCurrentPlayerIndex()).startTurn();
                 showCurrentActiveUser();
                 break;
             case END_GAME:
                 players.forEach(PlayerController::endGame);
                 break;
         }
+        statusObserver.onStatusChanged(this);
+    }
+
+    private void saveMatchStatus(){
+        System.out.println("SERIALIZZO");
+        System.out.println(Serializer.serializeMatchState(match));
     }
 
     /**
@@ -249,8 +242,8 @@ public class GameController implements PlayerStatusListener {
      */
     private void showCurrentActiveUser(){
         for(int i=0;i<players.size();i++)
-            if(i != currentPlayerIndex)
-                players.get(i).getVirtualView().showCurrentActiveUser(players.get(currentPlayerIndex).getUsername());
+            if(i != match.getCurrentPlayerIndex())
+                players.get(i).getVirtualView().showCurrentActiveUser(players.get(match.getCurrentPlayerIndex()).getUsername());
     }
 
     /**
@@ -260,19 +253,20 @@ public class GameController implements PlayerStatusListener {
     @Override
     public void onPlayerStatusChanged(PlayerController player) {
         System.out.println("The player "+player.getUsername()+" has changed his status to "+player.getCurrentStatus());
+        final PlayerController playerController = players.get(match.getCurrentPlayerIndex());
         switch (player.getCurrentStatus()) {
             case TURN_ENDED:
-                players.get(currentPlayerIndex).showPlayerBoard();
+                playerController.showPlayerBoard();
                 match.endTurn();
                 nextTurn();
                 break;
             case PERFORMING_ACTION:
-                players.get(currentPlayerIndex).askForAction();
-                this.currentPhase = GamePhase.TURN;
+                playerController.askForAction();
+                match.setCurrentPhase(Match.GamePhase.TURN);
                 break;
             case ACTION_PERFORMED:
-                players.get(currentPlayerIndex).startNormalAction();
-                this.currentPhase = GamePhase.TURN;
+                playerController.startNormalAction();
+                match.setCurrentPhase(Match.GamePhase.TURN);
                 break;
         }
     }
@@ -281,11 +275,11 @@ public class GameController implements PlayerStatusListener {
      * Move the current player to the next one
      */
     public void nextTurn(){
-        currentPlayerIndex = (currentPlayerIndex+1)%players.size();
+        match.setCurrentPlayerIndex((match.getCurrentPlayerIndex()+1)%players.size());
         if(players.stream().noneMatch(PlayerController::isActive)) //TODO: No one is active
             return;
-        if(!players.get(currentPlayerIndex).isActive()) { // The current player is inactive
-            broadcastMessage("The player: "+players.get(currentPlayerIndex).username+" is inactive. His turn has been skipped");
+        if(!players.get(match.getCurrentPlayerIndex()).isActive()) { // The current player is inactive
+            broadcastMessage("The player: "+players.get(match.getCurrentPlayerIndex()).username+" is inactive. His turn has been skipped");
             nextTurn();
         }
         onStatusChanged();
@@ -303,8 +297,8 @@ public class GameController implements PlayerStatusListener {
      * Allows to manually set the next phase
      * @param phase the phase currentPhase should turn into
      */
-    protected void setPhase(GamePhase phase){
-        this.currentPhase = phase;
+    protected void setPhase(Match.GamePhase phase){
+        match.setCurrentPhase(phase);
         onStatusChanged();
     }
 
@@ -345,24 +339,8 @@ public class GameController implements PlayerStatusListener {
         return players.stream().filter(x->x.getUsername().equals(username)).anyMatch(PlayerController::isActive);
     }
 
-    public enum GamePhase {
-        ADDING_PLAYERS,
-        PLAYERS_SETUP,
-        TURN,
-        END_GAME;
-
-        /**
-         * An array storing all GamePhase values
-         */
-        private static final GamePhase[] vals = values();
-
-        /**
-         * Returns the next phase
-         * @return a GamePhase object representing the phase next to this
-         */
-        public GamePhase next()
-        {
-            return vals[(this.ordinal()+1) % vals.length];
-        }
+    //TODO:javadoc
+    public List<PlayerController> getPlayers() {
+        return players;
     }
 }
