@@ -6,11 +6,13 @@ import it.polimi.ingsw.controller.StatusObserver;
 import it.polimi.ingsw.controller.PlayerController;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.serialization.Serializer;
+import it.polimi.ingsw.utils.FileManager;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.VirtualView;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,19 +60,11 @@ public class Server implements StatusObserver {
 
     @Override
     public void onStatusChanged(GameController gameController) {
-
-        System.out.println("Serializzo ");
         try {
-            System.out.println(Serializer.serializeMatchState(gameController.getMatch()));
-        }catch (Exception e){
-            e.printStackTrace();
+            FileManager.getInstance().writeMatchStatus(gameController.getMatch());
+        } catch (IOException e) {
+            log("Unable to locally save the match status of "+gameController.getMatchName());
         }
-       /* Message message = new Message(Message.MessageType.RESUME_MATCH);
-        message.addData("match",Serializer.serializeMatchState(gameController.getMatch()));
-        message.addData("matchStarted",String.valueOf(gameController.isMatchStarted()));
-        message.addData("currentPlayerIndex",String.valueOf(gameController.getCurrentPlayerIndex()));
-        message.addData("gamePhase", String.valueOf(gameController.getCurrentPhase()));
-        System.out.println(message.serialize());*/
     }
 
     /**
