@@ -184,6 +184,8 @@ public class PlayerController {
                 break;
         }
         getPlayerBoard().gainFaithPoints(faithPoints);
+        if(!isActive())
+            return;
         if(!gotResourcesOfYourChoice){
             askToChooseStartResources(resourcesToChoose);
         }else{
@@ -192,17 +194,25 @@ public class PlayerController {
     }
 
     /**
+     * Method called if the user is inactive during the setup phase. He will draw two random leader cards and a random resource
+     */
+    public void defaultSetup(){
+        List<LeaderCard> leaderCardList = playerBoard.getMatch().drawLeaderCards(4);
+        LeaderCard[] automaticallyChosen = {leaderCardList.get(0),leaderCardList.get(1)};
+        for (LeaderCard card : automaticallyChosen) {
+            playerBoard.addLeaderCard(card);
+            playerBoard.getMatch().chooseLeaderCard(card);//TODO: controllare che le carte vengano effetivamente rimosse dal mazzo
+        }
+        //TODO: settare anche le risorse a scelta
+    }
+
+    /**
      * Get 4 leader cards from the match and send it to the client through the virtual view.
      * If the user is inactive, the cards are randomly chosen
      */
     public void listLeaderCards(){
         List<LeaderCard> leaderCardList = playerBoard.getMatch().drawLeaderCards(4);
-        if(isActive()){
-            virtualView.listLeaderCards(leaderCardList,2);
-        }else {
-            chooseLeaderCards(leaderCardList.get(0),leaderCardList.get(1));
-            //TODO: ricontrollare riconnessione utente
-        }
+        virtualView.listLeaderCards(leaderCardList,2);
         leaderCardsChooser = cards -> {
             for (LeaderCard card : cards) {
                 playerBoard.addLeaderCard(card);

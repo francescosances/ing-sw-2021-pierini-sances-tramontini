@@ -232,11 +232,6 @@ public class GameController implements PlayerStatusListener {
         statusObserver.onStatusChanged(this);
     }
 
-    private void saveMatchStatus(){
-        System.out.println("SERIALIZZO");
-        System.out.println(Serializer.serializeMatchState(match));
-    }
-
     /**
      * Assures every non playing players receive a message showing whose turn is
      */
@@ -276,10 +271,12 @@ public class GameController implements PlayerStatusListener {
      */
     public void nextTurn(){
         match.setCurrentPlayerIndex((match.getCurrentPlayerIndex()+1)%players.size());
-        if(players.stream().noneMatch(PlayerController::isActive)) //TODO: No one is active
+        if(players.stream().noneMatch(PlayerController::isActive)) //TODO: No one is active (può succedere che si arrivi qui?)
             return;
         if(!players.get(match.getCurrentPlayerIndex()).isActive()) { // The current player is inactive
             broadcastMessage("The player: "+players.get(match.getCurrentPlayerIndex()).username+" is inactive. His turn has been skipped");
+            if(match.getCurrentPhase() == Match.GamePhase.PLAYERS_SETUP)
+                players.get(match.getCurrentPlayerIndex()).defaultSetup();
             nextTurn();
         }
         onStatusChanged();
