@@ -1,4 +1,6 @@
 import it.polimi.ingsw.network.ClientSocket;
+import it.polimi.ingsw.view.gui.JavaFXGui;
+import javafx.application.Application;
 
 import java.util.Scanner;
 
@@ -15,6 +17,6 @@ public class ClientMain
         if(scanner.nextInt() == 1)
             clientSocket.startCli();
         else
-            clientSocket.startGui();
+            Application.launch(JavaFXGui.class);
     }
 }

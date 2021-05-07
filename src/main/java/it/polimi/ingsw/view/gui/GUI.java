@@ -23,11 +23,6 @@ public class GUI implements View {
     }
 
     @Override
-    public void init() {
-        new Thread(() -> Application.launch(JavaFXGui.class)).start();
-    }
-
-    @Override
     public void showMessage(String message) {
 
     }
@@ -44,6 +39,11 @@ public class GUI implements View {
 
     @Override
     public void resumeMatch(Match match) {
+
+    }
+
+    @Override
+    public void init() {
 
     }
 

@@ -44,13 +44,6 @@ public class ClientSocket implements Runnable{
     }
 
     /**
-     * Set the view to Graphical User Interface and launch it via the controller
-     */
-    public void startGui() {
-        clientController.startGui();
-    }
-
-    /**
      * Establishes the connection with the server and set the input and output streams
      * @param ip the server ip address
      * @param port the server port
