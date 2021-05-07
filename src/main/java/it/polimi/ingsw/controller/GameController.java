@@ -247,6 +247,8 @@ public class GameController implements PlayerStatusListener {
      */
     @Override
     public void onPlayerStatusChanged(PlayerController player) {
+        if(!player.getUsername().equals(players.get(match.getCurrentPlayerIndex()).getUsername()))
+            return;
         System.out.println("The player "+player.getUsername()+" has changed his status to "+player.getCurrentStatus());
         final PlayerController playerController = players.get(match.getCurrentPlayerIndex());
         switch (player.getCurrentStatus()) {
@@ -278,6 +280,7 @@ public class GameController implements PlayerStatusListener {
             if(match.getCurrentPhase() == Match.GamePhase.PLAYERS_SETUP)
                 onStatusChanged();
             nextTurn();
+            return;
         }
         onStatusChanged();
     }
@@ -320,10 +323,10 @@ public class GameController implements PlayerStatusListener {
         players.forEach((user)->{
             if(user.getUsername().equals(username)) {
                 user.deactivate();
-                if(user.getCurrentStatus() == PlayerController.PlayerStatus.ACTION_PERFORMED)
+                if(username.equals(players.get(getMatch().getCurrentPlayerIndex()).getUsername()))
                     user.turnEnded();
-            }
-            user.getVirtualView().userDisconnected(username);
+            }else
+                user.getVirtualView().userDisconnected(username);
         });
     }
 

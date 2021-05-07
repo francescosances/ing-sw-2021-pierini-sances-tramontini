@@ -110,6 +110,7 @@ public class PlayerController {
      */
     public void deactivate(){
         this.active = false;
+        currentStatus = PlayerStatus.TURN_ENDED;
     }
 
     /**
@@ -213,7 +214,6 @@ public class PlayerController {
         for(int i=0;i<resourcesToChoose;i++)
             randomResources[i] = ResourceType.values()[new Random().nextInt(resourcesToChoose)];
         chooseStartResources(randomResources);
-     //   getPlayerBoard().getMatch().setUsersReadyToPlay(getPlayerBoard().getMatch().getUsersReadyToPlay()+1);
     }
 
     /**
