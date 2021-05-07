@@ -17,6 +17,7 @@ import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cli.CLI;
+import it.polimi.ingsw.view.gui.GUI;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -58,8 +59,7 @@ public class ClientController {
      * Sets the view to Graphical User Interface and launch it
      */
     public void startGui() {
-        // TODO - GUI Controller
-        // this.view = new GuiController(this);
+        view = new GUI(this);
         view.init();
     }
 
