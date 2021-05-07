@@ -77,6 +77,11 @@ public class PlayerController {
     private int playerIndex;
 
     /**
+     * The number of resources that the user can choose before the match starts
+     */
+    private int resourcesToChoose;
+
+    /**
      * Initialize a new player controller active and waiting for his turn.
      * @param username the username of the player associated with the player controller
      * @param playerBoard the playerboard of the user
@@ -165,7 +170,6 @@ public class PlayerController {
     }
 
     public void setup(){
-        int resourcesToChoose = 0;
         int faithPoints = 0;
         switch (playerIndex){
             case 0:
@@ -243,11 +247,20 @@ public class PlayerController {
      * @param resources the resources to store
      */
     public void chooseStartResources(Resource[] resources) {
-        for(Resource resource : resources){
-            playerBoard.getStrongbox().addResource((ResourceType) resource);//TODO: le risorse iniziale devono finire nei depositi e non nello strongbox
+        if(resources.length != resourcesToChoose)
+            throw new IllegalArgumentException("Invalid number of resource of your choosing");
+        try {
+            if (resourcesToChoose >= 1) {
+                playerBoard.getWarehouse().addResource(2, (ResourceType) resources[0], 1);
+            }
+            if (resourcesToChoose == 2) {
+                playerBoard.getWarehouse().addResource((resources[0] == resources[1]) ? 2 : 1, (ResourceType) resources[1], 1);
+            }
+        }catch (IncompatibleDepotException e){
+            e.printStackTrace();
         }
         gotResourcesOfYourChoice = true;
-        setup();
+        listLeaderCards();
     }
 
     /**
