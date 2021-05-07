@@ -35,6 +35,7 @@ public class JavaFXGui extends Application {
 
         stage.setScene(scene);
         stage.setTitle("Masters of Renaissance");
+        stage.setResizable(false);
         stage.show();
     }
 
