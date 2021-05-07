@@ -276,7 +276,7 @@ public class GameController implements PlayerStatusListener {
         if(!players.get(match.getCurrentPlayerIndex()).isActive()) { // The current player is inactive
             broadcastMessage("The player: "+players.get(match.getCurrentPlayerIndex()).username+" is inactive. His turn has been skipped");
             if(match.getCurrentPhase() == Match.GamePhase.PLAYERS_SETUP)
-                players.get(match.getCurrentPlayerIndex()).defaultSetup();
+                onStatusChanged();
             nextTurn();
         }
         onStatusChanged();

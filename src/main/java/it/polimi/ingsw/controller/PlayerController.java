@@ -187,9 +187,11 @@ public class PlayerController {
                 faithPoints = 1;
                 break;
         }
-        getPlayerBoard().gainFaithPoints(faithPoints);
-        if(!isActive())
+        getPlayerBoard().gainFaithPoints(faithPoints);//TODO: verificare perché gli utenti inattivi ottengono due faith point
+        if(!isActive()) {
+            defaultSetup();
             return;
+        }
         if(!gotResourcesOfYourChoice){
             askToChooseStartResources(resourcesToChoose);
         }else{
@@ -207,7 +209,11 @@ public class PlayerController {
             playerBoard.addLeaderCard(card);
             playerBoard.getMatch().chooseLeaderCard(card);//TODO: controllare che le carte vengano effetivamente rimosse dal mazzo
         }
-        //TODO: settare anche le risorse a scelta
+        Resource[] randomResources = new Resource[resourcesToChoose];
+        for(int i=0;i<resourcesToChoose;i++)
+            randomResources[i] = ResourceType.values()[new Random().nextInt(resourcesToChoose)];
+        chooseStartResources(randomResources);
+     //   getPlayerBoard().getMatch().setUsersReadyToPlay(getPlayerBoard().getMatch().getUsersReadyToPlay()+1);
     }
 
     /**
@@ -260,7 +266,8 @@ public class PlayerController {
             e.printStackTrace();
         }
         gotResourcesOfYourChoice = true;
-        listLeaderCards();
+        if(isActive())
+            listLeaderCards();
     }
 
     /**
