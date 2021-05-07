@@ -103,6 +103,7 @@ public class PlayerController {
      */
     public void activate() {
         this.active = true;
+        currentStatus = PlayerStatus.TURN_ENDED;
     }
 
     /**
@@ -111,6 +112,17 @@ public class PlayerController {
     public void deactivate(){
         this.active = false;
         currentStatus = PlayerStatus.TURN_ENDED;
+
+        if(currentDevelopmentCardToStore != null){
+            for(DevelopmentCardSlot slot : playerBoard.getDevelopmentCardSlots()){
+                if(slot.accepts(currentDevelopmentCardToStore)) {
+                    slot.addCard(currentDevelopmentCardToStore);
+                    currentDevelopmentCardToStore = null;
+                    break;
+                }
+            }
+        }
+        currentResourceToStore = null;
     }
 
     /**
@@ -188,7 +200,7 @@ public class PlayerController {
                 faithPoints = 1;
                 break;
         }
-        getPlayerBoard().gainFaithPoints(faithPoints);//TODO: verificare perché gli utenti inattivi ottengono due faith point
+        getPlayerBoard().gainFaithPoints(faithPoints);
         if(!isActive()) {
             defaultSetup();
             return;
@@ -676,6 +688,7 @@ public class PlayerController {
         this.playerIndex = i;
         virtualView.showMessage("You are the player #"+(i+1));
     }
+
 
     /**
      * Enumerates the status a player can be in

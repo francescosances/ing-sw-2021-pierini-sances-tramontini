@@ -323,8 +323,11 @@ public class GameController implements PlayerStatusListener {
         players.forEach((user)->{
             if(user.getUsername().equals(username)) {
                 user.deactivate();
-                if(username.equals(players.get(getMatch().getCurrentPlayerIndex()).getUsername()))
+                if(username.equals(players.get(getMatch().getCurrentPlayerIndex()).getUsername())) {
+                    if(match.getCurrentPhase() == Match.GamePhase.PLAYERS_SETUP)
+                        user.setup();
                     user.turnEnded();
+                }
             }else
                 user.getVirtualView().userDisconnected(username);
         });

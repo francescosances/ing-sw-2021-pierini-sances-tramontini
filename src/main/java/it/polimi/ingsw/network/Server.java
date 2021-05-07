@@ -1,11 +1,9 @@
 package it.polimi.ingsw.network;
 
-import com.google.gson.Gson;
 import it.polimi.ingsw.controller.GameController;
-import it.polimi.ingsw.controller.StatusObserver;
 import it.polimi.ingsw.controller.PlayerController;
+import it.polimi.ingsw.controller.StatusObserver;
 import it.polimi.ingsw.model.Match;
-import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.FileManager;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.utils.Triple;
