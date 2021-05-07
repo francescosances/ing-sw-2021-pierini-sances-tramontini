@@ -24,6 +24,7 @@ public class Serializer {
         gsonbuilder.registerTypeAdapter(Requirements.class, new RequirementsCreator());
         gsonbuilder.registerTypeAdapter(Depot.class, new DepotCreator());
         gsonbuilder.registerTypeAdapter(LeaderCard.class, new LeaderCardCreator());
+        gsonbuilder.registerTypeAdapter(Resource.class, new ResourceCreator());
         return gsonbuilder.create().fromJson(serializedMatch, Match.class);
     }
 
