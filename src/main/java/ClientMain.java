@@ -11,7 +11,6 @@ public class ClientMain
 {
     public static void main( String[] args )
     {
-
         Scanner scanner = new Scanner(System.in);
         System.out.println("Select 1 for CLI, 2 for GUI:");
         // start view and show welcome screen
