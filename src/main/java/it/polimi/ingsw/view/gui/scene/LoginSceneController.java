@@ -6,7 +6,7 @@ import javafx.scene.control.TextField;
 public class LoginSceneController extends Controller{
 
     @FXML
-    private TextField txtUsername;
+    protected TextField txtUsername;
 
     @FXML
     public void login(){

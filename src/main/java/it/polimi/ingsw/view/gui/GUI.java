@@ -12,6 +12,7 @@ import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.gui.scene.Controller;
+import it.polimi.ingsw.view.gui.scene.SelectLeaderCardsController;
 import it.polimi.ingsw.view.gui.scene.SelectLobbySceneController;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -104,7 +105,8 @@ public class GUI implements View {
     @Override
     public void listLeaderCards(List<LeaderCard> leaderCardList, int cardsToChoose) {
         Platform.runLater(()->{
-            loadScene("select_leader_cards_scene");
+            SelectLeaderCardsController controller = (SelectLeaderCardsController) loadScene("select_leader_cards_scene");
+            controller.initialize(leaderCardList,cardsToChoose);
         });
     }
 

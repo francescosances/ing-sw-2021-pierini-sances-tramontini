@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view.gui.scene;
 
 import it.polimi.ingsw.utils.Triple;
-import it.polimi.ingsw.view.gui.GUI;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
