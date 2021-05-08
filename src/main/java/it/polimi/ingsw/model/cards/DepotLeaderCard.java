@@ -30,8 +30,8 @@ public class DepotLeaderCard extends LeaderCard implements Depot {
      * @param requirements the requirements the player must satisfy so as to play the card
      * @param resourceType the resource the card can store
      */
-    public DepotLeaderCard(int victoryPoints, Requirements requirements, ResourceType resourceType) {
-        super(victoryPoints, requirements);
+    public DepotLeaderCard(String cardName,int victoryPoints, Requirements requirements, ResourceType resourceType) {
+        super(cardName,victoryPoints, requirements);
         this.resourceType = resourceType;
         occupied = 0;
     }
@@ -43,8 +43,8 @@ public class DepotLeaderCard extends LeaderCard implements Depot {
      * @param resourceType the resource the card can store
      * @param active manually sets the status of the card
      */
-    public DepotLeaderCard(int victoryPoints, Requirements requirements, ResourceType resourceType, boolean active) {
-        super(victoryPoints, requirements, active);
+    public DepotLeaderCard(String cardName,int victoryPoints, Requirements requirements, ResourceType resourceType, boolean active) {
+        super(cardName,victoryPoints, requirements, active);
         this.resourceType = resourceType;
         occupied = 0;
     }

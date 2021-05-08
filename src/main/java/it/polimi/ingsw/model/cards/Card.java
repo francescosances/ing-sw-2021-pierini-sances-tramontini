@@ -7,8 +7,14 @@ public abstract class Card {
      */
     private int victoryPoints;
 
-    Card(int victoryPoints){
+    /**
+     * The name associated to the card
+     */
+    private String cardName;
+
+    Card(int victoryPoints,String cardName){
         this.victoryPoints = victoryPoints;
+        this.cardName = cardName;
     }
 
     /**
@@ -25,6 +31,14 @@ public abstract class Card {
      */
     public void setVictoryPoints(int victoryPoints) {
         this.victoryPoints = victoryPoints;
+    }
+
+    /**
+     * Returns the name associated to the card
+     * @return the name associated to the card
+     */
+    public String getCardName() {
+        return cardName;
     }
 
     /**

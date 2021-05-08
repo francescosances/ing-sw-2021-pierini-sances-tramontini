@@ -17,8 +17,8 @@ public class WhiteMarbleLeaderCard extends LeaderCard {
      * @param requirements the requirements the player has to satisfy so as to play the card
      * @param outputResourceType the ResourceType the card converts the White Marbles into
      */
-    public WhiteMarbleLeaderCard (int victoryPoints, Requirements requirements, ResourceType outputResourceType){
-        super(victoryPoints, requirements);
+    public WhiteMarbleLeaderCard (String cardName,int victoryPoints, Requirements requirements, ResourceType outputResourceType){
+        super(cardName,victoryPoints, requirements);
         this.outputResourceType = outputResourceType;
     }
 
@@ -29,8 +29,8 @@ public class WhiteMarbleLeaderCard extends LeaderCard {
      * @param outputResourceType the ResourceType the card converts the White Marbles into
      * @param active the status of the card
      */
-    public WhiteMarbleLeaderCard (int victoryPoints, Requirements requirements, ResourceType outputResourceType, boolean active){
-        super(victoryPoints, requirements, active);
+    public WhiteMarbleLeaderCard (String cardName,int victoryPoints, Requirements requirements, ResourceType outputResourceType, boolean active){
+        super(cardName,victoryPoints, requirements, active);
         this.outputResourceType = outputResourceType;
     }
 

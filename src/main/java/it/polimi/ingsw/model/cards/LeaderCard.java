@@ -23,8 +23,8 @@ public abstract class LeaderCard extends Card {
      * @param victoryPoints the victory points associated with the card
      * @param requirements the requirements the player must satisfy so as to play the card
      */
-    public LeaderCard(int victoryPoints, Requirements requirements){
-        super(victoryPoints);
+    public LeaderCard(String cardName,int victoryPoints, Requirements requirements){
+        super(victoryPoints,cardName);
         this.active = false;
         this.requirements = requirements;
     }
@@ -35,8 +35,8 @@ public abstract class LeaderCard extends Card {
      * @param requirements the requirements the player must satisfy so as to play the card
      * @param active the status of the card
      */
-    public LeaderCard(int victoryPoints, Requirements requirements, boolean active){
-        super(victoryPoints);
+    public LeaderCard(String cardName,int victoryPoints, Requirements requirements, boolean active){
+        super(victoryPoints,cardName);
         this.active = false;
         this.requirements = requirements;
         this.active = active;
@@ -125,6 +125,7 @@ public abstract class LeaderCard extends Card {
         if (this == o) return true;
         if (!(o instanceof LeaderCard)) return false;
         LeaderCard that = (LeaderCard) o;
+        //TODO: il confronto può essere fatto sul card name dalla classe padre
         return requirements.equals(that.requirements) && active == that.active;
     }
 

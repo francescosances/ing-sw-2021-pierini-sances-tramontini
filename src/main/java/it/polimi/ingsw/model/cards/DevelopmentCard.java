@@ -41,14 +41,14 @@ public class DevelopmentCard extends Card implements Producer {
      * @param productionCost the cost to pay so as to activate the production
      * @param productionGain what the card returns when production is activated
      */
-    public DevelopmentCard(int victoryPoints, Requirements cost, int level, DevelopmentColorType color, Requirements productionCost, Pair<Resource,Integer> ... productionGain) {
-        this(victoryPoints,cost, level, color, productionCost, new Requirements());
+    public DevelopmentCard(String cardName,int victoryPoints, Requirements cost, int level, DevelopmentColorType color, Requirements productionCost, Pair<Resource,Integer> ... productionGain) {
+        this(cardName,victoryPoints,cost, level, color, productionCost, new Requirements());
         for(Pair<Resource,Integer> x : productionGain)
             this.productionGain.addResourceRequirement(x.fst,x.snd);
     }
 
-    public DevelopmentCard(int victoryPoints, Requirements cost, int level, DevelopmentColorType color, Requirements productionCost, Requirements productionGain) {
-        super(victoryPoints);
+    public DevelopmentCard(String cardName,int victoryPoints, Requirements cost, int level, DevelopmentColorType color, Requirements productionCost, Requirements productionGain) {
+        super(victoryPoints,cardName);
         this.cost = cost;
         this.level = level;
         this.color = color;
@@ -57,7 +57,7 @@ public class DevelopmentCard extends Card implements Producer {
     }
 
     public static DevelopmentCard getBaseProduction(){
-        DevelopmentCard ret = new DevelopmentCard(0);
+        DevelopmentCard ret = new DevelopmentCard("base_production",0);
         ret.level = 0;
         ret.color = DevelopmentColorType.YELLOW;
         ret.cost = new Requirements();
@@ -108,13 +108,13 @@ public class DevelopmentCard extends Card implements Producer {
         return productionGain;
     }
 
-    private DevelopmentCard(int victoryPoints){
-        super(victoryPoints);
+    private DevelopmentCard(String cardName,int victoryPoints){
+        super(victoryPoints,cardName);
     }
 
     @Override
     public DevelopmentCard clone(){
-        DevelopmentCard ret = new DevelopmentCard(getVictoryPoints());
+        DevelopmentCard ret = new DevelopmentCard(getCardName(),getVictoryPoints());
         ret.setCost(getCost().clone());
         ret.productionCost = productionCost.clone();
         ret.productionGain = productionGain.clone();
@@ -134,6 +134,7 @@ public class DevelopmentCard extends Card implements Producer {
         if (!(other instanceof DevelopmentCard))
             return false;
         DevelopmentCard o = (DevelopmentCard) other;
+        //TODO: il confronto si potrebbe fare solo sul card name direttamente dalla classe card
         return this.color.equals(o.color) && this.productionCost.equals(o.productionCost)
                 && this.productionGain.equals(o.productionGain) && this.level == o.level;
     }

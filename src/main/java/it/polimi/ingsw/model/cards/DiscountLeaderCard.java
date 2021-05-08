@@ -12,14 +12,15 @@ public class DiscountLeaderCard extends LeaderCard {
      */
     private final int discount;
 
+    //TODO: tutti i javadoc delle carte leader vanno aggiornati aggiungendo il parametro cardName
     /**
      * Initializes a new DiscountLeaderCardObject. Automatically sets the discount to 1 unit.
      * @param victoryPoints the victory points associated with the card
      * @param requirements the requirements the player has to satisfy if they want to activate the card
      * @param resourceType the Resource the card discounts you a unit of
      */
-    public DiscountLeaderCard (int victoryPoints, Requirements requirements, ResourceType resourceType) {
-        this (victoryPoints, requirements, resourceType, 1);
+    public DiscountLeaderCard (String cardName,int victoryPoints, Requirements requirements, ResourceType resourceType) {
+        this (cardName,victoryPoints, requirements, resourceType, 1);
     }
 
     /**
@@ -29,8 +30,8 @@ public class DiscountLeaderCard extends LeaderCard {
      * @param resourceType the Resource the card discounts you a unit of
      * @param discount the number of units the card lets you discount
      */
-    public DiscountLeaderCard (int victoryPoints, Requirements requirements, ResourceType resourceType, int discount) {
-        super(victoryPoints, requirements);
+    public DiscountLeaderCard (String cardName,int victoryPoints, Requirements requirements, ResourceType resourceType, int discount) {
+        super(cardName,victoryPoints, requirements);
         this.discountResourceType = resourceType;
         this.discount = discount;
 
@@ -45,8 +46,8 @@ public class DiscountLeaderCard extends LeaderCard {
      * @param discount the number of units the card lets you discount
      * @param active manually sets the status of the card
      */
-    public DiscountLeaderCard (int victoryPoints, Requirements requirements, ResourceType resourceType, int discount, boolean active) {
-        super(victoryPoints, requirements, active);
+    public DiscountLeaderCard (String cardName,int victoryPoints, Requirements requirements, ResourceType resourceType, int discount, boolean active) {
+        super(cardName,victoryPoints, requirements, active);
         this.discountResourceType = resourceType;
         this.discount = discount;
     }

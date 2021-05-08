@@ -27,8 +27,8 @@ public class ProductionLeaderCard extends LeaderCard implements Producer {
      * @param requirements the requirements the player has to satisfy so as to play the card
      * @param productionCost cost that a player has to pay to trigger the production
      */
-    public ProductionLeaderCard (int victoryPoints, Requirements requirements, Requirements productionCost) {
-        this(victoryPoints, requirements, productionCost, false);
+    public ProductionLeaderCard (String cardName,int victoryPoints, Requirements requirements, Requirements productionCost) {
+        this(cardName,victoryPoints, requirements, productionCost, false);
     }
 
     /**
@@ -38,8 +38,8 @@ public class ProductionLeaderCard extends LeaderCard implements Producer {
      * @param productionCost cost that a player has to pay to trigger the production
      * @param active the status of the card
      */
-    public ProductionLeaderCard (int victoryPoints, Requirements requirements, Requirements productionCost, boolean active) {
-        super(victoryPoints, requirements, active);
+    public ProductionLeaderCard (String cardName,int victoryPoints, Requirements requirements, Requirements productionCost, boolean active) {
+        super(cardName,victoryPoints, requirements, active);
         this.productionCost = productionCost;
         this.productionGain = new Requirements();
         productionGain.addResourceRequirement(NonPhysicalResourceType.ON_DEMAND,1);
