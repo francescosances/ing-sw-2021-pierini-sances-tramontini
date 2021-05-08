@@ -22,7 +22,7 @@
                      <children>
                         <AnchorPane prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Label fx:id="lbl" layoutX="160.0" layoutY="3.0" text="Choose 2 cards:" textAlignment="CENTER" textFill="#fdc309" AnchorPane.bottomAnchor="20.0">
+                              <Label fx:id="lbl" layoutX="160.0" layoutY="3.0" text="Choose cards:" textAlignment="CENTER" textFill="#fdc309" AnchorPane.bottomAnchor="20.0">
                                  <font>
                                     <Font size="17.0" />
                                  </font>

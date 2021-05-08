@@ -12,52 +12,55 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="700.0" prefWidth="1000.0" styleClass="rootPane" stylesheets="@../css/select_leader_cards_scene.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.scene.SelectLeaderCardsController">
+<StackPane prefHeight="700.0" prefWidth="1000.0" styleClass="rootPane" stylesheets="@../css/select_leader_cards_scene.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.scene.SelectResourcesController">
     <children>
         <Group scaleX="1.5" scaleY="1.5">
             <children>
                <AnchorPane fx:id="rootPane" layoutX="-28.0" layoutY="100.0" prefHeight="400.0" prefWidth="577.0">
                <children>
-                  <VBox layoutX="71.0" layoutY="120.0" prefHeight="200.0" prefWidth="100.0">
+                  <VBox layoutX="127.0" layoutY="122.0" prefHeight="200.0" prefWidth="100.0">
                      <children>
                         <AnchorPane prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Label fx:id="lbl" layoutX="160.0" layoutY="3.0" text="Choose cards:" textAlignment="CENTER" textFill="#fdc309" AnchorPane.bottomAnchor="20.0">
+                              <Label fx:id="lbl" layoutX="91.0" layoutY="3.0" text="Choose resources:" textAlignment="CENTER" textFill="#fdc309" AnchorPane.bottomAnchor="25.0">
                                  <font>
                                     <Font size="17.0" />
                                  </font>
                               </Label>
                            </children>
+                           <VBox.margin>
+                              <Insets top="15.0" />
+                           </VBox.margin>
                         </AnchorPane>
                         <HBox prefHeight="250.0" prefWidth="200.0">
                            <children>
-                              <ImageView fx:id="img1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                              <ImageView fx:id="imgcoin" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
                                  <image>
-                                    <Image url="@../images/cards/transparent.png" />
+                                    <Image url="@../images/resources/coin.png" />
                                  </image>
                                  <HBox.margin>
                                     <Insets left="5.0" right="5.0" />
                                  </HBox.margin>
                               </ImageView>
-                              <ImageView fx:id="img2" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                              <ImageView fx:id="imgservant" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
                                  <image>
-                                    <Image url="@../images/cards/transparent.png" />
+                                    <Image url="@../images/resources/servant.png" />
                                  </image>
                                  <HBox.margin>
                                     <Insets left="5.0" right="5.0" />
                                  </HBox.margin>
                               </ImageView>
-                              <ImageView fx:id="img3" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                              <ImageView fx:id="imgshield" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
                                  <image>
-                                    <Image url="@../images/cards/transparent.png" />
+                                    <Image url="@../images/resources/shield.png" />
                                  </image>
                                  <HBox.margin>
                                     <Insets left="5.0" right="5.0" />
                                  </HBox.margin>
                               </ImageView>
-                              <ImageView fx:id="img4" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                              <ImageView fx:id="imgstone" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
                                  <image>
-                                    <Image url="@../images/cards/transparent.png" />
+                                    <Image url="@../images/resources/stone.png" />
                                  </image>
                                  <HBox.margin>
                                     <Insets left="5.0" right="5.0" />
@@ -65,7 +68,7 @@
                               </ImageView>
                            </children>
                         </HBox>
-                        <Button prefHeight="50.0" prefWidth="440.0" fx:id="btnChoose" onAction="#choose" styleClass="btn, btn-disabled">
+                        <Button fx:id="btnChoose" onAction="#choose" prefHeight="50.0" prefWidth="440.0" styleClass="btn, btn-disabled">
                            <VBox.margin>
                               <Insets top="30.0" />
                            </VBox.margin></Button>

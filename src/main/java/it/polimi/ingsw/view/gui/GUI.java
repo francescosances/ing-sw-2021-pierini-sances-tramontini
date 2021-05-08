@@ -14,6 +14,7 @@ import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.gui.scene.Controller;
 import it.polimi.ingsw.view.gui.scene.SelectLeaderCardsController;
 import it.polimi.ingsw.view.gui.scene.SelectLobbySceneController;
+import it.polimi.ingsw.view.gui.scene.SelectResourcesController;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -177,7 +178,10 @@ public class GUI implements View {
 
     @Override
     public void askToChooseStartResources(Resource[] values, int resourcesToChoose) {
-
+        Platform.runLater(()->{
+            SelectResourcesController controller = (SelectResourcesController) loadScene("select_resources_scene");
+            controller.initialize(values,resourcesToChoose);
+        });
     }
 
 }

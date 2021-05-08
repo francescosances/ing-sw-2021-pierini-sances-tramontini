@@ -82,6 +82,7 @@ public class SelectLeaderCardsController extends Controller{
                 cardsChosen[added++] = leaderCardList.get(i);
         }
         clientController.leaderCardsChoice(cardsChosen);
+
     }
 
 }

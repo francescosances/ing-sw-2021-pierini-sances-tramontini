@@ -16,12 +16,9 @@ public class SelectLobbySceneController extends Controller{
     @FXML
     private ChoiceBox<Triple<String,Integer,Integer>> lobbySelector;
 
-    private List<Triple<String,Integer,Integer>> availableLobbies;
-
     @FXML
     public void initialize(List<Triple<String, Integer, Integer>> availableLobbies){
-        this.availableLobbies = availableLobbies;
-        this.availableLobbies.add(0,new Triple<>("Create new match",0,0));
+        availableLobbies.add(0,new Triple<>("Create new match",0,0));
         lobbySelector.setConverter(new StringConverter<Triple<String,Integer,Integer>>() {
 
             @Override
@@ -43,8 +40,8 @@ public class SelectLobbySceneController extends Controller{
                 return new Triple<>(s,0,0);
             }
         });
-        lobbySelector.setItems(FXCollections.observableArrayList(this.availableLobbies));
-        lobbySelector.setValue(this.availableLobbies.get(0));
+        lobbySelector.setItems(FXCollections.observableArrayList(availableLobbies));
+        lobbySelector.setValue(availableLobbies.get(0));
     }
 
     private int askNumberOfPlayers(){

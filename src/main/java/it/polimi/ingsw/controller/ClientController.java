@@ -200,6 +200,7 @@ public class ClientController {
         Message message = new Message(Message.MessageType.LEADER_CARDS_CHOICE);
         message.addData("leaderCards", Serializer.serializeLeaderCardDeck(leaderCards));
         clientSocket.sendMessage(message);
+        view.waitForOtherPlayers();
     }
 
     public void chooseDevelopmentCards(DevelopmentCard ... cardsChosen) {

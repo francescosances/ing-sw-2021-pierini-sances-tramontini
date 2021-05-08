@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.controller.ClientController;
-import it.polimi.ingsw.network.ClientSocket;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.gui.scene.Controller;
 import javafx.application.Application;
