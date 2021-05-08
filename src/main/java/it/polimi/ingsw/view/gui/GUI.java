@@ -103,7 +103,9 @@ public class GUI implements View {
 
     @Override
     public void listLeaderCards(List<LeaderCard> leaderCardList, int cardsToChoose) {
-        loadScene("");
+        Platform.runLater(()->{
+            loadScene("select_leader_cards_scene");
+        });
     }
 
     @Override

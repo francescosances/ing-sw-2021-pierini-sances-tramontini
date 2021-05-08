@@ -17,7 +17,7 @@ public class SerializerTest {
 
     @Test
     public void serializeDevelopmentCard() {
-        DevelopmentCard developmentCard = new DevelopmentCard(3, new Requirements(new Pair<>(ResourceType.SHIELD, 3)), 1, DevelopmentColorType.GREEN,
+        DevelopmentCard developmentCard = new DevelopmentCard("",3, new Requirements(new Pair<>(ResourceType.SHIELD, 3)), 1, DevelopmentColorType.GREEN,
                 new Requirements(new Pair<>(ResourceType.SERVANT, 2)), new Pair<>(ResourceType.COIN, 1), new Pair<>(ResourceType.SHIELD, 1), new Pair<>(ResourceType.STONE, 1));
         String json = Serializer.serializeDevelopmentCard(developmentCard);
         assertEquals(developmentCard, Serializer.deserializeDevelopmentCard(json));
@@ -33,28 +33,28 @@ public class SerializerTest {
 
     @Test
     public void serializeDepotLeaderCard() {
-        LeaderCard leaderCard = new DepotLeaderCard(3, new Requirements(new Pair<>(ResourceType.SERVANT, 5)), ResourceType.SHIELD);
+        LeaderCard leaderCard = new DepotLeaderCard("",3, new Requirements(new Pair<>(ResourceType.SERVANT, 5)), ResourceType.SHIELD);
         String json = Serializer.serializeLeaderCard(leaderCard);
         assertEquals(leaderCard, Serializer.deserializeLeaderCard(json));
     }
 
     @Test
     public void serializeDiscountLeaderCard() {
-        LeaderCard leaderCard = new DiscountLeaderCard(2, new Requirements(new Triple<>(DevelopmentColorType.YELLOW, 1, 1), new Triple<>(DevelopmentColorType.GREEN, 1, 1)), ResourceType.SERVANT);
+        LeaderCard leaderCard = new DiscountLeaderCard("",2, new Requirements(new Triple<>(DevelopmentColorType.YELLOW, 1, 1), new Triple<>(DevelopmentColorType.GREEN, 1, 1)), ResourceType.SERVANT);
         String json = Serializer.serializeLeaderCard(leaderCard);
         assertEquals(leaderCard, Serializer.deserializeLeaderCard(json));
     }
 
     @Test
     public void serializeProductionLeaderCard() {
-        LeaderCard leaderCard = new ProductionLeaderCard(4, new Requirements(new Triple<>(DevelopmentColorType.YELLOW, 2, 1)), new Requirements(new Pair<>(ResourceType.SHIELD, 1)));
+        LeaderCard leaderCard = new ProductionLeaderCard("",4, new Requirements(new Triple<>(DevelopmentColorType.YELLOW, 2, 1)), new Requirements(new Pair<>(ResourceType.SHIELD, 1)));
         String json = Serializer.serializeLeaderCard(leaderCard);
         assertEquals(leaderCard, Serializer.deserializeLeaderCard(json));
     }
 
     @Test
     public void serializeWhiteMarbleLeaderCard() {
-        LeaderCard leaderCard = new WhiteMarbleLeaderCard(5, new Requirements(new Triple<>(DevelopmentColorType.GREEN, 1, 2), new Triple<>(DevelopmentColorType.PURPLE, 1, 1)), ResourceType.SHIELD);
+        LeaderCard leaderCard = new WhiteMarbleLeaderCard("",5, new Requirements(new Triple<>(DevelopmentColorType.GREEN, 1, 2), new Triple<>(DevelopmentColorType.PURPLE, 1, 1)), ResourceType.SHIELD);
         String json = Serializer.serializeLeaderCard(leaderCard);
         assertEquals(leaderCard, Serializer.deserializeLeaderCard(json));
     }
@@ -62,10 +62,10 @@ public class SerializerTest {
     @Test
     public void serializeLeaderCardDeck() {
         List<LeaderCard> ret = new ArrayList<>();
-        ret.add(new DepotLeaderCard(3, new Requirements(new Pair<>(ResourceType.COIN, 5)), ResourceType.STONE));
-        ret.add(new DepotLeaderCard(3, new Requirements(new Pair<>(ResourceType.STONE, 5)), ResourceType.SERVANT));
-        ret.add(new DepotLeaderCard(3, new Requirements(new Pair<>(ResourceType.SERVANT, 5)), ResourceType.SHIELD));
-        ret.add(new DepotLeaderCard(3, new Requirements(new Pair<>(ResourceType.SHIELD, 5)), ResourceType.COIN));
+        ret.add(new DepotLeaderCard("",3, new Requirements(new Pair<>(ResourceType.COIN, 5)), ResourceType.STONE));
+        ret.add(new DepotLeaderCard("",3, new Requirements(new Pair<>(ResourceType.STONE, 5)), ResourceType.SERVANT));
+        ret.add(new DepotLeaderCard("",3, new Requirements(new Pair<>(ResourceType.SERVANT, 5)), ResourceType.SHIELD));
+        ret.add(new DepotLeaderCard("",3, new Requirements(new Pair<>(ResourceType.SHIELD, 5)), ResourceType.COIN));
         String json = Serializer.serializeLeaderCardDeck(ret.toArray(new LeaderCard[0]));
         assertEquals(ret, Serializer.deserializeLeaderCardDeck(json));
     }
@@ -103,7 +103,7 @@ public class SerializerTest {
         Warehouse warehouse = new Warehouse();
         warehouse.addResource(0, ResourceType.COIN, 1);
         warehouse.addResource(2, ResourceType.STONE, 2);
-        LeaderCard leaderDepot = new DepotLeaderCard(3, new Requirements(new Pair<>(ResourceType.COIN, 5)), ResourceType.STONE);
+        LeaderCard leaderDepot = new DepotLeaderCard("",3, new Requirements(new Pair<>(ResourceType.COIN, 5)), ResourceType.STONE);
         warehouse.addDepotLeaderCard(leaderDepot);
         String json = Serializer.serializeWarehouse(warehouse);
         assertEquals(warehouse, Serializer.deserializeWarehouse(json));
@@ -117,7 +117,7 @@ public class SerializerTest {
         PopeFavorTile[] popeFavorTiles = playerBoard.getFaithTrack().getPopeFavorTiles();
         popeFavorTiles[0].uncover();
         playerBoard.getWarehouse().addResource(0, ResourceType.COIN, 1);
-        LeaderCard leaderCard = new DepotLeaderCard(3, new Requirements(new Pair<>(ResourceType.STONE, 5)), ResourceType.SERVANT, true);
+        LeaderCard leaderCard = new DepotLeaderCard("",3, new Requirements(new Pair<>(ResourceType.STONE, 5)), ResourceType.SERVANT, true);
         playerBoard.addLeaderCard(leaderCard);
         playerBoard.getWarehouse().addDepotLeaderCard(leaderCard);
         playerBoard.getWarehouse().addResource(3, ResourceType.SERVANT, 2);
@@ -125,7 +125,7 @@ public class SerializerTest {
         resourcesMap.put(ResourceType.SHIELD, 3);
         resourcesMap.put(ResourceType.STONE, 7);
         playerBoard.getStrongbox().addResources(resourcesMap);
-        DevelopmentCard developmentCard = new DevelopmentCard(1, new Requirements(new Pair<>(ResourceType.SHIELD, 2)), 1, DevelopmentColorType.GREEN, new Requirements(new Pair<>(ResourceType.COIN, 1)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1));
+        DevelopmentCard developmentCard = new DevelopmentCard("",1, new Requirements(new Pair<>(ResourceType.SHIELD, 2)), 1, DevelopmentColorType.GREEN, new Requirements(new Pair<>(ResourceType.COIN, 1)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1));
         DevelopmentCardSlot[] developmentCardSlots = playerBoard.getDevelopmentCardSlots();
         developmentCardSlots[1].addCard(developmentCard);
 
@@ -153,7 +153,7 @@ public class SerializerTest {
         PopeFavorTile[] popeFavorTiles = playerBoard.getFaithTrack().getPopeFavorTiles();
         popeFavorTiles[0].uncover();
         playerBoard.getWarehouse().addResource(0, ResourceType.COIN, 1);
-        LeaderCard leaderCard = new DepotLeaderCard(3, new Requirements(new Pair<>(ResourceType.STONE, 5)), ResourceType.SERVANT, true);
+        LeaderCard leaderCard = new DepotLeaderCard("",3, new Requirements(new Pair<>(ResourceType.STONE, 5)), ResourceType.SERVANT, true);
         playerBoard.addLeaderCard(leaderCard);
         playerBoard.getWarehouse().addDepotLeaderCard(leaderCard);
         playerBoard.getWarehouse().addResource(3, ResourceType.SERVANT, 2);
@@ -161,7 +161,7 @@ public class SerializerTest {
         resourcesMap.put(ResourceType.SHIELD, 3);
         resourcesMap.put(ResourceType.STONE, 7);
         playerBoard.getStrongbox().addResources(resourcesMap);
-        DevelopmentCard developmentCard = new DevelopmentCard(1, new Requirements(new Pair<>(ResourceType.SHIELD, 2)), 1, DevelopmentColorType.GREEN, new Requirements(new Pair<>(ResourceType.COIN, 1)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1));
+        DevelopmentCard developmentCard = new DevelopmentCard("",1, new Requirements(new Pair<>(ResourceType.SHIELD, 2)), 1, DevelopmentColorType.GREEN, new Requirements(new Pair<>(ResourceType.COIN, 1)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1));
         DevelopmentCardSlot[] developmentCardSlots = playerBoard.getDevelopmentCardSlots();
         developmentCardSlots[1].addCard(developmentCard);
         String json = Serializer.serializeMatchState(match);
@@ -178,7 +178,7 @@ public class SerializerTest {
         PopeFavorTile[] popeFavorTiles = playerBoard.getFaithTrack().getPopeFavorTiles();
         popeFavorTiles[0].uncover();
         playerBoard.getWarehouse().addResource(0, ResourceType.COIN, 1);
-        LeaderCard leaderCard = new DepotLeaderCard(3, new Requirements(new Pair<>(ResourceType.STONE, 5)), ResourceType.SERVANT, true);
+        LeaderCard leaderCard = new DepotLeaderCard("",3, new Requirements(new Pair<>(ResourceType.STONE, 5)), ResourceType.SERVANT, true);
         playerBoard.addLeaderCard(leaderCard);
         playerBoard.getWarehouse().addDepotLeaderCard(leaderCard);
         playerBoard.getWarehouse().addResource(3, ResourceType.SERVANT, 2);
@@ -186,7 +186,7 @@ public class SerializerTest {
         resourcesMap.put(ResourceType.SHIELD, 3);
         resourcesMap.put(ResourceType.STONE, 7);
         playerBoard.getStrongbox().addResources(resourcesMap);
-        DevelopmentCard developmentCard = new DevelopmentCard(1, new Requirements(new Pair<>(ResourceType.SHIELD, 2)), 1, DevelopmentColorType.GREEN, new Requirements(new Pair<>(ResourceType.COIN, 1)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1));
+        DevelopmentCard developmentCard = new DevelopmentCard("",1, new Requirements(new Pair<>(ResourceType.SHIELD, 2)), 1, DevelopmentColorType.GREEN, new Requirements(new Pair<>(ResourceType.COIN, 1)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1));
         DevelopmentCardSlot[] developmentCardSlots = playerBoard.getDevelopmentCardSlots();
         developmentCardSlots[1].addCard(developmentCard);
         match.moveBlackCross(10);

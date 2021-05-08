@@ -25,6 +25,7 @@ public class ProducerCreator implements JsonDeserializer<Producer> {
 
     protected Producer developmentCard(JsonObject jsonObject, JsonDeserializationContext context) {
         return new DevelopmentCard(
+                jsonObject.get("cardName").getAsString(),
                 jsonObject.get("victoryPoints").getAsInt(),
                 new RequirementsCreator().deserialize(jsonObject.get("cost"), Requirements.class, context),
                 jsonObject.get("level").getAsInt(),

@@ -244,7 +244,7 @@ class WarehouseTest {
 
     @Test
     void addDepotLeaderCard() {
-        LeaderCard leaderCard = new DepotLeaderCard(3, null,ResourceType.SHIELD);
+        LeaderCard leaderCard = new DepotLeaderCard("",3, null,ResourceType.SHIELD);
         warehouse.addDepotLeaderCard(leaderCard);
         assertEquals(leaderCard, warehouse.getDepots().get(3));
     }

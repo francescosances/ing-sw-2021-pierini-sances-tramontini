@@ -54,9 +54,9 @@ class RequirementsTest {
 
     @Test
     void satisfied_DevelopmentCards() {
-        player.getDevelopmentCardSlots()[2].addCard(new DevelopmentCard(0, new Requirements(), 1, DevelopmentColorType.BLUE, null));
-        player.getDevelopmentCardSlots()[2].addCard(new DevelopmentCard(0, new Requirements(), 2, DevelopmentColorType.GREEN, null));
-        player.getDevelopmentCardSlots()[2].addCard(new DevelopmentCard(0, new Requirements(), 3, DevelopmentColorType.YELLOW, null));
+        player.getDevelopmentCardSlots()[2].addCard(new DevelopmentCard("",0, new Requirements(), 1, DevelopmentColorType.BLUE, null));
+        player.getDevelopmentCardSlots()[2].addCard(new DevelopmentCard("",0, new Requirements(), 2, DevelopmentColorType.GREEN, null));
+        player.getDevelopmentCardSlots()[2].addCard(new DevelopmentCard("",0, new Requirements(), 3, DevelopmentColorType.YELLOW, null));
 
         req1.addDevelopmentCardRequirement(DevelopmentColorType.GREEN, 0, 1);
         req1.addDevelopmentCardRequirement(DevelopmentColorType.GREEN, 2, 1);
@@ -86,12 +86,12 @@ class RequirementsTest {
             put(ResourceType.SERVANT, 5);
         }});
 
-        player.getDevelopmentCardSlots()[0].addCard(new DevelopmentCard(0, new Requirements(), 1, DevelopmentColorType.GREEN, null));
-        player.getDevelopmentCardSlots()[0].addCard(new DevelopmentCard(0, new Requirements(), 2, DevelopmentColorType.BLUE, null));
-        player.getDevelopmentCardSlots()[1].addCard(new DevelopmentCard(0, new Requirements(), 1, DevelopmentColorType.BLUE, null));
-        player.getDevelopmentCardSlots()[2].addCard(new DevelopmentCard(0, new Requirements(), 1, DevelopmentColorType.BLUE, null));
-        player.getDevelopmentCardSlots()[2].addCard(new DevelopmentCard(0, new Requirements(), 2, DevelopmentColorType.GREEN, null));
-        player.getDevelopmentCardSlots()[2].addCard(new DevelopmentCard(0, new Requirements(), 3, DevelopmentColorType.YELLOW, null));
+        player.getDevelopmentCardSlots()[0].addCard(new DevelopmentCard("",0, new Requirements(), 1, DevelopmentColorType.GREEN, null));
+        player.getDevelopmentCardSlots()[0].addCard(new DevelopmentCard("",0, new Requirements(), 2, DevelopmentColorType.BLUE, null));
+        player.getDevelopmentCardSlots()[1].addCard(new DevelopmentCard("",0, new Requirements(), 1, DevelopmentColorType.BLUE, null));
+        player.getDevelopmentCardSlots()[2].addCard(new DevelopmentCard("",0, new Requirements(), 1, DevelopmentColorType.BLUE, null));
+        player.getDevelopmentCardSlots()[2].addCard(new DevelopmentCard("",0, new Requirements(), 2, DevelopmentColorType.GREEN, null));
+        player.getDevelopmentCardSlots()[2].addCard(new DevelopmentCard("",0, new Requirements(), 3, DevelopmentColorType.YELLOW, null));
 
         req1.addResourceRequirement(ResourceType.SHIELD, 3);
         req1.addResourceRequirement(ResourceType.COIN, 3);
