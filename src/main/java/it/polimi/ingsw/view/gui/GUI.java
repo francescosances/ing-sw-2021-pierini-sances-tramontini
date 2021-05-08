@@ -10,7 +10,9 @@ import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
-import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.stage.Stage;
 
 import java.util.List;
 
@@ -18,23 +20,41 @@ public class GUI implements View {
 
     private ClientController clientController;
 
-    public GUI(ClientController clientController){
+    private Stage stage;
+
+    private String currentScene;
+
+    public GUI(ClientController clientController, Stage stage){
         this.clientController = clientController;
+        this.stage = stage;
+    }
+
+    private void loadScene(String sceneName){
+        if(currentScene != null && currentScene.equals(sceneName))
+            return;
+        this.currentScene = sceneName;
+        stage.setScene(JavaFXGui.loadScene(sceneName, clientController));
     }
 
     @Override
     public void showMessage(String message) {
-
+        Platform.runLater(()->{
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, message);
+            alert.show();
+        });
     }
 
     @Override
     public void showErrorMessage(String message) {
-
+        Platform.runLater(()->{
+            Alert alert = new Alert(Alert.AlertType.ERROR, message);
+            alert.show();
+        });
     }
 
     @Override
     public void listLobbies(List<Triple<String, Integer, Integer>> availableLobbies) {
-
+        System.out.println("listo le lobby");
     }
 
     @Override
@@ -44,13 +64,13 @@ public class GUI implements View {
 
     @Override
     public void init() {
-
+        loadScene("server_setup_scene");
     }
 
 
     @Override
     public void askLogin() {
-
+        loadScene("login_scene");
     }
 
     @Override

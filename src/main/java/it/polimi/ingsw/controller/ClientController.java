@@ -18,6 +18,7 @@ import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cli.CLI;
 import it.polimi.ingsw.view.gui.GUI;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -29,12 +30,19 @@ public class ClientController {
     /**
      * The socket connection to the server
      */
-    private final ClientSocket clientSocket;
+    private ClientSocket clientSocket;
 
     /**
      * The view used to interact with the user
      */
     private View view;
+
+    /**
+     * Default empty constructor that initialize a new socket
+     */
+    public ClientController(){
+        clientSocket = new ClientSocket(this);
+    }
 
     /**
      * Initialize a new ClientController connected to the server through the specified Client object
@@ -55,8 +63,8 @@ public class ClientController {
         view.init();
     }
 
-    public void startGui(){
-        view = new GUI(this);
+    public void startGui(Stage stage){
+        view = new GUI(this,stage);
         view.init();
     }
 

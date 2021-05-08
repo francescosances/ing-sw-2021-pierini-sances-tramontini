@@ -2,6 +2,7 @@ package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.controller.ClientController;
 import it.polimi.ingsw.utils.Message;
+import it.polimi.ingsw.view.cli.CLI;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -32,8 +33,16 @@ public class ClientSocket implements Runnable{
     /**
      * Initialize a new Client with and empty ClientController
      */
-    public ClientSocket(){
-        this.clientController = new ClientController(this);
+    public ClientSocket(ClientController clientController){
+        this.clientController = clientController;
+    }
+
+    /**
+     * Returns the current client controller associated to this socket
+     * @return the current client controller associated to this socket
+     */
+    public ClientController getClientController(){
+        return clientController;
     }
 
     /**

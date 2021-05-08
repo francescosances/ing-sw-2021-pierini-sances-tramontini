@@ -3,14 +3,7 @@
     -fx-background-size: stretch;
 }
 
-@font-face {
-    font-family: 'DominicanItalic';
-    src: url('../fonts/dominicanitalic.ttf');
-}
-
 .btn{
-    -fx-font-family: DominicanItalic;
-
     -fx-border-color: transparent;
     -fx-background-image: url("../images/buttons/connect.png");
     -fx-background-size: contain;

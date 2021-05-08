@@ -1,3 +1,4 @@
+import it.polimi.ingsw.controller.ClientController;
 import it.polimi.ingsw.network.ClientSocket;
 import it.polimi.ingsw.view.gui.JavaFXGui;
 import javafx.application.Application;
@@ -9,13 +10,13 @@ public class ClientMain
     public static void main( String[] args )
     {
         // client, clientController and cli are created
-        ClientSocket clientSocket = new ClientSocket();
+      //  ClientSocket clientSocket = new ClientSocket();
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Select 1 for CLI, 2 for GUI:");
         // start view and show welcome screen
         if(scanner.nextInt() == 1)
-            clientSocket.startCli();
+            new ClientController().startCli();
         else
             Application.launch(JavaFXGui.class);
     }

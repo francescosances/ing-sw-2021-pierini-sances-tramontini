@@ -2,7 +2,7 @@ package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.controller.ClientController;
 import it.polimi.ingsw.network.ClientSocket;
-import it.polimi.ingsw.view.gui.scene.ServerSetupSceneController;
+import it.polimi.ingsw.view.gui.scene.Controller;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -17,11 +17,24 @@ public class JavaFXGui extends Application {
     @Override
     public void start(Stage stage) {
 
-        ClientController clientController = new ClientController(new ClientSocket());
-        clientController.startGui();
+        ClientController clientController = new ClientController();
 
+        clientController.startGui(stage);
+
+        stage.setTitle("Masters of Renaissance");
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    @Override
+    public void stop() {
+        Platform.exit();
+        System.exit(0);
+    }
+
+    public static Scene loadScene(String fileName, ClientController clientController){
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/fxml/server_setup_scene.fxml"));
+        loader.setLocation(JavaFXGui.class.getResource("/fxml/"+fileName+".fxml"));
         Parent rootLayout = null;
         try {
             rootLayout = loader.load();
@@ -32,18 +45,9 @@ public class JavaFXGui extends Application {
 
         Scene scene = new Scene(rootLayout);
 
-        ServerSetupSceneController controller = loader.getController();
+        Controller controller = loader.getController();
         controller.setClientController(clientController);
 
-        stage.setScene(scene);
-        stage.setTitle("Masters of Renaissance");
-        stage.setResizable(false);
-        stage.show();
-    }
-
-    @Override
-    public void stop() {
-        Platform.exit();
-        System.exit(0);
+        return scene;
     }
 }
