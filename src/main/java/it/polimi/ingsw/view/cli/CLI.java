@@ -44,8 +44,6 @@ public class CLI implements View {
 
     private final boolean lightMode;
 
-    private String username;
-
     public CLI(ClientController clientController, boolean lightMode){
         this.clientController = clientController;
         this.input = new Scanner(System.in);
@@ -88,6 +86,11 @@ public class CLI implements View {
         output.print("Insert desired username: ");
         String username = input.next();
         clientController.login(username);
+    }
+
+    @Override
+    public void waitForOtherPlayers() {
+        output.println("Waiting for other players");
     }
 
     @Override

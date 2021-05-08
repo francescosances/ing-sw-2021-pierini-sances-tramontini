@@ -71,6 +71,11 @@ public class VirtualView implements View {
     }
 
     @Override
+    public void waitForOtherPlayers() {
+
+    }
+
+    @Override
     public void userConnected(String username) {
        showMessage(username+" has joined the lobby");
     }

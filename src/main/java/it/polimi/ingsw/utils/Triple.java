@@ -35,4 +35,13 @@ public class Triple <E,T,P>{
     public void setThird(P third) {
         this.third = third;
     }
+
+    @Override
+    public String toString() {
+        return "Triple{" +
+                "first=" + first +
+                ", second=" + second +
+                ", third=" + third +
+                '}';
+    }
 }

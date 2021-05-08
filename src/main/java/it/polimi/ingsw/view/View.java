@@ -54,6 +54,11 @@ public interface View {
     void askLogin();
 
     /**
+     * Shows a message that ask to wait for the other players before the match can start
+     */
+    void waitForOtherPlayers();
+
+    /**
      * Notifies that someone connected to the current match
      * @param username the username of the connected user
      */

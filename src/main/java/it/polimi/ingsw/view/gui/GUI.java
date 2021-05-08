@@ -8,9 +8,13 @@ import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.Warehouse;
+import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.gui.scene.Controller;
+import it.polimi.ingsw.view.gui.scene.SelectLobbySceneController;
 import javafx.application.Platform;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
@@ -24,16 +28,22 @@ public class GUI implements View {
 
     private String currentScene;
 
+    private Controller currentController;
+
+
     public GUI(ClientController clientController, Stage stage){
         this.clientController = clientController;
         this.stage = stage;
     }
 
-    private void loadScene(String sceneName){
+    private Controller loadScene(String sceneName){
         if(currentScene != null && currentScene.equals(sceneName))
-            return;
+            return currentController;
         this.currentScene = sceneName;
-        stage.setScene(JavaFXGui.loadScene(sceneName, clientController));
+        Pair<Scene, Controller> sceneControllerPair = JavaFXGui.loadScene(sceneName, clientController);
+        stage.setScene(sceneControllerPair.fst);
+        this.currentController = sceneControllerPair.snd;
+        return sceneControllerPair.snd;
     }
 
     @Override
@@ -54,7 +64,10 @@ public class GUI implements View {
 
     @Override
     public void listLobbies(List<Triple<String, Integer, Integer>> availableLobbies) {
-        System.out.println("listo le lobby");
+        Platform.runLater(() -> {
+            SelectLobbySceneController controller = (SelectLobbySceneController) loadScene("select_lobby_scene");
+            controller.initialize(availableLobbies);
+        });
     }
 
     @Override
@@ -74,6 +87,11 @@ public class GUI implements View {
     }
 
     @Override
+    public void waitForOtherPlayers() {
+        loadScene("waiting_scene");
+    }
+
+    @Override
     public void userConnected(String username) {
 
     }
@@ -85,7 +103,7 @@ public class GUI implements View {
 
     @Override
     public void listLeaderCards(List<LeaderCard> leaderCardList, int cardsToChoose) {
-
+        loadScene("");
     }
 
     @Override
@@ -157,4 +175,5 @@ public class GUI implements View {
     public void askToChooseStartResources(Resource[] values, int resourcesToChoose) {
 
     }
+
 }

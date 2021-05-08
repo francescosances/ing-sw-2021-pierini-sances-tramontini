@@ -1,0 +1,15 @@
+.rootPane {
+    -fx-background-image: url("../images/backgrounds/server_setup.png");
+    -fx-background-size: stretch;
+}
+
+@font-face {
+    font-family: DominicanItalic;
+    src: url("../fonts/dominicanitalic.ttf");
+}
+
+.lbl{
+    -fx-font-family: DominicanItalic;
+    -fx-text-fill: #FDC309;
+    -fx-font-size: 30px;
+}

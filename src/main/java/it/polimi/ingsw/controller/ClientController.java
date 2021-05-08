@@ -189,6 +189,7 @@ public class ClientController {
         if(playersNumber > 0)
             message.addData("playersNumber", String.valueOf(playersNumber));
         clientSocket.sendMessage(message);
+        view.waitForOtherPlayers();
     }
 
     /**

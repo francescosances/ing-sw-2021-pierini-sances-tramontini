@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.controller.ClientController;
 import it.polimi.ingsw.network.ClientSocket;
+import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.gui.scene.Controller;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -32,7 +33,7 @@ public class JavaFXGui extends Application {
         System.exit(0);
     }
 
-    public static Scene loadScene(String fileName, ClientController clientController){
+    public static Pair<Scene,Controller> loadScene(String fileName, ClientController clientController){
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(JavaFXGui.class.getResource("/fxml/"+fileName+".fxml"));
         Parent rootLayout = null;
@@ -48,6 +49,6 @@ public class JavaFXGui extends Application {
         Controller controller = loader.getController();
         controller.setClientController(clientController);
 
-        return scene;
+        return new Pair<>(scene,controller);
     }
 }
