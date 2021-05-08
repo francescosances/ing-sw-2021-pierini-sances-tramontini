@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.controller.ClientController;
 import it.polimi.ingsw.network.ClientSocket;
+import it.polimi.ingsw.view.gui.scene.ServerSetupSceneController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +18,7 @@ public class JavaFXGui extends Application {
     public void start(Stage stage) {
 
         ClientController clientController = new ClientController(new ClientSocket());
-        GUI view = new GUI(clientController);
+        clientController.startGui();
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/fxml/server_setup_scene.fxml"));
@@ -31,7 +32,8 @@ public class JavaFXGui extends Application {
 
         Scene scene = new Scene(rootLayout);
 
-        loader.getController();
+        ServerSetupSceneController controller = loader.getController();
+        controller.setClientController(clientController);
 
         stage.setScene(scene);
         stage.setTitle("Masters of Renaissance");

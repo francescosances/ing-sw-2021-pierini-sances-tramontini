@@ -55,6 +55,11 @@ public class ClientController {
         view.init();
     }
 
+    public void startGui(){
+        view = new GUI(this);
+        view.init();
+    }
+
     /**
      * Method that map a message with the the action that must be executed
      * @param message the message received from the server via socket
