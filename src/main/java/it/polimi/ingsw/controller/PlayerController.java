@@ -686,7 +686,6 @@ public class PlayerController {
      */
     public void setPlayerIndex(int i) {
         this.playerIndex = i;
-        virtualView.showMessage("You are the player #"+(i+1));
     }
 
 

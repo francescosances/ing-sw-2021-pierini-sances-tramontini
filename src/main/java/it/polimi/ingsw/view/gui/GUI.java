@@ -52,6 +52,7 @@ public class GUI implements View {
     public void showMessage(String message) {
         Platform.runLater(()->{
             Alert alert = new Alert(Alert.AlertType.INFORMATION, message);
+            alert.initOwner(stage);
             alert.show();
         });
     }
@@ -60,6 +61,7 @@ public class GUI implements View {
     public void showErrorMessage(String message) {
         Platform.runLater(()->{
             Alert alert = new Alert(Alert.AlertType.ERROR, message);
+            alert.initOwner(stage);
             alert.show();
         });
     }
