@@ -15,8 +15,8 @@ public class FileManager {
 
     private static FileManager instance;
 
-    private static final String ROOT_FOLDER_NAME = "storage";
-    private static final String MATCHES_FOLDER_NAME = "matches";
+    protected static final String ROOT_FOLDER_NAME = "storage";
+    protected static final String MATCHES_FOLDER_NAME = "matches";
 
     private FileManager(){}
 

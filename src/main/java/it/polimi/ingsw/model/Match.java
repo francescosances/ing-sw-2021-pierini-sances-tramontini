@@ -75,7 +75,6 @@ public class Match {
     private static List<Deck<DevelopmentCard>> generateDevelopmentCards(){
         List<Deck<DevelopmentCard>> ret = new ArrayList<>();
 
-
         Deck<DevelopmentCard> green1 = new Deck<>();
         green1.add(new DevelopmentCard("1",1,new Requirements(new Pair<>(ResourceType.SHIELD,2)),1,DevelopmentColorType.GREEN,new Requirements(new Pair<>(ResourceType.COIN,1)),new Pair<>(NonPhysicalResourceType.FAITH_POINT,1)));
         green1.add(new DevelopmentCard("5",2,new Requirements(new Pair<>(ResourceType.SHIELD,1),new Pair<>(ResourceType.SERVANT,1),new Pair<>(ResourceType.STONE,1)),1,DevelopmentColorType.GREEN,new Requirements(new Pair<>(ResourceType.STONE,1)),new Pair<>(ResourceType.SERVANT,1)));
