@@ -11,10 +11,7 @@ import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.VirtualView;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.view.cli.CLI.ANSI_BLUE;
@@ -32,8 +29,33 @@ public class Server implements StatusObserver {
     /**
      * Empty constructor that initializes an empty list of players
      */
-    public Server() {
+    private Server() {
         players = new HashMap<>();
+    }
+
+    public static Server loadServer(){
+        Server ret = new Server();
+        try {
+            Map<String,List<String>> matchesList = FileManager.getInstance().readMatchesList();
+            System.out.println(matchesList);
+            for(Map.Entry<String,List<String>> entry : matchesList.entrySet()){
+                try {
+                    Match match = FileManager.getInstance().readMatchStatus(entry.getKey());
+                    GameController gameController = new GameController(entry.getKey(), match.getMaxPlayersNumber(), ret);
+                    gameController.setSuspended(true);
+                    for (String username : entry.getValue()) {
+                        gameController.addPlayer(username, null);
+                        gameController.getPlayerController(username).deactivate();
+                        ret.players.put(username, gameController);
+                    }
+                }catch (Exception ignored){
+                    log("Unable to load match: "+entry.getKey()+" from local disk");
+                }
+            }
+        }catch (Exception ignored){
+            log("Unable to load matches from local disk");
+        }
+        return ret;
     }
 
     /**
@@ -54,6 +76,20 @@ public class Server implements StatusObserver {
                 .filter(x->!x.isStarted())
                 .distinct()
                 .collect(Collectors.toList());
+    }
+
+    public void updateMatchesList(){
+        try {
+            Map<String,List<String>> newMap = new HashMap<>();
+            players.forEach((key, value) -> {
+                if(value == null)return;
+                newMap.putIfAbsent(value.getMatchName(),new ArrayList<>());
+                newMap.get(value.getMatchName()).add(key);
+            });
+            FileManager.getInstance().writeMatchesList(newMap);
+        } catch (IOException e) {
+            log("Unable to locally save the matches list");
+        }
     }
 
     @Override
@@ -77,6 +113,7 @@ public class Server implements StatusObserver {
             throw new IllegalStateException("Match full");
         players.put(username,gameController);
         gameController.addPlayer(username,clientHandler);
+        updateMatchesList();
         if(gameController.isFull())
             gameController.start();
     }
@@ -206,6 +243,9 @@ public class Server implements StatusObserver {
      * @param clientHandler the ClientHandler that manages the socket connection with the client
      */
     private synchronized void reconnect(String username, ClientHandler clientHandler) {
+        if(getGameController(username).isSuspended()){
+            //TODO: far ripartire una partita sospesa
+        }
         PlayerController playerController = getGameController(username).getPlayerController(username);
         playerController.setVirtualView(new VirtualView(clientHandler)); //Set the virtual view with the new clientHandler reference
         playerController.activate();
@@ -224,7 +264,7 @@ public class Server implements StatusObserver {
      * Logs messages
      * @param msg the message to log
      */
-    public void log(String msg) {
+    public static void log(String msg) {
         System.out.println(ANSI_BLUE+"Logger: "+msg+ANSI_RESET);
     }
 

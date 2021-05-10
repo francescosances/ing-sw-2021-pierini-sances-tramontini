@@ -11,7 +11,6 @@ import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.view.VirtualView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +32,12 @@ public class GameController implements PlayerStatusListener {
     private transient StatusObserver statusObserver;
 
     /**
+     * True if the match has been suspended by the players
+     */
+    protected boolean suspended;
+
+
+    /**
      * Constructor that initialize a new match without players
      * @param matchName the name of the match that will be created
      */
@@ -44,7 +49,9 @@ public class GameController implements PlayerStatusListener {
         players = new ArrayList<>();
         match.setCurrentPhase(Match.GamePhase.ADDING_PLAYERS);
         this.statusObserver = statusObserver;
+        this.suspended = false;
     }
+
 
     /**
      * Method that map a message and an username with the the action that must be executed
@@ -328,8 +335,10 @@ public class GameController implements PlayerStatusListener {
                         user.setup();
                     user.turnEnded();
                 }
-            }else
-                user.getVirtualView().userDisconnected(username);
+            }else {
+                if(user.getVirtualView() != null)
+                    user.getVirtualView().userDisconnected(username);
+            }
         });
     }
 
@@ -342,8 +351,12 @@ public class GameController implements PlayerStatusListener {
         return players.stream().filter(x->x.getUsername().equals(username)).anyMatch(PlayerController::isActive);
     }
 
-    //TODO:javadoc
-    public List<PlayerController> getPlayers() {
-        return players;
+
+    public boolean isSuspended() {
+        return suspended;
+    }
+
+    public void setSuspended(boolean suspended) {
+        this.suspended = suspended;
     }
 }

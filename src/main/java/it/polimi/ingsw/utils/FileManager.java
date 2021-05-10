@@ -1,11 +1,15 @@
 package it.polimi.ingsw.utils;
 
-import it.polimi.ingsw.controller.GameController;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.model.Match;
+import it.polimi.ingsw.model.cards.Deck;
+import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.serialization.Serializer;
 
 import java.io.*;
 import java.util.List;
+import java.util.Map;
 
 public class FileManager {
 
@@ -26,11 +30,19 @@ public class FileManager {
         new File("./"+ROOT_FOLDER_NAME+"/"+MATCHES_FOLDER_NAME).mkdirs();
     }
 
-    public synchronized void writeMatchesList(List<GameController> matches) throws IOException {
+    public synchronized Map<String,List<String>> readMatchesList() throws IOException {
+        File matchFile = new File(ROOT_FOLDER_NAME+"/matches.json");
+        BufferedReader reader = new BufferedReader(new FileReader(matchFile));
+        return new Gson().fromJson(reader.readLine(),new TypeToken<Map<String,List<String>>>(){}.getType());
+    }
+
+    public synchronized void writeMatchesList(Map<String,List<String>> matches) throws IOException {
         checkFolders();
         File matchesFile = new File(ROOT_FOLDER_NAME+"/matches.json");
         matchesFile.createNewFile();
-        
+        FileWriter writer = new FileWriter(matchesFile);
+        writer.write(new Gson().toJson(matches));
+        writer.close();
     }
 
     public synchronized void writeMatchStatus(Match match) throws IOException {

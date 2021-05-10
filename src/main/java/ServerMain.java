@@ -8,7 +8,7 @@ public class ServerMain
     public static void main( String[] args ) throws IOException {
         int serverPort = 8000;
 
-        Server server = new Server();
+        Server server = Server.loadServer();
         SocketServer socketServer = new SocketServer(server, serverPort);
 
         socketServer.start();

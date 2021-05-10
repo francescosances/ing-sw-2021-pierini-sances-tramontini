@@ -98,6 +98,12 @@ public class PlayerController {
         resetAfterDepotsSwapAction();
     }
 
+    public PlayerController(String username,PlayerBoard playerBoard){
+        this.username = username;
+        this.playerBoard = playerBoard;
+        this.active = false;
+    }
+
     /**
      * Mark the user as "online" and able to play
      */
