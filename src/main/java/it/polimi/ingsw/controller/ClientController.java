@@ -98,7 +98,7 @@ public class ClientController {
                 resumeMatch(Serializer.deserializeMatchState(message.getData("match")));
                 break;
             case LIST_LEADER_CARDS:
-                List<LeaderCard> leaderCardList = Serializer.deserializeLeaderCardDeck(message.getData("leaderCards"));
+                List<LeaderCard> leaderCardList = Serializer.deserializeLeaderCardList(message.getData("leaderCards"));
                 view.listLeaderCards(leaderCardList,Integer.parseInt(message.getData("cardsToChoose")));
                 break;
             case START_RESOURCES:
@@ -198,7 +198,7 @@ public class ClientController {
      */
     public void leaderCardsChoice(LeaderCard ... leaderCards){
         Message message = new Message(Message.MessageType.LEADER_CARDS_CHOICE);
-        message.addData("leaderCards", Serializer.serializeLeaderCardDeck(leaderCards));
+        message.addData("leaderCards", Serializer.serializeLeaderCardList(leaderCards));
         clientSocket.sendMessage(message);
         view.waitForOtherPlayers();
     }

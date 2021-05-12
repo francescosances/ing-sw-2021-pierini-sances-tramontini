@@ -1,11 +1,12 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.cards.*;
-import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
-import it.polimi.ingsw.model.storage.ResourceType;
-import it.polimi.ingsw.utils.Pair;
-import it.polimi.ingsw.utils.Triple;
+import it.polimi.ingsw.model.cards.Deck;
+import it.polimi.ingsw.model.cards.DevelopmentCard;
+import it.polimi.ingsw.model.cards.DevelopmentColorType;
+import it.polimi.ingsw.model.cards.LeaderCard;
+import it.polimi.ingsw.utils.FileManager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -49,16 +50,21 @@ public class Match {
      */
     private GamePhase currentPhase;
 
-    public Match(String matchName){
+    public Match(String matchName) {
         this(matchName,MAX_PLAYERS);
     }
 
-    public Match(String matchName,int maxPlayersNumber){
+    public Match(String matchName,int maxPlayersNumber) {
         this.players = new ArrayList<>();
         this.market = new Market();
         this.developmentDecks = new ArrayList<>();
-        this.developmentDecks = generateDevelopmentCards();
-        this.leaderCards = generateLeaderCards();
+        try {
+            this.developmentDecks = generateDevelopmentCards();
+            this.leaderCards = generateLeaderCards();
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new IllegalStateException("Unable to create new match: error while creating cards decks");
+        }
         this.vaticanReportsCount = 0;
         this.matchName = matchName;
         this.maxPlayersNumber = maxPlayersNumber;
@@ -72,130 +78,14 @@ public class Match {
         throw new IllegalArgumentException("Invalid username");
     }
 
-    private static List<Deck<DevelopmentCard>> generateDevelopmentCards(){
-        List<Deck<DevelopmentCard>> ret = new ArrayList<>();
-
-        Deck<DevelopmentCard> green1 = new Deck<>();
-        green1.add(new DevelopmentCard("1",1,new Requirements(new Pair<>(ResourceType.SHIELD,2)),1,DevelopmentColorType.GREEN,new Requirements(new Pair<>(ResourceType.COIN,1)),new Pair<>(NonPhysicalResourceType.FAITH_POINT,1)));
-        green1.add(new DevelopmentCard("5",2,new Requirements(new Pair<>(ResourceType.SHIELD,1),new Pair<>(ResourceType.SERVANT,1),new Pair<>(ResourceType.STONE,1)),1,DevelopmentColorType.GREEN,new Requirements(new Pair<>(ResourceType.STONE,1)),new Pair<>(ResourceType.SERVANT,1)));
-        green1.add(new DevelopmentCard("9",3,new Requirements(new Pair<>(ResourceType.SHIELD,3)),1,DevelopmentColorType.GREEN,new Requirements(new Pair<>(ResourceType.SERVANT,2)),new Pair<>(ResourceType.COIN,1),new Pair<>(ResourceType.SHIELD,1),new Pair<>(ResourceType.STONE,1)));
-        green1.add(new DevelopmentCard("13",4,new Requirements(new Pair<>(ResourceType.SHIELD,2),new Pair<>(ResourceType.COIN,2)),1,DevelopmentColorType.GREEN,new Requirements(new Pair<>(ResourceType.SERVANT,1),new Pair<>(ResourceType.STONE,1)),new Pair<>(ResourceType.COIN,2),new Pair<>(NonPhysicalResourceType.FAITH_POINT,1)));
-        green1.shuffle();
-        ret.add(green1);
-
-        Deck<DevelopmentCard> green2 = new Deck<>();
-        green2.add(new DevelopmentCard("17",5,new Requirements(new Pair<>(ResourceType.SHIELD,4)),2,DevelopmentColorType.GREEN,new Requirements(new Pair<>(ResourceType.STONE,1)),new Pair<>(NonPhysicalResourceType.FAITH_POINT,2)));
-        green2.add(new DevelopmentCard("21",6,new Requirements(new Pair<>(ResourceType.SHIELD,3),new Pair<>(ResourceType.SERVANT,2)),2,DevelopmentColorType.GREEN,new Requirements(new Pair<>(ResourceType.SHIELD,1),new Pair<>(ResourceType.SERVANT,1)),new Pair<>(ResourceType.STONE,3)));
-        green2.add(new DevelopmentCard("25",7,new Requirements(new Pair<>(ResourceType.SHIELD,5)),2,DevelopmentColorType.GREEN,new Requirements(new Pair<>(ResourceType.COIN,2)),new Pair<>(ResourceType.STONE,2),new Pair<>(NonPhysicalResourceType.FAITH_POINT,2)));
-        green2.add(new DevelopmentCard("29",8,new Requirements(new Pair<>(ResourceType.SHIELD,3),new Pair<>(ResourceType.COIN,3)),2,DevelopmentColorType.GREEN,new Requirements(new Pair<>(ResourceType.COIN,1)),new Pair<>(ResourceType.SHIELD,2),new Pair<>(NonPhysicalResourceType.FAITH_POINT,1)));
-        green2.shuffle();
-        ret.add(green2);
-
-        Deck<DevelopmentCard> green3 = new Deck<>();
-        green3.add(new DevelopmentCard("33",9,new Requirements(new Pair<>(ResourceType.SHIELD,6)),3,DevelopmentColorType.GREEN,new Requirements(new Pair<>(ResourceType.COIN,2)),new Pair<>(NonPhysicalResourceType.FAITH_POINT,2),new Pair<>(ResourceType.STONE,3)));
-        green3.add(new DevelopmentCard("37",10,new Requirements(new Pair<>(ResourceType.SHIELD,5),new Pair<>(ResourceType.SERVANT,2)),3,DevelopmentColorType.GREEN,new Requirements(new Pair<>(ResourceType.COIN,1),new Pair<>(ResourceType.SERVANT,1)),new Pair<>(ResourceType.SHIELD,2),new Pair<>(ResourceType.STONE,2),new Pair<>(NonPhysicalResourceType.FAITH_POINT,1)));
-        green3.add(new DevelopmentCard("41",11,new Requirements(new Pair<>(ResourceType.SHIELD,7)),3,DevelopmentColorType.GREEN,new Requirements(new Pair<>(ResourceType.SERVANT,1)),new Pair<>(ResourceType.COIN,1),new Pair<>(NonPhysicalResourceType.FAITH_POINT,3)));
-        green3.add(new DevelopmentCard("45",12,new Requirements(new Pair<>(ResourceType.SHIELD,4),new Pair<>(ResourceType.COIN,4)),3,DevelopmentColorType.GREEN,new Requirements(new Pair<>(ResourceType.STONE,1)),new Pair<>(ResourceType.SHIELD,1),new Pair<>(ResourceType.COIN,3)));
-        green3.shuffle();
-        ret.add(green3);
-
-        Deck<DevelopmentCard> blue1 = new Deck<>();
-        blue1.add(new DevelopmentCard("3",1,new Requirements(new Pair<>(ResourceType.COIN,2)),1,DevelopmentColorType.BLUE,new Requirements(new Pair<>(ResourceType.SHIELD,1)),new Pair<>(NonPhysicalResourceType.FAITH_POINT,1)));
-        blue1.add(new DevelopmentCard("7",2,new Requirements(new Pair<>(ResourceType.COIN,1),new Pair<>(ResourceType.SERVANT,1),new Pair<>(ResourceType.STONE,1)),1,DevelopmentColorType.BLUE,new Requirements(new Pair<>(ResourceType.SERVANT,1)),new Pair<>(ResourceType.STONE,1)));
-        blue1.add(new DevelopmentCard("11",3,new Requirements(new Pair<>(ResourceType.COIN,3)),1,DevelopmentColorType.BLUE,new Requirements(new Pair<>(ResourceType.STONE,2)),new Pair<>(ResourceType.COIN,1),new Pair<>(ResourceType.SHIELD,1),new Pair<>(ResourceType.SERVANT,1)));
-        blue1.add(new DevelopmentCard("15",4,new Requirements(new Pair<>(ResourceType.COIN,2),new Pair<>(ResourceType.SERVANT,2)),1,DevelopmentColorType.BLUE,new Requirements(new Pair<>(ResourceType.STONE,1),new Pair<>(ResourceType.SHIELD,1)),new Pair<>(ResourceType.SERVANT,2),new Pair<>(NonPhysicalResourceType.FAITH_POINT,1)));
-        blue1.shuffle();
-        ret.add(blue1);
-
-        Deck<DevelopmentCard> blue2 = new Deck<>();
-        blue2.add(new DevelopmentCard("19",5,new Requirements(new Pair<>(ResourceType.COIN,4)),2,DevelopmentColorType.BLUE,new Requirements(new Pair<>(ResourceType.SERVANT,1)),new Pair<>(NonPhysicalResourceType.FAITH_POINT,2)));
-        blue2.add(new DevelopmentCard("23",6,new Requirements(new Pair<>(ResourceType.COIN,3),new Pair<>(ResourceType.STONE,2)),2,DevelopmentColorType.BLUE,new Requirements(new Pair<>(ResourceType.COIN,1),new Pair<>(ResourceType.STONE,1)),new Pair<>(ResourceType.SERVANT,3)));
-        blue2.add(new DevelopmentCard("27",7,new Requirements(new Pair<>(ResourceType.COIN,5)),2,DevelopmentColorType.BLUE,new Requirements(new Pair<>(ResourceType.SERVANT,2)),new Pair<>(ResourceType.SHIELD,2),new Pair<>(NonPhysicalResourceType.FAITH_POINT,2)));
-        blue2.add(new DevelopmentCard("31",8,new Requirements(new Pair<>(ResourceType.COIN,3),new Pair<>(ResourceType.STONE,3)),2,DevelopmentColorType.BLUE,new Requirements(new Pair<>(ResourceType.SERVANT,1)),new Pair<>(ResourceType.STONE,2),new Pair<>(NonPhysicalResourceType.FAITH_POINT,1)));
-        blue2.shuffle();
-        ret.add(blue2);
-
-        Deck<DevelopmentCard> blue3 = new Deck<>();
-        blue3.add(new DevelopmentCard("35",9,new Requirements(new Pair<>(ResourceType.COIN,6)),3,DevelopmentColorType.BLUE,new Requirements(new Pair<>(ResourceType.SERVANT,2)),new Pair<>(NonPhysicalResourceType.FAITH_POINT,2),new Pair<>(ResourceType.SHIELD,3)));
-        blue3.add(new DevelopmentCard("39",10,new Requirements(new Pair<>(ResourceType.COIN,5),new Pair<>(ResourceType.STONE,2)),3,DevelopmentColorType.BLUE,new Requirements(new Pair<>(ResourceType.COIN,1),new Pair<>(ResourceType.SHIELD,1)),new Pair<>(ResourceType.SERVANT,2),new Pair<>(ResourceType.STONE,2),new Pair<>(NonPhysicalResourceType.FAITH_POINT,1)));
-        blue3.add(new DevelopmentCard("43",11,new Requirements(new Pair<>(ResourceType.COIN,7)),3,DevelopmentColorType.BLUE,new Requirements(new Pair<>(ResourceType.STONE,1)),new Pair<>(ResourceType.SHIELD,1),new Pair<>(NonPhysicalResourceType.FAITH_POINT,3)));
-        blue3.add(new DevelopmentCard("47",12,new Requirements(new Pair<>(ResourceType.COIN,4),new Pair<>(ResourceType.STONE,4)),3,DevelopmentColorType.BLUE,new Requirements(new Pair<>(ResourceType.SERVANT,1)),new Pair<>(ResourceType.COIN,1),new Pair<>(ResourceType.SHIELD,3)));
-        blue3.shuffle();
-        ret.add(blue3);
-
-        Deck<DevelopmentCard> yellow1 = new Deck<>();
-        yellow1.add(new DevelopmentCard("4",1,new Requirements(new Pair<>(ResourceType.STONE,2)),1,DevelopmentColorType.YELLOW,new Requirements(new Pair<>(ResourceType.SERVANT,1)),new Pair<>(NonPhysicalResourceType.FAITH_POINT,1)));
-        yellow1.add(new DevelopmentCard("8",2,new Requirements(new Pair<>(ResourceType.STONE,1),new Pair<>(ResourceType.SHIELD,1),new Pair<>(ResourceType.COIN,1)),1,DevelopmentColorType.YELLOW,new Requirements(new Pair<>(ResourceType.SHIELD,1)),new Pair<>(ResourceType.COIN,1)));
-        yellow1.add(new DevelopmentCard("12",3,new Requirements(new Pair<>(ResourceType.STONE,3)),1,DevelopmentColorType.YELLOW,new Requirements(new Pair<>(ResourceType.SHIELD,2)),new Pair<>(ResourceType.COIN,1),new Pair<>(ResourceType.STONE,1),new Pair<>(ResourceType.SERVANT,1)));
-        yellow1.add(new DevelopmentCard("16",4,new Requirements(new Pair<>(ResourceType.STONE,2),new Pair<>(ResourceType.SHIELD,2)),1,DevelopmentColorType.YELLOW,new Requirements(new Pair<>(ResourceType.COIN,1),new Pair<>(ResourceType.SERVANT,1)),new Pair<>(ResourceType.SHIELD,2),new Pair<>(NonPhysicalResourceType.FAITH_POINT,1)));
-        yellow1.shuffle();
-        ret.add(yellow1);
-
-        Deck<DevelopmentCard> yellow2 = new Deck<>();
-        yellow2.add(new DevelopmentCard("20",5,new Requirements(new Pair<>(ResourceType.STONE,4)),2,DevelopmentColorType.YELLOW,new Requirements(new Pair<>(ResourceType.SHIELD,1)),new Pair<>(NonPhysicalResourceType.FAITH_POINT,2)));
-        yellow2.add(new DevelopmentCard("24",6,new Requirements(new Pair<>(ResourceType.STONE,3),new Pair<>(ResourceType.SHIELD,2)),2,DevelopmentColorType.YELLOW,new Requirements(new Pair<>(ResourceType.SHIELD,1),new Pair<>(ResourceType.STONE,1)),new Pair<>(ResourceType.COIN,3)));
-        yellow2.add(new DevelopmentCard("28",7,new Requirements(new Pair<>(ResourceType.STONE,5)),2,DevelopmentColorType.YELLOW,new Requirements(new Pair<>(ResourceType.SHIELD,2)),new Pair<>(ResourceType.SERVANT,2),new Pair<>(NonPhysicalResourceType.FAITH_POINT,2)));
-        yellow2.add(new DevelopmentCard("32",8,new Requirements(new Pair<>(ResourceType.STONE,3),new Pair<>(ResourceType.SERVANT,3)),2,DevelopmentColorType.YELLOW,new Requirements(new Pair<>(ResourceType.SHIELD,1)),new Pair<>(ResourceType.COIN,2),new Pair<>(NonPhysicalResourceType.FAITH_POINT,1)));
-        yellow2.shuffle();
-        ret.add(yellow2);
-
-        Deck<DevelopmentCard> yellow3 = new Deck<>();
-        yellow3.add(new DevelopmentCard("36",9,new Requirements(new Pair<>(ResourceType.STONE,6)),3,DevelopmentColorType.YELLOW,new Requirements(new Pair<>(ResourceType.SHIELD,2)),new Pair<>(NonPhysicalResourceType.FAITH_POINT,2),new Pair<>(ResourceType.SERVANT,3)));
-        yellow3.add(new DevelopmentCard("40",10,new Requirements(new Pair<>(ResourceType.STONE,5),new Pair<>(ResourceType.SERVANT,2)),3,DevelopmentColorType.YELLOW,new Requirements(new Pair<>(ResourceType.STONE,1),new Pair<>(ResourceType.SERVANT,1)),new Pair<>(ResourceType.COIN,2),new Pair<>(ResourceType.SHIELD,2),new Pair<>(NonPhysicalResourceType.FAITH_POINT,1)));
-        yellow3.add(new DevelopmentCard("44",11,new Requirements(new Pair<>(ResourceType.STONE,7)),3,DevelopmentColorType.YELLOW,new Requirements(new Pair<>(ResourceType.SHIELD,1)),new Pair<>(ResourceType.SERVANT,1),new Pair<>(NonPhysicalResourceType.FAITH_POINT,3)));
-        yellow3.add(new DevelopmentCard("48",12,new Requirements(new Pair<>(ResourceType.STONE,4),new Pair<>(ResourceType.SERVANT,4)),3,DevelopmentColorType.YELLOW,new Requirements(new Pair<>(ResourceType.SHIELD,1)),new Pair<>(ResourceType.STONE,1),new Pair<>(ResourceType.SERVANT,3)));
-        yellow3.shuffle();
-        ret.add(yellow3);
-
-        Deck<DevelopmentCard> purple1 = new Deck<>();
-        purple1.add(new DevelopmentCard("2",1,new Requirements(new Pair<>(ResourceType.SERVANT,2)),1,DevelopmentColorType.PURPLE,new Requirements(new Pair<>(ResourceType.STONE,1)),new Pair<>(NonPhysicalResourceType.FAITH_POINT,1)));
-        purple1.add(new DevelopmentCard("6",2,new Requirements(new Pair<>(ResourceType.SERVANT,1),new Pair<>(ResourceType.SHIELD,1),new Pair<>(ResourceType.COIN,1)),1,DevelopmentColorType.PURPLE,new Requirements(new Pair<>(ResourceType.COIN,1)),new Pair<>(ResourceType.SHIELD,1)));
-        purple1.add(new DevelopmentCard("10",3,new Requirements(new Pair<>(ResourceType.SERVANT,3)),1,DevelopmentColorType.PURPLE,new Requirements(new Pair<>(ResourceType.COIN,2)),new Pair<>(ResourceType.SHIELD,1),new Pair<>(ResourceType.STONE,1),new Pair<>(ResourceType.SERVANT,1)));
-        purple1.add(new DevelopmentCard("14",4,new Requirements(new Pair<>(ResourceType.SERVANT,2),new Pair<>(ResourceType.STONE,2)),1,DevelopmentColorType.PURPLE,new Requirements(new Pair<>(ResourceType.COIN,1),new Pair<>(ResourceType.SHIELD,1)),new Pair<>(ResourceType.STONE,2),new Pair<>(NonPhysicalResourceType.FAITH_POINT,1)));
-        purple1.shuffle();
-        ret.add(purple1);
-
-        Deck<DevelopmentCard> purple2 = new Deck<>();
-        purple2.add(new DevelopmentCard("18",5,new Requirements(new Pair<>(ResourceType.SERVANT,4)),2,DevelopmentColorType.PURPLE,new Requirements(new Pair<>(ResourceType.COIN,1)),new Pair<>(NonPhysicalResourceType.FAITH_POINT,2)));
-        purple2.add(new DevelopmentCard("22",6,new Requirements(new Pair<>(ResourceType.SERVANT,3),new Pair<>(ResourceType.COIN,2)),2,DevelopmentColorType.PURPLE,new Requirements(new Pair<>(ResourceType.COIN,1),new Pair<>(ResourceType.SERVANT,1)),new Pair<>(ResourceType.SHIELD,3)));
-        purple2.add(new DevelopmentCard("26",7,new Requirements(new Pair<>(ResourceType.SERVANT,5)),2,DevelopmentColorType.PURPLE,new Requirements(new Pair<>(ResourceType.STONE,2)),new Pair<>(ResourceType.COIN,2),new Pair<>(NonPhysicalResourceType.FAITH_POINT,2)));
-        purple2.add(new DevelopmentCard("30",8,new Requirements(new Pair<>(ResourceType.SERVANT,3),new Pair<>(ResourceType.SHIELD,3)),2,DevelopmentColorType.PURPLE,new Requirements(new Pair<>(ResourceType.SHIELD,1)),new Pair<>(ResourceType.SERVANT,2),new Pair<>(NonPhysicalResourceType.FAITH_POINT,1)));
-        purple2.shuffle();
-        ret.add(purple2);
-
-        Deck<DevelopmentCard> purple3 = new Deck<>();
-        purple3.add(new DevelopmentCard("34",9,new Requirements(new Pair<>(ResourceType.SERVANT,6)),3,DevelopmentColorType.PURPLE,new Requirements(new Pair<>(ResourceType.STONE,2)),new Pair<>(NonPhysicalResourceType.FAITH_POINT,2),new Pair<>(ResourceType.COIN,3)));
-        purple3.add(new DevelopmentCard("38",10,new Requirements(new Pair<>(ResourceType.SERVANT,5),new Pair<>(ResourceType.COIN,2)),3,DevelopmentColorType.PURPLE,new Requirements(new Pair<>(ResourceType.STONE,1),new Pair<>(ResourceType.SHIELD,1)),new Pair<>(ResourceType.COIN,2),new Pair<>(ResourceType.SERVANT,2),new Pair<>(NonPhysicalResourceType.FAITH_POINT,1)));
-        purple3.add(new DevelopmentCard("42",11,new Requirements(new Pair<>(ResourceType.SERVANT,7)),3,DevelopmentColorType.PURPLE,new Requirements(new Pair<>(ResourceType.COIN,1)),new Pair<>(ResourceType.STONE,1),new Pair<>(NonPhysicalResourceType.FAITH_POINT,3)));
-        purple3.add(new DevelopmentCard("46",12,new Requirements(new Pair<>(ResourceType.SERVANT,4),new Pair<>(ResourceType.SHIELD,4)),3,DevelopmentColorType.PURPLE,new Requirements(new Pair<>(ResourceType.COIN,1)),new Pair<>(ResourceType.STONE,3),new Pair<>(ResourceType.SERVANT,1)));
-        purple3.shuffle();
-        ret.add(purple3);
-
+    private static List<Deck<DevelopmentCard>> generateDevelopmentCards() throws IOException {
+        List<Deck<DevelopmentCard>> ret = FileManager.getInstance().readDevelopmentCardsDecks();
+        ret.forEach(Deck::shuffle);
         return ret;
     }
 
-    private static Deck<LeaderCard> generateLeaderCards(){
-        Deck<LeaderCard> ret = new Deck<>();
-        ret.add(new DiscountLeaderCard("49",2,new Requirements(new Triple<>(DevelopmentColorType.YELLOW,0,1),new Triple<>(DevelopmentColorType.GREEN,0,1)),ResourceType.SERVANT));
-        ret.add(new DiscountLeaderCard("50",2,new Requirements(new Triple<>(DevelopmentColorType.BLUE,0,1),new Triple<>(DevelopmentColorType.PURPLE,0,1)),ResourceType.SHIELD));
-        ret.add(new DiscountLeaderCard("51",2,new Requirements(new Triple<>(DevelopmentColorType.GREEN,0,1),new Triple<>(DevelopmentColorType.BLUE,0,1)),ResourceType.STONE));
-        ret.add(new DiscountLeaderCard("52",2,new Requirements(new Triple<>(DevelopmentColorType.YELLOW,0,1),new Triple<>(DevelopmentColorType.PURPLE,0,1)),ResourceType.COIN));
-
-        ret.add(new DepotLeaderCard("53",3,new Requirements(new Pair<>(ResourceType.COIN,5)),ResourceType.STONE));
-        ret.add(new DepotLeaderCard("54",3,new Requirements(new Pair<>(ResourceType.STONE,5)),ResourceType.SERVANT));
-        ret.add(new DepotLeaderCard("55",3,new Requirements(new Pair<>(ResourceType.SERVANT,5)),ResourceType.SHIELD));
-        ret.add(new DepotLeaderCard("56",3,new Requirements(new Pair<>(ResourceType.SHIELD,5)),ResourceType.COIN));
-
-        ret.add(new WhiteMarbleLeaderCard("57",5,new Requirements(new Triple<>(DevelopmentColorType.YELLOW,0,2),new Triple<>(DevelopmentColorType.BLUE,0,1)),ResourceType.SERVANT));
-        ret.add(new WhiteMarbleLeaderCard("58",5,new Requirements(new Triple<>(DevelopmentColorType.GREEN,0,2),new Triple<>(DevelopmentColorType.PURPLE,0,1)),ResourceType.SHIELD));
-        ret.add(new WhiteMarbleLeaderCard("59",5,new Requirements(new Triple<>(DevelopmentColorType.BLUE,0,2),new Triple<>(DevelopmentColorType.YELLOW,0,1)),ResourceType.STONE));
-        ret.add(new WhiteMarbleLeaderCard("60",5,new Requirements(new Triple<>(DevelopmentColorType.PURPLE,0,2),new Triple<>(DevelopmentColorType.GREEN,0,1)),ResourceType.COIN));
-
-        ret.add(new ProductionLeaderCard("61",4,new Requirements(new Triple<>(DevelopmentColorType.YELLOW,2,1)),new Requirements(new Pair<>(ResourceType.SHIELD,1))));
-        ret.add(new ProductionLeaderCard("62",4,new Requirements(new Triple<>(DevelopmentColorType.BLUE,2,1)),new Requirements(new Pair<>(ResourceType.SERVANT,1))));
-        ret.add(new ProductionLeaderCard("63",4,new Requirements(new Triple<>(DevelopmentColorType.PURPLE,2,1)),new Requirements(new Pair<>(ResourceType.STONE,1))));
-        ret.add(new ProductionLeaderCard("64",4,new Requirements(new Triple<>(DevelopmentColorType.GREEN,2,1)),new Requirements(new Pair<>(ResourceType.COIN,1))));
-
+    private static Deck<LeaderCard> generateLeaderCards() throws IOException {
+        Deck<LeaderCard> ret = FileManager.getInstance().readLeaderCards();
         ret.shuffle();
         return ret;
     }

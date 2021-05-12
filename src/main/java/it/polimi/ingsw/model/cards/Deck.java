@@ -10,7 +10,11 @@ public class Deck <E> implements Iterable<E> {
     private final List<E> cards;
 
     public Deck() {
-        cards = new ArrayList<>();
+        this(new ArrayList<>());
+    }
+
+    public Deck(List<E> cards){
+        this.cards = cards;
     }
 
     /**

@@ -82,11 +82,11 @@ public class Serializer {
         return gson.fromJson(serializedCard, LeaderCard.class);
     }
 
-    public static String serializeLeaderCardDeck(LeaderCard[] list) {
+    public static String serializeLeaderCardList(LeaderCard[] list) {
         return new Gson().toJson(list);
     }
 
-    public static List<LeaderCard> deserializeLeaderCardDeck(String serializedCard) {
+    public static List<LeaderCard> deserializeLeaderCardList(String serializedCard) {
         GsonBuilder gsonbuilder = new GsonBuilder();
         gsonbuilder.registerTypeAdapter(Requirements.class, new RequirementsCreator());
         gsonbuilder.registerTypeAdapter(LeaderCard.class, new LeaderCardCreator());

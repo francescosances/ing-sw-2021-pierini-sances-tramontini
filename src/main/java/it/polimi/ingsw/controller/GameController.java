@@ -41,7 +41,7 @@ public class GameController implements PlayerStatusListener {
      * Constructor that initialize a new match without players
      * @param matchName the name of the match that will be created
      */
-    public GameController(String matchName, int playersNumber, StatusObserver statusObserver){
+    public GameController(String matchName, int playersNumber, StatusObserver statusObserver) {
         if (playersNumber == 1)
             match = new SoloMatch(matchName);
         else
@@ -68,7 +68,7 @@ public class GameController implements PlayerStatusListener {
             final PlayerController currentPlayerController = getPlayerController(username);
             switch (message.getType()) {
                 case LEADER_CARDS_CHOICE:
-                    leaderCardsChoice(username, Serializer.deserializeLeaderCardDeck(message.getData("leaderCards")));
+                    leaderCardsChoice(username, Serializer.deserializeLeaderCardList(message.getData("leaderCards")));
                     break;
                 case START_RESOURCES:
                     currentPlayerController.chooseStartResources(Serializer.deserializeResources(message.getData("resources")));

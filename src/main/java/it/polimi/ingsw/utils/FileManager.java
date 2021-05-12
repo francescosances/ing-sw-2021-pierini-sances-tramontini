@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.cards.Deck;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
+import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.serialization.Serializer;
 
 import java.io.*;
@@ -62,5 +63,17 @@ public class FileManager {
         if(ret.getMaxPlayersNumber() == 1)
             ret= Serializer.deserializeSoloMatchState(matchJSON);
         return ret;
+    }
+
+    public List<Deck<DevelopmentCard>> readDevelopmentCardsDecks() throws IOException {
+        File cardsFile = new File(ROOT_FOLDER_NAME+"/development_cards.json");
+        BufferedReader reader = new BufferedReader(new FileReader(cardsFile));
+        return Serializer.deserializeDevelopmentCardsDeckList(reader.readLine());
+    }
+
+    public Deck<LeaderCard> readLeaderCards() throws IOException {
+        File cardsFile = new File(ROOT_FOLDER_NAME+"/leader_cards.json");
+        BufferedReader reader = new BufferedReader(new FileReader(cardsFile));
+        return new Deck<>(Serializer.deserializeLeaderCardList(reader.readLine()));
     }
 }
