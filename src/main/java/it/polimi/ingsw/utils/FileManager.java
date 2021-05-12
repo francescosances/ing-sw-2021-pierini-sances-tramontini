@@ -74,6 +74,8 @@ public class FileManager {
     public Deck<LeaderCard> readLeaderCards() throws IOException {
         File cardsFile = new File(ROOT_FOLDER_NAME+"/leader_cards.json");
         BufferedReader reader = new BufferedReader(new FileReader(cardsFile));
-        return new Deck<>(Serializer.deserializeLeaderCardList(reader.readLine()));
+        return Serializer.deserializeLeaderCardDeck(reader.readLine());
     }
+
+
 }

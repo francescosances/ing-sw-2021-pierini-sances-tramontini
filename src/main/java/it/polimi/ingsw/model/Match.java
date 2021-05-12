@@ -191,6 +191,10 @@ public class Match {
 
     public void endTurn(){}
 
+    public Deck<LeaderCard> getLeaderCards() {
+        return leaderCards;
+    }
+
     public List<Deck<DevelopmentCard>> getDevelopmentCardDecks() {
         return developmentDecks;
     }

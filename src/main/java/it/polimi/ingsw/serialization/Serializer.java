@@ -96,6 +96,16 @@ public class Serializer {
         return gson.fromJson(serializedCard, type);
     }
 
+    public static Deck<LeaderCard> deserializeLeaderCardDeck(String serializedCard) {
+        GsonBuilder gsonbuilder = new GsonBuilder();
+        gsonbuilder.registerTypeAdapter(Requirements.class, new RequirementsCreator());
+        gsonbuilder.registerTypeAdapter(LeaderCard.class, new LeaderCardCreator());
+
+        Gson gson = gsonbuilder.create();
+        Type type = new TypeToken<Deck<LeaderCard>>(){}.getType();
+        return gson.fromJson(serializedCard, type);
+    }
+
     public static String serializeMarket(Market market) {
         return new Gson().toJson(market);
     }

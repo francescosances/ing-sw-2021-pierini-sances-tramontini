@@ -226,7 +226,7 @@ public class PlayerController {
         LeaderCard[] automaticallyChosen = {leaderCardList.get(0),leaderCardList.get(1)};
         for (LeaderCard card : automaticallyChosen) {
             playerBoard.addLeaderCard(card);
-            playerBoard.getMatch().chooseLeaderCard(card);//TODO: controllare che le carte vengano effetivamente rimosse dal mazzo
+            playerBoard.getMatch().chooseLeaderCard(card);
         }
         Resource[] randomResources = new Resource[resourcesToChoose];
         for(int i=0;i<resourcesToChoose;i++)
@@ -244,7 +244,7 @@ public class PlayerController {
         leaderCardsChooser = cards -> {
             for (LeaderCard card : cards) {
                 playerBoard.addLeaderCard(card);
-                playerBoard.getMatch().chooseLeaderCard(card);//TODO: controllare che le carte vengano effetivamente rimosse dal mazzo
+                playerBoard.getMatch().chooseLeaderCard(card);
             }
             turnEnded();
         };
