@@ -9,6 +9,8 @@ import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.serialization.Serializer;
 
 import java.io.*;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
@@ -27,8 +29,12 @@ public class FileManager {
         return instance;
     }
 
-    private void checkFolders(){
+    protected void checkFolders(){
         new File("./"+ROOT_FOLDER_NAME+"/"+MATCHES_FOLDER_NAME).mkdirs();
+    }
+
+    protected String fileName(String s){
+       return s.replaceAll("\\W+", "");
     }
 
     public synchronized Map<String,List<String>> readMatchesList() throws IOException {
@@ -48,7 +54,7 @@ public class FileManager {
 
     public synchronized void writeMatchStatus(Match match) throws IOException {
         checkFolders();
-        File matchFile = new File(ROOT_FOLDER_NAME+"/"+MATCHES_FOLDER_NAME+"/"+match.getMatchName()+".json");//TODO:pulire il nome del file
+        File matchFile = new File(ROOT_FOLDER_NAME+"/"+MATCHES_FOLDER_NAME+"/"+fileName(match.getMatchName())+".json");
         matchFile.createNewFile();
         FileWriter writer = new FileWriter(matchFile);
         writer.write(Serializer.serializeMatchState(match));
@@ -59,7 +65,7 @@ public class FileManager {
         File matchFile = new File(ROOT_FOLDER_NAME+"/"+MATCHES_FOLDER_NAME+"/"+matchName+".json");
         BufferedReader reader = new BufferedReader(new FileReader(matchFile));
         String matchJSON = reader.readLine();
-        Match ret = Serializer.deserializeMatchState(matchJSON);//TODO: controllare la creazione di match all'interno del metodo, clonare all'esterno
+        Match ret = Serializer.deserializeMatchState(matchJSON);
         if(ret.getMaxPlayersNumber() == 1)
             ret= Serializer.deserializeSoloMatchState(matchJSON);
         return ret;
