@@ -8,6 +8,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.util.StringConverter;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,18 +45,23 @@ public class SelectLobbySceneController extends Controller{
         lobbySelector.setValue(availableLobbies.get(0));
     }
 
-    private int askNumberOfPlayers(){
+    private Optional<Integer> askNumberOfPlayers(){
         TextInputDialog td = new TextInputDialog();
         td.setHeaderText("Choose number of players:");
         td.setContentText("Insert a number between 1 and 4");
-        td.showAndWait();
-        try {
-            int res = Integer.parseInt(td.getEditor().getText());
-            if(res < 0 || res > 4)
+        Optional<String> dialogResult = td.showAndWait();
+        if (dialogResult.isPresent()) {
+            try {
+                int res = Integer.parseInt(dialogResult.get());
+                if(res < 0 || res > 4)
+                    return askNumberOfPlayers();
+                return Optional.of(res);
+            }catch (Exception e){
                 return askNumberOfPlayers();
-            return res;
-        }catch (Exception e){
-            return askNumberOfPlayers();
+            }
+        } else {
+            // cancel have been pressed.
+            return Optional.empty();
         }
     }
 
@@ -65,7 +71,8 @@ public class SelectLobbySceneController extends Controller{
         if(selected == null)
             return;
         if(selected.getSecond() == 0 && selected.getThird() == 0) {
-            clientController.createNewLobby(askNumberOfPlayers());
+            Optional<Integer> result = askNumberOfPlayers();
+            result.ifPresent(integer -> clientController.createNewLobby(integer));
         } else
             clientController.lobbyChoice(selected.getFirst());
     }
