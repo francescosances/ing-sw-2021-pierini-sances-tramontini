@@ -79,7 +79,6 @@ public class GameController implements PlayerStatusListener {
     public void handleReceivedGameMessage(Message message, String username){
         Gson gson = new Gson();
         try {
-            System.out.println("il current player index è "+match.getCurrentPlayerIndex()+" "+players.get(match.getCurrentPlayerIndex()).getUsername());
             if(!username.equals(players.get(match.getCurrentPlayerIndex()).getUsername())){
                 System.out.println("Invalid message received from "+username);
                 return;
@@ -144,7 +143,6 @@ public class GameController implements PlayerStatusListener {
             setPhase(Match.GamePhase.PLAYERS_SETUP);
         }else {
             setSuspended(false);
-            System.out.println("settoLa fase a "+match.getCurrentPhase());
             setPhase(match.getCurrentPhase());
         }
     }
