@@ -13,6 +13,7 @@ import it.polimi.ingsw.view.VirtualView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class GameController implements PlayerStatusListener {
 
@@ -61,6 +62,7 @@ public class GameController implements PlayerStatusListener {
     public void handleReceivedGameMessage(Message message, String username){
         Gson gson = new Gson();
         try {
+            System.out.println("il current player index è "+match.getCurrentPlayerIndex()+" "+players.get(match.getCurrentPlayerIndex()).getUsername());
             if(!username.equals(players.get(match.getCurrentPlayerIndex()).getUsername())){
                 System.out.println("Invalid message received from "+username);
                 return;
@@ -117,11 +119,18 @@ public class GameController implements PlayerStatusListener {
      * Starts the match ending the phase of adding players. The firt player is chosen randomly.
      */
     public void start(){
-        match.setCurrentPlayerIndex((int) (Math.random() * players.size()));
         match.setStarted(true);
-        for(int i=0;i<players.size();i++)
-            players.get((match.getCurrentPlayerIndex()+i)%players.size()).setPlayerIndex(i);
-        setPhase(Match.GamePhase.PLAYERS_SETUP);
+        if(!isSuspended()) {
+            match.setCurrentPlayerIndex(new Random().nextInt(players.size()));
+            for(int i=0;i<players.size();i++)
+                players.get((match.getCurrentPlayerIndex()+i)%players.size()).setPlayerIndex(i);
+            setPhase(Match.GamePhase.PLAYERS_SETUP);
+            System.out.println("not suspended");
+        }else {
+            setSuspended(false);
+            System.out.println("settoLa fase a "+match.getCurrentPhase());
+            setPhase(match.getCurrentPhase());
+        }
     }
 
     /**
@@ -279,6 +288,7 @@ public class GameController implements PlayerStatusListener {
      * Move the current player to the next one
      */
     public void nextTurn(){
+        System.out.println("next turn");
         match.setCurrentPlayerIndex((match.getCurrentPlayerIndex()+1)%players.size());
         if(players.stream().noneMatch(PlayerController::isActive)) //TODO: No one is active (può succedere che si arrivi qui?)
             return;
@@ -351,12 +361,16 @@ public class GameController implements PlayerStatusListener {
         return players.stream().filter(x->x.getUsername().equals(username)).anyMatch(PlayerController::isActive);
     }
 
-
+    //TODO: javadoc
     public boolean isSuspended() {
         return suspended;
     }
 
     public void setSuspended(boolean suspended) {
         this.suspended = suspended;
+    }
+
+    public List<PlayerController> getPlayers() {
+        return players;
     }
 }

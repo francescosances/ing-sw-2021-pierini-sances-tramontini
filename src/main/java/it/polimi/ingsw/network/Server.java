@@ -243,13 +243,21 @@ public class Server implements StatusObserver {
      * @param clientHandler the ClientHandler that manages the socket connection with the client
      */
     private synchronized void reconnect(String username, ClientHandler clientHandler) {
-        if(getGameController(username).isSuspended()){
-            //TODO: far ripartire una partita sospesa
-        }
         PlayerController playerController = getGameController(username).getPlayerController(username);
         playerController.setVirtualView(new VirtualView(clientHandler)); //Set the virtual view with the new clientHandler reference
         playerController.activate();
         playerController.getVirtualView().resumeMatch(getGameController(username).getMatch());
+        System.out.println("match suspended"+getGameController(username).isSuspended());
+        if(getGameController(username).isSuspended()){
+            //     if(getGameController(username).getMatch().isFull())
+            System.out.println("conto: "+getGameController(username).getPlayers().stream().filter(PlayerController::isActive).count());
+            System.out.println("totale: "+getGameController(username).getTotalPlayers());
+            if(getGameController(username).getPlayers().stream().filter(PlayerController::isActive).count() == getGameController(username).getTotalPlayers()){
+                getGameController(username).start();
+                System.out.println("avvio");
+            }
+            //TODO: far ripartire una partita sospesa
+        }
     }
 
     /**

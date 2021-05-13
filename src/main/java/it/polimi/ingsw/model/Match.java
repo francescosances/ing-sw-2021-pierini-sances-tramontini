@@ -138,6 +138,7 @@ public class Match {
     }
 
     public void setCurrentPlayerIndex(int currentPlayerIndex) {
+        System.out.println("Modifico il current player index da "+getCurrentPlayerIndex()+" a "+currentPlayerIndex);
         this.currentPlayerIndex = currentPlayerIndex;
     }
 
