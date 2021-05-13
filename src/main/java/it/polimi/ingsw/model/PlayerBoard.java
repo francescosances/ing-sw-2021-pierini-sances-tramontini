@@ -17,7 +17,7 @@ public class PlayerBoard {
     /**
      * A reference to the match
      */
-    private transient final Match match;
+    private transient Match match;
 
     /**
      * Player's username
@@ -281,6 +281,10 @@ public class PlayerBoard {
                 producers.add((ProductionLeaderCard) card);
         });
         return producers;
+    }
+
+    public void setMatch(Match match){
+        this.match = match;
     }
 
     /**

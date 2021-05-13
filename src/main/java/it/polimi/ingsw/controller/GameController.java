@@ -53,6 +53,23 @@ public class GameController implements PlayerStatusListener {
         this.suspended = false;
     }
 
+    private GameController(){
+        players = new ArrayList<>();
+    }
+
+    public static GameController regenerateController(Match match,StatusObserver statusObserver,List<String> players){
+        GameController ret = new GameController();
+        ret.match = match;
+        ret.statusObserver = statusObserver;
+        for(String player : players) {
+            PlayerController playerController = new PlayerController(player, match.getPlayerBoard(player), null);
+            ret.players.add(playerController);
+            playerController.addObserver(ret);
+        }
+        ret.suspended = true;
+        return ret;
+    }
+
 
     /**
      * Method that map a message and an username with the the action that must be executed
@@ -125,7 +142,6 @@ public class GameController implements PlayerStatusListener {
             for(int i=0;i<players.size();i++)
                 players.get((match.getCurrentPlayerIndex()+i)%players.size()).setPlayerIndex(i);
             setPhase(Match.GamePhase.PLAYERS_SETUP);
-            System.out.println("not suspended");
         }else {
             setSuspended(false);
             System.out.println("settoLa fase a "+match.getCurrentPhase());
@@ -149,7 +165,7 @@ public class GameController implements PlayerStatusListener {
      * @param clientHandler the clientHandler that manage the socket connection with the client
      * @return the player controller containing the reference to the virtual view
      */
-    public PlayerController addPlayer(String username, ClientHandler clientHandler){
+    public PlayerController addPlayer(String username, ClientHandler clientHandler,boolean notify){
         PlayerController playerController = getPlayerController(username);
         if(playerController != null){
             //Reactivating existing player
@@ -159,7 +175,13 @@ public class GameController implements PlayerStatusListener {
             players.add(playerController);
         }
         playerController.addObserver(this);
+        if(notify)
+            statusObserver.onStatusChanged(this);
         return playerController;
+    }
+
+    public PlayerController addPlayer(String username, ClientHandler clientHandler){
+        return addPlayer(username,clientHandler,true);
     }
 
     /**
@@ -288,7 +310,6 @@ public class GameController implements PlayerStatusListener {
      * Move the current player to the next one
      */
     public void nextTurn(){
-        System.out.println("next turn");
         match.setCurrentPlayerIndex((match.getCurrentPlayerIndex()+1)%players.size());
         if(players.stream().noneMatch(PlayerController::isActive)) //TODO: No one is active (può succedere che si arrivi qui?)
             return;

@@ -37,18 +37,16 @@ public class Server implements StatusObserver {
         Server ret = new Server();
         try {
             Map<String,List<String>> matchesList = FileManager.getInstance().readMatchesList();
-            System.out.println(matchesList);
             for(Map.Entry<String,List<String>> entry : matchesList.entrySet()){
                 try {
                     Match match = FileManager.getInstance().readMatchStatus(entry.getKey());
-                    GameController gameController = new GameController(entry.getKey(), match.getMaxPlayersNumber(), ret);
-                    gameController.setSuspended(true);
+                    GameController gameController = GameController.regenerateController(match,ret,entry.getValue());
                     for (String username : entry.getValue()) {
-                        gameController.addPlayer(username, null);
                         gameController.getPlayerController(username).deactivate();
                         ret.players.put(username, gameController);
                     }
                 }catch (Exception ignored){
+                    ignored.printStackTrace();
                     log("Unable to load match: "+entry.getKey()+" from local disk");
                 }
             }
@@ -247,16 +245,10 @@ public class Server implements StatusObserver {
         playerController.setVirtualView(new VirtualView(clientHandler)); //Set the virtual view with the new clientHandler reference
         playerController.activate();
         playerController.getVirtualView().resumeMatch(getGameController(username).getMatch());
-        System.out.println("match suspended"+getGameController(username).isSuspended());
         if(getGameController(username).isSuspended()){
-            //     if(getGameController(username).getMatch().isFull())
-            System.out.println("conto: "+getGameController(username).getPlayers().stream().filter(PlayerController::isActive).count());
-            System.out.println("totale: "+getGameController(username).getTotalPlayers());
-            if(getGameController(username).getPlayers().stream().filter(PlayerController::isActive).count() == getGameController(username).getTotalPlayers()){
+             if(getGameController(username).getPlayers().stream().filter(PlayerController::isActive).count() == getGameController(username).getTotalPlayers()){
                 getGameController(username).start();
-                System.out.println("avvio");
             }
-            //TODO: far ripartire una partita sospesa
         }
     }
 

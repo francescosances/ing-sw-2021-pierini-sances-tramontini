@@ -25,7 +25,11 @@ public class Serializer {
         gsonbuilder.registerTypeAdapter(Depot.class, new DepotCreator());
         gsonbuilder.registerTypeAdapter(LeaderCard.class, new LeaderCardCreator());
         gsonbuilder.registerTypeAdapter(Resource.class, new ResourceCreator());
-        return gsonbuilder.create().fromJson(serializedMatch, Match.class);
+        Match ret = gsonbuilder.create().fromJson(serializedMatch, Match.class);
+        for(PlayerBoard board : ret.getPlayers()){
+            board.setMatch(ret);
+        }
+        return  ret;
     }
 
     public static Match deserializeSoloMatchState(String serializedMatch) {
@@ -33,7 +37,11 @@ public class Serializer {
         gsonbuilder.registerTypeAdapter(Requirements.class, new RequirementsCreator());
         gsonbuilder.registerTypeAdapter(Depot.class, new DepotCreator());
         gsonbuilder.registerTypeAdapter(LeaderCard.class, new LeaderCardCreator());
-        return gsonbuilder.create().fromJson(serializedMatch, SoloMatch.class);
+        Match ret = gsonbuilder.create().fromJson(serializedMatch, SoloMatch.class);
+        for(PlayerBoard board : ret.getPlayers()){
+            board.setMatch(ret);
+        }
+        return ret;
     }
 
     public static String serializeDevelopmentCard(DevelopmentCard developmentCard) {
@@ -151,6 +159,7 @@ public class Serializer {
         gsonBuilder.registerTypeAdapter(Depot.class, new DepotCreator());
         gsonBuilder.registerTypeAdapter(LeaderCard.class, new LeaderCardCreator());
         gsonBuilder.registerTypeAdapter(Requirements.class, new RequirementsCreator());
+        gsonBuilder.registerTypeAdapter(Resource.class,new ResourceCreator());
         return gsonBuilder.create().fromJson(json, PlayerBoard.class);
     }
 

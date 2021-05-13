@@ -138,7 +138,6 @@ public class Match {
     }
 
     public void setCurrentPlayerIndex(int currentPlayerIndex) {
-        System.out.println("Modifico il current player index da "+getCurrentPlayerIndex()+" a "+currentPlayerIndex);
         this.currentPlayerIndex = currentPlayerIndex;
     }
 
@@ -211,6 +210,9 @@ public class Match {
         }
     }
 
+    public List<PlayerBoard> getPlayers() {
+        return players;
+    }
 
     @Override
     public boolean equals(Object o) {
