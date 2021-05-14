@@ -189,6 +189,9 @@ public class PlayerController {
         return currentStatus;
     }
 
+    /**
+     * Handles the player setup, giving the initial amount of resources and faith points.
+     */
     public void setup(){
         int faithPoints = 0;
         switch (playerIndex){

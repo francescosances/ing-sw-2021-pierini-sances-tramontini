@@ -53,7 +53,7 @@ public class ClientController {
 
 
     /**
-     * Set the view to Command Line Interface and launch it
+     * Sets the view to Command Line Interface and launches it
      */
     public void startCli() {
         Scanner scanner = new Scanner(System.in);
@@ -63,6 +63,9 @@ public class ClientController {
         view.init();
     }
 
+    /**
+     * Sets the view to Graphical User Interfaces and launches it
+     */
     public void startGui(Stage stage){
         view = new GUI(this,stage);
         view.init();
@@ -185,11 +188,20 @@ public class ClientController {
         lobbyChoice(matchName,-1);
     }
 
+    /**
+     * Creates a new lobby with the specified number of players
+     * @param playersNumber the number of players that can join the match
+     */
     public void createNewLobby(int playersNumber){
         lobbyChoice(null,playersNumber);
     }
 
-    public void lobbyChoice(String matchName,int playersNumber){
+    /**
+     * Sends to the server the player's choice, whether to create a new match or join an existing one
+     * @param matchName the name of the match to join (null to create a new match)
+     * @param playersNumber the number of players in the new match (0 or less to join an existing match)
+     */
+    private void lobbyChoice(String matchName,int playersNumber){
         Message message = new Message(Message.MessageType.LOBBY_CHOICE);
         message.addData("matchOwner", matchName);
         if(playersNumber > 0)

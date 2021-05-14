@@ -37,11 +37,6 @@ public class GameController implements PlayerStatusListener {
      */
     protected boolean suspended;
 
-
-    /**
-     * Constructor that initialize a new match without players
-     * @param matchName the name of the match that will be created
-     */
     public GameController(String matchName, int playersNumber, StatusObserver statusObserver) {
         if (playersNumber == 1)
             match = new SoloMatch(matchName);
@@ -53,6 +48,9 @@ public class GameController implements PlayerStatusListener {
         this.suspended = false;
     }
 
+    /**
+     * Constructor that initialize a new match without players
+     */
     private GameController(){
         players = new ArrayList<>();
     }
@@ -209,6 +207,14 @@ public class GameController implements PlayerStatusListener {
      */
     public String getMatchName(){
         return match.getMatchName();
+    }
+
+    /**
+     * Returns the list of players that have joined the match
+     * @return the list of players that have joined the match
+     */
+    public List<PlayerController> getPlayers() {
+        return players;
     }
 
     /**
@@ -396,9 +402,5 @@ public class GameController implements PlayerStatusListener {
 
     public void setSuspended(boolean suspended) {
         this.suspended = suspended;
-    }
-
-    public List<PlayerController> getPlayers() {
-        return players;
     }
 }
