@@ -1,3 +1,8 @@
+.rootPane {
+    -fx-background-image: url("../images/backgrounds/blue.png");
+    -fx-background-size: stretch;
+}
+
 .developmentcard {
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.28), 10, 0.7, 0, 1) !important;
 }
@@ -12,7 +17,7 @@
 }
 
 .leadercard{
-    -fx-opacity: 0.6;
+    -fx-opacity: 0.7;
 }
 
 .leadercard:hover {
@@ -35,13 +40,13 @@
 }
 
 #marketBtn{
-    -fx-background-image: url("../images/buttons/login.png");
+    -fx-background-image: url("../images/buttons/market.png");
 }
 
 #startProductionBtn{
-    -fx-background-image: url("../images/buttons/login.png");
+    -fx-background-image: url("../images/buttons/activate_production.png");
 }
 
 #buyDevelopmentcardBtn{
-    -fx-background-image: url("../images/buttons/login.png");
+    -fx-background-image: url("../images/buttons/buy_development_card.png");
 }

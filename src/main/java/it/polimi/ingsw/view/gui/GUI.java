@@ -71,6 +71,7 @@ public class GUI implements View {
         });
     }
 
+
     @Override
     public void resumeMatch(PlayerBoard playerBoard) {
 
@@ -139,12 +140,13 @@ public class GUI implements View {
 
     @Override
     public void takeResourcesFromMarket(Market market) {
-
+        Platform.runLater(()-> showMarket(market));
     }
 
     @Override
     public void showMarket(Market market) {
-
+        MarketSceneController controller = (MarketSceneController) loadScene("market_scene");
+        controller.initialize(market);
     }
 
     @Override

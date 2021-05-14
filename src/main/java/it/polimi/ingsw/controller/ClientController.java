@@ -276,6 +276,10 @@ public class ClientController {
         clientSocket.sendMessage(message);
     }
 
+    public View getView(){
+        return view;
+    }
+
     /**
      * Resumes a match suspended after a network disconnection
      * @param playerBoard the PlayerBoard of the match to be resumed

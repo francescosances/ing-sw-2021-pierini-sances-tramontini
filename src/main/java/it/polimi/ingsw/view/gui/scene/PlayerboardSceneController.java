@@ -1,8 +1,11 @@
 package it.polimi.ingsw.view.gui.scene;
 
+import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
+import it.polimi.ingsw.view.gui.GUI;
+import it.polimi.ingsw.view.gui.JavaFXGui;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -128,6 +131,7 @@ public class PlayerboardSceneController extends Controller{
 
     @FXML
     public void goToMarket() {
+        clientController.performAction(Action.TAKE_RESOURCES_FROM_MARKET);
     }
 
     @FXML
