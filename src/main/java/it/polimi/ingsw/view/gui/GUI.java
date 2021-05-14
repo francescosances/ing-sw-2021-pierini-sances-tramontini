@@ -53,7 +53,7 @@ public class GUI implements View {
         stage.setResizable(false);
         stage.setAlwaysOnTop(true);
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setOnCloseRequest((e)->onClose.run());
+        stage.setOnCloseRequest((e)-> onClose.run());
         stage.setTitle(title);
         stage.show();
         return temp.snd;

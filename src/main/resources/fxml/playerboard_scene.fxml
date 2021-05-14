@@ -129,17 +129,17 @@
             </ImageView>
             <ImageView fx:id="vaticanreport0" fitHeight="65.0" fitWidth="69.0" layoutX="210.0" layoutY="191.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
-                  <Image url="@../images/punchboard/quadrato%20giallo.png" />
+                  <Image url="@../images/punchboard/vaticanreport0.png" />
                </image>
             </ImageView>
             <ImageView fx:id="vaticanreport1" fitHeight="65.0" fitWidth="69.0" layoutX="422.0" layoutY="146.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
-                  <Image url="@../images/punchboard/quadrato%20arancione.png" />
+                  <Image url="@../images/punchboard/vaticanreport1.png" />
                </image>
             </ImageView>
             <ImageView fx:id="vaticanreport2" fitHeight="65.0" fitWidth="69.0" layoutX="676.0" layoutY="191.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
-                  <Image url="@../images/punchboard/quadrato%20rosso.png" />
+                  <Image url="@../images/punchboard/vaticanreport2.png" />
                </image>
             </ImageView>
             <ImageView fx:id="marker" fitHeight="74.0" fitWidth="61.0" layoutX="22.0" layoutY="213.0" pickOnBounds="true" preserveRatio="true">
