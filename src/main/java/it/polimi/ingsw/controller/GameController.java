@@ -76,7 +76,7 @@ public class GameController implements PlayerStatusListener {
      * @param message the message received from the client via socket
      * @param username the username of the user that sent the message
      */
-    public void handleReceivedGameMessage(Message message, String username){
+    public synchronized void handleReceivedGameMessage(Message message, String username){
         Gson gson = new Gson();
         try {
             if(!username.equals(players.get(match.getCurrentPlayerIndex()).getUsername())){
