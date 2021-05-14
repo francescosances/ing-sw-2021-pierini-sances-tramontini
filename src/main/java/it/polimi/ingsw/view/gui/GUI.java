@@ -15,6 +15,7 @@ import it.polimi.ingsw.view.gui.scene.*;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.List;
@@ -143,10 +144,22 @@ public class GUI implements View {
         Platform.runLater(()-> showMarket(market));
     }
 
+    private Controller openModal(String sceneName,String title,Runnable onClose){
+        Pair<Scene,Controller> temp = JavaFXGui.loadScene(sceneName,this.clientController);
+        Stage stage = new Stage();
+        stage.setScene(temp.fst);
+        stage.setResizable(false);
+        stage.setAlwaysOnTop(true);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setOnCloseRequest((e)->onClose.run());
+        stage.setTitle(title);
+        stage.show();
+        return temp.snd;
+    }
+
     @Override
     public void showMarket(Market market) {
-        MarketSceneController controller = (MarketSceneController) loadScene("market_scene");
-        controller.initialize(market);
+        ((MarketSceneController)openModal("market_scene","Market",()->clientController.rollback())).initialize(market);
     }
 
     @Override
