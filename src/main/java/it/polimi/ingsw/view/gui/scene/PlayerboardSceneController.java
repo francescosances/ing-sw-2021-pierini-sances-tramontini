@@ -4,8 +4,7 @@ import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
-import it.polimi.ingsw.view.gui.GUI;
-import it.polimi.ingsw.view.gui.JavaFXGui;
+import it.polimi.ingsw.model.storage.Depot;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -16,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
+import java.util.List;
 import java.util.Optional;
 
 public class PlayerboardSceneController extends Controller{
@@ -62,6 +62,48 @@ public class PlayerboardSceneController extends Controller{
     @FXML
     protected Button buyDevelopmentcardBtn;
 
+    @FXML
+    protected ImageView warehouse0;
+
+    @FXML
+    protected ImageView warehouse1;
+
+    @FXML
+    protected ImageView warehouse2;
+
+    @FXML
+    protected ImageView warehouse3;
+
+    @FXML
+    protected ImageView warehouse4;
+
+    @FXML
+    protected ImageView warehouse5;
+
+    @FXML
+    protected ImageView strongbox0;
+
+    @FXML
+    protected ImageView strongbox1;
+
+    @FXML
+    protected ImageView strongbox2;
+
+    @FXML
+    protected ImageView strongbox3;
+
+    @FXML
+    protected ImageView vaticanreport0;
+
+    @FXML
+    protected ImageView vaticanreport1;
+
+    @FXML
+    protected ImageView vaticanreport2;
+
+    @FXML
+    protected ImageView marker;
+
     private PlayerBoard playerBoard;
 
     @FXML
@@ -89,6 +131,26 @@ public class PlayerboardSceneController extends Controller{
             }
             slotIndex++;
         }
+
+        ImageView[][] warehouse = {
+                {warehouse0},
+                {warehouse1,warehouse2},
+                {warehouse3,warehouse4,warehouse5}
+        };
+
+        List<Depot> depots = playerBoard.getWarehouse().getDepots();
+        for(int i=0;i<depots.size();i++){
+            int j;
+            for(j=0;j<depots.get(i).getOccupied();j++){
+                warehouse[i][j].setImage(new Image("/images/resources/"+depots.get(i).getResourceType().toString()+".png"));
+            }
+            for(int k=j;k<depots.get(i).getSize();k++){
+                warehouse[i][k].setVisible(false);
+            }
+        }
+
+
+
     }
 
     private void leaderCardClicked(int cardIndex){

@@ -77,6 +77,76 @@
             <Button fx:id="marketBtn" layoutX="14.0" layoutY="30.0" mnemonicParsing="false" onAction="#goToMarket" prefHeight="48.0" prefWidth="208.0" styleClass="btn" />
             <Button fx:id="startProductionBtn" layoutX="250.0" layoutY="30.0" mnemonicParsing="false" onAction="#startProduction" prefHeight="48.0" prefWidth="208.0" styleClass="btn" />
             <Button fx:id="buyDevelopmentcardBtn" layoutX="487.0" layoutY="30.0" mnemonicParsing="false" onAction="#buyDevelopmentCard" prefHeight="48.0" prefWidth="208.0" styleClass="btn" />
+            <ImageView fx:id="strongbox0" fitHeight="62.0" fitWidth="57.0" layoutX="37.0" layoutY="572.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/resources/COIN.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="strongbox2" fitHeight="62.0" fitWidth="57.0" layoutX="36.0" layoutY="619.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/resources/SERVANT.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="strongbox1" fitHeight="62.0" fitWidth="57.0" layoutX="108.0" layoutY="571.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/resources/SHIELD.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="strongbox3" fitHeight="62.0" fitWidth="57.0" layoutX="107.0" layoutY="619.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/resources/STONE.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="warehouse0" fitHeight="62.0" fitWidth="57.0" layoutX="88.0" layoutY="351.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/resources/SERVANT.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="warehouse1" fitHeight="62.0" fitWidth="57.0" layoutX="64.0" layoutY="408.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/resources/SERVANT.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="warehouse2" fitHeight="62.0" fitWidth="57.0" layoutX="103.0" layoutY="408.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/resources/SERVANT.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="warehouse3" fitHeight="62.0" fitWidth="57.0" layoutX="43.0" layoutY="463.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/resources/SERVANT.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="warehouse4" fitHeight="62.0" fitWidth="57.0" layoutX="82.0" layoutY="463.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/resources/SERVANT.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="warehouse5" fitHeight="62.0" fitWidth="57.0" layoutX="120.0" layoutY="463.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/resources/SERVANT.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="vaticanreport0" fitHeight="65.0" fitWidth="69.0" layoutX="210.0" layoutY="191.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@../images/punchboard/quadrato%20giallo.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="vaticanreport1" fitHeight="65.0" fitWidth="69.0" layoutX="422.0" layoutY="146.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@../images/punchboard/quadrato%20arancione.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="vaticanreport2" fitHeight="65.0" fitWidth="69.0" layoutX="676.0" layoutY="191.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@../images/punchboard/quadrato%20rosso.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="marker" fitHeight="74.0" fitWidth="61.0" layoutX="22.0" layoutY="213.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/punchboard/marker.png" />
+               </image>
+            </ImageView>
          </children>
           </AnchorPane>
     </children>

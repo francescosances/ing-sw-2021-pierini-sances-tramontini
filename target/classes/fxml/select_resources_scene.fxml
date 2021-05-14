@@ -36,7 +36,7 @@
                            <children>
                               <ImageView fx:id="imgcoin" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
                                  <image>
-                                    <Image url="@../images/resources/coin.png" />
+                                    <Image url="@../images/resources/COIN.png" />
                                  </image>
                                  <HBox.margin>
                                     <Insets left="5.0" right="5.0" />
@@ -44,7 +44,7 @@
                               </ImageView>
                               <ImageView fx:id="imgservant" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
                                  <image>
-                                    <Image url="@../images/resources/servant.png" />
+                                    <Image url="@../images/resources/SERVANT.png" />
                                  </image>
                                  <HBox.margin>
                                     <Insets left="5.0" right="5.0" />
@@ -52,7 +52,7 @@
                               </ImageView>
                               <ImageView fx:id="imgshield" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
                                  <image>
-                                    <Image url="@../images/resources/shield.png" />
+                                    <Image url="@../images/resources/SHIELD.png" />
                                  </image>
                                  <HBox.margin>
                                     <Insets left="5.0" right="5.0" />
@@ -60,7 +60,7 @@
                               </ImageView>
                               <ImageView fx:id="imgstone" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
                                  <image>
-                                    <Image url="@../images/resources/stone.png" />
+                                    <Image url="@../images/resources/STONE.png" />
                                  </image>
                                  <HBox.margin>
                                     <Insets left="5.0" right="5.0" />
