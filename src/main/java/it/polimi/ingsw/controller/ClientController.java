@@ -143,6 +143,10 @@ public class ClientController {
                 List<Producer> producers = Serializer.deserializeProducerList(message.getData("productions"));
                 view.chooseProductions(producers,Serializer.deserializePlayerBoard(message.getData("playerboard")));
                 break;
+            case SHOW_PLAYER_LEADER_CARDS:
+                List<LeaderCard> playerLeaderCard = Serializer.deserializeLeaderCardList(message.getData("leaderCards"));
+                view.showPlayerLeaderCards(playerLeaderCard);
+                break;
             default:
                 clientSocket.log("Received unexpected message");
                 clientSocket.log(message.serialize());
@@ -288,4 +292,15 @@ public class ClientController {
         view.showPlayerBoard(playerBoard);
     }
 
+    public void discardLeaderCard(int num) {
+        Message message = new Message(Message.MessageType.DISCARD_LEADER_CARD);
+        message.addData("num", new Gson().toJson(num));
+        clientSocket.sendMessage(message);
+    }
+
+    public void activateLeaderCard(int num) {
+        Message message = new Message(Message.MessageType.ACTIVATE_LEADER_CARD);
+        message.addData("num", new Gson().toJson(num));
+        clientSocket.sendMessage(message);
+    }
 }

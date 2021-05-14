@@ -224,6 +224,16 @@ public class PlayerBoard {
         }
     }
 
+
+    /**
+     * Activates the LeaderCard in the selected position
+     * @param num the position if the LeaderCard to be activated
+     * @throws NotSatisfiedRequirementsException if the LeaderCard cannot be activated
+     */
+    public void activateLeaderCard(int num) throws NotSatisfiedRequirementsException {
+        leaderCards.get(num).activate(this);
+    }
+
     /**
      * Discards the LeaderCard, makes the player gain 1 FaithPoint
      * @param leaderCard the LeaderCard to discard
@@ -239,6 +249,19 @@ public class PlayerBoard {
                 this.gainFaithPoints(1);
             }
         }
+    }
+
+
+    /**
+     * Discards the LeaderCard, makes the player gain 1 FaithPoint
+     * @param num the number of the LeaderCard's position thatdiscarded
+     * @throws EndGameException if the player reaches the last space
+     */
+    public void discardLeaderCard(int num) throws EndGameException {
+        if (leaderCards.get(num).isActive())
+            throw new IllegalArgumentException("You cannot discard active cards");
+        leaderCards.remove(num);
+        this.gainFaithPoints(1);
     }
 
     /**
