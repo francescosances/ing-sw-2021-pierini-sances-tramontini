@@ -5,6 +5,8 @@ import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
 import it.polimi.ingsw.model.storage.Depot;
+import it.polimi.ingsw.utils.Pair;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -12,7 +14,9 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.util.List;
@@ -104,12 +108,46 @@ public class PlayerboardSceneController extends Controller{
     @FXML
     protected ImageView marker;
 
+    @FXML
+    protected StackPane root;
+
+    private double[][] faithTrackCells = {
+            {22,212},
+            {64,212},
+            {106,212},
+            {106,170},
+            {106,128},
+            {148,128},
+            {190,128},
+            {232,128},
+            {276,128},
+            {318,128},
+            {318,170},
+            {318,212},
+            {360,212},
+            {402,212},
+            {446,212},
+            {488,212},
+            {530,212},
+            {530,170},
+            {530,128},
+            {572,128},
+            {614,128},
+            {658,128},
+            {700,128},
+            {742,128},
+            {784,128}
+    };
+
     private PlayerBoard playerBoard;
 
 
     @FXML
     public void initialize(PlayerBoard playerBoard){
         this.playerBoard = playerBoard;
+
+        marker.setX(faithTrackCells[playerBoard.getFaithTrack().getFaithMarker()][0]);
+        marker.setY(faithTrackCells[playerBoard.getFaithTrack().getFaithMarker()][1]);
 
         this.leadercard0.setImage(new Image("/images/cards/FRONT/"+playerBoard.getLeaderCards().get(0).getCardName()+".png"));
         this.leadercard1.setImage(new Image("/images/cards/FRONT/"+playerBoard.getLeaderCards().get(1).getCardName()+".png"));
@@ -150,6 +188,13 @@ public class PlayerboardSceneController extends Controller{
                 warehouse[i][k].setVisible(false);
             }
         }
+
+        ImageView[] popeFavorTiles = {vaticanreport0,vaticanreport1,vaticanreport2};
+        for(int i=0;i<3;i++){
+            if(playerBoard.getFaithTrack().getPopeFavorTiles()[i].isUncovered())
+                popeFavorTiles[i].setVisible(true);
+        }
+
     }
 
     private void leaderCardClicked(int cardIndex){
@@ -202,4 +247,5 @@ public class PlayerboardSceneController extends Controller{
     @FXML
     public void buyDevelopmentCard() {
     }
+
 }
