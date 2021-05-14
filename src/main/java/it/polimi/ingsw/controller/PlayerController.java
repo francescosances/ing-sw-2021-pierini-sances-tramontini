@@ -12,6 +12,7 @@ import it.polimi.ingsw.model.storage.exceptions.UnswappableDepotsException;
 import it.polimi.ingsw.view.VirtualView;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class PlayerController {
 
@@ -321,6 +322,7 @@ public class PlayerController {
     public void askForAction(){
         resetAfterDepotsSwapAction();
         virtualView.askForAction(
+                playerBoard.getMatch().getPlayers().stream().map(PlayerBoard::getUsername).collect(Collectors.toList()),
                 Arrays.stream(Action.ALL_ACTIONS)
                         .filter(x -> x != Action.CANCEL)
                         .filter(x -> !((x == Action.PLAY_LEADER) && this.playerBoard.getAvailableLeaderCards().isEmpty())) //If no leader cards are available, the options are removed from the list
@@ -371,6 +373,7 @@ public class PlayerController {
      */
     public void askForNormalAction(){
         virtualView.askForAction(
+                playerBoard.getMatch().getPlayers().stream().map(PlayerBoard::getUsername).collect(Collectors.toList()),
                 Arrays.stream(Action.NORMAL_ACTIONS)
                         .toArray(Action[]::new));
     }
@@ -596,6 +599,16 @@ public class PlayerController {
      */
     public void showPlayerBoard() {
         this.virtualView.showPlayerBoard(this.playerBoard);
+    }
+
+    /**
+     * shows the player a PlayerBoard
+     * @param playerBoard the PlayerBoard to be shown
+     */
+    public void showPlayerBoard(PlayerBoard playerBoard){
+        this.virtualView.showPlayerBoard(playerBoard);
+        for (PlayerStatusListener x : this.observers)
+            x.onPlayerStatusChanged(this);
     }
 
     /**

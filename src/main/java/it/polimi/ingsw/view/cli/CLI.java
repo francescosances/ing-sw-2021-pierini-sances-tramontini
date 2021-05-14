@@ -694,18 +694,31 @@ public class CLI implements View {
     }
 
     @Override
-    public void askForAction(Action... availableActions) {
+    public void askForAction(List<String> usernames, Action... availableActions) {
         output.println("Which action do you want to perform?");
         for (int i = 0; i < availableActions.length; i++) {
-            output.print("  [" + (i) + "] ");
+            output.print("  [" + i + "] ");
             output.println(availableActions[i].toString());
         }
         int choice = input.nextInt();
-        if (choice >= 0 && choice < availableActions.length)
-            clientController.performAction(availableActions[choice] );
-        else{
+        if (choice >= 0 && choice < availableActions.length) {
+            if (Arrays.asList(availableActions).contains(Action.SHOW_PLAYER_BOARD) &&
+                    Arrays.asList(availableActions).indexOf(Action.SHOW_PLAYER_BOARD) == choice) {
+                output.println("Whose player board do you want to see?");
+                for (int i = 0; i < usernames.size(); i++) {
+                    output.print("    [" + i + "]");
+                    output.println(usernames.get(i));
+                }
+                int player = input.nextInt();
+                while (player < 0 || player >= usernames.size())
+                    showErrorMessage("Invalid choice");
+                clientController.showPlayerBoard(usernames.get(player));
+                return;
+            }
+            clientController.performAction(availableActions[choice]);
+        } else {
             showErrorMessage("Invalid choice");
-            askForAction(availableActions);
+            askForAction(usernames, availableActions);
         }
     }
 }

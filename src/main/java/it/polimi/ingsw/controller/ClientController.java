@@ -109,7 +109,8 @@ public class ClientController {
                 break;
             case ASK_FOR_ACTION:
                 List<Action> actions = gson.fromJson(message.getData("availableActions"),new TypeToken<List<Action>>(){}.getType());
-                view.askForAction(actions.toArray(new Action[0]));
+                List<String> usernames = gson.fromJson(message.getData("usernames"), new TypeToken<List<String>>(){}.getType());
+                view.askForAction(usernames, actions.toArray(new Action[0]));
                 break;
             case SWAP_DEPOTS:
                 view.askToSwapDepots(Serializer.deserializeWarehouse(message.getData("warehouse")));
@@ -301,6 +302,12 @@ public class ClientController {
     public void activateLeaderCard(int num) {
         Message message = new Message(Message.MessageType.ACTIVATE_LEADER_CARD);
         message.addData("num", new Gson().toJson(num));
+        clientSocket.sendMessage(message);
+    }
+
+    public void showPlayerBoard(String username) {
+        Message message = new Message(Message.MessageType.SHOW_PLAYER_BOARD);
+        message.addData("username", new Gson().toJson(username));
         clientSocket.sendMessage(message);
     }
 }

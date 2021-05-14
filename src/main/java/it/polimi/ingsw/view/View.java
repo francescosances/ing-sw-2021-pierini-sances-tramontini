@@ -112,7 +112,7 @@ public interface View {
       * Shows the actions that the user can choose to perform
       * @param availableActions the array of available actions which the user can choose
       */
-    void askForAction(Action... availableActions);
+    void askForAction(List<String> usernames, Action... availableActions);
 
     /**
      * Asks which row or column of resources the users wants to take from the market

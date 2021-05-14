@@ -8,7 +8,7 @@ Action{
     SKIP("Go ahead / Skip"),
     MOVE_RESOURCES("Move resources"),
     PLAY_LEADER ("Activate or discard a leader card"),
-    SHOW_OTHER_PLAYER_BOARD("Show another player's PlayerBoard (Not Yet Implemented)"), //TODO
+    SHOW_PLAYER_BOARD("Show a player board"),
 
     CANCEL("Cancel"),
 
@@ -24,12 +24,12 @@ Action{
     /**
      * Array that contains all extra actions
      */
-    public static final Action[] ALL_ACTIONS = {TAKE_RESOURCES_FROM_MARKET,BUY_DEVELOPMENT_CARD,ACTIVATE_PRODUCTION,MOVE_RESOURCES,PLAY_LEADER, SHOW_OTHER_PLAYER_BOARD};
+    public static final Action[] ALL_ACTIONS = {TAKE_RESOURCES_FROM_MARKET,BUY_DEVELOPMENT_CARD,ACTIVATE_PRODUCTION,MOVE_RESOURCES,PLAY_LEADER, SHOW_PLAYER_BOARD};
 
     /**
      * Array that contains all normal actions
      */
-    public static final Action[] NORMAL_ACTIONS = {SKIP,MOVE_RESOURCES,PLAY_LEADER, SHOW_OTHER_PLAYER_BOARD};
+    public static final Action[] NORMAL_ACTIONS = {SKIP,MOVE_RESOURCES,PLAY_LEADER, SHOW_PLAYER_BOARD};
 
     /**
      * Initialize a new Label Object with its custom label

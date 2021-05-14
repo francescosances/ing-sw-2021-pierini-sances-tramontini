@@ -154,7 +154,7 @@ public class GUI implements View {
     }
 
     @Override
-    public void askForAction(Action... availableActions) {
+    public void askForAction(List<String> usernames, Action... availableActions) {
     }
 
     @Override

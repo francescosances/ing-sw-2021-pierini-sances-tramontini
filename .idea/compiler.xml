@@ -6,7 +6,6 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="ing-sw-2021-pierini-sances-tramontini" />
         <module name="GC13" />
       </profile>
     </annotationProcessing>

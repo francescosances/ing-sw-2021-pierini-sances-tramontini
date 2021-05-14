@@ -128,6 +128,9 @@ public class GameController implements PlayerStatusListener {
                 case ACTIVATE_LEADER_CARD:
                     currentPlayerController.activateLeaderCard(Integer.parseInt(message.getData("num")));
                     break;
+                case SHOW_PLAYER_BOARD:
+                    currentPlayerController.showPlayerBoard(match.getPlayerBoard(new Gson().fromJson(message.getData("username"), String.class)));
+                    break;
                 case ROLLBACK:
                     currentPlayerController.performAction(Action.CANCEL);
                     break;

@@ -196,10 +196,11 @@ public class VirtualView implements View {
     }
 
     @Override
-    public void askForAction(Action... availableActions) {
+    public void askForAction(List<String> usernames, Action... availableActions) {
         Gson gson = new Gson();
         Message message = new Message(Message.MessageType.ASK_FOR_ACTION);
         message.addData("availableActions",gson.toJson(Arrays.asList(availableActions)));
+        message.addData("usernames", gson.toJson(usernames));
         sendMessage(message);
     }
 
