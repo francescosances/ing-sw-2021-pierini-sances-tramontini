@@ -1,0 +1,47 @@
+.developmentcard {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.28), 10, 0.7, 0, 1) !important;
+}
+
+.card {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.28), 10, 0.3, 0, 0);
+    -fx-cursor: hand;
+}
+
+.card-selected {
+    -fx-effect: dropshadow(gaussian, #FDC309, 20, 0.3, 0, 0);
+}
+
+.leadercard{
+    -fx-opacity: 0.6;
+}
+
+.leadercard:hover {
+    -fx-effect: dropshadow(gaussian, #FDC309, 20, 0.3, 0, 0) !important;
+}
+
+.btn{
+    -fx-border-color: transparent;
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+
+    -fx-background-radius: 0;
+    -fx-background-color: transparent;
+}
+
+.btn:hover {
+    -fx-effect: dropshadow(gaussian, #FDC309, 20, 0.3, 0, 0);
+    -fx-cursor: hand;
+}
+
+#marketBtn{
+    -fx-background-image: url("../images/buttons/login.png");
+}
+
+#startProductionBtn{
+    -fx-background-image: url("../images/buttons/login.png");
+}
+
+#buyDevelopmentcardBtn{
+    -fx-background-image: url("../images/buttons/login.png");
+}

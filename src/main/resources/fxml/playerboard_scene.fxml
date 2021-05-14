@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane prefHeight="720.0" prefWidth="1080.0" styleClass="rootPane" stylesheets="@../css/playerboard_scene.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.scene.PlayerboardSceneController">
+    <children>
+        <Group scaleX="1.5" scaleY="1.5" />
+          <AnchorPane fx:id="rootPane" prefHeight="720.0" prefWidth="1080.0">
+         <children>
+            <ImageView fitHeight="617.0" fitWidth="864.0" layoutY="103.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+               <image>
+                  <Image url="@../images/backgrounds/playerboard.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="leadercard0" fitHeight="211.0" fitWidth="156.0" layoutX="903.0" layoutY="105.0" pickOnBounds="true" preserveRatio="true" styleClass="card,leadercard">
+               <image>
+                  <Image url="@../images/cards/BACK/64.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="leadercard1" fitHeight="211.0" fitWidth="156.0" layoutX="903.0" layoutY="349.0" pickOnBounds="true" preserveRatio="true" styleClass="card,leadercard">
+               <image>
+                  <Image url="@../images/cards/BACK/64.png" />
+               </image>
+            </ImageView>
+             <ImageView fx:id="developmentcardslot0_0" fitHeight="211.0" fitWidth="156.0" layoutX="339.0" layoutY="452.0" pickOnBounds="true" preserveRatio="true" styleClass="card,developmentcard" visible="false">
+                 <image>
+                     <Image url="@../images/cards/BACK/1.png" />
+                 </image>
+             </ImageView>
+            <ImageView fx:id="developmentcardslot0_1" fitHeight="211.0" fitWidth="156.0" layoutX="339.0" layoutY="409.0" pickOnBounds="true" preserveRatio="true" styleClass="card,developmentcard" visible="false">
+               <image>
+                  <Image url="@../images/cards/BACK/1.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="developmentcardslot0_2" fitHeight="211.0" fitWidth="156.0" layoutX="339.0" layoutY="367.0" pickOnBounds="true" preserveRatio="true" styleClass="card,developmentcard" visible="false">
+               <image>
+                  <Image url="@../images/cards/BACK/1.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="developmentcardslot1_0" fitHeight="211.0" fitWidth="156.0" layoutX="505.0" layoutY="452.0" pickOnBounds="true" preserveRatio="true" styleClass="card,developmentcard" visible="false">
+               <image>
+                  <Image url="@../images/cards/BACK/1.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="developmentcardslot1_1" fitHeight="211.0" fitWidth="156.0" layoutX="505.0" layoutY="409.0" pickOnBounds="true" preserveRatio="true" styleClass="card,developmentcard" visible="false">
+               <image>
+                  <Image url="@../images/cards/BACK/1.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="developmentcardslot1_2" fitHeight="211.0" fitWidth="156.0" layoutX="505.0" layoutY="367.0" pickOnBounds="true" preserveRatio="true" styleClass="card,developmentcard" visible="false">
+               <image>
+                  <Image url="@../images/cards/BACK/1.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="developmentcardslot2_0" fitHeight="211.0" fitWidth="156.0" layoutX="674.0" layoutY="452.0" pickOnBounds="true" preserveRatio="true" styleClass="card,developmentcard" visible="false">
+               <image>
+                  <Image url="@../images/cards/BACK/1.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="developmentcardslot2_1" fitHeight="211.0" fitWidth="156.0" layoutX="674.0" layoutY="409.0" pickOnBounds="true" preserveRatio="true" styleClass="card,developmentcard" visible="false">
+               <image>
+                  <Image url="@../images/cards/BACK/1.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="developmentcardslot2_2" fitHeight="211.0" fitWidth="156.0" layoutX="674.0" layoutY="367.0" pickOnBounds="true" preserveRatio="true" styleClass="card,developmentcard" visible="false">
+               <image>
+                  <Image url="@../images/cards/BACK/1.png" />
+               </image>
+            </ImageView>
+            <ChoiceBox layoutX="893.0" layoutY="42.0" prefHeight="48.0" prefWidth="175.0" />
+            <Button fx:id="marketBtn" onAction="#goToMarket" layoutX="14.0" layoutY="42.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="208.0" styleClass="btn" />
+            <Button fx:id="startProductionBtn" onAction="#startProduction" layoutX="250.0" layoutY="42.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="208.0" styleClass="btn" />
+            <Button fx:id="buyDevelopmentcardBtn" onAction="#buyDevelopmentCard" layoutX="487.0" layoutY="42.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="208.0" styleClass="btn" />
+         </children>
+          </AnchorPane>
+    </children>
+</StackPane>

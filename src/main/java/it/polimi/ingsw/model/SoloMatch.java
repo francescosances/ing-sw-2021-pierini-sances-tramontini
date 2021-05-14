@@ -60,7 +60,7 @@ public class SoloMatch extends Match{
 
         //TODO: comunicare al giocatore che un ActionToken è stato pescato
         try {
-            drawActionToken().show(this);
+            drawActionToken().show(this);//TODO: mischiare gli action token scartati
             //TODO: creare metodo endgame per contare i punti
         } catch (EndGameException e) {
             e.printStackTrace();

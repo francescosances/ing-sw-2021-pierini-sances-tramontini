@@ -309,7 +309,7 @@ public class GameController implements PlayerStatusListener {
      */
     public void nextTurn(){
         match.setCurrentPlayerIndex((match.getCurrentPlayerIndex()+1)%players.size());
-        if(players.stream().noneMatch(PlayerController::isActive)) //TODO: No one is active (può succedere che si arrivi qui?)
+        if(players.stream().noneMatch(PlayerController::isActive)) //TODO: cancellare la partita
             return;
         if(!players.get(match.getCurrentPlayerIndex()).isActive()) { // The current player is inactive
             broadcastMessage("The player: "+players.get(match.getCurrentPlayerIndex()).username+" is inactive. His turn has been skipped");

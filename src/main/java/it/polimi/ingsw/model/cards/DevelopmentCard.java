@@ -134,7 +134,6 @@ public class DevelopmentCard extends Card implements Producer {
         if (!(other instanceof DevelopmentCard))
             return false;
         DevelopmentCard o = (DevelopmentCard) other;
-        //TODO: il confronto si potrebbe fare solo sul card name direttamente dalla classe card
         return this.color.equals(o.color) && this.productionCost.equals(o.productionCost)
                 && this.productionGain.equals(o.productionGain) && this.level == o.level;
     }

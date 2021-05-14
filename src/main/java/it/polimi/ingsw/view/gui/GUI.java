@@ -11,10 +11,7 @@ import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.gui.scene.Controller;
-import it.polimi.ingsw.view.gui.scene.SelectLeaderCardsController;
-import it.polimi.ingsw.view.gui.scene.SelectLobbySceneController;
-import it.polimi.ingsw.view.gui.scene.SelectResourcesController;
+import it.polimi.ingsw.view.gui.scene.*;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -120,7 +117,10 @@ public class GUI implements View {
 
     @Override
     public void showPlayerBoard(PlayerBoard playerBoard) {
-
+        Platform.runLater(()->{
+            PlayerboardSceneController controller = (PlayerboardSceneController) loadScene("playerboard_scene");
+            controller.initialize(playerBoard);
+        });
     }
 
     @Override
@@ -135,7 +135,6 @@ public class GUI implements View {
 
     @Override
     public void askForAction(Action... availableActions) {
-
     }
 
     @Override

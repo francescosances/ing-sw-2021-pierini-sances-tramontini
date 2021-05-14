@@ -37,6 +37,8 @@ public class ClientController {
      */
     private View view;
 
+    private String username;
+
     /**
      * Default empty constructor that initialize a new socket
      */
@@ -51,6 +53,7 @@ public class ClientController {
     public ClientController(ClientSocket clientSocket) {
         this.clientSocket = clientSocket;
     }
+
 
     /**
      * Set the view to Command Line Interface and launch it
@@ -168,6 +171,7 @@ public class ClientController {
     public void login(String username){
         Message message = new Message(Message.MessageType.LOGIN_REQUEST);
         message.addData("username", username);
+        this.username = username;
         clientSocket.sendMessage(message);
     }
 
@@ -280,7 +284,7 @@ public class ClientController {
      * @param match the match to be resumed
      */
     public void resumeMatch(Match match){
-        view.resumeMatch(match);
+        view.showPlayerBoard(match.getPlayerBoard(username));
     }
 
 }
