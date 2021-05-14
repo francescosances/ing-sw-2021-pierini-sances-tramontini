@@ -113,6 +113,11 @@ public class GUI implements View {
     }
 
     @Override
+    public void showPlayerLeaderCards(List<LeaderCard> leaderCardList) {
+
+    }
+
+    @Override
     public void listDevelopmentCards(List<Deck<DevelopmentCard>> developmentCardList, int cardsToChoose, PlayerBoard userBoard) {
 
     }

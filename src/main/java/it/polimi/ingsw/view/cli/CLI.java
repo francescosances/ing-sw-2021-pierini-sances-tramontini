@@ -142,8 +142,6 @@ public class CLI implements View {
     public void listLeaderCards(List<LeaderCard> leaderCardList,int cardsToChoose) {
         showLeaderCards(leaderCardList);
         output.println("Choose " + cardsToChoose + " leader cards:");
-        if (cardsToChoose == 1)
-            output.println("Insert a negative number to reverse the action");
         int[] choices = new int[cardsToChoose];
         LeaderCard[] cardsChosen = new LeaderCard[cardsToChoose];
         for(int i=0;i<cardsToChoose;i++) {
@@ -167,6 +165,44 @@ public class CLI implements View {
             cardsChosen[i] = leaderCardList.get(choices[i]);
         }
         clientController.leaderCardsChoice(cardsChosen);
+    }
+
+    @Override
+    public void showPlayerLeaderCards(List<LeaderCard> leaderCardList) {
+        while (true){
+            output.println("You have these leader cards");
+            showLeaderCards(leaderCardList);
+            output.println("Select which leader card you want to activate or discard");
+            output.println("Insert a negative number to reverse the action");
+            int choice = input.nextInt();
+
+            if (choice < 0) {
+                clientController.rollback();
+                return;
+            } else if (choice == 0 || choice == 1) {
+                while (true) {
+                    output.println("What do you want to do with this card?");
+                    output.println("Insert a negative number to reverse the action");
+                    output.println(" [0] Discard");
+                    output.println(" [1] Activate");
+
+                    int action = input.nextInt();
+
+                    if (action < 0) {
+                        clientController.rollback();
+                        return;
+                    } else if (action == 0){
+                        clientController.discardLeaderCard(choice);
+                        return;
+                    } else if (action == 1){
+                        clientController.activateLeaderCard(choice);
+                        return;
+                    }
+                    errorOutput.println("Invalid choice");
+                }
+            }
+            errorOutput.println("Invalid choice");
+        }
     }
 
     private String developmentCardColor(DevelopmentCard card){

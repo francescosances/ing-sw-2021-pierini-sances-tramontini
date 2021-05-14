@@ -259,6 +259,33 @@ public class PlayerController {
     }
 
     /**
+     * Discards the LeaderCard the player has in the selected position
+     * @param num the position of the LeaderCard in the PlayerBoard
+     */
+    public void discardLeaderCard(int num){
+        playerBoard.discardLeaderCard(num);
+        for (PlayerStatusListener x : this.observers) {
+            x.onPlayerStatusChanged(this);
+        }
+    }
+
+    /**
+     * Activates the LeaderCard the player has in the selected position
+     * @param num the position of the LeaderCard in the PlayerBoard
+     */
+    public void activateLeaderCard(int num){
+        try {
+            playerBoard.activateLeaderCard(num);
+        } catch (NotSatisfiedRequirementsException e){
+            virtualView.showErrorMessage(e.getMessage());
+        } finally {
+            for (PlayerStatusListener x : this.observers) {
+                x.onPlayerStatusChanged(this);
+            }
+        }
+    }
+
+    /**
      * Asks the player which ResourceType he wants as they're not starting the turn
      * @param resourcesToChoose the number of resource the player is allowed to choose
      */
@@ -296,7 +323,7 @@ public class PlayerController {
         virtualView.askForAction(
                 Arrays.stream(Action.ALL_ACTIONS)
                         .filter(x -> x != Action.CANCEL)
-                        .filter(x -> !((x == Action.PLAY_LEADER || x == Action.DISCARD_LEADER) && this.playerBoard.getAvailableLeaderCards().isEmpty())) //If no leader cards are available, the options are removed from the list
+                        .filter(x -> !((x == Action.PLAY_LEADER) && this.playerBoard.getAvailableLeaderCards().isEmpty())) //If no leader cards are available, the options are removed from the list
                         .toArray(Action[]::new));
     }
 
@@ -310,10 +337,7 @@ public class PlayerController {
                 rollback();
                 break;
             case PLAY_LEADER:
-                listLeaderCardsToPlay();
-                break;
-            case DISCARD_LEADER:
-                listLeaderCardsToDiscard();
+                listPlayableLeaderCards();
                 break;
             case MOVE_RESOURCES:
                 virtualView.askToSwapDepots(getPlayerBoard().getWarehouse());
@@ -352,34 +376,10 @@ public class PlayerController {
     }
 
     /**
-     * Send the cards in the hand of the user so that he can choose a card to activate
+     * Send the cards in the hand of the user to the player.
      */
-    public void listLeaderCardsToPlay(){
-        virtualView.listLeaderCards(this.playerBoard.getAvailableLeaderCards(), 1);
-        this.leaderCardsChooser = cards -> {
-            try {
-                for (LeaderCard card : cards) {
-                    this.playerBoard.activateLeaderCard(card);
-                }
-            }catch (NotSatisfiedRequirementsException e){
-                virtualView.showErrorMessage(e.getMessage());
-            } finally {
-                askForAction();
-            }
-        };
-    }
-
-    /**
-     * Send the inactive cards in the hand of the user so that he can choose a card to discard
-     */
-    public void listLeaderCardsToDiscard(){
-        virtualView.listLeaderCards(this.playerBoard.getAvailableLeaderCards(), 1);
-        this.leaderCardsChooser = cards -> {
-            for(LeaderCard card : cards){
-                this.playerBoard.discardLeaderCard(card);
-            }
-            askForAction();
-        };
+    public void listPlayableLeaderCards(){
+        virtualView.showPlayerLeaderCards(playerBoard.getAvailableLeaderCards());
     }
 
     /**

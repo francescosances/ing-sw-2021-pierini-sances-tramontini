@@ -78,6 +78,12 @@ public interface View {
     void listLeaderCards(List<LeaderCard> leaderCardList,int cardsToChoose);
 
     /**
+     * Shows the LeaderCards to the player
+     * @param leaderCardList the LeaderCards to choose
+     */
+    void showPlayerLeaderCards(List<LeaderCard> leaderCardList);
+
+    /**
      * Shows a list of Development Cards and asks to choose some of them
      * @param developmentCardList the list of Development Cards to choose from
      * @param cardsToChoose the amount of cards to choose

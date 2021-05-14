@@ -113,12 +113,15 @@ public class Message{
         CHOOSE_DEVELOPMENT_CARD_SLOT,
         PRODUCTION,
         START_RESOURCES,
+        SHOW_PLAYER_LEADER_CARDS,
         // from client to server
         LOGIN_REQUEST,
         LOBBY_CHOICE,
         LEADER_CARDS_CHOICE,
+        DISCARD_LEADER_CARD,
+        ACTIVATE_LEADER_CARD,
         PERFORM_ACTION,
-        ROLLBACK
+        ROLLBACK;
 
     }
 

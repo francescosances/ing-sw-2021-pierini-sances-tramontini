@@ -122,6 +122,12 @@ public class GameController implements PlayerStatusListener {
                 case PRODUCTION:
                     currentPlayerController.chooseProductions(Serializer.deserializeRequirements(message.getData("costs")),Serializer.deserializeRequirements(message.getData("gains")));
                     break;
+                case DISCARD_LEADER_CARD:
+                    currentPlayerController.discardLeaderCard(Integer.parseInt(message.getData("num")));
+                    break;
+                case ACTIVATE_LEADER_CARD:
+                    currentPlayerController.activateLeaderCard(Integer.parseInt(message.getData("num")));
+                    break;
                 case ROLLBACK:
                     currentPlayerController.performAction(Action.CANCEL);
                     break;
