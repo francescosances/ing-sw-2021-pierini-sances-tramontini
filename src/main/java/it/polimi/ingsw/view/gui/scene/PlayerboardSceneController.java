@@ -106,6 +106,7 @@ public class PlayerboardSceneController extends Controller{
 
     private PlayerBoard playerBoard;
 
+
     @FXML
     public void initialize(PlayerBoard playerBoard){
         this.playerBoard = playerBoard;
@@ -143,14 +144,12 @@ public class PlayerboardSceneController extends Controller{
             int j;
             for(j=0;j<depots.get(i).getOccupied();j++){
                 warehouse[i][j].setImage(new Image("/images/resources/"+depots.get(i).getResourceType().toString()+".png"));
+                warehouse[i][j].setVisible(true);
             }
             for(int k=j;k<depots.get(i).getSize();k++){
                 warehouse[i][k].setVisible(false);
             }
         }
-
-
-
     }
 
     private void leaderCardClicked(int cardIndex){

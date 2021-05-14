@@ -653,7 +653,6 @@ public class CLI implements View {
         clientController.chooseWhiteMarbleConversion(choice);
     }
 
-
     @Override
     public void takeResourcesFromMarket(Market market){
         showMarket(market);
