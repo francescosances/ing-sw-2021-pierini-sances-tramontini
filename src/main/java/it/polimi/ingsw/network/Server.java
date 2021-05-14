@@ -244,7 +244,7 @@ public class Server implements StatusObserver {
         PlayerController playerController = getGameController(username).getPlayerController(username);
         playerController.setVirtualView(new VirtualView(clientHandler)); //Set the virtual view with the new clientHandler reference
         playerController.activate();
-        playerController.getVirtualView().resumeMatch(getGameController(username).getMatch());
+        playerController.getVirtualView().resumeMatch(getGameController(username).getMatch().getPlayerBoard(username));
         if(getGameController(username).isSuspended()){
              if(getGameController(username).getPlayers().stream().filter(PlayerController::isActive).count() == getGameController(username).getTotalPlayers()){
                 getGameController(username).start();

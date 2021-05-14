@@ -124,8 +124,8 @@ public class CLI implements View {
     }
 
     @Override
-    public void resumeMatch(Match match) {
-        output.println("You are been reconnected to the "+match.getMatchName()+" match");
+    public void resumeMatch(PlayerBoard playerBoard) {
+        output.println("You have been reconnected to your previous match");
     }
 
     @Override

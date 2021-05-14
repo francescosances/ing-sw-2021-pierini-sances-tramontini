@@ -54,9 +54,9 @@ public class VirtualView implements View {
     }
 
     @Override
-    public void resumeMatch(Match match) {
+    public void resumeMatch(PlayerBoard playerBoard) {
         Message message = new Message(Message.MessageType.RESUME_MATCH);
-        message.addData("match", Serializer.serializeMatchState(match));
+        message.addData("playerBoard", Serializer.serializePlayerBoard(playerBoard));
         sendMessage(message);
     }
 

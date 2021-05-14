@@ -39,9 +39,9 @@ public interface View {
 
     /**
      * Reset the view to the state indicated by the match object
-     * @param match the match to resume
+     * @param playerBoard the PlayerBoard of the match to resume
      */
-    void resumeMatch(Match match);
+    void resumeMatch(PlayerBoard playerBoard);
 
     /**
      * Initializes the view and shows welcome screen

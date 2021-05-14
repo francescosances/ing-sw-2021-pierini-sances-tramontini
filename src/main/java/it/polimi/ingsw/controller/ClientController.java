@@ -2,11 +2,8 @@ package it.polimi.ingsw.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import it.polimi.ingsw.model.Action;
-import it.polimi.ingsw.model.Producer;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
-import it.polimi.ingsw.model.Market;
-import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.Requirements;
@@ -98,7 +95,7 @@ public class ClientController {
                 view.listLobbies(matches);
                 break;
             case RESUME_MATCH:
-                resumeMatch(Serializer.deserializeMatchState(message.getData("match")));
+                resumeMatch(Serializer.deserializePlayerBoard(message.getData("playerBoard")));
                 break;
             case LIST_LEADER_CARDS:
                 List<LeaderCard> leaderCardList = Serializer.deserializeLeaderCardList(message.getData("leaderCards"));
@@ -281,10 +278,10 @@ public class ClientController {
 
     /**
      * Resumes a match suspended after a network disconnection
-     * @param match the match to be resumed
+     * @param playerBoard the PlayerBoard of the match to be resumed
      */
-    public void resumeMatch(Match match){
-        view.showPlayerBoard(match.getPlayerBoard(username));
+    public void resumeMatch(PlayerBoard playerBoard){
+        view.showPlayerBoard(playerBoard);
     }
 
 }

@@ -72,7 +72,7 @@ public class GUI implements View {
     }
 
     @Override
-    public void resumeMatch(Match match) {
+    public void resumeMatch(PlayerBoard playerBoard) {
 
     }
 
