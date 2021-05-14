@@ -12,6 +12,10 @@
     -fx-cursor: hand;
 }
 
+.playerBoard{
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.28), 10, 0.3, 0, 0);
+}
+
 .card-selected {
     -fx-effect: dropshadow(gaussian, #FDC309, 20, 0.3, 0, 0);
 }

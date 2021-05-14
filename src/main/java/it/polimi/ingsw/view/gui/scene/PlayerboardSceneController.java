@@ -119,7 +119,7 @@ public class PlayerboardSceneController extends Controller{
         Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
         closeButton.managedProperty().bind(closeButton.visibleProperty());
 
-        Optional<String> result = dialog.showAndWait();
+        Optional result = dialog.showAndWait();
         if(result.isPresent()){
             if(result.get().equals("activate")){
 

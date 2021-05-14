@@ -46,6 +46,19 @@ public class GUI implements View {
         return sceneControllerPair.snd;
     }
 
+    private Controller openModal(String sceneName,String title,Runnable onClose){
+        Pair<Scene,Controller> temp = JavaFXGui.loadScene(sceneName,this.clientController);
+        Stage stage = new Stage();
+        stage.setScene(temp.fst);
+        stage.setResizable(false);
+        stage.setAlwaysOnTop(true);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setOnCloseRequest((e)->onClose.run());
+        stage.setTitle(title);
+        stage.show();
+        return temp.snd;
+    }
+
     @Override
     public void showMessage(String message) {
         Platform.runLater(()->{
@@ -142,19 +155,6 @@ public class GUI implements View {
     @Override
     public void takeResourcesFromMarket(Market market) {
         Platform.runLater(()-> showMarket(market));
-    }
-
-    private Controller openModal(String sceneName,String title,Runnable onClose){
-        Pair<Scene,Controller> temp = JavaFXGui.loadScene(sceneName,this.clientController);
-        Stage stage = new Stage();
-        stage.setScene(temp.fst);
-        stage.setResizable(false);
-        stage.setAlwaysOnTop(true);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setOnCloseRequest((e)->onClose.run());
-        stage.setTitle(title);
-        stage.show();
-        return temp.snd;
     }
 
     @Override

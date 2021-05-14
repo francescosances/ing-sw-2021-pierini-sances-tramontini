@@ -13,7 +13,7 @@
         <Group scaleX="1.5" scaleY="1.5" />
           <AnchorPane fx:id="rootPane" prefHeight="720.0" prefWidth="1080.0">
          <children>
-            <ImageView fitHeight="617.0" fitWidth="864.0" layoutY="103.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+            <ImageView fitHeight="617.0" fitWidth="864.0" layoutY="103.0" pickOnBounds="true" preserveRatio="true" styleClass="playerboard">
                <image>
                   <Image url="@../images/backgrounds/playerboard.png" />
                </image>
@@ -73,10 +73,10 @@
                   <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
-            <ChoiceBox layoutX="893.0" layoutY="42.0" prefHeight="48.0" prefWidth="175.0" />
-            <Button fx:id="marketBtn" onAction="#goToMarket" layoutX="14.0" layoutY="42.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="208.0" styleClass="btn" />
-            <Button fx:id="startProductionBtn" onAction="#startProduction" layoutX="250.0" layoutY="42.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="208.0" styleClass="btn" />
-            <Button fx:id="buyDevelopmentcardBtn" onAction="#buyDevelopmentCard" layoutX="487.0" layoutY="42.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="208.0" styleClass="btn" />
+            <ChoiceBox layoutX="893.0" layoutY="32.0" prefHeight="48.0" prefWidth="175.0" />
+            <Button fx:id="marketBtn" layoutX="14.0" layoutY="30.0" mnemonicParsing="false" onAction="#goToMarket" prefHeight="48.0" prefWidth="208.0" styleClass="btn" />
+            <Button fx:id="startProductionBtn" layoutX="250.0" layoutY="30.0" mnemonicParsing="false" onAction="#startProduction" prefHeight="48.0" prefWidth="208.0" styleClass="btn" />
+            <Button fx:id="buyDevelopmentcardBtn" layoutX="487.0" layoutY="30.0" mnemonicParsing="false" onAction="#buyDevelopmentCard" prefHeight="48.0" prefWidth="208.0" styleClass="btn" />
          </children>
           </AnchorPane>
     </children>
