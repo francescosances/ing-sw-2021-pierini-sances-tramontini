@@ -285,6 +285,7 @@ public class PlayerBoard {
 
     public void setMatch(Match match){
         this.match = match;
+        this.faithTrack.setMatch(match);
     }
 
     /**
