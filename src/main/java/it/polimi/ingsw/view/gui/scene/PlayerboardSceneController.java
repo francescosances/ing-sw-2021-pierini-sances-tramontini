@@ -1,12 +1,13 @@
 package it.polimi.ingsw.view.gui.scene;
 
-import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -60,7 +61,6 @@ public class PlayerboardSceneController extends Controller{
 
     private PlayerBoard playerBoard;
 
-
     @FXML
     public void initialize(PlayerBoard playerBoard){
         this.playerBoard = playerBoard;
@@ -68,12 +68,8 @@ public class PlayerboardSceneController extends Controller{
         this.leadercard0.setImage(new Image("/images/cards/FRONT/"+playerBoard.getLeaderCards().get(0).getCardName()+".png"));
         this.leadercard1.setImage(new Image("/images/cards/FRONT/"+playerBoard.getLeaderCards().get(1).getCardName()+".png"));
 
-        leadercard0.setOnMouseClicked((e)->{
-            leaderCardClicked(0);
-        });
-        leadercard1.setOnMouseClicked((e)->{
-            leaderCardClicked(1);
-        });
+        leadercard0.setOnMouseClicked((e)-> leaderCardClicked(0));
+        leadercard1.setOnMouseClicked((e)-> leaderCardClicked(1));
 
         ImageView[][] slots =
                 {{developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2},
@@ -123,8 +119,7 @@ public class PlayerboardSceneController extends Controller{
         Optional<String> result = dialog.showAndWait();
         if(result.isPresent()){
             if(result.get().equals("activate")){
-                clientController.performAction(Action.PLAY_LEADER);
-                clientController.leaderCardsChoice(playerBoard.getLeaderCards().get(cardIndex));
+
             }else if(result.get().equals("discard")){
 
             }
