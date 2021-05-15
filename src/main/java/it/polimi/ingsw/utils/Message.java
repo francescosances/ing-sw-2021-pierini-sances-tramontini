@@ -121,7 +121,8 @@ public class Message{
         DISCARD_LEADER_CARD,
         ACTIVATE_LEADER_CARD,
         PERFORM_ACTION,
-        ROLLBACK;
+        ROLLBACK,
+        SHOW_PLAYERS;
 
     }
 

@@ -5,22 +5,25 @@ import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
 import it.polimi.ingsw.model.storage.Depot;
-import it.polimi.ingsw.utils.Pair;
-import javafx.event.EventHandler;
+import it.polimi.ingsw.utils.Triple;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.util.StringConverter;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PlayerboardSceneController extends Controller{
 
@@ -111,7 +114,10 @@ public class PlayerboardSceneController extends Controller{
     @FXML
     protected StackPane root;
 
-    private double[][] faithTrackCells = {
+    @FXML
+    protected ChoiceBox<String> selectUser;
+
+    private final double[][] FAITH_TRACK_CELLS = {
             {22,212},
             {64,212},
             {106,212},
@@ -141,13 +147,12 @@ public class PlayerboardSceneController extends Controller{
 
     private PlayerBoard playerBoard;
 
-
     @FXML
     public void initialize(PlayerBoard playerBoard){
         this.playerBoard = playerBoard;
 
-        marker.setX(faithTrackCells[playerBoard.getFaithTrack().getFaithMarker()][0]);
-        marker.setY(faithTrackCells[playerBoard.getFaithTrack().getFaithMarker()][1]);
+        marker.setX(FAITH_TRACK_CELLS[playerBoard.getFaithTrack().getFaithMarker()][0]);
+        marker.setY(FAITH_TRACK_CELLS[playerBoard.getFaithTrack().getFaithMarker()][1]);
 
         this.leadercard0.setImage(new Image("/images/cards/FRONT/"+playerBoard.getLeaderCards().get(0).getCardName()+".png"));
         this.leadercard1.setImage(new Image("/images/cards/FRONT/"+playerBoard.getLeaderCards().get(1).getCardName()+".png"));
@@ -156,7 +161,7 @@ public class PlayerboardSceneController extends Controller{
         leadercard1.setOnMouseClicked((e)-> leaderCardClicked(1));
 
         ImageView[][] slots =
-                {{developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2},
+                        {{developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2},
                         {developmentcardslot1_0,developmentcardslot1_1,developmentcardslot1_2},
                         {developmentcardslot2_0,developmentcardslot2_1,developmentcardslot2_2}};
 
@@ -195,6 +200,13 @@ public class PlayerboardSceneController extends Controller{
                 popeFavorTiles[i].setVisible(true);
         }
 
+        List<String> players = clientController.getPlayers();
+        selectUser.setItems(FXCollections.observableArrayList(players));
+        selectUser.setValue(clientController.getUsername());
+
+        selectUser.setOnAction((e)->{
+            System.out.println(selectUser.getValue());
+        });
     }
 
     private void leaderCardClicked(int cardIndex){

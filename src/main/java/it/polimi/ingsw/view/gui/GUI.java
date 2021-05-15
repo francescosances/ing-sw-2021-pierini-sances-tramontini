@@ -205,4 +205,9 @@ public class GUI implements View {
         });
     }
 
+    @Override
+    public void showPlayers(List<String> users) {
+        this.clientController.setPlayers(users);
+    }
+
 }

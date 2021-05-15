@@ -196,6 +196,13 @@ public class VirtualView implements View {
     }
 
     @Override
+    public void showPlayers(List<String> players) {
+        Message message = new Message(Message.MessageType.SHOW_PLAYERS);
+        message.addData("players",new Gson().toJson(players));
+        sendMessage(message);
+    }
+
+    @Override
     public void askForAction(List<String> usernames, Action... availableActions) {
         Gson gson = new Gson();
         Message message = new Message(Message.MessageType.ASK_FOR_ACTION);

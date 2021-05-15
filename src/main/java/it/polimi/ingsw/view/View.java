@@ -172,4 +172,6 @@ public interface View {
      * @param resourcesToChoose the amount of resources to be chosen
      */
     void askToChooseStartResources(Resource[] values,int resourcesToChoose);
+
+    void showPlayers(List<String> users);
 }

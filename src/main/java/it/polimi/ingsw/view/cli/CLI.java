@@ -419,6 +419,15 @@ public class CLI implements View {
         clientController.chooseStartResources(resourcesChosen);
     }
 
+    @Override
+    public void showPlayers(List<String> users) {
+        clientController.setPlayers(users);
+        output.println("The players of this match are:");
+        for(String user:users){
+            output.println("- "+user);
+        }
+    }
+
 
     @Override
     public void showPlayerBoard(PlayerBoard playerBoard){

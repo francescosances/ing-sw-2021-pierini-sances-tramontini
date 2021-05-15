@@ -34,21 +34,21 @@ public class ClientController {
      */
     private View view;
 
+    /**
+     * The username of the user associated to this controller
+     */
     private String username;
+
+    /**
+     * The usernames of the players playing this match
+     */
+    private List<String> players;
 
     /**
      * Default empty constructor that initialize a new socket
      */
     public ClientController(){
         clientSocket = new ClientSocket(this);
-    }
-
-    /**
-     * Initialize a new ClientController connected to the server through the specified Client object
-     * @param clientSocket the socket connection reference
-     */
-    public ClientController(ClientSocket clientSocket) {
-        this.clientSocket = clientSocket;
     }
 
 
@@ -150,6 +150,10 @@ public class ClientController {
             case SHOW_PLAYER_LEADER_CARDS:
                 List<LeaderCard> playerLeaderCard = Serializer.deserializeLeaderCardList(message.getData("leaderCards"));
                 view.showPlayerLeaderCards(playerLeaderCard);
+                break;
+            case SHOW_PLAYERS:
+                List<String> players = new Gson().fromJson(message.getData("players"),new TypeToken<List<String>>(){}.getType());
+                view.showPlayers(players);
                 break;
             default:
                 clientSocket.log("Received unexpected message");
@@ -321,5 +325,17 @@ public class ClientController {
         Message message = new Message(Message.MessageType.SHOW_PLAYER_BOARD);
         message.addData("username", new Gson().toJson(username));
         clientSocket.sendMessage(message);
+    }
+
+    public void setPlayers(List<String> users) {
+        this.players = users;
+    }
+
+    public List<String> getPlayers() {
+        return players;
+    }
+
+    public String getUsername(){
+        return username;
     }
 }

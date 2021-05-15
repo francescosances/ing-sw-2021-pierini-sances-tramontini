@@ -14,6 +14,7 @@ import it.polimi.ingsw.view.VirtualView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class GameController implements PlayerStatusListener {
 
@@ -142,6 +143,7 @@ public class GameController implements PlayerStatusListener {
      * Starts the match ending the phase of adding players. The firt player is chosen randomly.
      */
     public void start(){
+        listPlayers();
         match.setStarted(true);
         if(!isSuspended()) {
             match.setCurrentPlayerIndex(new Random().nextInt(players.size()));
@@ -402,5 +404,16 @@ public class GameController implements PlayerStatusListener {
 
     public void setSuspended(boolean suspended) {
         this.suspended = suspended;
+    }
+
+    protected void listPlayers(){
+        for(PlayerController playerController:players){
+            playerController.getVirtualView().showPlayers(players.stream().map(PlayerController::getUsername).collect(Collectors.toList()));
+        }
+    }
+
+    public void resumeMatch(String username) {
+        listPlayers();
+        getPlayerController(username).getVirtualView().resumeMatch(getPlayerController(username).getPlayerBoard());
     }
 }
