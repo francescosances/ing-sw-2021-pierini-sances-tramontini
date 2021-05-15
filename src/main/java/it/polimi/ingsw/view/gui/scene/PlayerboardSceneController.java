@@ -6,6 +6,8 @@ import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
 import it.polimi.ingsw.model.storage.Depot;
 import it.polimi.ingsw.utils.Triple;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -15,12 +17,11 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.util.StringConverter;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -204,8 +205,10 @@ public class PlayerboardSceneController extends Controller{
         selectUser.setItems(FXCollections.observableArrayList(players));
         selectUser.setValue(clientController.getUsername());
 
-        selectUser.setOnAction((e)->{
-            System.out.println(selectUser.getValue());
+        selectUser.getSelectionModel().selectedIndexProperty().addListener((observableValue, value, index) -> {
+            int intIndex = (Integer) index;
+            if(intIndex < 0)return;
+            System.out.println(selectUser.getItems().get(intIndex));
         });
     }
 
@@ -248,6 +251,14 @@ public class PlayerboardSceneController extends Controller{
                 clientController.discardLeaderCard(cardIndex);
             }
         }
+    }
+
+    protected void disableControls(){
+        marketBtn.setDisable(true);
+        buyDevelopmentcardBtn.setDisable(true);
+        startProductionBtn.setDisable(true);
+        leadercard0.setDisable(true);
+        leadercard1.setDisable(true);
     }
 
     @FXML
