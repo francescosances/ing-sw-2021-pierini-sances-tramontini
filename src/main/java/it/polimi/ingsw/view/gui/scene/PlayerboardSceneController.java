@@ -202,6 +202,9 @@ public class PlayerboardSceneController extends Controller{
         dialog.setTitle("Choose action");
 
         Pane pane = new Pane();
+
+        pane.setMinWidth(200);
+
         VBox vbox = new VBox();
 
         Button activate = new Button("Activate");
@@ -228,9 +231,9 @@ public class PlayerboardSceneController extends Controller{
         Optional result = dialog.showAndWait();
         if(result.isPresent()){
             if(result.get().equals("activate")){
-
+                clientController.activateLeaderCard(cardIndex);
             }else if(result.get().equals("discard")){
-
+                clientController.discardLeaderCard(cardIndex);
             }
         }
     }
