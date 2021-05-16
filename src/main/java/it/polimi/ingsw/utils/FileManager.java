@@ -1,6 +1,7 @@
 package it.polimi.ingsw.utils;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.cards.Deck;
@@ -59,6 +60,33 @@ public class FileManager {
         FileWriter writer = new FileWriter(matchFile);
         writer.write(Serializer.serializeMatchState(match));
         writer.close();
+    }
+
+    public synchronized void deleteMatch(String matchName){
+        File matchFile = new File(ROOT_FOLDER_NAME + "/" + MATCHES_FOLDER_NAME + "/" + matchName + ".json");
+        if (matchFile.delete()) {
+            System.out.println(matchName + ".json successfully deleted");
+            matchFile = new File(ROOT_FOLDER_NAME+"/matches.json");
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(matchFile));
+                Gson gson = new Gson();
+                Map<String, List<String>> matchesMap = gson.fromJson(reader, Map.class);
+                reader.close();
+                matchesMap.remove(matchName);
+                matchFile.delete();
+                matchFile = new File(ROOT_FOLDER_NAME+"/matches.json");
+                FileWriter writer = new FileWriter(matchFile);
+                gson.toJson(matchesMap, writer);
+                writer.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else
+            System.out.println("Impossible to delete " + matchName + ".json file!");
+
+
     }
 
     public synchronized Match readMatchStatus(String matchName) throws IOException {

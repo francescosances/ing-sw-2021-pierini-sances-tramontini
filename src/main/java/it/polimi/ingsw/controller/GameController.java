@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.SoloMatch;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.network.ClientHandler;
 import it.polimi.ingsw.serialization.Serializer;
+import it.polimi.ingsw.utils.FileManager;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.view.VirtualView;
 
@@ -328,7 +329,7 @@ public class GameController implements PlayerStatusListener {
     public void nextTurn(){
         match.setCurrentPlayerIndex((match.getCurrentPlayerIndex()+1)%players.size());
         if(players.stream().noneMatch(PlayerController::isActive)){
-            //TODO: cancellare la partita
+            FileManager.getInstance().deleteMatch(match.getMatchName());
             return;
         }
         if(!players.get(match.getCurrentPlayerIndex()).isActive()) { // The current player is inactive
