@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.*;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
+import org.graalvm.compiler.replacements.AllocationSnippets;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -96,7 +97,6 @@ public class CLI implements View {
 
     @Override
     public void listLobbies(List<Triple<String, Integer, Integer>> availableLobbies) {
-        // TODO possibilità di aggiornare la lista di lobby disponibili
         output.println("Create a new match or join one:");
         output.println("  [0] New match");
         int choice;
@@ -106,6 +106,7 @@ public class CLI implements View {
                 output.print(availableLobbies.get(i - 1).getFirst() + "'s match ");
                 output.println("(" + availableLobbies.get(i - 1).getSecond() + "/" + availableLobbies.get(i - 1).getThird() + ")");
             }
+            output.println("\n" + ANSI_WHITE + " Insert a negative number to refresh" + ANSI_RESET);
             choice = input.nextInt();
         }else
             choice = 0;
@@ -118,10 +119,8 @@ public class CLI implements View {
             clientController.createNewLobby(playersNumber);
         } else if (choice > 0 && choice <= availableLobbies.size())
             clientController.lobbyChoice(availableLobbies.get(choice - 1).getFirst());
-        else{
-            output.println("Invalid choice");
-            listLobbies(availableLobbies);
-        }
+        else
+            clientController.refreshLobbies();
     }
 
     @Override
@@ -174,7 +173,7 @@ public class CLI implements View {
             output.println("You have these leader cards");
             showLeaderCards(leaderCardList);
             output.println("Select which leader card you want to activate or discard");
-            output.println("Insert a negative number to reverse the action");
+            output.println(ANSI_WHITE + "Insert a negative number to reverse the action" + ANSI_RESET);
             int choice = input.nextInt();
 
             if (choice < 0) {
@@ -183,7 +182,7 @@ public class CLI implements View {
             } else if (choice == 0 || choice == 1) {
                 while (true) {
                     output.println("What do you want to do with this card?");
-                    output.println("Insert a negative number to reverse the action");
+                    output.println(ANSI_WHITE + "Insert a negative number to reverse the action" + ANSI_RESET);
                     output.println(" [0] Discard");
                     output.println(" [1] Activate");
 
@@ -239,7 +238,7 @@ public class CLI implements View {
             output.print(ANSI_RESET);
         }
         output.println("Choose " + cardsToChoose + " development card:");
-        output.println("Insert a negative number to reverse the action");
+        output.println(ANSI_WHITE + "Insert a negative number to reverse the action" + ANSI_RESET);
         int[] choices = new int[cardsToChoose];
         DevelopmentCard[] cardsChosen = new DevelopmentCard[cardsToChoose];
         for(int i=0;i<cardsToChoose;i++) {
@@ -340,7 +339,7 @@ public class CLI implements View {
         List<Integer> choices = new ArrayList<>();
         int temp;
         output.println("Choose the productions to activate.");
-        output.println("Insert a negative number to exit.");
+        output.println(ANSI_WHITE + "Insert a negative number to exit." + ANSI_RESET);
         Requirements costs = new Requirements();
         Requirements gains = new Requirements();
         temp = input.nextInt();
@@ -674,7 +673,7 @@ public class CLI implements View {
             output.println("Do you want to choose a row or a column?");
             output.println("  [0] Row");
             output.println("  [1] Column");
-            output.println("Insert a negative number to reverse the action");
+            output.println(ANSI_WHITE + "Insert a negative number to reverse the action" + ANSI_RESET);
             choice = input.nextInt();
             if (choice < 0) {
                 clientController.rollback();

@@ -79,7 +79,6 @@ public class Serializer {
         return gson.fromJson(serializedList, type);
     }
 
-
     public static String serializeLeaderCard(LeaderCard leaderCard){
         return new Gson().toJson(leaderCard);
     }
@@ -93,6 +92,11 @@ public class Serializer {
     public static String serializeLeaderCardList(LeaderCard[] list) {
         return new Gson().toJson(list);
     }
+
+    public static String serializeLeaderCardList(List<LeaderCard> list){
+        return new Gson().toJson(list);
+    }
+
 
     public static List<LeaderCard> deserializeLeaderCardList(String serializedCard) {
         GsonBuilder gsonbuilder = new GsonBuilder();
@@ -220,6 +224,14 @@ public class Serializer {
         gsonBuilder.registerTypeAdapter(Requirements.class, new RequirementsCreator());
         gsonBuilder.registerTypeAdapter(Resource.class, new ResourceCreator());
         return gsonBuilder.create().fromJson(json, Requirements.class);
+    }
+
+    public static String serializeInt(int i){
+        return new Gson().toJson(i);
+    }
+
+    public static int deserializeInt(String json){
+        return new Gson().fromJson(json, int.class);
     }
 }
 

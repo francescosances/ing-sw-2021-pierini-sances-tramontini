@@ -339,4 +339,9 @@ public class ClientController {
     public String getUsername(){
         return username;
     }
+
+    public void refreshLobbies(){
+        Message message = new Message(Message.MessageType.LOBBY_INFO);
+        clientSocket.sendMessage(message);
+    }
 }

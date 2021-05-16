@@ -133,6 +133,9 @@ public class Server implements StatusObserver {
                     joinLobby(message.getData("matchOwner"), clientHandler);
                 getGameController(clientHandler.getUsername()).connect(clientHandler.getUsername());
                 break;
+            case LOBBY_INFO:
+                listLobbies(clientHandler);
+                break;
             default:
                 getGameController(clientHandler.getUsername()).handleReceivedGameMessage(message,clientHandler.getUsername());
         }

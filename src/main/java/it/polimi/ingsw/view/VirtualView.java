@@ -92,9 +92,8 @@ public class VirtualView implements View {
             throw new IllegalArgumentException("No leader cards given");
         Gson gson = new Gson();
         Message message = new Message(Message.MessageType.LIST_LEADER_CARDS);
-       // Serializer.serializeLeaderCardDeck(leaderCardList.toArray(new LeaderCard[0])); TODO: verificare se questa riga può essere attivata
-        message.addData("leaderCards",gson.toJson(leaderCardList));
-        message.addData("cardsToChoose",String.valueOf(cardsToChoose));
+        message.addData("leaderCards",Serializer.serializeLeaderCardList(leaderCardList));
+        message.addData("cardsToChoose",Serializer.serializeInt(cardsToChoose));
         sendMessage(message);
     }
 
@@ -109,16 +108,15 @@ public class VirtualView implements View {
     public void listDevelopmentCards(List<Deck<DevelopmentCard>> developmentCardList, int cardsToChoose, PlayerBoard userBoard) {
         Message message = new Message(Message.MessageType.DEVELOPMENT_CARDS_TO_BUY);
         message.addData("developmentCards",Serializer.serializeDevelopmentCardsDeckList(developmentCardList));
-        message.addData("cardsToChoose",String.valueOf(cardsToChoose));
+        message.addData("cardsToChoose",Serializer.serializeInt(cardsToChoose));
         message.addData("playerBoard",Serializer.serializePlayerBoard(userBoard));
         sendMessage(message);
     }
 
     @Override
     public void showPlayerBoard(PlayerBoard playerBoard){
-        Gson gson = new Gson();
         Message message = new Message(Message.MessageType.SHOW_PLAYER_BOARD);
-        message.addData("playerBoard",gson.toJson(playerBoard));
+        message.addData("playerBoard",Serializer.serializePlayerBoard(playerBoard));
         sendMessage(message);
     }
 
@@ -141,6 +139,7 @@ public class VirtualView implements View {
         Message message = new Message(Message.MessageType.TAKE_RESOURCES_FROM_MARKET);
         message.addData("market",Serializer.serializeMarket(market));
         sendMessage(message);
+
     }
 
     @Override
@@ -192,7 +191,7 @@ public class VirtualView implements View {
     public void askToChooseStartResources(Resource[] values,int resourcesToChoose) {
         Message message = new Message(Message.MessageType.START_RESOURCES);
         message.addData("resources",Serializer.serializeResources(values));
-        message.addData("resourcesToChoose",Integer.toString(resourcesToChoose));
+        message.addData("resourcesToChoose",Serializer.serializeInt(resourcesToChoose));
         sendMessage(message);
     }
 
