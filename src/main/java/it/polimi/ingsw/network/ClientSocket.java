@@ -74,6 +74,7 @@ public class ClientSocket implements Runnable{
             Message message = Message.messageFromString(received);
             clientController.handleReceivedMessage(message);
         }
+        //TODO: in caso di no line found e quindi chiusura della connessione dal server, chiudere anche thread java fx
         socketIn.close();
         socketOut.close();
         try {

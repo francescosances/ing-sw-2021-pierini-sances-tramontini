@@ -5,9 +5,6 @@ import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
 import it.polimi.ingsw.model.storage.Depot;
-import it.polimi.ingsw.utils.Triple;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -17,14 +14,12 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import javafx.util.StringConverter;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class PlayerboardSceneController extends Controller{
 
@@ -201,6 +196,11 @@ public class PlayerboardSceneController extends Controller{
                 popeFavorTiles[i].setVisible(true);
         }
 
+        disableControls();
+        selectUser.setDisable(true);
+    }
+
+    public void populateUserSelect(){
         List<String> players = clientController.getPlayers();
         selectUser.setItems(FXCollections.observableArrayList(players));
         selectUser.setValue(playerBoard.getUsername());
@@ -212,12 +212,9 @@ public class PlayerboardSceneController extends Controller{
             if(!username.equals(playerBoard.getUsername())) {
                 clientController.showPlayerBoard(selectUser.getItems().get(intIndex));
             }
+            selectUser.setDisable(true);
             disableControls();
         });
-
-        if(!playerBoard.getUsername().equals(clientController.getUsername())) {
-            disableControls();
-        }
     }
 
     private void leaderCardClicked(int cardIndex){
@@ -261,12 +258,23 @@ public class PlayerboardSceneController extends Controller{
         }
     }
 
-    protected void disableControls(){
+    public void disableControls(){
         marketBtn.setDisable(true);
         buyDevelopmentcardBtn.setDisable(true);
         startProductionBtn.setDisable(true);
         leadercard0.setDisable(true);
         leadercard1.setDisable(true);
+    }
+
+    public void enableControls(){
+        if(playerBoard.getUsername().equals(clientController.getUsername())) {
+            marketBtn.setDisable(false);
+            buyDevelopmentcardBtn.setDisable(false);
+            startProductionBtn.setDisable(false);
+            leadercard0.setDisable(false);
+            leadercard1.setDisable(false);
+        }
+        selectUser.setDisable(false);
     }
 
     @FXML

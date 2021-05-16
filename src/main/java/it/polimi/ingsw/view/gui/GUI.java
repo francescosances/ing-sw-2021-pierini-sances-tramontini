@@ -33,6 +33,8 @@ public class GUI implements View {
 
     private Controller currentController;
 
+    private PlayerboardSceneController playerboardSceneController;
+
 
     public GUI(ClientController clientController, Stage stage){
         this.clientController = clientController;
@@ -48,8 +50,8 @@ public class GUI implements View {
             return currentController;
         this.currentScene = sceneName;
         Pair<Scene, Controller> sceneControllerPair = JavaFXGui.loadScene(sceneName, clientController);
-        stage.setScene(sceneControllerPair.fst);
         this.currentController = sceneControllerPair.snd;
+        stage.setScene(sceneControllerPair.fst);
         return sceneControllerPair.snd;
     }
 
@@ -146,6 +148,7 @@ public class GUI implements View {
     public void showPlayerBoard(PlayerBoard playerBoard) {
         Platform.runLater(()->{
             PlayerboardSceneController controller = (PlayerboardSceneController) loadScene("playerboard_scene",true);
+            this.playerboardSceneController = controller;
             controller.initialize(playerBoard);
         });
     }
@@ -162,6 +165,13 @@ public class GUI implements View {
 
     @Override
     public void askForAction(List<String> usernames, Action... availableActions) {
+        clientController.setPlayers(usernames);
+        if(playerboardSceneController == null)
+            return;
+        Platform.runLater(()->{
+            playerboardSceneController.populateUserSelect();
+            playerboardSceneController.enableControls();
+        });
     }
 
     @Override

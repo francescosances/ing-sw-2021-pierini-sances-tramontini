@@ -6,12 +6,10 @@ import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.*;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
-import org.graalvm.compiler.replacements.AllocationSnippets;
 
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.*;
-import java.util.stream.Collectors;
 
 //TODO: lo scanner deve essere eseguito in un thread diverso dal printstream
 public class CLI implements View {
