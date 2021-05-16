@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class ClientController {
@@ -152,7 +153,7 @@ public class ClientController {
                 view.showPlayerLeaderCards(playerLeaderCard);
                 break;
             case SHOW_PLAYERS:
-                List<String> players = new Gson().fromJson(message.getData("players"),new TypeToken<List<String>>(){}.getType());
+                Map<String, Boolean> players = new Gson().fromJson(message.getData("players"), Map.class);
                 view.showPlayers(players);
                 break;
             default:

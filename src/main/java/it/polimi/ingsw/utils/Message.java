@@ -82,8 +82,7 @@ public class Message{
      * @return the message deserialized from the specified JSON string
      */
     public static Message messageFromString(String serializedMessage){
-        Gson gson = new Gson();
-        return gson.fromJson(serializedMessage,Message.class);
+        return new Gson().fromJson(serializedMessage,Message.class);
     }
 
     /**

@@ -11,11 +11,7 @@ import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.view.VirtualView;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class GameController implements PlayerStatusListener {
 
@@ -145,7 +141,6 @@ public class GameController implements PlayerStatusListener {
      * Starts the match ending the phase of adding players. The firt player is chosen randomly.
      */
     public void start(){
-        listPlayers();
         match.setStarted(true);
         if(!isSuspended()) {
             match.setCurrentPlayerIndex(new Random().nextInt(players.size()));
@@ -332,7 +327,7 @@ public class GameController implements PlayerStatusListener {
             //TODO: cancellare la partita
             return;
         }
-            if(!players.get(match.getCurrentPlayerIndex()).isActive()) { // The current player is inactive
+        if(!players.get(match.getCurrentPlayerIndex()).isActive()) { // The current player is inactive
             broadcastMessage("The player: "+players.get(match.getCurrentPlayerIndex()).username+" is inactive. His turn has been skipped");
             if(match.getCurrentPhase() == Match.GamePhase.PLAYERS_SETUP)
                 onStatusChanged();
@@ -385,7 +380,7 @@ public class GameController implements PlayerStatusListener {
                 if(username.equals(players.get(getMatch().getCurrentPlayerIndex()).getUsername())) {
                     if(match.getCurrentPhase() == Match.GamePhase.PLAYERS_SETUP)
                         user.setup();
-                    user.turnEnded();
+                    nextTurn();
                 }
             }else {
                 if(user.getVirtualView() != null)
@@ -423,9 +418,14 @@ public class GameController implements PlayerStatusListener {
      * Lists to all players all the players playing that match
      */
     protected void listPlayers(){
+        Map<String, Boolean> map = new HashMap<>();
+
+        for (PlayerController p: players)
+            map.put(p.getUsername(), p.isActive());
+
         for(PlayerController playerController:players){
-            if(playerController.getVirtualView() != null)
-               playerController.getVirtualView().showPlayers(players.stream().map(PlayerController::getUsername).collect(Collectors.toList()));
+            if (playerController.getVirtualView() != null)
+                playerController.getVirtualView().showPlayers(map);
         }
     }
 

@@ -10,6 +10,7 @@ import it.polimi.ingsw.view.View;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.*;
+import java.util.stream.Collectors;
 
 //TODO: lo scanner deve essere eseguito in un thread diverso dal printstream
 public class CLI implements View {
@@ -420,11 +421,14 @@ public class CLI implements View {
     }
 
     @Override
-    public void showPlayers(List<String> users) {
-        clientController.setPlayers(users);
+    public void showPlayers(Map<String, Boolean> users) {
+        clientController.setPlayers(new ArrayList<>(users.keySet()));
         output.println("The players of this match are:");
-        for(String user:users){
-            output.println("- "+user);
+        for(String user:users.keySet()){
+            output.print("- "+user);
+            if (!users.get(user))
+                output.print("\t\t- not active");
+            output.print("\n");
         }
     }
 

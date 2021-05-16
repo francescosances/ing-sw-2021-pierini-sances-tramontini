@@ -242,11 +242,11 @@ public class Server implements StatusObserver {
      */
     private synchronized void reconnect(String username, ClientHandler clientHandler) {
         PlayerController playerController = getGameController(username).getPlayerController(username);
-        playerController.setVirtualView(new VirtualView(clientHandler)); //Set the virtual view with the new clientHandler reference
+        playerController.setVirtualView(new VirtualView(clientHandler)); //Sets the virtual view with the new clientHandler reference
         playerController.activate();
         getGameController(username).resumeMatch(username);
-        if(getGameController(username).isSuspended()){
-             if(getGameController(username).getPlayers().stream().filter(PlayerController::isActive).count() == getGameController(username).getTotalPlayers()){
+        if(getGameController(username).isSuspended()) {
+            if (getGameController(username).getPlayers().stream().filter(PlayerController::isActive).count() == getGameController(username).getTotalPlayers()) {
                 getGameController(username).start();
             }
         }
