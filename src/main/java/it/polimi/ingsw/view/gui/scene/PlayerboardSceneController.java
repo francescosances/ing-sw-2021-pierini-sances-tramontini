@@ -203,11 +203,16 @@ public class PlayerboardSceneController extends Controller{
 
         List<String> players = clientController.getPlayers();
         selectUser.setItems(FXCollections.observableArrayList(players));
-        selectUser.setValue(clientController.getUsername());
+        selectUser.setValue(playerBoard.getUsername());
 
         selectUser.getSelectionModel().selectedIndexProperty().addListener((observableValue, value, index) -> {
             int intIndex = (Integer) index;
             if(intIndex < 0)return;
+            String username = selectUser.getItems().get(intIndex);
+            if(!username.equals(clientController.getUsername())) {
+                clientController.showPlayerBoard(selectUser.getItems().get(intIndex));
+
+            }
             System.out.println(selectUser.getItems().get(intIndex));
         });
     }

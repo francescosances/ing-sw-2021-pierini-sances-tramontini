@@ -79,7 +79,7 @@ public class GameController implements PlayerStatusListener {
     public synchronized void handleReceivedGameMessage(Message message, String username){
         Gson gson = new Gson();
         try {
-            if(!username.equals(players.get(match.getCurrentPlayerIndex()).getUsername())){
+            if(message.getType() != Message.MessageType.SHOW_PLAYER_BOARD && !username.equals(players.get(match.getCurrentPlayerIndex()).getUsername())){
                 System.out.println("Invalid message received from "+username);
                 return;
             }
@@ -129,6 +129,7 @@ public class GameController implements PlayerStatusListener {
                     currentPlayerController.activateLeaderCard(Integer.parseInt(message.getData("num")));
                     break;
                 case SHOW_PLAYER_BOARD:
+                    //TODO: prendere l'username che ha mandato la richiesta e non quello corrente
                     currentPlayerController.showPlayerBoard(match.getPlayerBoard(new Gson().fromJson(message.getData("username"), String.class)));
                     break;
                 case ROLLBACK:
@@ -423,7 +424,8 @@ public class GameController implements PlayerStatusListener {
      */
     protected void listPlayers(){
         for(PlayerController playerController:players){
-            playerController.getVirtualView().showPlayers(players.stream().map(PlayerController::getUsername).collect(Collectors.toList()));
+            if(playerController.getVirtualView() != null)
+               playerController.getVirtualView().showPlayers(players.stream().map(PlayerController::getUsername).collect(Collectors.toList()));
         }
     }
 
