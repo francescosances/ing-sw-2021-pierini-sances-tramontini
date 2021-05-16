@@ -8,7 +8,6 @@ import it.polimi.ingsw.model.SoloMatch;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.network.ClientHandler;
 import it.polimi.ingsw.serialization.Serializer;
-import it.polimi.ingsw.utils.FileManager;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.view.VirtualView;
 
