@@ -125,8 +125,12 @@ public class GameController implements PlayerStatusListener {
                     currentPlayerController.activateLeaderCard(Integer.parseInt(message.getData("num")));
                     break;
                 case SHOW_PLAYER_BOARD:
-                    //TODO: prendere l'username che ha mandato la richiesta e non quello corrente
-                    currentPlayerController.showPlayerBoard(match.getPlayerBoard(new Gson().fromJson(message.getData("username"), String.class)));
+                    for (PlayerController controller:players) {
+                        if (controller.getUsername().equals(username)) {
+                            controller.showPlayerBoard(match.getPlayerBoard(new Gson().fromJson(message.getData("username"), String.class)));
+                            break;
+                        }
+                    }
                     break;
                 case ROLLBACK:
                     currentPlayerController.performAction(Action.CANCEL);
