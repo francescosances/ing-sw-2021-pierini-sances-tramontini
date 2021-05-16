@@ -329,7 +329,8 @@ public class GameController implements PlayerStatusListener {
     public void nextTurn(){
         match.setCurrentPlayerIndex((match.getCurrentPlayerIndex()+1)%players.size());
         if(players.stream().noneMatch(PlayerController::isActive)){
-            FileManager.getInstance().deleteMatch(match.getMatchName());
+            match.setCurrentPhase(Match.GamePhase.END_GAME);
+            statusObserver.onStatusChanged(this);
             return;
         }
         if(!players.get(match.getCurrentPlayerIndex()).isActive()) { // The current player is inactive

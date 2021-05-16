@@ -150,11 +150,15 @@ public class PlayerboardSceneController extends Controller{
         marker.setX(FAITH_TRACK_CELLS[playerBoard.getFaithTrack().getFaithMarker()][0]);
         marker.setY(FAITH_TRACK_CELLS[playerBoard.getFaithTrack().getFaithMarker()][1]);
 
-        this.leadercard0.setImage(new Image("/images/cards/FRONT/"+playerBoard.getLeaderCards().get(0).getCardName()+".png"));
-        this.leadercard1.setImage(new Image("/images/cards/FRONT/"+playerBoard.getLeaderCards().get(1).getCardName()+".png"));
+        if(playerBoard.getLeaderCards().size() > 0) {
+            this.leadercard0.setImage(new Image("/images/cards/FRONT/" + playerBoard.getLeaderCards().get(0).getCardName() + ".png"));
+            leadercard0.setOnMouseClicked((e) -> leaderCardClicked(0));
 
-        leadercard0.setOnMouseClicked((e)-> leaderCardClicked(0));
-        leadercard1.setOnMouseClicked((e)-> leaderCardClicked(1));
+            if(playerBoard.getLeaderCards().size() > 1) {
+                this.leadercard1.setImage(new Image("/images/cards/FRONT/" + playerBoard.getLeaderCards().get(1).getCardName() + ".png"));
+                leadercard1.setOnMouseClicked((e) -> leaderCardClicked(1));
+            }
+        }
 
         ImageView[][] slots =
                         {{developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2},

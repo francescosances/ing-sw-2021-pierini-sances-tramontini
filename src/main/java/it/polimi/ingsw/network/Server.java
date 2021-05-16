@@ -92,10 +92,16 @@ public class Server implements StatusObserver {
 
     @Override
     public void onStatusChanged(GameController gameController) {
-        try {
-            FileManager.getInstance().writeMatchStatus(gameController.getMatch());
-        } catch (IOException e) {
-            log("Unable to locally save the match status of "+gameController.getMatchName());
+        if(gameController.getMatch().getCurrentPhase() == Match.GamePhase.END_GAME){
+            for(PlayerController playerController: gameController.getPlayers())
+                players.remove(playerController.getUsername());
+            FileManager.getInstance().deleteMatch(gameController.getMatch().getMatchName());
+        }else {
+            try {
+                FileManager.getInstance().writeMatchStatus(gameController.getMatch());
+            } catch (IOException e) {
+                log("Unable to locally save the match status of " + gameController.getMatchName());
+            }
         }
     }
 
