@@ -40,7 +40,11 @@ public class GUI implements View {
     }
 
     private Controller loadScene(String sceneName){
-        if(currentScene != null && currentScene.equals(sceneName))
+        return loadScene(sceneName,false);
+    }
+
+    private Controller loadScene(String sceneName,boolean override){
+        if(!override && currentScene != null && currentScene.equals(sceneName))
             return currentController;
         this.currentScene = sceneName;
         Pair<Scene, Controller> sceneControllerPair = JavaFXGui.loadScene(sceneName, clientController);
@@ -141,7 +145,7 @@ public class GUI implements View {
     @Override
     public void showPlayerBoard(PlayerBoard playerBoard) {
         Platform.runLater(()->{
-            PlayerboardSceneController controller = (PlayerboardSceneController) loadScene("playerboard_scene");
+            PlayerboardSceneController controller = (PlayerboardSceneController) loadScene("playerboard_scene",true);
             controller.initialize(playerBoard);
         });
     }

@@ -209,12 +209,15 @@ public class PlayerboardSceneController extends Controller{
             int intIndex = (Integer) index;
             if(intIndex < 0)return;
             String username = selectUser.getItems().get(intIndex);
-            if(!username.equals(clientController.getUsername())) {
+            if(!username.equals(playerBoard.getUsername())) {
                 clientController.showPlayerBoard(selectUser.getItems().get(intIndex));
-
             }
-            System.out.println(selectUser.getItems().get(intIndex));
+            disableControls();
         });
+
+        if(!playerBoard.getUsername().equals(clientController.getUsername())) {
+            disableControls();
+        }
     }
 
     private void leaderCardClicked(int cardIndex){
