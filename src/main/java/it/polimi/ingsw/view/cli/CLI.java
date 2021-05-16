@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.*;
 
-//TODO: lo scanner deve essere eseguito in un thread diverso dal printstream
 public class CLI implements View {
 
     public static final String ANSI_RESET = "\u001B[0m";

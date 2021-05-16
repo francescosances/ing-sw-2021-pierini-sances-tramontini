@@ -70,9 +70,10 @@ public class ClientSocket implements Runnable{
     public void run(){
         while (!Thread.currentThread().isInterrupted()){
             String received = socketIn.nextLine();
-            log("ricevo"+received);
+            //log("ricevo"+received);
             Message message = Message.messageFromString(received);
-            clientController.handleReceivedMessage(message);
+            Thread t = new Thread(() -> clientController.handleReceivedMessage(message));
+            t.start();
         }
         //TODO: in caso di no line found e quindi chiusura della connessione dal server, chiudere anche thread java fx
         socketIn.close();
