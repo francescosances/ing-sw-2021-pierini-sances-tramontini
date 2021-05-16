@@ -11,6 +11,7 @@ import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.view.VirtualView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -326,9 +327,11 @@ public class GameController implements PlayerStatusListener {
      */
     public void nextTurn(){
         match.setCurrentPlayerIndex((match.getCurrentPlayerIndex()+1)%players.size());
-        if(players.stream().noneMatch(PlayerController::isActive)) //TODO: cancellare la partita
+        if(players.stream().noneMatch(PlayerController::isActive)){
+            //TODO: cancellare la partita
             return;
-        if(!players.get(match.getCurrentPlayerIndex()).isActive()) { // The current player is inactive
+        }
+            if(!players.get(match.getCurrentPlayerIndex()).isActive()) { // The current player is inactive
             broadcastMessage("The player: "+players.get(match.getCurrentPlayerIndex()).username+" is inactive. His turn has been skipped");
             if(match.getCurrentPhase() == Match.GamePhase.PLAYERS_SETUP)
                 onStatusChanged();
@@ -343,7 +346,9 @@ public class GameController implements PlayerStatusListener {
      * @param message the message to be sent
      */
     protected void broadcastMessage(String message){
-       players.forEach(player -> {player.getVirtualView().showMessage(message);});
+        for (PlayerController player : players) {
+            player.getVirtualView().showMessage(message);
+        }
     }
 
     /**
@@ -397,21 +402,35 @@ public class GameController implements PlayerStatusListener {
         return players.stream().filter(x->x.getUsername().equals(username)).anyMatch(PlayerController::isActive);
     }
 
-    //TODO: javadoc
+    /**
+     * Returns true if the match is suspended false elsewhere
+     * @return true if the match is suspended false elsewhere
+     */
     public boolean isSuspended() {
         return suspended;
     }
 
+    /**
+     * Sets a new value to the suspended attribute
+     * @param suspended the new value the attribute must turn into
+     */
     public void setSuspended(boolean suspended) {
         this.suspended = suspended;
     }
 
+    /**
+     * Lists to all players all the players playing that match
+     */
     protected void listPlayers(){
         for(PlayerController playerController:players){
             playerController.getVirtualView().showPlayers(players.stream().map(PlayerController::getUsername).collect(Collectors.toList()));
         }
     }
 
+    /**
+     * Makes a user reconnect to a match
+     * @param username the username of the player reconnecting
+     */
     public void resumeMatch(String username) {
         listPlayers();
         getPlayerController(username).getVirtualView().resumeMatch(getPlayerController(username).getPlayerBoard());

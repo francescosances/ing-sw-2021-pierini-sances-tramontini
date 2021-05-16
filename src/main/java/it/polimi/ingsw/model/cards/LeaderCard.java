@@ -125,8 +125,7 @@ public abstract class LeaderCard extends Card {
         if (this == o) return true;
         if (!(o instanceof LeaderCard)) return false;
         LeaderCard that = (LeaderCard) o;
-        //TODO: il confronto può essere fatto sul card name dalla classe padre
-        return requirements.equals(that.requirements) && active == that.active;
+        return requirements.equals(that.requirements) && active == that.active && super.getCardName().equals(that.getCardName());
     }
 
     /**
