@@ -63,7 +63,7 @@ public class FileManager {
     }
 
     public synchronized void deleteMatch(String matchName){
-        File matchFile = new File(ROOT_FOLDER_NAME + "/" + MATCHES_FOLDER_NAME + "/" + matchName + ".json");
+        File matchFile = new File(ROOT_FOLDER_NAME + "/" + MATCHES_FOLDER_NAME + "/" + fileName(matchName) + ".json");
         if (matchFile.delete()) {
             System.out.println(matchName + ".json successfully deleted");
             matchFile = new File(ROOT_FOLDER_NAME+"/matches.json");
@@ -78,14 +78,11 @@ public class FileManager {
                 FileWriter writer = new FileWriter(matchFile);
                 gson.toJson(matchesMap, writer);
                 writer.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else
             System.out.println("Impossible to delete " + matchName + ".json file!");
-
 
     }
 
