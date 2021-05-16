@@ -97,7 +97,7 @@ public class GUI implements View {
 
     @Override
     public void resumeMatch(PlayerBoard playerBoard) {
-
+        showPlayerBoard(playerBoard);
     }
 
     @Override

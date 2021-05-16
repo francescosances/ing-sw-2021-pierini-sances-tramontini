@@ -1,10 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.model.Action;
-import it.polimi.ingsw.model.EndGameException;
-import it.polimi.ingsw.model.Match;
-import it.polimi.ingsw.model.SoloMatch;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.network.ClientHandler;
 import it.polimi.ingsw.serialization.Serializer;
@@ -127,7 +124,11 @@ public class GameController implements PlayerStatusListener {
                 case SHOW_PLAYER_BOARD:
                     for (PlayerController controller:players) {
                         if (controller.getUsername().equals(username)) {
-                            controller.showPlayerBoard(match.getPlayerBoard(new Gson().fromJson(message.getData("username"), String.class)));
+                            PlayerBoard res = match.getPlayerBoard(message.getData("username"));
+                            if(!message.getData("username").equals(controller.getUsername())){
+                                res.getLeaderCards().clear();
+                            }
+                            controller.showPlayerBoard(res);
                             break;
                         }
                     }

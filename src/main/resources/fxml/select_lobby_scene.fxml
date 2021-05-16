@@ -9,32 +9,28 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane prefHeight="700.0" prefWidth="1000.0" styleClass="rootPane" stylesheets="@../css/select_lobby_scene.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.scene.SelectLobbySceneController">
-    <children>
-        <Group scaleX="1.5" scaleY="1.5">
-            <children>
-                <AnchorPane fx:id="rootPane">
-                    <children>
-                        <VBox layoutY="100.0" prefHeight="220.0" prefWidth="270.0">
-                            <children>
-                                <Label style="-fx-end-margin: 25px;-fx-text-fill: #fff" text="Select lobby:">
-                           <VBox.margin>
-                              <Insets bottom="5.0" />
-                           </VBox.margin>
-                                </Label>
-                        <ChoiceBox fx:id="lobbySelector" prefHeight="26.0" prefWidth="271.0" />
-                                 <Button onAction="#join" prefHeight="45" prefWidth="300.0" style="-fx-start-margin: 55px" styleClass="btn">
-                           <VBox.margin>
-                              <Insets top="25.0" />
-                           </VBox.margin></Button>
-                            </children>
-                     <padding>
-                        <Insets top="15.0" />
-                     </padding>
-                        </VBox>
-                    </children>
-                </AnchorPane>
-            </children>
-        </Group>
-    </children>
+<StackPane prefHeight="700.0" prefWidth="1000.0" styleClass="rootPane" stylesheets="@../css/select_lobby_scene.css"
+           xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="it.polimi.ingsw.view.gui.scene.SelectLobbySceneController">
+    <Group scaleX="1.5" scaleY="1.5">
+        <AnchorPane>
+            <VBox layoutY="100.0" prefHeight="220.0" prefWidth="270.0">
+                <padding>
+                    <Insets top="15.0"/>
+                </padding>
+                <Label style="-fx-end-margin: 25px;-fx-text-fill: #fff" text="Select lobby:">
+                    <VBox.margin>
+                        <Insets bottom="5.0"/>
+                    </VBox.margin>
+                </Label>
+                <ChoiceBox fx:id="lobbySelector" prefHeight="26.0" prefWidth="271.0"/>
+                <Button onAction="#join" prefHeight="45" prefWidth="300.0" style="-fx-start-margin: 55px"
+                        defaultButton="true" styleClass="btn">
+                    <VBox.margin>
+                        <Insets top="25.0"/>
+                    </VBox.margin>
+                </Button>
+            </VBox>
+        </AnchorPane>
+    </Group>
 </StackPane>
