@@ -18,7 +18,10 @@ import javafx.scene.control.Alert;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class GUI implements View {
 
@@ -206,8 +209,8 @@ public class GUI implements View {
     }
 
     @Override
-    public void showPlayers(List<String> users) {
-        this.clientController.setPlayers(users);
+    public void showPlayers(Map<String, Boolean> users) {
+        this.clientController.setPlayers(new ArrayList<>(users.keySet()));
     }
 
 }

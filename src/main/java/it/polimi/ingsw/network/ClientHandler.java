@@ -65,7 +65,7 @@ public class ClientHandler implements Runnable {
                 server.log("Message received from " + username);
                 server.log(message.serialize());
                 try {
-                    server.handleReceivedMessage(message, this); // Forward the message to the server
+                    server.handleReceivedMessage(message, this); // Forwards the message to the server
                 }catch (IllegalStateException | IllegalArgumentException e){
                     new VirtualView(this).showErrorMessage(e.getMessage());
                 }

@@ -15,6 +15,7 @@ import it.polimi.ingsw.utils.Triple;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class VirtualView implements View {
 
@@ -196,7 +197,7 @@ public class VirtualView implements View {
     }
 
     @Override
-    public void showPlayers(List<String> players) {
+    public void showPlayers(Map<String, Boolean> players) {
         Message message = new Message(Message.MessageType.SHOW_PLAYERS);
         message.addData("players",new Gson().toJson(players));
         sendMessage(message);

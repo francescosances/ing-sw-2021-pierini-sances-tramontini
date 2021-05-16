@@ -11,6 +11,7 @@ import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.utils.Triple;
 
 import java.util.List;
+import java.util.Map;
 
 public interface View {
 
@@ -173,5 +174,5 @@ public interface View {
      */
     void askToChooseStartResources(Resource[] values,int resourcesToChoose);
 
-    void showPlayers(List<String> users);
+    void showPlayers(Map<String, Boolean> users);
 }
