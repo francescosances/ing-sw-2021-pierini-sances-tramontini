@@ -28,6 +28,8 @@ public class CLI implements View {
      */
     private final ClientController clientController;
 
+    //TODO: input e output dovrebbero funzionare su stream diversi
+
     /**
      * The scanner that reads the user inputs
      */
