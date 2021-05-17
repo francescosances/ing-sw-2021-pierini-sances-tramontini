@@ -320,6 +320,10 @@ public class PlayerBoard {
         strongbox.removeResources(costs);
     }
 
+    public void setWarehouse(Warehouse warehouse) {
+        this.warehouse = warehouse;
+    }
+
     /**
      * Returns a String representation of the object
      * @return a String representation of the object
@@ -362,4 +366,6 @@ public class PlayerBoard {
     public int hashCode() {
         return super.hashCode();
     }
+
+
 }

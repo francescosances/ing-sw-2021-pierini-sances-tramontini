@@ -158,7 +158,7 @@ public class GUI implements View {
 
     @Override
     public void showWarehouse(Warehouse warehouse) {
-
+        playerboardSceneController.showWarehouse(warehouse);
     }
 
     @Override

@@ -1,10 +1,12 @@
 package it.polimi.ingsw.view.gui.scene;
 
 import it.polimi.ingsw.model.Action;
+import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
 import it.polimi.ingsw.model.storage.Depot;
+import it.polimi.ingsw.model.storage.Warehouse;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -191,23 +193,7 @@ public class PlayerboardSceneController extends Controller{
             slotIndex++;
         }
 
-        ImageView[][] warehouse = {
-                {warehouse0},
-                {warehouse1,warehouse2},
-                {warehouse3,warehouse4,warehouse5}
-        };
-
-        List<Depot> depots = playerBoard.getWarehouse().getDepots();
-        for(int i=0;i<depots.size();i++){
-            int j;
-            for(j=0;j<depots.get(i).getOccupied();j++){
-                warehouse[i][j].setImage(new Image("/images/resources/"+depots.get(i).getResourceType().toString()+".png"));
-                warehouse[i][j].setVisible(true);
-            }
-            for(int k=j;k<depots.get(i).getSize();k++){
-                warehouse[i][k].setVisible(false);
-            }
-        }
+        showWarehouse(playerBoard.getWarehouse());
 
         ImageView[] popeFavorTiles = {vaticanreport0,vaticanreport1,vaticanreport2};
         for(int i=0;i<3;i++){
@@ -218,110 +204,12 @@ public class PlayerboardSceneController extends Controller{
         disableControls();
         selectUser.setDisable(true);
 
-        warehouse0.setVisible(true);
-        warehouse1.setVisible(true);
-        warehouse2.setVisible(true);
-        warehouse3.setVisible(true);
-        warehouse4.setVisible(true);
-        warehouse5.setVisible(true);
-
-        warehouseRow0.hoverProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue && controlsEnabled) {
-                warehouse0.getStyleClass().add("card-selected");
-            } else if(selectedWarehouseRow == null || selectedWarehouseRow != 0){
-                warehouse0.getStyleClass().remove("card-selected");
-            }
-        });
-        warehouseRow0.setOnMouseClicked((e)->{
-            if(selectedWarehouseRow == null){
-                selectedWarehouseRow = 0;
-                warehouse0.getStyleClass().add("card-selected");
-            }else{
-                if (selectedWarehouseRow == 0) {
-                    selectedWarehouseRow = null;
-                    warehouse0.getStyleClass().remove("card-selected");
-                }else{
-                    clearWarehouseSelection();
-                    clientController.swapDepots(selectedWarehouseRow,0);
-                    //TODO: aggiornare la vista
-                }
-            }
-        });
-
-        warehouseRow1.hoverProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue && controlsEnabled) {
-                warehouse1.getStyleClass().add("card-selected");
-                warehouse2.getStyleClass().add("card-selected");
-            } else if(selectedWarehouseRow == null || selectedWarehouseRow != 1){
-                warehouse1.getStyleClass().remove("card-selected");
-                warehouse2.getStyleClass().remove("card-selected");
-            }
-        });
-        warehouseRow1.setOnMouseClicked((e)->{
-            if(selectedWarehouseRow == null){
-                selectedWarehouseRow = 1;
-                warehouse1.getStyleClass().add("card-selected");
-                warehouse2.getStyleClass().add("card-selected");
-            }else{
-                if (selectedWarehouseRow == 1) {
-                    selectedWarehouseRow = null;
-                    warehouse1.getStyleClass().remove("card-selected");
-                    warehouse2.getStyleClass().remove("card-selected");
-                }else{
-                    clearWarehouseSelection();
-                    clientController.swapDepots(selectedWarehouseRow,1);
-                    //TODO: aggiornare la vista
-                }
-            }
-        });
-
-        warehouseRow2.hoverProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue && controlsEnabled) {
-                warehouse3.getStyleClass().add("card-selected");
-                warehouse4.getStyleClass().add("card-selected");
-                warehouse5.getStyleClass().add("card-selected");
-            } else if(selectedWarehouseRow == null || selectedWarehouseRow != 2){
-                warehouse3.getStyleClass().remove("card-selected");
-                warehouse4.getStyleClass().remove("card-selected");
-                warehouse5.getStyleClass().remove("card-selected");
-            }
-        });
-
-        warehouseRow2.setOnMouseClicked((e)->{
-            if(selectedWarehouseRow == null){
-                selectedWarehouseRow = 2;
-                warehouse3.getStyleClass().add("card-selected");
-                warehouse4.getStyleClass().add("card-selected");
-                warehouse5.getStyleClass().add("card-selected");
-            }else{
-                if (selectedWarehouseRow == 2) {
-                    selectedWarehouseRow = null;
-                    warehouse3.getStyleClass().remove("card-selected");
-                    warehouse4.getStyleClass().remove("card-selected");
-                    warehouse5.getStyleClass().remove("card-selected");
-                }else{
-                    clearWarehouseSelection();
-                    clientController.swapDepots(selectedWarehouseRow,2);
-                    //TODO: aggiornare la vista
-                }
-            }
-        });
-    }
-
-    private void clearWarehouseSelection(){
-        warehouse0.getStyleClass().remove("card-selected");
-        warehouse1.getStyleClass().remove("card-selected");
-        warehouse2.getStyleClass().remove("card-selected");
-        warehouse3.getStyleClass().remove("card-selected");
-        warehouse4.getStyleClass().remove("card-selected");
-        warehouse5.getStyleClass().remove("card-selected");
-        selectedWarehouseRow = null;
     }
 
     public void populateUserSelect(){
         List<String> players = clientController.getPlayers();
         selectUser.setItems(FXCollections.observableArrayList(players));
-        selectUser.setValue(playerBoard.getUsername());
+        selectUser.setValue(Match.YOU_STRING);
 
         selectUser.getSelectionModel().selectedIndexProperty().addListener((observableValue, value, index) -> {
             int intIndex = (Integer) index;
@@ -408,6 +296,123 @@ public class PlayerboardSceneController extends Controller{
 
     @FXML
     public void buyDevelopmentCard() {
+    }
+
+    public void showWarehouse(Warehouse warehouse){
+        this.playerBoard.setWarehouse(warehouse);
+
+        ImageView[][] imgWarehouse = {
+                {warehouse0},
+                {warehouse1,warehouse2},
+                {warehouse3,warehouse4,warehouse5}
+        };
+
+        List<Depot> depots = warehouse.getDepots();
+        for(int i=0;i<depots.size();i++){
+            int j;
+            for(j=0;j<depots.get(i).getOccupied();j++){
+                imgWarehouse[i][j].setImage(new Image("/images/resources/"+depots.get(i).getResourceType().toString()+".png"));
+                imgWarehouse[i][j].setVisible(true);
+            }
+            for(int k=j;k<depots.get(i).getSize();k++){
+                imgWarehouse[i][k].setVisible(false);
+            }
+        }
+
+        warehouseRow0.hoverProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue && controlsEnabled) {
+                warehouse0.getStyleClass().add("card-selected");
+            } else if(selectedWarehouseRow == null || selectedWarehouseRow != 0){
+                warehouse0.getStyleClass().remove("card-selected");
+            }
+        });
+        warehouseRow0.setOnMouseClicked((e)->{
+            if(selectedWarehouseRow == null){
+                selectedWarehouseRow = 9;
+                warehouse0.getStyleClass().add("card-selected");
+            }else{
+                if (selectedWarehouseRow == 0) {
+                    selectedWarehouseRow = null;
+                    warehouse0.getStyleClass().remove("card-selected");
+                }else{
+                    System.out.println("SWAPPO "+selectedWarehouseRow+" e 0");
+                    clientController.swapDepots(selectedWarehouseRow,0);
+                    clearWarehouseSelection();
+                    //TODO: aggiornare la vista
+                }
+            }
+        });
+//TODO: impedire swap depositi altrui
+        warehouseRow1.hoverProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue && controlsEnabled) {
+                warehouse1.getStyleClass().add("card-selected");
+                warehouse2.getStyleClass().add("card-selected");
+            } else if(selectedWarehouseRow == null || selectedWarehouseRow != 1){
+                warehouse1.getStyleClass().remove("card-selected");
+                warehouse2.getStyleClass().remove("card-selected");
+            }
+        });
+        warehouseRow1.setOnMouseClicked((e)->{
+            if(selectedWarehouseRow == null){
+                selectedWarehouseRow = 1;
+                warehouse1.getStyleClass().add("card-selected");
+                warehouse2.getStyleClass().add("card-selected");
+            }else{
+                if (selectedWarehouseRow == 1) {
+                    selectedWarehouseRow = null;
+                    warehouse1.getStyleClass().remove("card-selected");
+                    warehouse2.getStyleClass().remove("card-selected");
+                }else{
+                    System.out.println("SWAPPO "+selectedWarehouseRow+" e 1");
+                    clientController.swapDepots(selectedWarehouseRow,1);
+                    clearWarehouseSelection();
+                    //TODO: aggiornare la vista
+                }
+            }
+        });
+
+        warehouseRow2.hoverProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue && controlsEnabled) {
+                warehouse3.getStyleClass().add("card-selected");
+                warehouse4.getStyleClass().add("card-selected");
+                warehouse5.getStyleClass().add("card-selected");
+            } else if(selectedWarehouseRow == null || selectedWarehouseRow != 2){
+                warehouse3.getStyleClass().remove("card-selected");
+                warehouse4.getStyleClass().remove("card-selected");
+                warehouse5.getStyleClass().remove("card-selected");
+            }
+        });
+
+        warehouseRow2.setOnMouseClicked((e)->{
+            if(selectedWarehouseRow == null){
+                selectedWarehouseRow = 2;
+                warehouse3.getStyleClass().add("card-selected");
+                warehouse4.getStyleClass().add("card-selected");
+                warehouse5.getStyleClass().add("card-selected");
+            }else{
+                if (selectedWarehouseRow == 2) {
+                    selectedWarehouseRow = null;
+                    warehouse3.getStyleClass().remove("card-selected");
+                    warehouse4.getStyleClass().remove("card-selected");
+                    warehouse5.getStyleClass().remove("card-selected");
+                }else{
+                    System.out.println("SWAPPO "+selectedWarehouseRow+" e 0");
+                    clientController.swapDepots(selectedWarehouseRow,2);
+                    clearWarehouseSelection();
+                    //TODO: aggiornare la vista
+                }
+            }
+        });
+    }
+
+    private void clearWarehouseSelection(){
+        warehouse0.getStyleClass().remove("card-selected");
+        warehouse1.getStyleClass().remove("card-selected");
+        warehouse2.getStyleClass().remove("card-selected");
+        warehouse3.getStyleClass().remove("card-selected");
+        warehouse4.getStyleClass().remove("card-selected");
+        warehouse5.getStyleClass().remove("card-selected");
+        selectedWarehouseRow = null;
     }
 
 }

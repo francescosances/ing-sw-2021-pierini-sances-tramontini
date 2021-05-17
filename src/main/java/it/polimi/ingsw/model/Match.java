@@ -30,6 +30,8 @@ public class Match {
 
     protected String matchName;
 
+    public static final String YOU_STRING = "You";
+
     /**
      * The index of the list players representing the active player
      */
