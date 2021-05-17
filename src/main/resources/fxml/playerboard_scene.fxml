@@ -6,6 +6,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 
 <StackPane fx:id="root" prefHeight="720.0" prefWidth="1080.0" styleClass="rootPane" stylesheets="@../css/playerboard_scene.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.scene.PlayerboardSceneController">
@@ -147,6 +148,9 @@
                    <Image url="@../images/punchboard/marker.png" />
                 </image>
              </ImageView>
+            <Region fx:id="warehouseRow2" layoutX="60.0" layoutY="473.0" prefHeight="48.0" prefWidth="105.0" />
+            <Region fx:id="warehouseRow1" layoutX="69.0" layoutY="415.0" prefHeight="43.0" prefWidth="87.0" />
+            <Region fx:id="warehouseRow0" layoutX="90.0" layoutY="368.0" prefHeight="33.0" prefWidth="53.0" />
          </children>
           </AnchorPane>
     </children>

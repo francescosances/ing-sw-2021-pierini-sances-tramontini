@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
 import it.polimi.ingsw.model.storage.Depot;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -15,6 +16,7 @@ import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -111,9 +113,22 @@ public class PlayerboardSceneController extends Controller{
     protected StackPane root;
 
     @FXML
+    protected Region warehouseRow0;
+
+    @FXML
+    protected Region warehouseRow1;
+
+    @FXML
+    protected Region warehouseRow2;
+
+    @FXML
     protected ChoiceBox<String> selectUser;
 
-    private final double[][] FAITH_TRACK_CELLS = {
+    protected boolean controlsEnabled = false;
+
+    protected Integer selectedWarehouseRow = null;
+
+    private final static double[][] FAITH_TRACK_CELLS = {
             {22,212},
             {64,212},
             {106,212},
@@ -202,6 +217,105 @@ public class PlayerboardSceneController extends Controller{
 
         disableControls();
         selectUser.setDisable(true);
+
+        warehouse0.setVisible(true);
+        warehouse1.setVisible(true);
+        warehouse2.setVisible(true);
+        warehouse3.setVisible(true);
+        warehouse4.setVisible(true);
+        warehouse5.setVisible(true);
+
+        warehouseRow0.hoverProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue && controlsEnabled) {
+                warehouse0.getStyleClass().add("card-selected");
+            } else if(selectedWarehouseRow == null || selectedWarehouseRow != 0){
+                warehouse0.getStyleClass().remove("card-selected");
+            }
+        });
+        warehouseRow0.setOnMouseClicked((e)->{
+            if(selectedWarehouseRow == null){
+                selectedWarehouseRow = 0;
+                warehouse0.getStyleClass().add("card-selected");
+            }else{
+                if (selectedWarehouseRow == 0) {
+                    selectedWarehouseRow = null;
+                    warehouse0.getStyleClass().remove("card-selected");
+                }else{
+                    clearWarehouseSelection();
+                    clientController.swapDepots(selectedWarehouseRow,0);
+                    //TODO: aggiornare la vista
+                }
+            }
+        });
+
+        warehouseRow1.hoverProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue && controlsEnabled) {
+                warehouse1.getStyleClass().add("card-selected");
+                warehouse2.getStyleClass().add("card-selected");
+            } else if(selectedWarehouseRow == null || selectedWarehouseRow != 1){
+                warehouse1.getStyleClass().remove("card-selected");
+                warehouse2.getStyleClass().remove("card-selected");
+            }
+        });
+        warehouseRow1.setOnMouseClicked((e)->{
+            if(selectedWarehouseRow == null){
+                selectedWarehouseRow = 1;
+                warehouse1.getStyleClass().add("card-selected");
+                warehouse2.getStyleClass().add("card-selected");
+            }else{
+                if (selectedWarehouseRow == 1) {
+                    selectedWarehouseRow = null;
+                    warehouse1.getStyleClass().remove("card-selected");
+                    warehouse2.getStyleClass().remove("card-selected");
+                }else{
+                    clearWarehouseSelection();
+                    clientController.swapDepots(selectedWarehouseRow,1);
+                    //TODO: aggiornare la vista
+                }
+            }
+        });
+
+        warehouseRow2.hoverProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue && controlsEnabled) {
+                warehouse3.getStyleClass().add("card-selected");
+                warehouse4.getStyleClass().add("card-selected");
+                warehouse5.getStyleClass().add("card-selected");
+            } else if(selectedWarehouseRow == null || selectedWarehouseRow != 2){
+                warehouse3.getStyleClass().remove("card-selected");
+                warehouse4.getStyleClass().remove("card-selected");
+                warehouse5.getStyleClass().remove("card-selected");
+            }
+        });
+
+        warehouseRow2.setOnMouseClicked((e)->{
+            if(selectedWarehouseRow == null){
+                selectedWarehouseRow = 2;
+                warehouse3.getStyleClass().add("card-selected");
+                warehouse4.getStyleClass().add("card-selected");
+                warehouse5.getStyleClass().add("card-selected");
+            }else{
+                if (selectedWarehouseRow == 2) {
+                    selectedWarehouseRow = null;
+                    warehouse3.getStyleClass().remove("card-selected");
+                    warehouse4.getStyleClass().remove("card-selected");
+                    warehouse5.getStyleClass().remove("card-selected");
+                }else{
+                    clearWarehouseSelection();
+                    clientController.swapDepots(selectedWarehouseRow,2);
+                    //TODO: aggiornare la vista
+                }
+            }
+        });
+    }
+
+    private void clearWarehouseSelection(){
+        warehouse0.getStyleClass().remove("card-selected");
+        warehouse1.getStyleClass().remove("card-selected");
+        warehouse2.getStyleClass().remove("card-selected");
+        warehouse3.getStyleClass().remove("card-selected");
+        warehouse4.getStyleClass().remove("card-selected");
+        warehouse5.getStyleClass().remove("card-selected");
+        selectedWarehouseRow = null;
     }
 
     public void populateUserSelect(){
@@ -263,6 +377,7 @@ public class PlayerboardSceneController extends Controller{
     }
 
     public void disableControls(){
+        controlsEnabled = false;
         marketBtn.setDisable(true);
         buyDevelopmentcardBtn.setDisable(true);
         startProductionBtn.setDisable(true);
@@ -272,6 +387,7 @@ public class PlayerboardSceneController extends Controller{
 
     public void enableControls(){
         if(playerBoard.getUsername().equals(clientController.getUsername())) {
+            controlsEnabled = true;
             marketBtn.setDisable(false);
             buyDevelopmentcardBtn.setDisable(false);
             startProductionBtn.setDisable(false);
