@@ -46,12 +46,17 @@ public class ClientController {
     private List<String> players;
 
     /**
+     * Manages synchronization
+     */
+    private boolean locked;
+
+    /**
      * Default empty constructor that initialize a new socket
      */
     public ClientController(){
         clientSocket = new ClientSocket(this);
+        locked = false;
     }
-
 
     /**
      * Sets the view to Command Line Interface and launches it
@@ -78,14 +83,28 @@ public class ClientController {
      */
     public void handleReceivedMessage(Message message) {
         Gson gson = new Gson();
+        while (locked) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        locked = true;
         switch (message.getType()) {
             case GENERIC:
+                locked = false;
+                notify();
                 view.showMessage(message.getData("text"));
                 break;
             case ERROR:
+                locked = false;
+                notify();
                 view.showErrorMessage(message.getData("text"));
                 break;
             case CURRENT_ACTIVE_USER:
+                locked = false;
+                notify();
                 view.showCurrentActiveUser(message.getData("username"));
                 break;
             case LOGIN_FAILED:
@@ -94,7 +113,8 @@ public class ClientController {
                 break;
             case LOBBY_INFO:
                 String availableMessages = message.getData("availableMatches");
-                Type listType = new TypeToken<List<Triple<String,Integer,Integer>>>(){}.getType();
+                Type listType = new TypeToken<List<Triple<String, Integer, Integer>>>() {
+                }.getType();
                 List<Triple<String, Integer, Integer>> matches = gson.fromJson(availableMessages, listType);
                 view.listLobbies(matches);
                 break;
@@ -103,17 +123,21 @@ public class ClientController {
                 break;
             case LIST_LEADER_CARDS:
                 List<LeaderCard> leaderCardList = Serializer.deserializeLeaderCardList(message.getData("leaderCards"));
-                view.listLeaderCards(leaderCardList,Integer.parseInt(message.getData("cardsToChoose")));
+                view.listLeaderCards(leaderCardList, Integer.parseInt(message.getData("cardsToChoose")));
                 break;
             case START_RESOURCES:
-                view.askToChooseStartResources(Serializer.deserializeResources(message.getData("resources")),Integer.parseInt(message.getData("resourcesToChoose")));
+                view.askToChooseStartResources(Serializer.deserializeResources(message.getData("resources")), Integer.parseInt(message.getData("resourcesToChoose")));
                 break;
             case SHOW_PLAYER_BOARD:
+                locked = false;
+                notify();
                 view.showPlayerBoard(Serializer.deserializePlayerBoard(message.getData("playerBoard")));
                 break;
             case ASK_FOR_ACTION:
-                List<Action> actions = gson.fromJson(message.getData("availableActions"),new TypeToken<List<Action>>(){}.getType());
-                List<String> usernames = gson.fromJson(message.getData("usernames"), new TypeToken<List<String>>(){}.getType());
+                List<Action> actions = gson.fromJson(message.getData("availableActions"), new TypeToken<List<Action>>() {
+                }.getType());
+                List<String> usernames = gson.fromJson(message.getData("usernames"), new TypeToken<List<String>>() {
+                }.getType());
                 view.askForAction(usernames, actions.toArray(new Action[0]));
                 break;
             case SWAP_DEPOTS:
@@ -133,33 +157,40 @@ public class ClientController {
                 view.showResourcesGainedFromMarket(Serializer.deserializeResources(message.getData("resources")));
                 break;
             case WHITE_MARBLE_CONVERSION:
-                view.chooseWhiteMarbleConversion(Serializer.deserializeLeaderCard(message.getData("card1")),Serializer.deserializeLeaderCard(message.getData("card2")));
+                view.chooseWhiteMarbleConversion(Serializer.deserializeLeaderCard(message.getData("card1")), Serializer.deserializeLeaderCard(message.getData("card2")));
                 break;
             case RESOURCE_TO_STORE:
-                view.askToStoreResource(Serializer.deserializeResource(message.getData("resource")),Serializer.deserializeWarehouse(message.getData("warehouse")));
+                view.askToStoreResource(Serializer.deserializeResource(message.getData("resource")), Serializer.deserializeWarehouse(message.getData("warehouse")));
                 break;
             case DEVELOPMENT_CARDS_TO_BUY:
-                view.listDevelopmentCards(Serializer.deserializeDevelopmentCardsDeckList(message.getData("developmentCards")),Integer.parseInt(message.getData("cardsToChoose")),Serializer.deserializePlayerBoard(message.getData("playerBoard")));
+                view.listDevelopmentCards(Serializer.deserializeDevelopmentCardsDeckList(message.getData("developmentCards")), Integer.parseInt(message.getData("cardsToChoose")), Serializer.deserializePlayerBoard(message.getData("playerBoard")));
                 break;
             case CHOOSE_DEVELOPMENT_CARD_SLOT:
-                view.askToChooseDevelopmentCardSlot(Serializer.deserializeDevelopmentCardsSlots(message.getData("slots")).toArray(new DevelopmentCardSlot[0]),Serializer.deserializeDevelopmentCard(message.getData("developmentCard")));
+                view.askToChooseDevelopmentCardSlot(Serializer.deserializeDevelopmentCardsSlots(message.getData("slots")).toArray(new DevelopmentCardSlot[0]), Serializer.deserializeDevelopmentCard(message.getData("developmentCard")));
                 break;
             case PRODUCTION:
                 List<Producer> producers = Serializer.deserializeProducerList(message.getData("productions"));
-                view.chooseProductions(producers,Serializer.deserializePlayerBoard(message.getData("playerboard")));
+                view.chooseProductions(producers, Serializer.deserializePlayerBoard(message.getData("playerboard")));
                 break;
             case SHOW_PLAYER_LEADER_CARDS:
                 List<LeaderCard> playerLeaderCard = Serializer.deserializeLeaderCardList(message.getData("leaderCards"));
                 view.showPlayerLeaderCards(playerLeaderCard);
                 break;
             case SHOW_PLAYERS:
+                locked = false;
+                notify();
                 Map<String, Boolean> players = new Gson().fromJson(message.getData("players"), Map.class);
                 view.showPlayers(players);
                 break;
             default:
+                locked = false;
+                notify();
                 clientSocket.log("Received unexpected message");
                 clientSocket.log(message.serialize());
+                break;
         }
+        locked = false;
+        notify();
     }
 
     /**
@@ -209,10 +240,11 @@ public class ClientController {
     private void lobbyChoice(String matchName,int playersNumber){
         Message message = new Message(Message.MessageType.LOBBY_CHOICE);
         message.addData("matchOwner", matchName);
-        if(playersNumber > 0)
+        if(playersNumber > 0) {
             message.addData("playersNumber", String.valueOf(playersNumber));
+            view.waitForOtherPlayers();
+        }
         clientSocket.sendMessage(message);
-        view.waitForOtherPlayers();
     }
 
     /**
