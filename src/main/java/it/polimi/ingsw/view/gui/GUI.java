@@ -21,7 +21,7 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.concurrent.Semaphore;
 
 public class GUI implements View {
 
@@ -35,6 +35,7 @@ public class GUI implements View {
 
     private PlayerboardSceneController playerboardSceneController;
 
+    private Semaphore playerBoardSemaphore = new Semaphore(0);
 
     public GUI(ClientController clientController, Stage stage){
         this.clientController = clientController;
@@ -149,6 +150,7 @@ public class GUI implements View {
         Platform.runLater(()->{
             PlayerboardSceneController controller = (PlayerboardSceneController) loadScene("playerboard_scene",true);
             this.playerboardSceneController = controller;
+            playerBoardSemaphore.release();
             controller.initialize(playerBoard);
         });
     }
@@ -166,6 +168,11 @@ public class GUI implements View {
     @Override
     public void askForAction(List<String> usernames, Action... availableActions) {
         clientController.setPlayers(usernames);
+        try {
+            playerBoardSemaphore.acquire();//TODO: se arrivano due ask for action verificare che semaforo non blocchi tutto
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         if(playerboardSceneController == null)
             return;
         Platform.runLater(()->{

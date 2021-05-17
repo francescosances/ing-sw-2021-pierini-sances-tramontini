@@ -117,7 +117,7 @@ public class CLI implements View {
             }while(playersNumber <= 0 || playersNumber > Match.MAX_PLAYERS);
             clientController.createNewLobby(playersNumber);
         } else if (choice > 0 && choice <= availableLobbies.size())
-            clientController.lobbyChoice(availableLobbies.get(choice - 1).getFirst());
+            clientController.lobbyChoice(availableLobbies.get(choice - 1).getFirst(),availableLobbies.get(choice-1).getThird());
         else
             clientController.refreshLobbies();
     }

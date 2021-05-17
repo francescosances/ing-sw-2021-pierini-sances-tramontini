@@ -74,7 +74,7 @@ public class SelectLobbySceneController extends Controller{
             Optional<Integer> result = askNumberOfPlayers();
             result.ifPresent(integer -> clientController.createNewLobby(integer));
         } else
-            clientController.lobbyChoice(selected.getFirst());
+            clientController.lobbyChoice(selected.getFirst(),selected.getThird());
     }
 
 }

@@ -229,20 +229,18 @@ public class ClientController {
         clientSocket.sendMessage(message);
     }
 
-    /**
-     * Sends to the server the lobby chosen by the user
-     * @param matchName the name of the match chosen by the user
-     */
-    public void lobbyChoice(String matchName) {
-        lobbyChoice(matchName,-1);
-    }
 
     /**
      * Creates a new lobby with the specified number of players
      * @param playersNumber the number of players that can join the match
      */
     public void createNewLobby(int playersNumber){
-        lobbyChoice(null,playersNumber);
+        Message message = new Message(Message.MessageType.LOBBY_CHOICE);
+        message.addData("matchOwner", null);
+        message.addData("playersNumber", String.valueOf(playersNumber));
+        if(playersNumber > 1)
+            view.waitForOtherPlayers();
+        clientSocket.sendMessage(message);
     }
 
     /**
@@ -250,13 +248,11 @@ public class ClientController {
      * @param matchName the name of the match to join (null to create a new match)
      * @param playersNumber the number of players in the new match (0 or less to join an existing match)
      */
-    private void lobbyChoice(String matchName,int playersNumber){
+    public void lobbyChoice(String matchName,int playersNumber){
         Message message = new Message(Message.MessageType.LOBBY_CHOICE);
         message.addData("matchOwner", matchName);
-        if(playersNumber > 0) {
-            message.addData("playersNumber", String.valueOf(playersNumber));
+        if(playersNumber > 1)
             view.waitForOtherPlayers();
-        }
         clientSocket.sendMessage(message);
     }
 
