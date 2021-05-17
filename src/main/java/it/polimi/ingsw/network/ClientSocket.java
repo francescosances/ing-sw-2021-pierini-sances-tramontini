@@ -70,7 +70,7 @@ public class ClientSocket implements Runnable{
     public void run(){
         while (!Thread.currentThread().isInterrupted()){
             String received = socketIn.nextLine();
-            //log("ricevo"+received);
+            //log("received"+received);
             Message message = Message.messageFromString(received);
             clientController.handleReceivedMessage(message);
         }
