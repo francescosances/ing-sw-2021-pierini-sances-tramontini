@@ -267,12 +267,20 @@ public class ClientController {
         view.waitForOtherPlayers();
     }
 
+    /**
+     * Sends to the server the list of DevelopmentCards chosen by the user
+     * @param cardsChosen the DevelopmentCards chosen by the user
+     */
     public void chooseDevelopmentCards(DevelopmentCard ... cardsChosen) {
         Message message = new Message(Message.MessageType.DEVELOPMENT_CARDS_TO_BUY);
         message.addData("developmentCards",Serializer.serializeDevelopmentCardsList(Arrays.asList(cardsChosen)));
         clientSocket.sendMessage(message);
     }
 
+    /**
+     * Sends to the server the number corresponding to the slot chosen by the user
+     * @param choice the number corresponding to the slot chosen by the user
+     */
     public void chooseDevelopmentCardsSlot(int choice) {
         Message message = new Message(Message.MessageType.CHOOSE_DEVELOPMENT_CARD_SLOT);
         message.addData("slotIndex",String.valueOf(choice));
@@ -290,6 +298,11 @@ public class ClientController {
         clientSocket.sendMessage(message);
     }
 
+    /**
+     * Sends to the server the number corresponding to the depots the user wants to swap
+     * @param depotA the number of first depot to swap
+     * @param depotB the number of the second depot to swap
+     */
     public void swapDepots(int depotA, int depotB) {
         Message message = new Message(Message.MessageType.SWAP_DEPOTS);
         message.addData("depotA",String.valueOf(depotA));
@@ -297,30 +310,52 @@ public class ClientController {
         clientSocket.sendMessage(message);
     }
 
+    /**
+     * Sends to the server the market's row number chosen by the user
+     * @param row the market's row number chosen by the user
+     */
     public void chooseMarketRow(int row){
         Message message = new Message(Message.MessageType.SELECT_MARKET_ROW);
         message.addData("row",String.valueOf(row));
         clientSocket.sendMessage(message);
     }
 
+    /**
+     * Sends to the server the market's column number chosen by the user
+     * @param column the market's column number chosen by the user
+     */
     public void chooseMarketColumn(int column){
         Message message = new Message(Message.MessageType.SELECT_MARKET_COLUMN);
         message.addData("column",String.valueOf(column));
         clientSocket.sendMessage(message);
     }
 
+    /**
+     * ends to the server the number corresponding to the chosen conversion
+     * @param choice the number corresponding to the chosen conversion
+     */
     public void chooseWhiteMarbleConversion(int choice) {
         Message message = new Message(Message.MessageType.WHITE_MARBLE_CONVERSION);
         message.addData("choice",String.valueOf(choice));
         clientSocket.sendMessage(message);
     }
 
+    /**
+     * Sends to the server where to store the resource
+     * @param choice the number of the depots chosen
+     */
     public void chooseDepot(int choice) {
         Message message = new Message(Message.MessageType.RESOURCE_TO_STORE);
         message.addData("choice",String.valueOf(choice));
         clientSocket.sendMessage(message);
     }
 
+    /**
+     * Sends to the server a Requirements Object containing the sum of all productions costs
+     * and a Requirements Object containing the sum of all productions gains
+     * @param costs the sum of all productions costs
+     * @param gains the sum of all productions gains
+     */
     public void chooseProductions(Requirements costs,Requirements gains) {
         Message message = new Message(Message.MessageType.PRODUCTION);
         message.addData("costs",Serializer.serializeRequirements(costs));
@@ -328,17 +363,28 @@ public class ClientController {
         clientSocket.sendMessage(message);
     }
 
+    /**
+     * Sends to the server an array containing all the resourcesChosen at the start of the match
+     * @param resourcesChosen the resources chosen
+     */
     public void chooseStartResources(Resource[] resourcesChosen) {
         Message message = new Message(Message.MessageType.START_RESOURCES);
         message.addData("resources",Serializer.serializeResources(resourcesChosen));
         clientSocket.sendMessage(message);
     }
 
+    /**
+     * Cancels the current action and asks for a new askForAction() request
+     */
     public void rollback() {
         Message message = new Message(Message.MessageType.ROLLBACK);
         clientSocket.sendMessage(message);
     }
 
+    /**
+     * Returns the view attribute
+     * @return the view attribute
+     */
     public View getView(){
         return view;
     }
@@ -351,36 +397,63 @@ public class ClientController {
         view.showPlayerBoard(playerBoard);
     }
 
+    /**
+     * Sends to the server the number associated with the LeaderCard to discard
+     * @param num the number associated with the LeaderCard to discard
+     */
     public void discardLeaderCard(int num) {
         Message message = new Message(Message.MessageType.DISCARD_LEADER_CARD);
         message.addData("num", new Gson().toJson(num));
         clientSocket.sendMessage(message);
     }
 
+    /**
+     * Sends to the server the number associated with the LeaderCard to activate
+     * @param num the number associated with the LeaderCard to activate
+     */
     public void activateLeaderCard(int num) {
         Message message = new Message(Message.MessageType.ACTIVATE_LEADER_CARD);
         message.addData("num", new Gson().toJson(num));
         clientSocket.sendMessage(message);
     }
 
+    /**
+     * Sends to the server a request to show the specified PlayerBoard
+     * @param username the username of the player whose PlayerBoard is to be shown
+     */
     public void showPlayerBoard(String username) {
         Message message = new Message(Message.MessageType.SHOW_PLAYER_BOARD);
         message.addData("username", username);
         clientSocket.sendMessage(message);
     }
 
+    /**
+     * Sets the attribute players
+     * @param users the value the attribute will be set to
+     */
     public void setPlayers(List<String> users) {
         this.players = users;
     }
 
+    /**
+     * Returns a list containing the players of the match
+     * @return the attribute players
+     */
     public List<String> getPlayers() {
         return players;
     }
 
+    /**
+     * Returns player's username
+     * @return player's username
+     */
     public String getUsername(){
         return username;
     }
 
+    /**
+     * Sends to the server a request to receive an updated lobby
+     */
     public void refreshLobbies(){
         Message message = new Message(Message.MessageType.LOBBY_INFO);
         clientSocket.sendMessage(message);

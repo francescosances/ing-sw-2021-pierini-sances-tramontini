@@ -169,7 +169,7 @@ public class GUI implements View {
     public void askForAction(List<String> usernames, Action... availableActions) {
         clientController.setPlayers(usernames);
         try {
-            playerBoardSemaphore.acquire();//TODO: se arrivano due ask for action verificare che semaforo non blocchi tutto
+            playerBoardSemaphore.acquire();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -178,6 +178,7 @@ public class GUI implements View {
         Platform.runLater(()->{
             playerboardSceneController.populateUserSelect();
             playerboardSceneController.enableControls();
+            playerBoardSemaphore.release();
         });
     }
 

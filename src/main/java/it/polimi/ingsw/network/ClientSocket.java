@@ -67,6 +67,11 @@ public class ClientSocket implements Runnable{
         socketOut = new PrintWriter(socket.getOutputStream());
     }
 
+    /**
+     * The method that will be run by a Thread
+     * Catches all incoming messages and sends them to the ClientController creating a new thread)
+     * so that it can be handled
+     */
     @Override
     public void run(){
         while (!Thread.currentThread().isInterrupted()){
@@ -82,8 +87,7 @@ public class ClientSocket implements Runnable{
                 break;
             }
         }
-        //TODO: in caso di no line found e quindi chiusura della connessione dal server, chiudere anche thread java fx
-        //TODO: settarli come demoni
+        //TODO: in caso di no line found e quindi chiusura della connessione dal server, chiudere anche thread javafx o settarli come demoni
         socketIn.close();
         socketOut.close();
         try {
