@@ -24,6 +24,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class ClientController {
     /**
@@ -46,11 +48,14 @@ public class ClientController {
      */
     private List<String> players;
 
+    private Lock lock;
+
     /**
      * Default empty constructor that initialize a new socket
      */
     public ClientController(){
         clientSocket = new ClientSocket(this);
+        lock = new ReentrantLock();
     }
 
     /**
@@ -89,73 +94,105 @@ public class ClientController {
                 view.showCurrentActiveUser(message.getData("username"));
                 break;
             case LOGIN_FAILED:
+                lock.lock();
                 view.showErrorMessage("Login failed, try with another username");
                 view.askLogin();
+                lock.unlock();
                 break;
             case LOBBY_INFO:
+                lock.lock();
                 String availableMessages = message.getData("availableMatches");
                 Type listType = new TypeToken<List<Triple<String, Integer, Integer>>>() {}.getType();
                 List<Triple<String, Integer, Integer>> matches = gson.fromJson(availableMessages, listType);
                 view.listLobbies(matches);
+                lock.unlock();
                 break;
             case RESUME_MATCH:
+                lock.lock();
                 resumeMatch(Serializer.deserializePlayerBoard(message.getData("playerBoard")));
-
+                lock.unlock();
                 break;
             case LIST_LEADER_CARDS:
+                lock.lock();
                 List<LeaderCard> leaderCardList = Serializer.deserializeLeaderCardList(message.getData("leaderCards"));
                 view.listLeaderCards(leaderCardList, Integer.parseInt(message.getData("cardsToChoose")));
-
+                lock.unlock();
                 break;
             case START_RESOURCES:
+                lock.lock();
                 view.askToChooseStartResources(Serializer.deserializeResources(message.getData("resources")), Integer.parseInt(message.getData("resourcesToChoose")));
-
+                lock.unlock();
                 break;
             case SHOW_PLAYER_BOARD:
+                lock.lock();
                 view.showPlayerBoard(Serializer.deserializePlayerBoard(message.getData("playerBoard")));
+                lock.unlock();
                 break;
             case ASK_FOR_ACTION:
+                lock.lock();
                 List<Action> actions = gson.fromJson(message.getData("availableActions"), new TypeToken<List<Action>>() {}.getType());
                 List<String> usernames = gson.fromJson(message.getData("usernames"), new TypeToken<List<String>>() {}.getType());
                 view.askForAction(usernames, actions.toArray(new Action[0]));
+                lock.unlock();
                 break;
             case SWAP_DEPOTS:
+                lock.lock();
                 view.askToSwapDepots(Serializer.deserializeWarehouse(message.getData("warehouse")));
+                lock.unlock();
                 break;
             case SHOW_WAREHOUSE_STATUS:
+                lock.lock();
                 view.showWarehouse(Serializer.deserializeWarehouse(message.getData("warehouse")));
+                lock.unlock();
                 break;
             case TAKE_RESOURCES_FROM_MARKET:
+                lock.lock();
                 Market market = Serializer.deserializeMarket(message.getData("market"));
                 view.takeResourcesFromMarket(market);
+                lock.unlock();
                 break;
             case SHOW_MARKET:
+                lock.lock();
                 market = Serializer.deserializeMarket(message.getData("market"));
                 view.showMarket(market);
+                lock.unlock();
                 break;
             case SHOW_RESOURCES:
+                lock.lock();
                 view.showResourcesGainedFromMarket(Serializer.deserializeResources(message.getData("resources")));
+                lock.unlock();
                 break;
             case WHITE_MARBLE_CONVERSION:
+                lock.lock();
                 view.chooseWhiteMarbleConversion(Serializer.deserializeLeaderCard(message.getData("card1")), Serializer.deserializeLeaderCard(message.getData("card2")));
-
+                lock.unlock();
                 break;
             case RESOURCE_TO_STORE:
+                lock.lock();
                 view.askToStoreResource(Serializer.deserializeResource(message.getData("resource")), Serializer.deserializeWarehouse(message.getData("warehouse")));
+                lock.unlock();
                 break;
             case DEVELOPMENT_CARDS_TO_BUY:
+                lock.lock();
                 view.listDevelopmentCards(Serializer.deserializeDevelopmentCardsDeckList(message.getData("developmentCards")), Integer.parseInt(message.getData("cardsToChoose")), Serializer.deserializePlayerBoard(message.getData("playerBoard")));
+                lock.unlock();
                 break;
             case CHOOSE_DEVELOPMENT_CARD_SLOT:
+                lock.lock();
                 view.askToChooseDevelopmentCardSlot(Serializer.deserializeDevelopmentCardsSlots(message.getData("slots")).toArray(new DevelopmentCardSlot[0]), Serializer.deserializeDevelopmentCard(message.getData("developmentCard")));
+                lock.unlock();
                 break;
             case PRODUCTION:
+                lock.lock();
                 List<Producer> producers = Serializer.deserializeProducerList(message.getData("productions"));
                 view.chooseProductions(producers, Serializer.deserializePlayerBoard(message.getData("playerboard")));
+                lock.unlock();
                 break;
             case SHOW_PLAYER_LEADER_CARDS:
+                lock.lock();
                 List<LeaderCard> playerLeaderCard = Serializer.deserializeLeaderCardList(message.getData("leaderCards"));
                 view.showPlayerLeaderCards(playerLeaderCard);
+                lock.unlock();
                 break;
             case SHOW_PLAYERS:
                 Map<String, Boolean> players = new Gson().fromJson(message.getData("players"), Map.class);

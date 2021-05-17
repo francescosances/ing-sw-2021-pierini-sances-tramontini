@@ -7,6 +7,7 @@ import it.polimi.ingsw.view.cli.CLI;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import static it.polimi.ingsw.view.cli.CLI.ANSI_BLUE;
@@ -69,12 +70,20 @@ public class ClientSocket implements Runnable{
     @Override
     public void run(){
         while (!Thread.currentThread().isInterrupted()){
-            String received = socketIn.nextLine();
-            //log("received"+received);
-            Message message = Message.messageFromString(received);
-            clientController.handleReceivedMessage(message);
+            try {
+                String received = socketIn.nextLine();
+                Message message = Message.messageFromString(received);
+                //log("received"+received);
+                Thread t = new Thread(()-> clientController.handleReceivedMessage(message));
+                t.start();
+            } catch (Exception e){
+                clientController.getView().showErrorMessage("Server closed connection");
+                break;
+            }
+
         }
         //TODO: in caso di no line found e quindi chiusura della connessione dal server, chiudere anche thread java fx
+        //TODO: settarli come demoni anche quello sopra
         socketIn.close();
         socketOut.close();
         try {
