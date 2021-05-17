@@ -28,8 +28,6 @@ public class CLI implements View {
      */
     private final ClientController clientController;
 
-    //TODO: input e output dovrebbero funzionare su stream diversi
-
     /**
      * The scanner that reads the user inputs
      */
@@ -43,6 +41,9 @@ public class CLI implements View {
      */
     private final PrintStream errorOutput;
 
+    /**
+     * Helps granting optimal visualization to different screen
+     */
     private final boolean lightMode;
 
     public CLI(ClientController clientController, boolean lightMode){

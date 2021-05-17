@@ -124,10 +124,12 @@ public class GameController implements PlayerStatusListener {
                 case SHOW_PLAYER_BOARD:
                     for (PlayerController controller:players) {
                         if (controller.getUsername().equals(username)) {
-                            PlayerBoard res = match.getPlayerBoard(message.getData("username"));
-                            if(!message.getData("username").equals(controller.getUsername())){
+                            String request = message.getData("username");
+                            if (request.equals("You"))
+                                request = username;
+                            PlayerBoard res = match.getPlayerBoard(request);
+                            if(!request.equals(controller.getUsername()))
                                 res.getLeaderCards().clear();
-                            }
                             controller.showPlayerBoard(res);
                             break;
                         }
@@ -424,12 +426,16 @@ public class GameController implements PlayerStatusListener {
      * Lists to all players all the players playing that match
      */
     protected void listPlayers(){
-        Map<String, Boolean> map = new HashMap<>();
-
-        for (PlayerController p: players)
-            map.put(p.getUsername(), p.isActive());
+        Map<String, Boolean> map;
 
         for(PlayerController playerController:players){
+            map = new HashMap<>();
+            for (PlayerController p:players) {
+                if (p.getUsername().equals(playerController.getUsername()))
+                    map.put("You", p.isActive());
+                else
+                    map.put(p.getUsername(), p.isActive());
+            }
             if (playerController.getVirtualView() != null)
                 playerController.getVirtualView().showPlayers(map);
         }

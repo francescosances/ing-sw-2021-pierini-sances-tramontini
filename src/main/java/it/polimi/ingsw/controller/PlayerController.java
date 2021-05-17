@@ -325,7 +325,7 @@ public class PlayerController {
     public void askForAction(){
         resetAfterDepotsSwapAction();
         virtualView.askForAction(
-                playerBoard.getMatch().getPlayers().stream().map(PlayerBoard::getUsername).collect(Collectors.toList()),
+                playerBoard.getMatch().getPlayers().stream().map(x -> x.getUsername().equals(this.username)?"You":x.getUsername()).collect(Collectors.toList()),
                 Arrays.stream(Action.ALL_ACTIONS)
                         .filter(x -> x != Action.CANCEL)
                         .filter(x -> !((x == Action.PLAY_LEADER) && this.playerBoard.getAvailableLeaderCards().isEmpty())) //If no leader cards are available, the options are removed from the list
@@ -376,7 +376,7 @@ public class PlayerController {
      */
     public void askForNormalAction(){
         virtualView.askForAction(
-                playerBoard.getMatch().getPlayers().stream().map(PlayerBoard::getUsername).collect(Collectors.toList()),
+                playerBoard.getMatch().getPlayers().stream().map(x -> x.getUsername().equals(this.username)?"You":x.getUsername()).collect(Collectors.toList()),
                 Arrays.stream(Action.NORMAL_ACTIONS)
                         .toArray(Action[]::new));
     }

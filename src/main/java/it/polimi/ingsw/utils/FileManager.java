@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.cards.Deck;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.LeaderCard;
+import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.serialization.Serializer;
 
 import java.io.*;
@@ -65,7 +66,7 @@ public class FileManager {
     public synchronized void deleteMatch(String matchName){
         File matchFile = new File(ROOT_FOLDER_NAME + "/" + MATCHES_FOLDER_NAME + "/" + fileName(matchName) + ".json");
         if (matchFile.delete()) {
-            System.out.println(matchName + ".json successfully deleted");
+            Server.log(matchName + ".json successfully deleted");
             matchFile = new File(ROOT_FOLDER_NAME+"/matches.json");
             try {
                 BufferedReader reader = new BufferedReader(new FileReader(matchFile));

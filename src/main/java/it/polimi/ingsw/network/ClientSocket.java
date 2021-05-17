@@ -75,15 +75,15 @@ public class ClientSocket implements Runnable{
                 Message message = Message.messageFromString(received);
                 log("received"+received);
                 Thread t = new Thread(()-> clientController.handleReceivedMessage(message));
+                t.setDaemon(true);
                 t.start();
             } catch (Exception e){
                 clientController.getView().showErrorMessage("Server closed connection");
                 break;
             }
-
         }
         //TODO: in caso di no line found e quindi chiusura della connessione dal server, chiudere anche thread java fx
-        //TODO: settarli come demoni anche quello sopra
+        //TODO: settarli come demoni
         socketIn.close();
         socketOut.close();
         try {
