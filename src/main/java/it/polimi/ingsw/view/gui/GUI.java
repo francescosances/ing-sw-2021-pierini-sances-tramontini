@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 public class GUI implements View {
 
@@ -169,16 +170,13 @@ public class GUI implements View {
     public void askForAction(List<String> usernames, Action... availableActions) {
         clientController.setPlayers(usernames);
         try {
-            playerBoardSemaphore.acquire();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+            playerBoardSemaphore.tryAcquire(3, TimeUnit.SECONDS);
+        } catch (InterruptedException ignored) {}
         if(playerboardSceneController == null)
             return;
         Platform.runLater(()->{
             playerboardSceneController.populateUserSelect();
             playerboardSceneController.enableControls();
-            playerBoardSemaphore.release();
         });
     }
 
