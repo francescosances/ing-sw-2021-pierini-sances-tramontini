@@ -324,7 +324,7 @@ public class ClientController {
 
     public void showPlayerBoard(String username) {
         Message message = new Message(Message.MessageType.SHOW_PLAYER_BOARD);
-        message.addData("username", new Gson().toJson(username));
+        message.addData("username", username);
         clientSocket.sendMessage(message);
     }
 

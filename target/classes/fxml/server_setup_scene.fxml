@@ -28,7 +28,7 @@
                               <Insets bottom="5.0" top="10.0" />
                            </VBox.margin></Label>
                                 <TextField fx:id="txtSrvPort" promptText="8000" />
-                                <Button styleClass="btn" onAction="#connect" prefHeight="45" prefWidth="300.0" style="-fx-start-margin: 55px" text="">
+                                <Button styleClass="btn" onAction="#connect" prefHeight="45" prefWidth="300.0" style="-fx-start-margin: 55px" defaultButton="true">
                            <VBox.margin>
                               <Insets top="25.0" />
                            </VBox.margin></Button>

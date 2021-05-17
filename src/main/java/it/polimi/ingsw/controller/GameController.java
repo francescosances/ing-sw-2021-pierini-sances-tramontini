@@ -1,14 +1,10 @@
 package it.polimi.ingsw.controller;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.model.Action;
-import it.polimi.ingsw.model.EndGameException;
-import it.polimi.ingsw.model.Match;
-import it.polimi.ingsw.model.SoloMatch;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.network.ClientHandler;
 import it.polimi.ingsw.serialization.Serializer;
-import it.polimi.ingsw.utils.FileManager;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.view.VirtualView;
 
@@ -128,7 +124,11 @@ public class GameController implements PlayerStatusListener {
                 case SHOW_PLAYER_BOARD:
                     for (PlayerController controller:players) {
                         if (controller.getUsername().equals(username)) {
-                            controller.showPlayerBoard(match.getPlayerBoard(new Gson().fromJson(message.getData("username"), String.class)));
+                            PlayerBoard res = match.getPlayerBoard(message.getData("username"));
+                            if(!message.getData("username").equals(controller.getUsername())){
+                                res.getLeaderCards().clear();
+                            }
+                            controller.showPlayerBoard(res);
                             break;
                         }
                     }
@@ -329,7 +329,8 @@ public class GameController implements PlayerStatusListener {
     public void nextTurn(){
         match.setCurrentPlayerIndex((match.getCurrentPlayerIndex()+1)%players.size());
         if(players.stream().noneMatch(PlayerController::isActive)){
-            FileManager.getInstance().deleteMatch(match.getMatchName());
+            match.setCurrentPhase(Match.GamePhase.END_GAME);
+            statusObserver.onStatusChanged(this);
             return;
         }
         if(!players.get(match.getCurrentPlayerIndex()).isActive()) { // The current player is inactive
