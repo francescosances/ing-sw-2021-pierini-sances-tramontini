@@ -47,6 +47,27 @@ public class MarketSceneController extends Controller{
     protected ImageView marble11;
 
     @FXML
+    protected ImageView row0;
+
+    @FXML
+    protected ImageView row1;
+
+    @FXML
+    protected ImageView row2;
+
+    @FXML
+    protected ImageView column0;
+
+    @FXML
+    protected ImageView column1;
+
+    @FXML
+    protected ImageView column2;
+
+    @FXML
+    protected ImageView column3;
+
+    @FXML
     public void initialize(Market market){
 
         ImageView[][] tray = {
@@ -63,6 +84,22 @@ public class MarketSceneController extends Controller{
 
         slide.setImage(new Image("/images/marbles/"+market.getSlideMarble().toString()+".png"));
 
+        column0.setOnMouseClicked((e)->columnClicked(0));
+        column1.setOnMouseClicked((e)->columnClicked(1));
+        column2.setOnMouseClicked((e)->columnClicked(2));
+        column3.setOnMouseClicked((e)->columnClicked(3));
+
+        row0.setOnMouseClicked((e)->rowClicked(0));
+        row1.setOnMouseClicked((e)->rowClicked(1));
+        row2.setOnMouseClicked((e)->rowClicked(2));
+    }
+
+    protected void columnClicked(int columnIndex){
+        clientController.chooseMarketColumn(columnIndex);
+    }
+
+    protected void rowClicked(int rowIndex){
+        clientController.chooseMarketRow(rowIndex);
     }
 
 

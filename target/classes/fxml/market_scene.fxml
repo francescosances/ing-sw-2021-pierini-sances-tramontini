@@ -21,7 +21,7 @@
                   <Image url="@../images/backgrounds/market_tray.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="marble0" fitHeight="66.0" fitWidth="55.0" layoutX="156.0" layoutY="141.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="marble0" fitHeight="66.0" fitWidth="55.0" layoutX="156.0" layoutY="142.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/marbles/WHITE.png" />
                </image>
@@ -31,7 +31,7 @@
                   <Image url="@../images/marbles/WHITE.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="marble1" fitHeight="66.0" fitWidth="55.0" layoutX="208.0" layoutY="140.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="marble1" fitHeight="66.0" fitWidth="55.0" layoutX="208.0" layoutY="141.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/marbles/WHITE.png" />
                </image>
@@ -41,32 +41,32 @@
                   <Image url="@../images/marbles/WHITE.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="marble3" fitHeight="66.0" fitWidth="55.0" layoutX="312.0" layoutY="139.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="marble3" fitHeight="66.0" fitWidth="55.0" layoutX="312.0" layoutY="141.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/marbles/WHITE.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="marble4" fitHeight="66.0" fitWidth="55.0" layoutX="156.0" layoutY="192.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="marble4" fitHeight="66.0" fitWidth="55.0" layoutX="156.0" layoutY="193.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/marbles/WHITE.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="marble5" fitHeight="66.0" fitWidth="55.0" layoutX="207.0" layoutY="192.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="marble5" fitHeight="66.0" fitWidth="55.0" layoutX="207.0" layoutY="193.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/marbles/WHITE.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="marble6" fitHeight="66.0" fitWidth="55.0" layoutX="259.0" layoutY="192.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="marble6" fitHeight="66.0" fitWidth="55.0" layoutX="259.0" layoutY="193.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/marbles/WHITE.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="marble7" fitHeight="66.0" fitWidth="55.0" layoutX="312.0" layoutY="192.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="marble7" fitHeight="66.0" fitWidth="55.0" layoutX="312.0" layoutY="193.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/marbles/WHITE.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="marble8" fitHeight="66.0" fitWidth="55.0" layoutX="155.0" layoutY="245.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="marble8" fitHeight="66.0" fitWidth="55.0" layoutX="155.0" layoutY="246.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/marbles/WHITE.png" />
                </image>
@@ -81,9 +81,44 @@
                   <Image url="@../images/marbles/WHITE.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="marble11" fitHeight="66.0" fitWidth="55.0" layoutX="313.0" layoutY="246.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="marble11" fitHeight="66.0" fitWidth="55.0" layoutX="313.0" layoutY="247.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/marbles/WHITE.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="row0" fitHeight="34.0" fitWidth="64.0" layoutX="433.0" layoutY="152.0" pickOnBounds="true" preserveRatio="true" styleClass="arrow">
+               <image>
+                  <Image url="@../images/buttons/market_horizontal_arrow.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="row1" fitHeight="34.0" fitWidth="64.0" layoutX="432.0" layoutY="207.0" pickOnBounds="true" preserveRatio="true" styleClass="arrow">
+               <image>
+                  <Image url="@../images/buttons/market_horizontal_arrow.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="row2" fitHeight="34.0" fitWidth="64.0" layoutX="433.0" layoutY="261.0" pickOnBounds="true" preserveRatio="true" styleClass="arrow">
+               <image>
+                  <Image url="@../images/buttons/market_horizontal_arrow.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="column0" fitHeight="79.0" fitWidth="34.0" layoutX="164.0" layoutY="368.0" pickOnBounds="true" preserveRatio="true" styleClass="arrow">
+               <image>
+                  <Image url="@../images/buttons/market_vertical_arrow.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="column1" fitHeight="79.0" fitWidth="34.0" layoutX="218.0" layoutY="368.0" pickOnBounds="true" preserveRatio="true" styleClass="arrow">
+               <image>
+                  <Image url="@../images/buttons/market_vertical_arrow.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="column2" fitHeight="79.0" fitWidth="34.0" layoutX="273.0" layoutY="368.0" pickOnBounds="true" preserveRatio="true" styleClass="arrow">
+               <image>
+                  <Image url="@../images/buttons/market_vertical_arrow.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="column3" fitHeight="79.0" fitWidth="34.0" layoutX="328.0" layoutY="368.0" pickOnBounds="true" preserveRatio="true" styleClass="arrow">
+               <image>
+                  <Image url="@../images/buttons/market_vertical_arrow.png" />
                </image>
             </ImageView>
          </children>
