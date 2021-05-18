@@ -26,7 +26,11 @@ public class SocketServer {
         this.port = port;
     }
 
-    public void start() throws IOException {
+    /**
+     * ClientSocket starts to wait for messages and to assign a ClientHandler
+     * to each client joining
+     */
+    public void start(){
         //It creates threads when necessary, otherwise it re-uses existing one when possible
         ExecutorService executor = Executors.newCachedThreadPool();
         ServerSocket serverSocket;
@@ -36,11 +40,11 @@ public class SocketServer {
             System.err.println(e.getMessage()); //port not available
             return;
         }
-        server.log("Server ready on port " + port);
+        Server.log("Server ready on port " + port);
         while (true){
             try{
                 Socket socket = serverSocket.accept();
-                server.log("User connected");
+                Server.log("User connected");
                 executor.submit(new ClientHandler(socket,server));
             }catch(IOException e){
                 e.printStackTrace();
@@ -48,7 +52,10 @@ public class SocketServer {
             }
         }
         executor.shutdown();
-        serverSocket.close();
+        try {
+            serverSocket.close();
+        }catch (IOException e){
+            System.err.println(e.getMessage());
+        }
     }
-
 }

@@ -33,6 +33,10 @@ public class Server implements StatusObserver {
         players = new HashMap<>();
     }
 
+    /**
+     * Creates a new Server Object and loads the games suspended and stored
+     * @return an instance of the server
+     */
     public static Server loadServer(){
         Server ret = new Server();
         try {
@@ -76,6 +80,9 @@ public class Server implements StatusObserver {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * updates the matches list both locally and on disk
+     */
     public void updateMatchesList(){
         try {
             Map<String,List<String>> newMap = new HashMap<>();
@@ -90,6 +97,10 @@ public class Server implements StatusObserver {
         }
     }
 
+    /**
+     * Updates GameController's match's save or deletes it in case it ended
+     * @param gameController the match that needs to be updated or deleted
+     */
     @Override
     public void onStatusChanged(GameController gameController) {
         if(gameController.getMatch().getCurrentPhase() == Match.GamePhase.END_GAME){
@@ -210,6 +221,11 @@ public class Server implements StatusObserver {
         }
     }
 
+    /**
+     * Makes the player join the lobby if possible
+     * @param matchName the match the player wants to join in
+     * @param clientHandler the ClientHandler of the player who wants to join in the match
+     */
     private synchronized void joinLobby(String matchName, ClientHandler clientHandler){
         View view = new VirtualView(clientHandler);
         if (getGameController(matchName) == null || getGameController(matchName).isFull()){

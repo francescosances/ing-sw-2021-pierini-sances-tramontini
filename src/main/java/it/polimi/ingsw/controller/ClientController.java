@@ -31,7 +31,7 @@ public class ClientController {
     /**
      * The socket connection to the server
      */
-    private ClientSocket clientSocket;
+    private final ClientSocket clientSocket;
 
     /**
      * The view used to interact with the user
@@ -48,7 +48,10 @@ public class ClientController {
      */
     private List<String> players;
 
-    private Lock lock;
+    /**
+     * Helps to handle synchronization
+     */
+    private final Lock lock;
 
     /**
      * Default empty constructor that initialize a new socket
