@@ -3,8 +3,7 @@ package it.polimi.ingsw.view.gui.scene;
 import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.PlayerBoard;
-import it.polimi.ingsw.model.cards.Card;
-import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
+import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.Depot;
 import it.polimi.ingsw.model.storage.Warehouse;
 import javafx.collections.FXCollections;
@@ -77,15 +76,7 @@ public class PlayerboardSceneController extends Controller{
         marker.setX(FAITH_TRACK_CELLS[playerBoard.getFaithTrack().getFaithMarker()][0]);
         marker.setY(FAITH_TRACK_CELLS[playerBoard.getFaithTrack().getFaithMarker()][1]);
 
-        if(playerBoard.getLeaderCards().size() > 0) {
-            this.leadercard0.setImage(new Image("/images/cards/FRONT/" + playerBoard.getLeaderCards().get(0).getCardName() + ".png"));
-            leadercard0.setOnMouseClicked((e) -> leaderCardClicked(0));
-
-            if(playerBoard.getLeaderCards().size() > 1) {
-                this.leadercard1.setImage(new Image("/images/cards/FRONT/" + playerBoard.getLeaderCards().get(1).getCardName() + ".png"));
-                leadercard1.setOnMouseClicked((e) -> leaderCardClicked(1));
-            }
-        }
+        showLeaderCards(playerBoard.getLeaderCards());
 
         ImageView[][] slots =
                         {{developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2},
@@ -202,10 +193,14 @@ public class PlayerboardSceneController extends Controller{
 
     @FXML
     public void startProduction() {
+        disableControls();
+        selectUser.setDisable(true);
+        clientController.performAction(Action.ACTIVATE_PRODUCTION);
     }
 
     @FXML
     public void buyDevelopmentCard() {
+        clientController.performAction(Action.BUY_DEVELOPMENT_CARD);
     }
 
     public void showWarehouse(Warehouse warehouse){
@@ -323,6 +318,25 @@ public class PlayerboardSceneController extends Controller{
         warehouse4.getStyleClass().remove("card-selected");
         warehouse5.getStyleClass().remove("card-selected");
         selectedWarehouseRow = null;
+    }
+
+    public void askProductionsToStart(){
+        baseProductionBtn.getStyleClass().add("btnProduction");
+    }
+
+    public void showLeaderCards(List<LeaderCard> leaderCardList) {
+        this.playerBoard.setLeaderCards(leaderCardList);
+
+        if(leaderCardList.size() > 0) {
+            this.leadercard0.setImage(new Image("/images/cards/FRONT/" + leaderCardList.get(0).getCardName() + ".png"));
+            leadercard0.setOnMouseClicked((e) -> leaderCardClicked(0));
+
+            if(leaderCardList.size() > 1) {
+                this.leadercard1.setImage(new Image("/images/cards/FRONT/" + leaderCardList.get(1).getCardName() + ".png"));
+                leadercard1.setOnMouseClicked((e) -> leaderCardClicked(1));
+            }
+        }
+
     }
 
 }

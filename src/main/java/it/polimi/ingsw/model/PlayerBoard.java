@@ -47,7 +47,7 @@ public class PlayerBoard {
     /**
      * A list referencing their LeaderCards
      */
-    private final List<LeaderCard> leaderCards;
+    private List<LeaderCard> leaderCards;
 
     /**
      * A counter that stores the number of DevelopmentCards bought
@@ -270,6 +270,10 @@ public class PlayerBoard {
      */
     public List<LeaderCard> getLeaderCards() {
         return leaderCards;
+    }
+
+    public void setLeaderCards(List<LeaderCard> leaderCardList) {
+        this.leaderCards = leaderCardList;
     }
 
     /**
