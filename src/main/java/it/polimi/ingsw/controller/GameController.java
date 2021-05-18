@@ -125,7 +125,7 @@ public class GameController implements PlayerStatusListener {
                     for (PlayerController controller:players) {
                         if (controller.getUsername().equals(username)) {
                             String request = message.getData("username");
-                            if (request.equals("You"))
+                            if (request.equals(Match.YOU_STRING))
                                 request = username;
                             PlayerBoard res = match.getPlayerBoard(request);
                             if(!request.equals(controller.getUsername()))
@@ -432,7 +432,7 @@ public class GameController implements PlayerStatusListener {
             map = new HashMap<>();
             for (PlayerController p:players) {
                 if (p.getUsername().equals(playerController.getUsername()))
-                    map.put("You", p.isActive());
+                    map.put(Match.YOU_STRING, p.isActive());
                 else
                     map.put(p.getUsername(), p.isActive());
             }

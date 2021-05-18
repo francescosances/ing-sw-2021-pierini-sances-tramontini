@@ -1,11 +1,11 @@
 package it.polimi.ingsw.view.gui.scene;
 
 import it.polimi.ingsw.model.Action;
+import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.PlayerBoard;
-import it.polimi.ingsw.model.cards.Card;
-import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
+import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.Depot;
-import javafx.beans.value.ChangeListener;
+import it.polimi.ingsw.model.storage.Warehouse;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -26,85 +26,25 @@ import java.util.Optional;
 public class PlayerboardSceneController extends Controller{
 
     @FXML
-    protected ImageView leadercard0;
+    protected ImageView leadercard0,leadercard1;
 
     @FXML
-    protected ImageView leadercard1;
+    protected ImageView leaderCardDepot00,leaderCardDepot01,leaderCardDepot10,leaderCardDepot11;
 
     @FXML
-    protected ImageView developmentcardslot0_0;
+    protected ImageView developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2,developmentcardslot1_0,developmentcardslot1_1,developmentcardslot1_2,developmentcardslot2_0,developmentcardslot2_1,developmentcardslot2_2;
 
     @FXML
-    protected ImageView developmentcardslot0_1;
+    protected Button marketBtn,startProductionBtn,buyDevelopmentcardBtn;
 
     @FXML
-    protected ImageView developmentcardslot0_2;
+    protected ImageView warehouse0,warehouse1,warehouse2,warehouse3,warehouse4,warehouse5;
 
     @FXML
-    protected ImageView developmentcardslot1_0;
+    protected ImageView strongbox0,strongbox1,strongbox2,strongbox3;
 
     @FXML
-    protected ImageView developmentcardslot1_1;
-
-    @FXML
-    protected ImageView developmentcardslot1_2;
-
-    @FXML
-    protected ImageView developmentcardslot2_0;
-
-    @FXML
-    protected ImageView developmentcardslot2_1;
-
-    @FXML
-    protected ImageView developmentcardslot2_2;
-
-    @FXML
-    protected Button marketBtn;
-
-    @FXML
-    protected Button startProductionBtn;
-
-    @FXML
-    protected Button buyDevelopmentcardBtn;
-
-    @FXML
-    protected ImageView warehouse0;
-
-    @FXML
-    protected ImageView warehouse1;
-
-    @FXML
-    protected ImageView warehouse2;
-
-    @FXML
-    protected ImageView warehouse3;
-
-    @FXML
-    protected ImageView warehouse4;
-
-    @FXML
-    protected ImageView warehouse5;
-
-    @FXML
-    protected ImageView strongbox0;
-
-    @FXML
-    protected ImageView strongbox1;
-
-    @FXML
-    protected ImageView strongbox2;
-
-    @FXML
-    protected ImageView strongbox3;
-
-    @FXML
-    protected ImageView vaticanreport0;
-
-    @FXML
-    protected ImageView vaticanreport1;
-
-    @FXML
-    protected ImageView vaticanreport2;
+    protected ImageView vaticanreport0,vaticanreport1,vaticanreport2;
 
     @FXML
     protected ImageView marker;
@@ -113,48 +53,19 @@ public class PlayerboardSceneController extends Controller{
     protected StackPane root;
 
     @FXML
-    protected Region warehouseRow0;
-
-    @FXML
-    protected Region warehouseRow1;
-
-    @FXML
-    protected Region warehouseRow2;
+    protected Region warehouseRow0,warehouseRow1,warehouseRow2;
 
     @FXML
     protected ChoiceBox<String> selectUser;
+
+    @FXML
+    protected ImageView baseProductionBtn;
 
     protected boolean controlsEnabled = false;
 
     protected Integer selectedWarehouseRow = null;
 
-    private final static double[][] FAITH_TRACK_CELLS = {
-            {22,212},
-            {64,212},
-            {106,212},
-            {106,170},
-            {106,128},
-            {148,128},
-            {190,128},
-            {232,128},
-            {276,128},
-            {318,128},
-            {318,170},
-            {318,212},
-            {360,212},
-            {402,212},
-            {446,212},
-            {488,212},
-            {530,212},
-            {530,170},
-            {530,128},
-            {572,128},
-            {614,128},
-            {658,128},
-            {700,128},
-            {742,128},
-            {784,128}
-    };
+    private final static double[][] FAITH_TRACK_CELLS = {{22,212}, {64,212}, {106,212}, {106,170}, {106,128}, {148,128}, {190,128}, {232,128}, {276,128}, {318,128}, {318,170}, {318,212}, {360,212}, {402,212}, {446,212}, {488,212}, {530,212}, {530,170}, {530,128}, {572,128}, {614,128}, {658,128}, {700,128}, {742,128}, {784,128}};
 
     private PlayerBoard playerBoard;
 
@@ -165,15 +76,7 @@ public class PlayerboardSceneController extends Controller{
         marker.setX(FAITH_TRACK_CELLS[playerBoard.getFaithTrack().getFaithMarker()][0]);
         marker.setY(FAITH_TRACK_CELLS[playerBoard.getFaithTrack().getFaithMarker()][1]);
 
-        if(playerBoard.getLeaderCards().size() > 0) {
-            this.leadercard0.setImage(new Image("/images/cards/FRONT/" + playerBoard.getLeaderCards().get(0).getCardName() + ".png"));
-            leadercard0.setOnMouseClicked((e) -> leaderCardClicked(0));
-
-            if(playerBoard.getLeaderCards().size() > 1) {
-                this.leadercard1.setImage(new Image("/images/cards/FRONT/" + playerBoard.getLeaderCards().get(1).getCardName() + ".png"));
-                leadercard1.setOnMouseClicked((e) -> leaderCardClicked(1));
-            }
-        }
+        showLeaderCards(playerBoard.getLeaderCards());
 
         ImageView[][] slots =
                         {{developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2},
@@ -191,23 +94,7 @@ public class PlayerboardSceneController extends Controller{
             slotIndex++;
         }
 
-        ImageView[][] warehouse = {
-                {warehouse0},
-                {warehouse1,warehouse2},
-                {warehouse3,warehouse4,warehouse5}
-        };
-
-        List<Depot> depots = playerBoard.getWarehouse().getDepots();
-        for(int i=0;i<depots.size();i++){
-            int j;
-            for(j=0;j<depots.get(i).getOccupied();j++){
-                warehouse[i][j].setImage(new Image("/images/resources/"+depots.get(i).getResourceType().toString()+".png"));
-                warehouse[i][j].setVisible(true);
-            }
-            for(int k=j;k<depots.get(i).getSize();k++){
-                warehouse[i][k].setVisible(false);
-            }
-        }
+        showWarehouse(playerBoard.getWarehouse());
 
         ImageView[] popeFavorTiles = {vaticanreport0,vaticanreport1,vaticanreport2};
         for(int i=0;i<3;i++){
@@ -218,110 +105,12 @@ public class PlayerboardSceneController extends Controller{
         disableControls();
         selectUser.setDisable(true);
 
-        warehouse0.setVisible(true);
-        warehouse1.setVisible(true);
-        warehouse2.setVisible(true);
-        warehouse3.setVisible(true);
-        warehouse4.setVisible(true);
-        warehouse5.setVisible(true);
-
-        warehouseRow0.hoverProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue && controlsEnabled) {
-                warehouse0.getStyleClass().add("card-selected");
-            } else if(selectedWarehouseRow == null || selectedWarehouseRow != 0){
-                warehouse0.getStyleClass().remove("card-selected");
-            }
-        });
-        warehouseRow0.setOnMouseClicked((e)->{
-            if(selectedWarehouseRow == null){
-                selectedWarehouseRow = 0;
-                warehouse0.getStyleClass().add("card-selected");
-            }else{
-                if (selectedWarehouseRow == 0) {
-                    selectedWarehouseRow = null;
-                    warehouse0.getStyleClass().remove("card-selected");
-                }else{
-                    clearWarehouseSelection();
-                    clientController.swapDepots(selectedWarehouseRow,0);
-                    //TODO: aggiornare la vista
-                }
-            }
-        });
-
-        warehouseRow1.hoverProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue && controlsEnabled) {
-                warehouse1.getStyleClass().add("card-selected");
-                warehouse2.getStyleClass().add("card-selected");
-            } else if(selectedWarehouseRow == null || selectedWarehouseRow != 1){
-                warehouse1.getStyleClass().remove("card-selected");
-                warehouse2.getStyleClass().remove("card-selected");
-            }
-        });
-        warehouseRow1.setOnMouseClicked((e)->{
-            if(selectedWarehouseRow == null){
-                selectedWarehouseRow = 1;
-                warehouse1.getStyleClass().add("card-selected");
-                warehouse2.getStyleClass().add("card-selected");
-            }else{
-                if (selectedWarehouseRow == 1) {
-                    selectedWarehouseRow = null;
-                    warehouse1.getStyleClass().remove("card-selected");
-                    warehouse2.getStyleClass().remove("card-selected");
-                }else{
-                    clearWarehouseSelection();
-                    clientController.swapDepots(selectedWarehouseRow,1);
-                    //TODO: aggiornare la vista
-                }
-            }
-        });
-
-        warehouseRow2.hoverProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue && controlsEnabled) {
-                warehouse3.getStyleClass().add("card-selected");
-                warehouse4.getStyleClass().add("card-selected");
-                warehouse5.getStyleClass().add("card-selected");
-            } else if(selectedWarehouseRow == null || selectedWarehouseRow != 2){
-                warehouse3.getStyleClass().remove("card-selected");
-                warehouse4.getStyleClass().remove("card-selected");
-                warehouse5.getStyleClass().remove("card-selected");
-            }
-        });
-
-        warehouseRow2.setOnMouseClicked((e)->{
-            if(selectedWarehouseRow == null){
-                selectedWarehouseRow = 2;
-                warehouse3.getStyleClass().add("card-selected");
-                warehouse4.getStyleClass().add("card-selected");
-                warehouse5.getStyleClass().add("card-selected");
-            }else{
-                if (selectedWarehouseRow == 2) {
-                    selectedWarehouseRow = null;
-                    warehouse3.getStyleClass().remove("card-selected");
-                    warehouse4.getStyleClass().remove("card-selected");
-                    warehouse5.getStyleClass().remove("card-selected");
-                }else{
-                    clearWarehouseSelection();
-                    clientController.swapDepots(selectedWarehouseRow,2);
-                    //TODO: aggiornare la vista
-                }
-            }
-        });
-    }
-
-    private void clearWarehouseSelection(){
-        warehouse0.getStyleClass().remove("card-selected");
-        warehouse1.getStyleClass().remove("card-selected");
-        warehouse2.getStyleClass().remove("card-selected");
-        warehouse3.getStyleClass().remove("card-selected");
-        warehouse4.getStyleClass().remove("card-selected");
-        warehouse5.getStyleClass().remove("card-selected");
-        selectedWarehouseRow = null;
     }
 
     public void populateUserSelect(){
         List<String> players = clientController.getPlayers();
         selectUser.setItems(FXCollections.observableArrayList(players));
-        selectUser.setValue(playerBoard.getUsername());
+        selectUser.setValue((playerBoard.getUsername().equals(clientController.getUsername()))?Match.YOU_STRING: playerBoard.getUsername());
 
         selectUser.getSelectionModel().selectedIndexProperty().addListener((observableValue, value, index) -> {
             int intIndex = (Integer) index;
@@ -404,10 +193,150 @@ public class PlayerboardSceneController extends Controller{
 
     @FXML
     public void startProduction() {
+        disableControls();
+        selectUser.setDisable(true);
+        clientController.performAction(Action.ACTIVATE_PRODUCTION);
     }
 
     @FXML
     public void buyDevelopmentCard() {
+        clientController.performAction(Action.BUY_DEVELOPMENT_CARD);
+    }
+
+    public void showWarehouse(Warehouse warehouse){
+        this.playerBoard.setWarehouse(warehouse);
+
+        ImageView[][] imgWarehouse = {
+                {warehouse0},
+                {warehouse1,warehouse2},
+                {warehouse3,warehouse4,warehouse5}
+        };
+
+        List<Depot> depots = warehouse.getDepots();
+        for(int i=0;i<depots.size();i++){
+            int j;
+            for(j=0;j<depots.get(i).getOccupied();j++){
+                imgWarehouse[i][j].setImage(new Image("/images/resources/"+depots.get(i).getResourceType().toString()+".png"));
+                imgWarehouse[i][j].setVisible(true);
+            }
+            for(int k=j;k<depots.get(i).getSize();k++){
+                imgWarehouse[i][k].setVisible(false);
+            }
+        }
+
+        warehouseRow0.hoverProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue && controlsEnabled) {
+                warehouse0.getStyleClass().add("card-selected");
+            } else if(selectedWarehouseRow == null || selectedWarehouseRow != 0){
+                warehouse0.getStyleClass().remove("card-selected");
+            }
+        });
+        warehouseRow0.setOnMouseClicked((e)->{
+            if(selectedWarehouseRow == null){
+                selectedWarehouseRow = 9;
+                warehouse0.getStyleClass().add("card-selected");
+            }else{
+                if (selectedWarehouseRow == 0) {
+                    selectedWarehouseRow = null;
+                    warehouse0.getStyleClass().remove("card-selected");
+                }else{
+                    System.out.println("SWAPPO "+selectedWarehouseRow+" e 0");
+                    clientController.swapDepots(selectedWarehouseRow,0);
+                    clearWarehouseSelection();
+                    //TODO: aggiornare la vista
+                }
+            }
+        });
+//TODO: impedire swap depositi altrui
+        warehouseRow1.hoverProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue && controlsEnabled) {
+                warehouse1.getStyleClass().add("card-selected");
+                warehouse2.getStyleClass().add("card-selected");
+            } else if(selectedWarehouseRow == null || selectedWarehouseRow != 1){
+                warehouse1.getStyleClass().remove("card-selected");
+                warehouse2.getStyleClass().remove("card-selected");
+            }
+        });
+        warehouseRow1.setOnMouseClicked((e)->{
+            if(selectedWarehouseRow == null){
+                selectedWarehouseRow = 1;
+                warehouse1.getStyleClass().add("card-selected");
+                warehouse2.getStyleClass().add("card-selected");
+            }else{
+                if (selectedWarehouseRow == 1) {
+                    selectedWarehouseRow = null;
+                    warehouse1.getStyleClass().remove("card-selected");
+                    warehouse2.getStyleClass().remove("card-selected");
+                }else{
+                    System.out.println("SWAPPO "+selectedWarehouseRow+" e 1");
+                    clientController.swapDepots(selectedWarehouseRow,1);
+                    clearWarehouseSelection();
+                    //TODO: aggiornare la vista
+                }
+            }
+        });
+
+        warehouseRow2.hoverProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue && controlsEnabled) {
+                warehouse3.getStyleClass().add("card-selected");
+                warehouse4.getStyleClass().add("card-selected");
+                warehouse5.getStyleClass().add("card-selected");
+            } else if(selectedWarehouseRow == null || selectedWarehouseRow != 2){
+                warehouse3.getStyleClass().remove("card-selected");
+                warehouse4.getStyleClass().remove("card-selected");
+                warehouse5.getStyleClass().remove("card-selected");
+            }
+        });
+
+        warehouseRow2.setOnMouseClicked((e)->{
+            if(selectedWarehouseRow == null){
+                selectedWarehouseRow = 2;
+                warehouse3.getStyleClass().add("card-selected");
+                warehouse4.getStyleClass().add("card-selected");
+                warehouse5.getStyleClass().add("card-selected");
+            }else{
+                if (selectedWarehouseRow == 2) {
+                    selectedWarehouseRow = null;
+                    warehouse3.getStyleClass().remove("card-selected");
+                    warehouse4.getStyleClass().remove("card-selected");
+                    warehouse5.getStyleClass().remove("card-selected");
+                }else{
+                    System.out.println("SWAPPO "+selectedWarehouseRow+" e 0");
+                    clientController.swapDepots(selectedWarehouseRow,2);
+                    clearWarehouseSelection();
+                    //TODO: aggiornare la vista
+                }
+            }
+        });
+    }
+
+    private void clearWarehouseSelection(){
+        warehouse0.getStyleClass().remove("card-selected");
+        warehouse1.getStyleClass().remove("card-selected");
+        warehouse2.getStyleClass().remove("card-selected");
+        warehouse3.getStyleClass().remove("card-selected");
+        warehouse4.getStyleClass().remove("card-selected");
+        warehouse5.getStyleClass().remove("card-selected");
+        selectedWarehouseRow = null;
+    }
+
+    public void askProductionsToStart(){
+        baseProductionBtn.getStyleClass().add("btnProduction");
+    }
+
+    public void showLeaderCards(List<LeaderCard> leaderCardList) {
+        this.playerBoard.setLeaderCards(leaderCardList);
+
+        if(leaderCardList.size() > 0) {
+            this.leadercard0.setImage(new Image("/images/cards/FRONT/" + leaderCardList.get(0).getCardName() + ".png"));
+            leadercard0.setOnMouseClicked((e) -> leaderCardClicked(0));
+
+            if(leaderCardList.size() > 1) {
+                this.leadercard1.setImage(new Image("/images/cards/FRONT/" + leaderCardList.get(1).getCardName() + ".png"));
+                leadercard1.setOnMouseClicked((e) -> leaderCardClicked(1));
+            }
+        }
+
     }
 
 }

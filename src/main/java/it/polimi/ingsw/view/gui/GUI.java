@@ -70,6 +70,15 @@ public class GUI implements View {
         return temp.snd;
     }
 
+    private PlayerboardSceneController getPlayerBoardSceneController() {
+        try {
+            playerBoardSemaphore.tryAcquire(3, TimeUnit.SECONDS);
+        } catch (InterruptedException ignored) {
+            return null;
+        }
+        return playerboardSceneController;
+    }
+
     @Override
     public void showMessage(String message) {
         Platform.runLater(()->{
@@ -120,12 +129,12 @@ public class GUI implements View {
 
     @Override
     public void userConnected(String username) {
-
+        showMessage(username+" has joined the match");
     }
 
     @Override
     public void userDisconnected(String username) {
-
+        showMessage(username+" has left the match");
     }
 
     @Override
@@ -138,18 +147,21 @@ public class GUI implements View {
 
     @Override
     public void showPlayerLeaderCards(List<LeaderCard> leaderCardList) {
-
+        Platform.runLater(()->{
+            if(getPlayerBoardSceneController() != null)
+                getPlayerBoardSceneController().showLeaderCards(leaderCardList);
+        });
     }
 
     @Override
     public void listDevelopmentCards(List<Deck<DevelopmentCard>> developmentCardList, int cardsToChoose, PlayerBoard userBoard) {
-
+        openModal("select_development_cards_scene","Select development cards",()->{clientController.rollback();});
     }
 
     @Override
     public void showPlayerBoard(PlayerBoard playerBoard) {
         Platform.runLater(()->{
-            PlayerboardSceneController controller = (PlayerboardSceneController) loadScene("playerboard_scene",true);
+            PlayerboardSceneController controller = (PlayerboardSceneController) loadScene("playerboard_scene",playerboardSceneController == null || playerBoard.getUsername().equals(playerboardSceneController.getClientController().getUsername()));
             this.playerboardSceneController = controller;
             playerBoardSemaphore.release();
             controller.initialize(playerBoard);
@@ -158,7 +170,7 @@ public class GUI implements View {
 
     @Override
     public void showWarehouse(Warehouse warehouse) {
-
+        playerboardSceneController.showWarehouse(warehouse);
     }
 
     @Override
@@ -166,13 +178,11 @@ public class GUI implements View {
 
     }
 
+
     @Override
     public void askForAction(List<String> usernames, Action... availableActions) {
         clientController.setPlayers(usernames);
-        try {
-            playerBoardSemaphore.tryAcquire(3, TimeUnit.SECONDS);
-        } catch (InterruptedException ignored) {}
-        if(playerboardSceneController == null)
+        if(getPlayerBoardSceneController() == null)
             return;
         Platform.runLater(()->{
             playerboardSceneController.populateUserSelect();
@@ -212,7 +222,11 @@ public class GUI implements View {
 
     @Override
     public void chooseProductions(List<Producer> availableProductions, PlayerBoard playerBoard) {
-
+        if(getPlayerBoardSceneController() == null)
+            return;
+        Platform.runLater(()->{
+            playerboardSceneController.askProductionsToStart();
+        });
     }
 
     @Override

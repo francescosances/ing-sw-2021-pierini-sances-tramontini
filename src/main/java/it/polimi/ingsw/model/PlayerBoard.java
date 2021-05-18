@@ -47,7 +47,7 @@ public class PlayerBoard {
     /**
      * A list referencing their LeaderCards
      */
-    private final List<LeaderCard> leaderCards;
+    private List<LeaderCard> leaderCards;
 
     /**
      * A counter that stores the number of DevelopmentCards bought
@@ -272,6 +272,10 @@ public class PlayerBoard {
         return leaderCards;
     }
 
+    public void setLeaderCards(List<LeaderCard> leaderCardList) {
+        this.leaderCards = leaderCardList;
+    }
+
     /**
      * Returns the leader cards that can be activated or discarded
      * @return a list of leader cards that can be activated or discarded
@@ -320,6 +324,10 @@ public class PlayerBoard {
         strongbox.removeResources(costs);
     }
 
+    public void setWarehouse(Warehouse warehouse) {
+        this.warehouse = warehouse;
+    }
+
     /**
      * Returns a String representation of the object
      * @return a String representation of the object
@@ -362,4 +370,6 @@ public class PlayerBoard {
     public int hashCode() {
         return super.hashCode();
     }
+
+
 }
