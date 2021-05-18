@@ -7,7 +7,6 @@ import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
 import it.polimi.ingsw.model.storage.Depot;
 import it.polimi.ingsw.model.storage.Warehouse;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -28,85 +27,25 @@ import java.util.Optional;
 public class PlayerboardSceneController extends Controller{
 
     @FXML
-    protected ImageView leadercard0;
+    protected ImageView leadercard0,leadercard1;
 
     @FXML
-    protected ImageView leadercard1;
+    protected ImageView leaderCardDepot00,leaderCardDepot01,leaderCardDepot10,leaderCardDepot11;
 
     @FXML
-    protected ImageView developmentcardslot0_0;
+    protected ImageView developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2,developmentcardslot1_0,developmentcardslot1_1,developmentcardslot1_2,developmentcardslot2_0,developmentcardslot2_1,developmentcardslot2_2;
 
     @FXML
-    protected ImageView developmentcardslot0_1;
+    protected Button marketBtn,startProductionBtn,buyDevelopmentcardBtn;
 
     @FXML
-    protected ImageView developmentcardslot0_2;
+    protected ImageView warehouse0,warehouse1,warehouse2,warehouse3,warehouse4,warehouse5;
 
     @FXML
-    protected ImageView developmentcardslot1_0;
+    protected ImageView strongbox0,strongbox1,strongbox2,strongbox3;
 
     @FXML
-    protected ImageView developmentcardslot1_1;
-
-    @FXML
-    protected ImageView developmentcardslot1_2;
-
-    @FXML
-    protected ImageView developmentcardslot2_0;
-
-    @FXML
-    protected ImageView developmentcardslot2_1;
-
-    @FXML
-    protected ImageView developmentcardslot2_2;
-
-    @FXML
-    protected Button marketBtn;
-
-    @FXML
-    protected Button startProductionBtn;
-
-    @FXML
-    protected Button buyDevelopmentcardBtn;
-
-    @FXML
-    protected ImageView warehouse0;
-
-    @FXML
-    protected ImageView warehouse1;
-
-    @FXML
-    protected ImageView warehouse2;
-
-    @FXML
-    protected ImageView warehouse3;
-
-    @FXML
-    protected ImageView warehouse4;
-
-    @FXML
-    protected ImageView warehouse5;
-
-    @FXML
-    protected ImageView strongbox0;
-
-    @FXML
-    protected ImageView strongbox1;
-
-    @FXML
-    protected ImageView strongbox2;
-
-    @FXML
-    protected ImageView strongbox3;
-
-    @FXML
-    protected ImageView vaticanreport0;
-
-    @FXML
-    protected ImageView vaticanreport1;
-
-    @FXML
-    protected ImageView vaticanreport2;
+    protected ImageView vaticanreport0,vaticanreport1,vaticanreport2;
 
     @FXML
     protected ImageView marker;
@@ -115,48 +54,19 @@ public class PlayerboardSceneController extends Controller{
     protected StackPane root;
 
     @FXML
-    protected Region warehouseRow0;
-
-    @FXML
-    protected Region warehouseRow1;
-
-    @FXML
-    protected Region warehouseRow2;
+    protected Region warehouseRow0,warehouseRow1,warehouseRow2;
 
     @FXML
     protected ChoiceBox<String> selectUser;
+
+    @FXML
+    protected ImageView baseProductionBtn;
 
     protected boolean controlsEnabled = false;
 
     protected Integer selectedWarehouseRow = null;
 
-    private final static double[][] FAITH_TRACK_CELLS = {
-            {22,212},
-            {64,212},
-            {106,212},
-            {106,170},
-            {106,128},
-            {148,128},
-            {190,128},
-            {232,128},
-            {276,128},
-            {318,128},
-            {318,170},
-            {318,212},
-            {360,212},
-            {402,212},
-            {446,212},
-            {488,212},
-            {530,212},
-            {530,170},
-            {530,128},
-            {572,128},
-            {614,128},
-            {658,128},
-            {700,128},
-            {742,128},
-            {784,128}
-    };
+    private final static double[][] FAITH_TRACK_CELLS = {{22,212}, {64,212}, {106,212}, {106,170}, {106,128}, {148,128}, {190,128}, {232,128}, {276,128}, {318,128}, {318,170}, {318,212}, {360,212}, {402,212}, {446,212}, {488,212}, {530,212}, {530,170}, {530,128}, {572,128}, {614,128}, {658,128}, {700,128}, {742,128}, {784,128}};
 
     private PlayerBoard playerBoard;
 
@@ -209,7 +119,7 @@ public class PlayerboardSceneController extends Controller{
     public void populateUserSelect(){
         List<String> players = clientController.getPlayers();
         selectUser.setItems(FXCollections.observableArrayList(players));
-        selectUser.setValue(Match.YOU_STRING);
+        selectUser.setValue((playerBoard.getUsername().equals(clientController.getUsername()))?Match.YOU_STRING: playerBoard.getUsername());
 
         selectUser.getSelectionModel().selectedIndexProperty().addListener((observableValue, value, index) -> {
             int intIndex = (Integer) index;

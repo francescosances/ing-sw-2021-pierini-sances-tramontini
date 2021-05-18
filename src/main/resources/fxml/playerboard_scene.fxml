@@ -151,6 +151,31 @@
             <Region fx:id="warehouseRow2" layoutX="60.0" layoutY="473.0" prefHeight="48.0" prefWidth="105.0" />
             <Region fx:id="warehouseRow1" layoutX="69.0" layoutY="415.0" prefHeight="43.0" prefWidth="87.0" />
             <Region fx:id="warehouseRow0" layoutX="90.0" layoutY="368.0" prefHeight="33.0" prefWidth="53.0" />
+            <ImageView fx:id="baseProductionBtn" fitHeight="135.0" fitWidth="119.0" layoutX="203.0" layoutY="508.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/buttons/base_production.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="leaderCardDepot00" fitHeight="43.0" fitWidth="53.0" layoutX="927.0" layoutY="266.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@../images/resources/SHIELD.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="leaderCardDepot01" fitHeight="43.0" fitWidth="53.0" layoutX="979.0" layoutY="266.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@../images/resources/SHIELD.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="leaderCardDepot10" fitHeight="43.0" fitWidth="53.0" layoutX="927.0" layoutY="509.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@../images/resources/SHIELD.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="leaderCardDepot11" fitHeight="43.0" fitWidth="53.0" layoutX="979.0" layoutY="509.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@../images/resources/SHIELD.png" />
+               </image>
+            </ImageView>
          </children>
           </AnchorPane>
     </children>
