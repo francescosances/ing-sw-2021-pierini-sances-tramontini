@@ -7,7 +7,11 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.28), 10, 0.7, 0, 1);
 }
 
-.topcard:hover {
+.selectable{
+    -fx-opacity: 1 !important;
+}
+
+.selectable:hover {
     -fx-effect: dropshadow(gaussian, #FDC309, 20, 0.3, 0, 0) !important;
     -fx-cursor: hand;
 }
