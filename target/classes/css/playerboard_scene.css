@@ -29,7 +29,15 @@
     -fx-effect: dropshadow(gaussian, #FDC309, 20, 0.3, 0, 0) !important;
 }
 
+.btnProduction{
+    -fx-cursor: hand;
+}
+
 .btnProduction:hover {
+    -fx-effect: dropshadow(gaussian, #FDC309, 20, 0.3, 0, 0) !important;
+}
+
+.selected{
     -fx-effect: dropshadow(gaussian, #FDC309, 20, 0.3, 0, 0) !important;
 }
 

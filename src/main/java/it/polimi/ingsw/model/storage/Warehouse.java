@@ -87,7 +87,7 @@ public class Warehouse implements Storage {
      * @param second the number of the second depot
      */
     public void swapDepots(int first, int second) throws IncompatibleDepotException {
-        if (first == second || depots.get(first).getOccupied() > depots.get(second).getSize() || depots.get(second).getOccupied() > depots.get(first).getSize())
+        if (first == second || first >= depots.size() || second >= depots.size() || depots.get(first).getOccupied() > depots.get(second).getSize() || depots.get(second).getOccupied() > depots.get(first).getSize())
             throw new UnswappableDepotsException("Unable to swap selected depots");
 
         ResourceType firstResourceType = depots.get(first).getResourceType();

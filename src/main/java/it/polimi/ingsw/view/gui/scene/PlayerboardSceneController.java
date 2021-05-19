@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.Depot;
 import it.polimi.ingsw.model.storage.Warehouse;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -69,6 +70,17 @@ public class PlayerboardSceneController extends Controller{
 
     private PlayerBoard playerBoard;
 
+    private final ChangeListener<? super Number> changeUserListener = (observableValue, value, index) -> {
+        int intIndex = (Integer) index;
+        if(intIndex < 0)return;
+        String username = selectUser.getItems().get(intIndex);
+        if(!username.equals(playerBoard.getUsername())) {
+            clientController.showPlayerBoard(selectUser.getItems().get(intIndex));
+            selectUser.setDisable(true);
+            disableControls();
+        }
+    };
+
     @FXML
     public void initialize(PlayerBoard playerBoard){
         this.playerBoard = playerBoard;
@@ -109,19 +121,13 @@ public class PlayerboardSceneController extends Controller{
 
     public void populateUserSelect(){
         List<String> players = clientController.getPlayers();
+
+        selectUser.getSelectionModel().selectedIndexProperty().removeListener(changeUserListener);
+
         selectUser.setItems(FXCollections.observableArrayList(players));
         selectUser.setValue((playerBoard.getUsername().equals(clientController.getUsername()))?Match.YOU_STRING: playerBoard.getUsername());
 
-        selectUser.getSelectionModel().selectedIndexProperty().addListener((observableValue, value, index) -> {
-            int intIndex = (Integer) index;
-            if(intIndex < 0)return;
-            String username = selectUser.getItems().get(intIndex);
-            if(!username.equals(playerBoard.getUsername())) {
-                clientController.showPlayerBoard(selectUser.getItems().get(intIndex));
-            }
-            selectUser.setDisable(true);
-            disableControls();
-        });
+        selectUser.getSelectionModel().selectedIndexProperty().addListener(changeUserListener);
     }
 
     private void leaderCardClicked(int cardIndex){
@@ -233,7 +239,7 @@ public class PlayerboardSceneController extends Controller{
         });
         warehouseRow0.setOnMouseClicked((e)->{
             if(selectedWarehouseRow == null){
-                selectedWarehouseRow = 9;
+                selectedWarehouseRow = 0;
                 warehouse0.getStyleClass().add("card-selected");
             }else{
                 if (selectedWarehouseRow == 0) {
