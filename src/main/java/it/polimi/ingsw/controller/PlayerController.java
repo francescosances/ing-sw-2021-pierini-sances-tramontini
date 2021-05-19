@@ -406,12 +406,14 @@ public class PlayerController {
         for(Deck<DevelopmentCard> deck : cards){
             Deck<DevelopmentCard> newDeck = new Deck<>();
             newCards.add(newDeck);
-            DevelopmentCard newCard = deck.get(0).clone();
-            Requirements requirements = newCard.getCost();
-            for(LeaderCard leaderCard : getPlayerBoard().getLeaderCards())
-                requirements = leaderCard.recalculateRequirements(requirements);
-            newCard.setCost(requirements);
-            newDeck.add(newCard);
+            for(DevelopmentCard card:deck) {
+                DevelopmentCard newCard = card.clone();
+                Requirements requirements = newCard.getCost();
+                for (LeaderCard leaderCard : getPlayerBoard().getLeaderCards())
+                    requirements = leaderCard.recalculateRequirements(requirements);
+                newCard.setCost(requirements);
+                newDeck.add(newCard);
+            }
         }virtualView.listDevelopmentCards(newCards, 1, getPlayerBoard());
     }
 

@@ -16,6 +16,10 @@
     -fx-cursor: hand;
 }
 
+.card-selected{
+    -fx-effect: dropshadow(gaussian, #FDC309, 20, 0.3, 0, 0) !important;
+}
+
 .btn{
     -fx-border-color: transparent;
     -fx-background-size: contain;
@@ -24,10 +28,14 @@
 
     -fx-background-radius: 0;
     -fx-background-color: transparent;
+    -fx-background-image: url("../images/buttons/continue_disabled.png");
+}
+
+.btn-active{
     -fx-background-image: url("../images/buttons/continue.png");
 }
 
-.btn:hover {
+.btn-active:hover {
     -fx-effect: dropshadow(gaussian, #FDC309, 20, 0.3, 0, 0);
     -fx-cursor: hand;
 }

@@ -4,194 +4,196 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 
 <StackPane prefHeight="859.0" prefWidth="1000.0" styleClass="rootPane" stylesheets="@../css/select_development_cards_scene.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.scene.SelectDeveloperCardsController">
    <children>
       <AnchorPane prefHeight="985.0" prefWidth="1000.0">
          <children>
-            <ImageView fitHeight="193.0" fitWidth="174.0" layoutX="122.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
+            <ImageView fx:id="card0_2" fitHeight="193.0" fitWidth="174.0" layoutX="122.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="193.0" fitWidth="174.0" layoutX="107.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
+            <ImageView fx:id="card0_1" fitHeight="193.0" fitWidth="174.0" layoutX="107.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
             <ImageView fx:id="card0_0" fitHeight="193.0" fitWidth="174.0" layoutX="94.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard,topcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="193.0" fitWidth="174.0" layoutX="125.0" layoutY="277.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
+            <ImageView fx:id="card4_2" fitHeight="193.0" fitWidth="174.0" layoutX="125.0" layoutY="277.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="193.0" fitWidth="174.0" layoutX="110.0" layoutY="284.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
+            <ImageView fx:id="card4_1" fitHeight="193.0" fitWidth="174.0" layoutX="110.0" layoutY="284.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
             <ImageView fx:id="card4_0" fitHeight="193.0" fitWidth="174.0" layoutX="97.0" layoutY="294.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard,topcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="193.0" fitWidth="174.0" layoutX="125.0" layoutY="517.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
+            <ImageView fx:id="card8_2" fitHeight="193.0" fitWidth="174.0" layoutX="125.0" layoutY="517.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="193.0" fitWidth="174.0" layoutX="110.0" layoutY="524.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
+            <ImageView fx:id="card8_1" fitHeight="193.0" fitWidth="174.0" layoutX="110.0" layoutY="524.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
             <ImageView fx:id="card8_0" fitHeight="193.0" fitWidth="174.0" layoutX="97.0" layoutY="534.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard,topcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="193.0" fitWidth="174.0" layoutX="334.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
+            <ImageView fx:id="card1_2" fitHeight="193.0" fitWidth="174.0" layoutX="334.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="193.0" fitWidth="174.0" layoutX="319.0" layoutY="44.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
+            <ImageView fx:id="card1_1" fitHeight="193.0" fitWidth="174.0" layoutX="319.0" layoutY="44.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
             <ImageView fx:id="card1_0" fitHeight="193.0" fitWidth="174.0" layoutX="306.0" layoutY="54.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard,topcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="193.0" fitWidth="174.0" layoutX="557.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
+            <ImageView fx:id="card2_2" fitHeight="193.0" fitWidth="174.0" layoutX="557.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="193.0" fitWidth="174.0" layoutX="542.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
+            <ImageView fx:id="card2_1" fitHeight="193.0" fitWidth="174.0" layoutX="542.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
             <ImageView fx:id="card2_0" fitHeight="193.0" fitWidth="174.0" layoutX="529.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard,topcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="193.0" fitWidth="174.0" layoutX="775.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
+            <ImageView fx:id="card3_2" fitHeight="193.0" fitWidth="174.0" layoutX="775.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="193.0" fitWidth="174.0" layoutX="760.0" layoutY="49.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
+            <ImageView fx:id="card3_1" fitHeight="193.0" fitWidth="174.0" layoutX="760.0" layoutY="49.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
             <ImageView fx:id="card3_0" fitHeight="193.0" fitWidth="174.0" layoutX="747.0" layoutY="59.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard,topcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="193.0" fitWidth="174.0" layoutX="334.0" layoutY="280.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
+            <ImageView fx:id="card5_2" fitHeight="193.0" fitWidth="174.0" layoutX="334.0" layoutY="280.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="193.0" fitWidth="174.0" layoutX="319.0" layoutY="287.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
+            <ImageView fx:id="card5_1" fitHeight="193.0" fitWidth="174.0" layoutX="319.0" layoutY="287.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
             <ImageView fx:id="card5_0" fitHeight="193.0" fitWidth="174.0" layoutX="306.0" layoutY="297.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard,topcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="193.0" fitWidth="174.0" layoutX="557.0" layoutY="281.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
+            <ImageView fx:id="card6_2" fitHeight="193.0" fitWidth="174.0" layoutX="557.0" layoutY="281.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="193.0" fitWidth="174.0" layoutX="542.0" layoutY="288.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
+            <ImageView fx:id="card6_1" fitHeight="193.0" fitWidth="174.0" layoutX="542.0" layoutY="288.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
             <ImageView fx:id="card6_0" fitHeight="193.0" fitWidth="174.0" layoutX="529.0" layoutY="298.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard,topcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="193.0" fitWidth="174.0" layoutX="775.0" layoutY="285.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
+            <ImageView fx:id="card7_2" fitHeight="193.0" fitWidth="174.0" layoutX="775.0" layoutY="285.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="193.0" fitWidth="174.0" layoutX="760.0" layoutY="292.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
+            <ImageView fx:id="card7_1" fitHeight="193.0" fitWidth="174.0" layoutX="760.0" layoutY="292.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
             <ImageView fx:id="card7_0" fitHeight="193.0" fitWidth="174.0" layoutX="747.0" layoutY="302.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard,topcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="193.0" fitWidth="174.0" layoutX="331.0" layoutY="513.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
+            <ImageView fx:id="card9_2" fitHeight="193.0" fitWidth="174.0" layoutX="331.0" layoutY="513.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="193.0" fitWidth="174.0" layoutX="316.0" layoutY="520.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
+            <ImageView fx:id="card9_1" fitHeight="193.0" fitWidth="174.0" layoutX="316.0" layoutY="520.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
             <ImageView fx:id="card9_0" fitHeight="193.0" fitWidth="174.0" layoutX="303.0" layoutY="530.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard,topcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="193.0" fitWidth="174.0" layoutX="554.0" layoutY="514.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
+            <ImageView fx:id="card10_2" fitHeight="193.0" fitWidth="174.0" layoutX="554.0" layoutY="514.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="193.0" fitWidth="174.0" layoutX="539.0" layoutY="521.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
+            <ImageView fx:id="card10_1" fitHeight="193.0" fitWidth="174.0" layoutX="539.0" layoutY="521.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
             <ImageView fx:id="card10_0" fitHeight="193.0" fitWidth="174.0" layoutX="526.0" layoutY="531.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard,topcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="193.0" fitWidth="174.0" layoutX="772.0" layoutY="518.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
+            <ImageView fx:id="card11_2" fitHeight="193.0" fitWidth="174.0" layoutX="772.0" layoutY="518.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="193.0" fitWidth="174.0" layoutX="757.0" layoutY="525.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
+            <ImageView fx:id="card11_1" fitHeight="193.0" fitWidth="174.0" layoutX="757.0" layoutY="525.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
             <ImageView fx:id="card11_0" fitHeight="193.0" fitWidth="174.0" layoutX="744.0" layoutY="535.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard,topcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
 
-            <Button layoutX="388.0" layoutY="772.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="208.0" styleClass="btn" />
+            <Button layoutX="388.0" fx:id="btnChoose" onAction="#choose" layoutY="772.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="208.0" styleClass="btn" />
+            <Pane layoutX="94.0" layoutY="51.0" prefHeight="200.0" prefWidth="131.0" style="-fx-background-color: #5f5f5f; -fx-opacity: 0.7;" />
 
          </children>
       </AnchorPane>

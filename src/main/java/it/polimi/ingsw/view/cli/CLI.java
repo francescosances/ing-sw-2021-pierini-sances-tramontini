@@ -224,19 +224,19 @@ public class CLI implements View {
     public void listDevelopmentCards(List<Deck<DevelopmentCard>> developmentCardList, int cardsToChoose, PlayerBoard playerBoard) {
         List<DevelopmentCard> availableCards = new ArrayList<>();
         for (Deck<DevelopmentCard> deck : developmentCardList) {
-            output.print(developmentCardColor(deck.get(0)));
-            output.printf("%s level %d\n", deck.get(0).getColor(), deck.get(0).getLevel());
-            for (DevelopmentCard developmentCard : deck) {
-                if (!developmentCard.getCost().satisfied(playerBoard) || !playerBoard.acceptsDevelopmentCard(developmentCard))
-                    output.print(ANSI_WHITE + "[X]");
-                else {
-                    output.printf(developmentCardColor(developmentCard) + "[%d]", availableCards.size());
-                    availableCards.add(developmentCard);
-                }
-                output.println(developmentCard);
+            output.print(developmentCardColor(deck.top()));
+            output.printf("%s level %d\n", deck.top().getColor(), deck.top().getLevel());
+            DevelopmentCard developmentCard = deck.top();
+            if (!developmentCard.getCost().satisfied(playerBoard) || !playerBoard.acceptsDevelopmentCard(developmentCard))
+                output.print(ANSI_WHITE + "[X]");
+            else {
+                output.printf(developmentCardColor(developmentCard) + "[%d]", availableCards.size());
+                availableCards.add(developmentCard);
             }
-            output.print(ANSI_RESET);
+            output.println(developmentCard);
         }
+        output.print(ANSI_RESET);
+
         output.println("Choose " + cardsToChoose + " development card:");
         output.println(ANSI_WHITE + "Insert a negative number to reverse the action" + ANSI_RESET);
         int[] choices = new int[cardsToChoose];
