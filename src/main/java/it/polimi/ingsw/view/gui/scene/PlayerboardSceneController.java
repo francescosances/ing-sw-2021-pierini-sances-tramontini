@@ -110,13 +110,17 @@ public class PlayerboardSceneController extends Controller{
 
         ImageView[] popeFavorTiles = {vaticanreport0,vaticanreport1,vaticanreport2};
         for(int i=0;i<3;i++){
-            if(playerBoard.getFaithTrack().getPopeFavorTiles()[i].isUncovered())
+            popeFavorTiles[i].setVisible(false);
+            if(playerBoard.getFaithTrack().getPopeFavorTiles()[i] == null){
+                //TODO: rapporto in vaticano non chiamato
+            }else if(playerBoard.getFaithTrack().getPopeFavorTiles()[i].isUncovered())
                 popeFavorTiles[i].setVisible(true);
         }
 
         disableControls();
-        selectUser.setDisable(true);
+        //selectUser.setDisable(true);
 
+        populateUserSelect();
     }
 
     public void populateUserSelect(){
@@ -313,7 +317,7 @@ public class PlayerboardSceneController extends Controller{
                     warehouse4.getStyleClass().remove("card-selected");
                     warehouse5.getStyleClass().remove("card-selected");
                 }else{
-                    System.out.println("SWAPPO "+selectedWarehouseRow+" e 0");
+                    System.out.println("SWAPPO "+selectedWarehouseRow+" e 2");
                     clientController.swapDepots(selectedWarehouseRow,2);
                     clearWarehouseSelection();
                     //TODO: aggiornare la vista
