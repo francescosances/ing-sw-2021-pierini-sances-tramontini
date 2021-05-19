@@ -238,6 +238,8 @@ public class PlayerboardSceneController extends Controller{
             }
         });
         warehouseRow0.setOnMouseClicked((e)->{
+            if(!controlsEnabled)
+                return;
             if(selectedWarehouseRow == null){
                 selectedWarehouseRow = 0;
                 warehouse0.getStyleClass().add("card-selected");
@@ -264,6 +266,8 @@ public class PlayerboardSceneController extends Controller{
             }
         });
         warehouseRow1.setOnMouseClicked((e)->{
+            if(!controlsEnabled)
+                return;
             if(selectedWarehouseRow == null){
                 selectedWarehouseRow = 1;
                 warehouse1.getStyleClass().add("card-selected");
@@ -295,6 +299,8 @@ public class PlayerboardSceneController extends Controller{
         });
 
         warehouseRow2.setOnMouseClicked((e)->{
+            if(!controlsEnabled)
+                return;
             if(selectedWarehouseRow == null){
                 selectedWarehouseRow = 2;
                 warehouse3.getStyleClass().add("card-selected");

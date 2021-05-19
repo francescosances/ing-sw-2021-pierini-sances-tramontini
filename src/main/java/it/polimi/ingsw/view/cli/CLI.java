@@ -729,7 +729,7 @@ public class CLI implements View {
     private void choosePlayerBoard(List<String> usernames){
         output.println("Whose player board do you want to see?");
         for (int i = 0; i < usernames.size(); i++) {
-            output.print("    [" + i + "]");
+            output.print("[" + i + "] ");
             output.println(usernames.get(i));
         }
         int player = input.nextInt();
