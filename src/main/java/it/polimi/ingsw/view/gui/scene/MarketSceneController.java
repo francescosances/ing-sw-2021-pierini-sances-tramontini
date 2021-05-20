@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.Market;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 public class MarketSceneController extends Controller{
 
@@ -48,10 +49,14 @@ public class MarketSceneController extends Controller{
 
     protected void columnClicked(int columnIndex){
         clientController.chooseMarketColumn(columnIndex);
+        Stage stage = (Stage) row0.getScene().getWindow();
+        stage.close();
     }
 
     protected void rowClicked(int rowIndex){
         clientController.chooseMarketRow(rowIndex);
+        Stage stage = (Stage) row0.getScene().getWindow();
+        stage.close();
     }
 
 

@@ -2,10 +2,7 @@ package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.controller.ClientController;
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.cards.Deck;
-import it.polimi.ingsw.model.cards.DevelopmentCard;
-import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
-import it.polimi.ingsw.model.cards.LeaderCard;
+import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.utils.Pair;
@@ -219,7 +216,7 @@ public class GUI implements View {
 
     @Override
     public void showResourcesGainedFromMarket(Resource[] resources) {
-
+        
     }
 
     @Override
@@ -229,7 +226,7 @@ public class GUI implements View {
 
     @Override
     public void chooseWhiteMarbleConversion(LeaderCard leaderCard, LeaderCard leaderCard1) {
-
+        openModal("select_white_marble_conversion","Select white marble conversion",()->chooseWhiteMarbleConversion(leaderCard,leaderCard1));
     }
 
     @Override
