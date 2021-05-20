@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,6 +102,8 @@ public class SelectDeveloperCardsController extends Controller{
         if(cardsToChoose != chosenCards.size())
             return;
         clientController.chooseDevelopmentCards(chosenCards.toArray(new DevelopmentCard[0]));
+        Stage stage = (Stage) btnChoose.getScene().getWindow();
+        stage.close();
     }
 
 }
