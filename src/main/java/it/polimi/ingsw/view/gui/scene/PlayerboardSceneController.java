@@ -112,9 +112,12 @@ public class PlayerboardSceneController extends Controller{
         for(int i=0;i<3;i++){
             popeFavorTiles[i].setVisible(false);
             if(playerBoard.getFaithTrack().getPopeFavorTiles()[i] == null){
-                //TODO: rapporto in vaticano non chiamato
-            }else if(playerBoard.getFaithTrack().getPopeFavorTiles()[i].isUncovered())
+                popeFavorTiles[i].setImage(new Image("/images/punchboard/pope_favor_tile_missed_"+i+".png"));
                 popeFavorTiles[i].setVisible(true);
+            }else if(playerBoard.getFaithTrack().getPopeFavorTiles()[i].isUncovered()) {
+                popeFavorTiles[i].setImage(new Image("/images/punchboard/pope_favor_tile" + i + ".png"));
+                popeFavorTiles[i].setVisible(true);
+            }
         }
 
         disableControls();

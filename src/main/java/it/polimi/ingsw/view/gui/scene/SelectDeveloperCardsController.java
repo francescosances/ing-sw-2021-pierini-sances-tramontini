@@ -3,8 +3,6 @@ package it.polimi.ingsw.view.gui.scene;
 import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.Deck;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
-import it.polimi.ingsw.model.storage.ResourceType;
-import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -31,7 +29,6 @@ public class SelectDeveloperCardsController extends Controller{
     private Button btnChoose;
 
     private List<DevelopmentCard> chosenCards = new ArrayList<>();
-
 
     @FXML
     public void initialize(List<Deck<DevelopmentCard>> developmentCardList, int cardsToChoose, PlayerBoard playerBoard){

@@ -11,61 +11,13 @@ public class MarketSceneController extends Controller{
     protected ImageView slide;
 
     @FXML
-    protected ImageView marble0;
+    protected ImageView marble0,marble1,marble2,marble3,marble4,marble5,marble6,marble7,marble8,marble9,marble10,marble11;
 
     @FXML
-    protected ImageView marble1;
+    protected ImageView row0,row1,row2;
 
     @FXML
-    protected ImageView marble2;
-
-    @FXML
-    protected ImageView marble3;
-
-    @FXML
-    protected ImageView marble4;
-
-    @FXML
-    protected ImageView marble5;
-
-    @FXML
-    protected ImageView marble6;
-
-    @FXML
-    protected ImageView marble7;
-
-    @FXML
-    protected ImageView marble8;
-
-    @FXML
-    protected ImageView marble9;
-
-    @FXML
-    protected ImageView marble10;
-
-    @FXML
-    protected ImageView marble11;
-
-    @FXML
-    protected ImageView row0;
-
-    @FXML
-    protected ImageView row1;
-
-    @FXML
-    protected ImageView row2;
-
-    @FXML
-    protected ImageView column0;
-
-    @FXML
-    protected ImageView column1;
-
-    @FXML
-    protected ImageView column2;
-
-    @FXML
-    protected ImageView column3;
+    protected ImageView column0,column1,column2,column3;
 
     @FXML
     public void initialize(Market market){
