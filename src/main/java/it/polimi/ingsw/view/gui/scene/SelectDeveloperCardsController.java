@@ -37,17 +37,6 @@ public class SelectDeveloperCardsController extends Controller{
     public void initialize(List<Deck<DevelopmentCard>> developmentCardList, int cardsToChoose, PlayerBoard playerBoard){
         this.cardsToChoose = cardsToChoose;
 
-        try {
-            playerBoard.getWarehouse().getDepots().get(2).addResource(ResourceType.COIN);
-            playerBoard.getWarehouse().getDepots().get(2).addResource(ResourceType.COIN);
-            playerBoard.getWarehouse().getDepots().get(2).addResource(ResourceType.COIN);
-            playerBoard.getWarehouse().getDepots().get(1).addResource(ResourceType.SERVANT);
-            playerBoard.getWarehouse().getDepots().get(1).addResource(ResourceType.SERVANT);
-            playerBoard.getWarehouse().getDepots().get(0).addResource(ResourceType.SHIELD);
-        } catch (IncompatibleDepotException e) {
-            e.printStackTrace();
-        }
-
         ImageView[][] imgs = {{card0_0,card0_1,card0_2},{card1_0,card1_1,card1_2},{card2_0,card2_1,card2_2},{card3_0,card3_1,card3_2},{card4_0,card4_1,card4_2},{card5_0,card5_1,card5_2},{card6_0,card6_1,card6_2},{card7_0,card7_1,card7_2},{card8_0,card8_1,card8_2},{card9_0,card9_1,card9_2},{card10_0,card10_1,card10_2},{card11_0,card11_1,card11_2}};
 
         for(int i=0;i<developmentCardList.size();i++){
