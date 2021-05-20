@@ -64,6 +64,8 @@ public class PlayerboardSceneController extends Controller{
 
     protected boolean controlsEnabled = false;
 
+    private boolean choosingProductions = false;
+
     protected Integer selectedWarehouseRow = null;
 
     private final static double[][] FAITH_TRACK_CELLS = {{22,212}, {64,212}, {106,212}, {106,170}, {106,128}, {148,128}, {190,128}, {232,128}, {276,128}, {318,128}, {318,170}, {318,212}, {360,212}, {402,212}, {446,212}, {488,212}, {530,212}, {530,170}, {530,128}, {572,128}, {614,128}, {658,128}, {700,128}, {742,128}, {784,128}};
@@ -208,6 +210,7 @@ public class PlayerboardSceneController extends Controller{
     public void startProduction() {
         disableControls();
         selectUser.setDisable(true);
+        choosingProductions = true;
         clientController.performAction(Action.ACTIVATE_PRODUCTION);
     }
 
