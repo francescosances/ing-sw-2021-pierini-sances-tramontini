@@ -225,7 +225,11 @@ public class GUI implements View {
 
     @Override
     public void askToStoreResource(Resource resource, Warehouse warehouse) {
-
+        if(getPlayerBoardSceneController() == null)
+            return;
+        Platform.runLater(()->{
+            playerboardSceneController.askToStoreResource(resource,warehouse);
+        });
     }
 
     @Override

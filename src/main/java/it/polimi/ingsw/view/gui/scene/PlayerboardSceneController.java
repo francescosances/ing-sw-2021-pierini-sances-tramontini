@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.Depot;
 import it.polimi.ingsw.model.storage.Resource;
+import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.model.storage.Warehouse;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
@@ -22,6 +23,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +51,9 @@ public class PlayerboardSceneController extends Controller{
     protected ImageView vaticanreport0,vaticanreport1,vaticanreport2;
 
     @FXML
-    protected ImageView resources_supply;
+    protected ImageView resources_supply,resources_supply_0,resources_supply_1,resources_supply_2,resources_supply_3;
+
+    protected List<ResourceType> resourcesToStore;
 
     @FXML
     protected ImageView marker;
@@ -365,12 +369,35 @@ public class PlayerboardSceneController extends Controller{
     }
 
     public void storeResourcesFromMarket(Resource[] resources){
-        resources_supply.setVisible(true);
         disableControls();
         marketBtn.setVisible(false);
         startProductionBtn.setVisible(false);
         buyDevelopmentcardBtn.setVisible(false);
 
+        ImageView[] imgs = {resources_supply_0,resources_supply_1,resources_supply_2,resources_supply_3};
+
+        resourcesToStore = new ArrayList<>();
+
+        for(int i=0;i<resources.length;i++){
+            imgs[i].setImage(new Image("/images/resources/"+resources[i].toString()+".png"));
+            imgs[i].setVisible(true);
+            resourcesToStore.add((ResourceType) resources[i]);
+        }
+
+        resources_supply.setVisible(true);
     }
 
+    public void askToStoreResource(Resource resource, Warehouse warehouse) {
+        showWarehouse(warehouse);
+
+        ImageView[] imgs = {resources_supply_0,resources_supply_1,resources_supply_2,resources_supply_3};
+
+        for(int i=0;i<resourcesToStore.size();i++){
+            if(resourcesToStore.get(i).equals(resource)){
+                imgs[i].getStyleClass().add("selected");
+                break;
+            }
+        }
+
+    }
 }

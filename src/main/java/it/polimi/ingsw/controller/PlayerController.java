@@ -570,7 +570,7 @@ public class PlayerController {
      */
     protected void askToConfirmDepot(){
         setAfterDepotsSwapAction(() -> virtualView.askToStoreResource(currentResourceToStore,getPlayerBoard().getWarehouse()));
-        virtualView.showMessage("You have to store a "+currentResourceToStore);
+        virtualView.showMessage("You have to store a "+currentResourceToStore);//TODO: verificare se si può spostare questo messaggio in CLI
         virtualView.askToStoreResource(currentResourceToStore, getPlayerBoard().getWarehouse());
     }
 
