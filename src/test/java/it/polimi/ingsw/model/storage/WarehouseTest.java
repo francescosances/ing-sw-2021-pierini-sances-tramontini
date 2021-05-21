@@ -39,7 +39,7 @@ class WarehouseTest {
         try{
             warehouse.addResource(2, ResourceType.SHIELD, 2);
         } catch (IncompatibleDepotException e){
-            assertEquals("You can’t place the same type of Resource in two different depots.", e.getMessage());
+            assertEquals("You can’t place the same type of Resource in two different standard depots.", e.getMessage());
             bool = true;
         }
         assertTrue(bool);
@@ -74,22 +74,6 @@ class WarehouseTest {
             assertEquals("Depot is full", e.getMessage());
             bool = true;
         }
-        assertTrue(bool);
-        bool = false;
-
-        assertEquals(ResourceType.SHIELD, warehouse.getDepots().get(1).getResourceType());
-        assertEquals(2, warehouse.getDepots().get(1).getOccupied());
-        assertEquals(0, warehouse.getDepots().get(0).getOccupied());
-        assertEquals(0, warehouse.getDepots().get(2).getOccupied());
-        assertNull(warehouse.getDepots().get(0).getResourceType());
-        assertNull(warehouse.getDepots().get(2).getResourceType());
-
-        try{
-            warehouse.addResource(0, null, 2);
-        } catch (NullPointerException e){
-            bool = true;
-        }
-
         assertTrue(bool);
 
         assertEquals(ResourceType.SHIELD, warehouse.getDepots().get(1).getResourceType());
