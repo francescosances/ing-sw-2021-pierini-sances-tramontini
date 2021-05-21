@@ -99,6 +99,12 @@ public interface View {
     void showPlayerBoard(PlayerBoard playerBoard);
 
     /**
+     * Shows the faith track
+     * @param faithTrack the faith track to be shown
+     */
+    void showFaithTrack(FaithTrack faithTrack);
+
+    /**
      * List the resources stored in the warehouse
      */
     void showWarehouse(Warehouse warehouse);

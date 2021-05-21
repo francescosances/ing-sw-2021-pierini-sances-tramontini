@@ -98,6 +98,7 @@ public class Message{
         CURRENT_ACTIVE_USER,
         LIST_LEADER_CARDS,
         SHOW_PLAYER_BOARD,
+        SHOW_FAITH_TRACK,
         ASK_FOR_ACTION,
         SWAP_DEPOTS,
         TAKE_RESOURCES_FROM_MARKET,
@@ -122,7 +123,6 @@ public class Message{
         PERFORM_ACTION,
         ROLLBACK,
         SHOW_PLAYERS;
-
     }
 
 }

@@ -183,6 +183,11 @@ public class GUI implements View {
     }
 
     @Override
+    public void showFaithTrack(FaithTrack faithTrack) {
+        //TODO
+    }
+
+    @Override
     public void showWarehouse(Warehouse warehouse) {
         playerboardSceneController.showWarehouse(warehouse);
     }

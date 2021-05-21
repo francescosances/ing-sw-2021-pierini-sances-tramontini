@@ -233,5 +233,10 @@ public class Serializer {
     public static int deserializeInt(String json){
         return new Gson().fromJson(json, int.class);
     }
+
+    public static String serializeFaithTrack(FaithTrack faithTrack) {
+        //TODO
+        return "";
+    }
 }
 

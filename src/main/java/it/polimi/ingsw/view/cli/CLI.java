@@ -447,7 +447,8 @@ public class CLI implements View {
             output.print(" ");
     }
 
-    private void showFaithTrack(FaithTrack faithTrack) {
+    @Override
+    public void showFaithTrack(FaithTrack faithTrack) {
         output.println("Faith track: " + faithTrack.getTrackVictoryPoints() + " victory points");
 
         printCross(0, faithTrack);
