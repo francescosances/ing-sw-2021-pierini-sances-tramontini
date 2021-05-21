@@ -9,6 +9,7 @@ import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.view.VirtualView;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class GameController implements PlayerStatusListener {
 
@@ -127,9 +128,9 @@ public class GameController implements PlayerStatusListener {
                             String request = message.getData("username");
                             if (request.equals(Match.YOU_STRING))
                                 request = username;
-                            PlayerBoard res = match.getPlayerBoard(request);
-                            if(!request.equals(controller.getUsername()))
-                                res.getLeaderCards().clear();
+                            PlayerBoard res = match.getPlayerBoard(request).clone();
+                            if(!username.equals(request))
+                                res.setLeaderCards(res.getLeaderCards().stream().filter(LeaderCard::isActive).collect(Collectors.toList()));
                             controller.showPlayerBoard(res);
                             break;
                         }
@@ -154,7 +155,8 @@ public class GameController implements PlayerStatusListener {
             for(int i=0;i<players.size();i++)
                 players.get((match.getCurrentPlayerIndex()+i)%players.size()).setPlayerIndex(i);
             setPhase(Match.GamePhase.PLAYERS_SETUP);
-        }else {
+            listPlayers();
+        }else{
             setSuspended(false);
             setPhase(match.getCurrentPhase());
         }

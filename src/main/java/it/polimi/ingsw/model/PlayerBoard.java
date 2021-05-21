@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
 import it.polimi.ingsw.model.storage.*;
+import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Pair;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class PlayerBoard {
+public class PlayerBoard implements Cloneable{
 
     /**
      * A reference to the match
@@ -372,4 +373,10 @@ public class PlayerBoard {
     }
 
 
+    @Override
+    public PlayerBoard clone() {
+        return Serializer.deserializePlayerBoard(Serializer.serializePlayerBoard(this));
+    }
+
 }
+

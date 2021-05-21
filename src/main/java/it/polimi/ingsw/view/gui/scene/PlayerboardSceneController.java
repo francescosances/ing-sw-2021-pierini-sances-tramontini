@@ -21,6 +21,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -128,7 +129,7 @@ public class PlayerboardSceneController extends Controller{
         }
 
         disableControls();
-        //selectUser.setDisable(true);
+        selectUser.setDisable(false);
 
         populateUserSelect();
     }
@@ -238,14 +239,16 @@ public class PlayerboardSceneController extends Controller{
         };
 
         List<Depot> depots = warehouse.getDepots();
+
+        for (ImageView[] imageViews : imgWarehouse) {
+            for (ImageView imageView : imageViews) imageView.setVisible(false);
+        }
+
         for(int i=0;i<depots.size();i++){
             int j;
             for(j=0;j<depots.get(i).getOccupied();j++){
                 imgWarehouse[i][j].setImage(new Image("/images/resources/"+depots.get(i).getResourceType().toString()+".png"));
                 imgWarehouse[i][j].setVisible(true);
-            }
-            for(int k=j;k<depots.get(i).getSize();k++){
-                imgWarehouse[i][k].setVisible(false);//TODO: debugger
             }
         }
 
@@ -362,15 +365,22 @@ public class PlayerboardSceneController extends Controller{
 
         //TODO: quando mostri le leadercard di un altro coprirle
 
+        Arrays.stream(leaderCards).forEach(card->card.setVisible(false));
+
         for(int i=0;i<leaderCardList.size();i++){
             LeaderCard card = leaderCardList.get(i);
             leaderCards[i].setImage(new Image("/images/cards/FRONT/" + card.getCardName() + ".png"));
             final int index = i;
-            leaderCards[i].setOnMouseClicked((e) -> leaderCardClicked(index));
+
             if(card.isActive()) {
                 leaderCards[i].getStyleClass().remove("leadercard");
                 leaderCards[i].getStyleClass().add("active-leadercard");
+            }else {
+                leaderCards[i].getStyleClass().add("leadercard");
+                leaderCards[i].getStyleClass().remove("active-leadercard");
+                leaderCards[i].setOnMouseClicked((e) -> leaderCardClicked(index));
             }
+            leaderCards[i].setVisible(true);
         }
     }
 

@@ -269,4 +269,5 @@ public class GUI implements View {
         this.clientController.setPlayers(new ArrayList<>(users.keySet()));
     }
 
+
 }
