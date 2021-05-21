@@ -100,6 +100,10 @@ public class DevelopmentCardSlot implements Iterable<DevelopmentCard>{
                 .sum();
     }
 
+    public boolean isEmpty(){
+        return this.developmentCards.isEmpty();
+    }
+
     /**
      * Returns an iterator of the object
      * @return an iterator of the object

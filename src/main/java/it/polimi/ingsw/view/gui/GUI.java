@@ -78,6 +78,7 @@ public class GUI implements View {
     private PlayerboardSceneController getPlayerBoardSceneController() {
         try {
             playerBoardSemaphore.tryAcquire(3, TimeUnit.SECONDS);
+            playerBoardSemaphore.release();
         } catch (InterruptedException ignored) {
             return null;
         }
@@ -247,7 +248,8 @@ public class GUI implements View {
         if(getPlayerBoardSceneController() == null)
             return;
         Platform.runLater(()->{
-            playerboardSceneController.askProductionsToStart();
+            playerboardSceneController.initialize(playerBoard);
+            playerboardSceneController.askProductionsToStart(availableProductions);
         });
     }
 

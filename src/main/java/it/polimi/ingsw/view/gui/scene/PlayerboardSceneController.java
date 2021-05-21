@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.gui.scene;
 import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.PlayerBoard;
+import it.polimi.ingsw.model.Producer;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.*;
 import javafx.beans.value.ChangeListener;
@@ -78,6 +79,8 @@ public class PlayerboardSceneController extends Controller{
 
     private PlayerBoard playerBoard;
 
+    private List<Producer> selectedProducers;
+
     private final ChangeListener<? super Number> changeUserListener = (observableValue, value, index) -> {
         int intIndex = (Integer) index;
         if(intIndex < 0)return;
@@ -91,7 +94,8 @@ public class PlayerboardSceneController extends Controller{
 
     @FXML
     public void initialize(PlayerBoard playerBoard){
-        this.playerBoard = playerBoard;
+       // if(playerBoard.getUsername().equals(clientController.getUsername()))
+             this.playerBoard = playerBoard;
 
         marker.setX(FAITH_TRACK_CELLS[playerBoard.getFaithTrack().getFaithMarker()][0]);
         marker.setY(FAITH_TRACK_CELLS[playerBoard.getFaithTrack().getFaithMarker()][1]);
@@ -354,16 +358,10 @@ public class PlayerboardSceneController extends Controller{
         selectedWarehouseRow = null;
     }
 
-    public void askProductionsToStart(){
-        baseProductionBtn.getStyleClass().add("btnProduction");
-    }
-
     public void showLeaderCards(List<LeaderCard> leaderCardList) {
         this.playerBoard.setLeaderCards(leaderCardList);
 
         ImageView[] leaderCards = {leadercard0,leadercard1};
-
-        //TODO: quando mostri le leadercard di un altro coprirle
 
         Arrays.stream(leaderCards).forEach(card->card.setVisible(false));
 
@@ -373,8 +371,10 @@ public class PlayerboardSceneController extends Controller{
             final int index = i;
 
             if(card.isActive()) {
+                playerBoard.activateLeaderCard(card);
                 leaderCards[i].getStyleClass().remove("leadercard");
                 leaderCards[i].getStyleClass().add("active-leadercard");
+                leaderCards[i].setOnMouseClicked((e)->{});
             }else {
                 leaderCards[i].getStyleClass().add("leadercard");
                 leaderCards[i].getStyleClass().remove("active-leadercard");
@@ -418,5 +418,72 @@ public class PlayerboardSceneController extends Controller{
             }
         }
 
+    }
+
+    private void selectProducer(){
+
+    }
+
+    public void askProductionsToStart(List<Producer> availableProductions) {
+        selectUser.setDisable(true);
+        selectedProducers = new ArrayList<>();
+
+        baseProductionBtn.getStyleClass().add("btnProduction");
+        baseProductionBtn.setOnMouseClicked((e)->{
+            if(selectedProducers.contains(DevelopmentCard.getBaseProduction())){
+                selectedProducers.remove(DevelopmentCard.getBaseProduction());
+                baseProductionBtn.getStyleClass().remove("selected");
+            }else{
+                selectedProducers.add(DevelopmentCard.getBaseProduction());
+                baseProductionBtn.getStyleClass().add("selected");
+            }
+            System.out.println(selectedProducers);
+        });
+
+        ImageView[] leaderCardsImg = {leadercard0,leadercard1};
+
+        int index = 0;
+        for(LeaderCard leaderCard:playerBoard.getLeaderCards()){
+            System.out.println(leaderCard);
+            if(leaderCard.isActive() && leaderCard.isProductionLeaderCards()){
+                ProductionLeaderCard productionLeaderCard = (ProductionLeaderCard) leaderCard;
+                leaderCardsImg[index].getStyleClass().add("selectable");
+                final int finalIndex = index;
+                leaderCardsImg[index].setDisable(false);
+                leaderCardsImg[index].setOnMouseClicked((e)->{
+                    if(selectedProducers.contains(productionLeaderCard)){
+                        selectedProducers.remove(productionLeaderCard);
+                        leaderCardsImg[finalIndex].getStyleClass().remove("selected");
+                    }else{
+                        selectedProducers.add(productionLeaderCard);
+                        leaderCardsImg[finalIndex].getStyleClass().add("selected");
+                    }
+                    System.out.println(selectedProducers);
+                });
+            }
+            index++;
+        }
+
+        ImageView[] slots = {developmentcardslot0_0,developmentcardslot1_0,developmentcardslot2_0};
+
+        index = 0;
+        for(DevelopmentCardSlot slot:playerBoard.getDevelopmentCardSlots()){
+            if(!slot.isEmpty()){
+                DevelopmentCard card = slot.getTopCard();
+                slots[index].getStyleClass().add("selectable");
+                final int finalIndex = index;
+                slots[index].setOnMouseClicked((e)->{
+                    if(selectedProducers.contains(card)){
+                        selectedProducers.remove(card);
+                        slots[finalIndex].getStyleClass().remove("selected");
+                    }else{
+                        selectedProducers.add(card);
+                        slots[finalIndex].getStyleClass().add("selected");
+                    }
+                    System.out.println(selectedProducers);
+                });
+            }
+            index++;
+        }
     }
 }

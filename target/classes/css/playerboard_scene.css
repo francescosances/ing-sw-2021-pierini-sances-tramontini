@@ -45,6 +45,14 @@
     -fx-effect: dropshadow(gaussian, #FDC309, 20, 0.3, 0, 0) !important;
 }
 
+.selectable{
+    -fx-cursor: hand;
+}
+
+.selectable:hover {
+    -fx-effect: dropshadow(gaussian, #FDC309, 20, 0.3, 0, 0) !important;
+}
+
 .btn{
     -fx-border-color: transparent;
     -fx-background-size: contain;

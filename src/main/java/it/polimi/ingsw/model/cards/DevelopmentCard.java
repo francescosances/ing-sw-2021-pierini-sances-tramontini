@@ -31,6 +31,7 @@ public class DevelopmentCard extends Card implements Producer {
      */
     private Requirements productionGain;
 
+    private static Producer baseProduction;
 
     /**
      * Initializes a new DevelopmentCard
@@ -56,13 +57,16 @@ public class DevelopmentCard extends Card implements Producer {
         this.productionGain = productionGain;
     }
 
-    public static DevelopmentCard getBaseProduction(){
+    public static Producer getBaseProduction(){
+        if(baseProduction != null)
+            return baseProduction;
         DevelopmentCard ret = new DevelopmentCard("base_production",0);
         ret.level = 0;
         ret.color = DevelopmentColorType.YELLOW;
         ret.cost = new Requirements();
         ret.productionCost = new Requirements(new Pair<>(NonPhysicalResourceType.ON_DEMAND,2));
         ret.productionGain = new Requirements(new Pair<>(NonPhysicalResourceType.ON_DEMAND,1));
+        baseProduction = ret;
         return ret;
     }
 
