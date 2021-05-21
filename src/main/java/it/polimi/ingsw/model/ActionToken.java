@@ -63,11 +63,14 @@ public class ActionToken {
             return false;
         ActionToken o = (ActionToken) other;
 
-        if (this.blackCrossSpaces.equals(o.blackCrossSpaces)) {
-            if (this.developmentCard != null && o.developmentCard != null)
-                return this.developmentCard.equals(o.developmentCard);
-            return this.developmentCard == null && o.developmentCard == null;
-        }
+        if (this.blackCrossSpaces!= null && o.blackCrossSpaces != null)
+            if (this.blackCrossSpaces.equals(o.blackCrossSpaces)) {
+                if (this.developmentCard != null && o.developmentCard != null)
+                    return this.developmentCard.equals(o.developmentCard);
+                return this.developmentCard == null && o.developmentCard == null;
+            }
+        else if (this.developmentCard != null && o.developmentCard != null)
+            return this.developmentCard.equals(o.developmentCard);
         return false;
     }
 
