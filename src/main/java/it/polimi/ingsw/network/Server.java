@@ -49,8 +49,8 @@ public class Server implements StatusObserver {
                         gameController.getPlayerController(username).deactivate();
                         ret.players.put(username, gameController);
                     }
-                }catch (Exception ignored){
-                    ignored.printStackTrace();
+                }catch (Exception e){
+                    e.printStackTrace();
                     log("Unable to load match: "+entry.getKey()+" from local disk");
                 }
             }
