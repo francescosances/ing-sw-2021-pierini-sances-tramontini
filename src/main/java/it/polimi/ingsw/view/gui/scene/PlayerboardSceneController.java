@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.Depot;
+import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.Warehouse;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
@@ -46,6 +47,9 @@ public class PlayerboardSceneController extends Controller{
 
     @FXML
     protected ImageView vaticanreport0,vaticanreport1,vaticanreport2;
+
+    @FXML
+    protected ImageView resources_supply;
 
     @FXML
     protected ImageView marker;
@@ -358,6 +362,14 @@ public class PlayerboardSceneController extends Controller{
                 leadercard1.setOnMouseClicked((e) -> leaderCardClicked(1));
             }
         }
+    }
+
+    public void storeResourcesFromMarket(Resource[] resources){
+        resources_supply.setVisible(true);
+        disableControls();
+        marketBtn.setVisible(false);
+        startProductionBtn.setVisible(false);
+        buyDevelopmentcardBtn.setVisible(false);
 
     }
 

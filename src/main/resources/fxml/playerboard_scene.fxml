@@ -176,6 +176,11 @@
                   <Image url="@../images/resources/SHIELD.png" />
                </image>
             </ImageView>
+            <ImageView fx:id="resources_supply" fitHeight="100.0" fitWidth="345.0" layoutX="-4.0" layoutY="-2.0" pickOnBounds="true" visible="false" preserveRatio="true">
+               <image>
+                  <Image url="@../images/backgrounds/resource_supply.png" />
+               </image>
+            </ImageView>
          </children>
           </AnchorPane>
     </children>

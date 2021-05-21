@@ -216,7 +216,11 @@ public class GUI implements View {
 
     @Override
     public void showResourcesGainedFromMarket(Resource[] resources) {
-        
+        if(getPlayerBoardSceneController() == null)
+            return;
+        Platform.runLater(()->{
+            playerboardSceneController.storeResourcesFromMarket(resources);
+        });
     }
 
     @Override
