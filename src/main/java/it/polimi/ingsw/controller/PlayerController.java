@@ -272,6 +272,7 @@ public class PlayerController {
         for (PlayerStatusListener x : this.observers) {
             x.onPlayerStatusChanged(this);
         }
+        virtualView.showPlayerLeaderCards(playerBoard.getLeaderCards());
     }
 
     /**
@@ -288,6 +289,7 @@ public class PlayerController {
                 x.onPlayerStatusChanged(this);
             }
         }
+        virtualView.showPlayerLeaderCards(playerBoard.getLeaderCards());
     }
 
     /**

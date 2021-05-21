@@ -175,4 +175,5 @@ public interface View {
     void askToChooseStartResources(Resource[] values,int resourcesToChoose);
 
     void showPlayers(Map<String, Boolean> users);
+
 }
