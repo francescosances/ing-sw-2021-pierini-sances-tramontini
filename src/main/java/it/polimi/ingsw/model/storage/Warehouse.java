@@ -34,13 +34,13 @@ public class Warehouse implements Storage {
      * @param depotNumber the number of the depot where to add the resources
      * @param res the type of the resources to be added
      * @param num the amount of the resources to be added
-     * @throws IncompatibleDepotException if is already existing a depot with the same resource type
+     * @throws IncompatibleDepotException if is already existing a standard depot with the same resource type
      */
     public void addResource(int depotNumber, ResourceType res, int num) throws IncompatibleDepotException {
-        int depotIndex = 0;
-        for(Depot depot : depots)
-            if(depotIndex++ != depotNumber && depot.getOccupied() > 0 && depot.getResourceType() == res)
-                throw new IncompatibleDepotException("You can’t place the same type of Resource in two different depots.");
+        if (depotNumber < 3)
+            for (int depotIndex = 0; depotIndex < 3; depotIndex++)
+                if (depotIndex != depotNumber && depots.get(depotIndex).getResourceType() == res)
+                    throw new IncompatibleDepotException("You can’t place the same type of Resource in two different standard depots.");
         for (int i = 0; i < num; i++)
             depots.get(depotNumber).addResource(res);
     }
