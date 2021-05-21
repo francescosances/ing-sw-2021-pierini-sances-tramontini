@@ -282,7 +282,10 @@ public class Server implements StatusObserver {
      * @param username the username of the disconnected user
      */
     public synchronized void disconnect(String username){
-        players.get(username).disconnect(username);
+        if (players.get(username) != null)
+            players.get(username).disconnect(username);
+        else //player didn't even joined a lobby
+            players.remove(username);
     }
 
     /**
