@@ -128,17 +128,17 @@
                   <Image url="@../images/resources/SERVANT.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="vaticanreport0" fitHeight="65.0" fitWidth="69.0" layoutX="210.0" layoutY="191.0" pickOnBounds="true" preserveRatio="true" visible="false">
+            <ImageView fx:id="vaticanreport0" fitHeight="65.0" fitWidth="69.0" layoutX="210.0" layoutY="191.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/punchboard/pope_favor_tile_missed_0.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="vaticanreport1" fitHeight="65.0" fitWidth="69.0" layoutX="422.0" layoutY="146.0" pickOnBounds="true" preserveRatio="true" visible="false">
+            <ImageView fx:id="vaticanreport1" fitHeight="65.0" fitWidth="69.0" layoutX="422.0" layoutY="146.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/punchboard/pope_favor_tile_missed_1.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="vaticanreport2" fitHeight="65.0" fitWidth="69.0" layoutX="676.0" layoutY="191.0" pickOnBounds="true" preserveRatio="true" visible="false">
+            <ImageView fx:id="vaticanreport2" fitHeight="65.0" fitWidth="69.0" layoutX="676.0" layoutY="191.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/punchboard/pope_favor_tile_missed_2.png" />
                </image>

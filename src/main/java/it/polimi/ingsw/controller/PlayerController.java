@@ -281,7 +281,7 @@ public class PlayerController {
     public void activateLeaderCard(int num){
         try {
             playerBoard.activateLeaderCard(num);
-        } catch (NotSatisfiedRequirementsException e){
+        } catch (Exception e){
             virtualView.showErrorMessage(e.getMessage());
         } finally {
             for (PlayerStatusListener x : this.observers) {

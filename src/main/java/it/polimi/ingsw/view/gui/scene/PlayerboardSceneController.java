@@ -4,10 +4,7 @@ import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.*;
-import it.polimi.ingsw.model.storage.Depot;
-import it.polimi.ingsw.model.storage.Resource;
-import it.polimi.ingsw.model.storage.ResourceType;
-import it.polimi.ingsw.model.storage.Warehouse;
+import it.polimi.ingsw.model.storage.*;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -53,7 +50,7 @@ public class PlayerboardSceneController extends Controller{
     @FXML
     protected ImageView resources_supply,resources_supply_0,resources_supply_1,resources_supply_2,resources_supply_3;
 
-    protected List<ResourceType> resourcesToStore;
+    protected List<Resource> resourcesToStore;
 
     @FXML
     protected ImageView marker;
@@ -120,10 +117,10 @@ public class PlayerboardSceneController extends Controller{
 
         ImageView[] popeFavorTiles = {vaticanreport0,vaticanreport1,vaticanreport2};
         for(int i=0;i<3;i++){
-            popeFavorTiles[i].setVisible(false);
+            popeFavorTiles[i].setImage(new Image("/images/punchboard/pope_favor_tile_missed_"+i+".png"));
+            popeFavorTiles[i].setVisible(true);
             if(playerBoard.getFaithTrack().getPopeFavorTiles()[i] == null){
-                popeFavorTiles[i].setImage(new Image("/images/punchboard/pope_favor_tile_missed_"+i+".png"));
-                popeFavorTiles[i].setVisible(true);
+                popeFavorTiles[i].setVisible(false);
             }else if(playerBoard.getFaithTrack().getPopeFavorTiles()[i].isUncovered()) {
                 popeFavorTiles[i].setImage(new Image("/images/punchboard/pope_favor_tile" + i + ".png"));
                 popeFavorTiles[i].setVisible(true);
@@ -140,6 +137,9 @@ public class PlayerboardSceneController extends Controller{
         List<String> players = clientController.getPlayers();
 
         selectUser.getSelectionModel().selectedIndexProperty().removeListener(changeUserListener);
+
+        System.out.println("players");
+        System.out.println(players);
 
         selectUser.setItems(FXCollections.observableArrayList(players));
         selectUser.setValue((playerBoard.getUsername().equals(clientController.getUsername()))?Match.YOU_STRING: playerBoard.getUsername());
@@ -244,7 +244,7 @@ public class PlayerboardSceneController extends Controller{
                 imgWarehouse[i][j].setVisible(true);
             }
             for(int k=j;k<depots.get(i).getSize();k++){
-                imgWarehouse[i][k].setVisible(false);
+                imgWarehouse[i][k].setVisible(false);//TODO: debugger
             }
         }
 
@@ -357,13 +357,18 @@ public class PlayerboardSceneController extends Controller{
     public void showLeaderCards(List<LeaderCard> leaderCardList) {
         this.playerBoard.setLeaderCards(leaderCardList);
 
-        if(leaderCardList.size() > 0) {
-            this.leadercard0.setImage(new Image("/images/cards/FRONT/" + leaderCardList.get(0).getCardName() + ".png"));
-            leadercard0.setOnMouseClicked((e) -> leaderCardClicked(0));
+        ImageView[] leaderCards = {leadercard0,leadercard1};
 
-            if(leaderCardList.size() > 1) {
-                this.leadercard1.setImage(new Image("/images/cards/FRONT/" + leaderCardList.get(1).getCardName() + ".png"));
-                leadercard1.setOnMouseClicked((e) -> leaderCardClicked(1));
+        //TODO: quando mostri le leadercard di un altro coprirle
+
+        for(int i=0;i<leaderCardList.size();i++){
+            LeaderCard card = leaderCardList.get(i);
+            leaderCards[i].setImage(new Image("/images/cards/FRONT/" + card.getCardName() + ".png"));
+            final int index = i;
+            leaderCards[i].setOnMouseClicked((e) -> leaderCardClicked(index));
+            if(card.isActive()) {
+                leaderCards[i].getStyleClass().remove("leadercard");
+                leaderCards[i].getStyleClass().add("active-leadercard");
             }
         }
     }
@@ -379,9 +384,12 @@ public class PlayerboardSceneController extends Controller{
         resourcesToStore = new ArrayList<>();
 
         for(int i=0;i<resources.length;i++){
-            imgs[i].setImage(new Image("/images/resources/"+resources[i].toString()+".png"));
+            if(resources[i] == NonPhysicalResourceType.VOID)
+                imgs[i].setImage(new Image("/images/marbles/white.png"));
+            else
+                imgs[i].setImage(new Image("/images/resources/"+resources[i].toString()+".png"));
             imgs[i].setVisible(true);
-            resourcesToStore.add((ResourceType) resources[i]);
+            resourcesToStore.add(resources[i]);
         }
 
         resources_supply.setVisible(true);
