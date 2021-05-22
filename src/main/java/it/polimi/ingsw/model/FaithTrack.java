@@ -1,7 +1,13 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.utils.ObservableFromView;
+import it.polimi.ingsw.view.View;
+
+import java.util.ArrayList;
 import java.util.Arrays;
-public class FaithTrack {
+import java.util.List;
+
+public class FaithTrack implements ObservableFromView {
 
     /**
      * Array with all the spaces that trigger vaticanReport()
@@ -29,6 +35,8 @@ public class FaithTrack {
      */
     private final boolean[] vaticanReports;
 
+    transient private final List<View> views;
+
     /**
      * Initialize a new FaithTrack connected to the its match
      * @param match the match reference
@@ -42,6 +50,7 @@ public class FaithTrack {
         faithMarker = 0;
         vaticanReports = new boolean[POPE_SPACES.length];
         Arrays.fill(vaticanReports,false);
+        views = new ArrayList<>();
     }
 
     /**
@@ -116,6 +125,7 @@ public class FaithTrack {
      */
     public void moveMarker() throws EndGameException {
         faithMarker++;
+        updateViews();
         if(match.getVaticanReportsCount() < vaticanReports.length &&
                 !vaticanReports[match.getVaticanReportsCount()] && isPopeSpace(faithMarker))
             match.vaticanReport(faithMarker);
@@ -131,7 +141,6 @@ public class FaithTrack {
         return popeFavorTiles;
     }
 
-
     /**
      * Sets the match reference
      * @param match to be referenced
@@ -141,6 +150,7 @@ public class FaithTrack {
             throw new NullPointerException();
         this.match = match;
     }
+
     /**
      * sets the current of the vatican report to true
      * @param vaticanReportCount the number of the vatican report triggered
@@ -159,6 +169,20 @@ public class FaithTrack {
         while (count < POPE_SPACES.length && space != POPE_SPACES[count])
             count++;
         return count < vaticanReports.length && !vaticanReports[count];
+    }
+
+    @Override
+    public void addView(View view) {
+        views.add(view);
+    }
+
+    @Override
+    public void removeView(View view) {
+        views.remove(view);
+    }
+
+    private void updateViews() {
+        views.forEach(view -> view.showFaithTrack(this));
     }
 
     /**

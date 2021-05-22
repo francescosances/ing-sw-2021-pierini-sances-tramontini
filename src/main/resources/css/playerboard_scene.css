@@ -72,6 +72,10 @@
     -fx-background-image: url("../images/buttons/market.png");
 }
 
+#rollbackBtn{
+    -fx-background-image: url("../images/buttons/cancel.png");
+}
+
 #startProductionBtn{
     -fx-background-image: url("../images/buttons/activate_production.png");
 }

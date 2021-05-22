@@ -5,6 +5,8 @@ import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.DevelopmentColorType;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.utils.FileManager;
+import it.polimi.ingsw.utils.ObservableFromView;
+import it.polimi.ingsw.view.View;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,7 +14,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-public class Match {
+public class Match implements ObservableFromView {
 
     public static final int MAX_PLAYERS = 4;
 
@@ -52,6 +54,8 @@ public class Match {
      */
     private GamePhase currentPhase;
 
+    private final transient List<View> views;
+
     public Match(String matchName) {
         this(matchName,MAX_PLAYERS);
     }
@@ -70,6 +74,7 @@ public class Match {
         this.vaticanReportsCount = 0;
         this.matchName = matchName;
         this.maxPlayersNumber = maxPlayersNumber;
+        this.views = new ArrayList<>();
     }
 
     public PlayerBoard getPlayerBoard(String username){
@@ -214,6 +219,19 @@ public class Match {
 
     public List<PlayerBoard> getPlayers() {
         return players;
+    }
+
+    @Override
+    public void addView(View view) {
+        //TODO add initial views and on connect/disconnect/reconnect
+        views.add(view);
+        players.forEach(playerBoard -> playerBoard.addView(view));
+    }
+
+    @Override
+    public void removeView(View view) {
+        views.remove(view);
+        players.forEach(playerBoard -> playerBoard.removeView(view));
     }
 
     @Override

@@ -293,7 +293,7 @@ public class PlayerController {
     }
 
     /**
-     * Asks the player which ResourceType he wants as they're not starting the turn
+     * Asks the player which ResourceType he wants as they're not starting the match
      * @param resourcesToChoose the number of resource the player is allowed to choose
      */
     public void askToChooseStartResources(int resourcesToChoose){

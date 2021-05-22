@@ -19,12 +19,12 @@
                   <Image url="@../images/backgrounds/playerboard.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="leadercard0" visible="false" fitHeight="211.0" fitWidth="156.0" layoutX="903.0" layoutY="105.0" pickOnBounds="true" preserveRatio="true" styleClass="card,leadercard">
+            <ImageView fx:id="leadercard0" fitHeight="211.0" fitWidth="156.0" layoutX="903.0" layoutY="105.0" pickOnBounds="true" preserveRatio="true" styleClass="card,leadercard" visible="false">
                <image>
                   <Image url="@../images/cards/BACK/64.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="leadercard1" visible="false" fitHeight="211.0" fitWidth="156.0" layoutX="903.0" layoutY="349.0" pickOnBounds="true" preserveRatio="true" styleClass="card,leadercard">
+            <ImageView fx:id="leadercard1" fitHeight="211.0" fitWidth="156.0" layoutX="903.0" layoutY="349.0" pickOnBounds="true" preserveRatio="true" styleClass="card,leadercard" visible="false">
                <image>
                   <Image url="@../images/cards/BACK/64.png" />
                </image>
@@ -201,6 +201,7 @@
                   <Image url="@../images/resources/SERVANT.png" />
                </image>
             </ImageView>
+            <Button fx:id="rollbackBtn" visible="false" layoutX="13.0" layoutY="28.0" mnemonicParsing="false" onAction="#rollback" prefHeight="48.0" prefWidth="208.0" styleClass="btn" />
          </children>
           </AnchorPane>
     </children>

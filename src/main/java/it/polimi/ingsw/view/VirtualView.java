@@ -121,6 +121,13 @@ public class VirtualView implements View {
     }
 
     @Override
+    public void showFaithTrack(FaithTrack faithTrack) {
+        Message message = new Message(Message.MessageType.SHOW_FAITH_TRACK);
+        message.addData("faithTrack",Serializer.serializeFaithTrack(faithTrack));
+        sendMessage(message);
+    }
+
+    @Override
     public void showWarehouse(Warehouse warehouse){
         Message message = new Message(Message.MessageType.SHOW_WAREHOUSE_STATUS);
         message.addData("warehouse",Serializer.serializeWarehouse(warehouse));

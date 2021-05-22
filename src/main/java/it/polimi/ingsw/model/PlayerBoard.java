@@ -4,7 +4,9 @@ import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
 import it.polimi.ingsw.model.storage.*;
 import it.polimi.ingsw.serialization.Serializer;
+import it.polimi.ingsw.utils.ObservableFromView;
 import it.polimi.ingsw.utils.Pair;
+import it.polimi.ingsw.view.View;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class PlayerBoard implements Cloneable{
+public class PlayerBoard implements Cloneable, ObservableFromView {
 
     /**
      * A reference to the match
@@ -55,6 +57,8 @@ public class PlayerBoard implements Cloneable{
      */
     private int boughtDevelopmentCardsCounter = 0;
 
+    private final transient List<View> views;
+
     /**
      * Initializes a new PlayerBoard object
      * @param username the player's username
@@ -75,6 +79,7 @@ public class PlayerBoard implements Cloneable{
 
 
         leaderCards = new ArrayList<>();
+        views = new ArrayList<>();
     }
 
     /**
@@ -336,6 +341,18 @@ public class PlayerBoard implements Cloneable{
         this.warehouse = warehouse;
     }
 
+    @Override
+    public void addView(View view) {
+        views.add(view);
+        faithTrack.addView(view);
+    }
+
+    @Override
+    public void removeView(View view) {
+        views.remove(view);
+        faithTrack.removeView(view);
+    }
+
     /**
      * Returns a String representation of the object
      * @return a String representation of the object
@@ -357,6 +374,7 @@ public class PlayerBoard implements Cloneable{
      * @param o that is confronted
      * @return true if o is equal to the object, false elsewhere
      */
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -384,6 +402,5 @@ public class PlayerBoard implements Cloneable{
     public PlayerBoard clone() {
         return Serializer.deserializePlayerBoard(Serializer.serializePlayerBoard(this));
     }
-
 }
 

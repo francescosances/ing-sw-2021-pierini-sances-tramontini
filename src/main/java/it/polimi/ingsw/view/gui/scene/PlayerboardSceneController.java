@@ -16,10 +16,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,7 +35,7 @@ public class PlayerboardSceneController extends Controller{
     protected ImageView developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2,developmentcardslot1_0,developmentcardslot1_1,developmentcardslot1_2,developmentcardslot2_0,developmentcardslot2_1,developmentcardslot2_2;
 
     @FXML
-    protected Button marketBtn,startProductionBtn,buyDevelopmentcardBtn;
+    protected Button marketBtn,startProductionBtn,buyDevelopmentcardBtn,rollbackBtn;
 
     @FXML
     protected ImageView warehouse0,warehouse1,warehouse2,warehouse3,warehouse4,warehouse5;
@@ -80,6 +77,8 @@ public class PlayerboardSceneController extends Controller{
     private PlayerBoard playerBoard;
 
     private List<Producer> selectedProducers;
+
+    private Runnable onRollbackAction = ()->{};
 
     private final ChangeListener<? super Number> changeUserListener = (observableValue, value, index) -> {
         int intIndex = (Integer) index;
@@ -425,6 +424,7 @@ public class PlayerboardSceneController extends Controller{
     }
 
     private void addListenerToProducer(ImageView imageView, Producer producer){
+        imageView.setDisable(false);
         imageView.setOnMouseClicked((e)->{
             if(selectedProducers.contains(producer)){
                 selectedProducers.remove(producer);
@@ -440,6 +440,11 @@ public class PlayerboardSceneController extends Controller{
         selectUser.setDisable(true);
         selectedProducers = new ArrayList<>();
 
+        startProductionBtn.setVisible(false);
+        marketBtn.setVisible(false);
+        buyDevelopmentcardBtn.setVisible(false);
+        rollbackBtn.setVisible(true);
+
         if(availableProductions.contains(DevelopmentCard.getBaseProduction())) {
             baseProductionBtn.getStyleClass().add("btnProduction");
             addListenerToProducer(baseProductionBtn, DevelopmentCard.getBaseProduction());
@@ -452,7 +457,6 @@ public class PlayerboardSceneController extends Controller{
             if(leaderCard.isActive() && leaderCard.isProductionLeaderCards() && availableProductions.contains(leaderCard)){
                 ProductionLeaderCard productionLeaderCard = (ProductionLeaderCard) leaderCard;
                 leaderCardsImg[index].getStyleClass().add("selectable");
-                leaderCardsImg[index].setDisable(false);
                 addListenerToProducer(leaderCardsImg[index],productionLeaderCard);
             }
             index++;
@@ -472,5 +476,53 @@ public class PlayerboardSceneController extends Controller{
             }
             index++;
         }
+
+        onRollbackAction = this::cancelProductionSelection;
+    }
+
+    public void cancelProductionSelection(){
+        selectedProducers = new ArrayList<>();
+
+        startProductionBtn.setVisible(true);
+        marketBtn.setVisible(true);
+        buyDevelopmentcardBtn.setVisible(true);
+        rollbackBtn.setVisible(false);
+
+        baseProductionBtn.getStyleClass().remove("btnProduction");
+        baseProductionBtn.getStyleClass().remove("selected");
+        baseProductionBtn.setDisable(true);
+
+        ImageView[] leaderCardsImg = {leadercard0,leadercard1};
+
+        int index = 0;
+        for(LeaderCard leaderCard:playerBoard.getLeaderCards()){
+            if(leaderCard.isActive() && leaderCard.isProductionLeaderCards()){
+                leaderCardsImg[index].getStyleClass().remove("selectable");
+                leaderCardsImg[index].getStyleClass().remove("selected");
+                leaderCardsImg[index].setDisable(true);
+            }
+            index++;
+        }
+
+        ImageView[][] slots =
+                {{developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2},
+                        {developmentcardslot1_0,developmentcardslot1_1,developmentcardslot1_2},
+                        {developmentcardslot2_0,developmentcardslot2_1,developmentcardslot2_2}};
+
+        index = 0;
+        for(DevelopmentCardSlot slot:playerBoard.getDevelopmentCardSlots()){
+            if(!slot.isEmpty()){
+                slots[index][slot.getSize()-1].getStyleClass().remove("selectable");
+                slots[index][slot.getSize()-1].getStyleClass().remove("selected");
+                slots[index][slot.getSize()-1].setDisable(true);
+            }
+            index++;
+        }
+    }
+
+    @FXML
+    public void rollback(){
+        onRollbackAction.run();
+        clientController.rollback();
     }
 }
