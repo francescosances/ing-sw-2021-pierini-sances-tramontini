@@ -205,8 +205,7 @@ public class GUI implements View {
         if(getPlayerBoardSceneController() == null)
             return;
         Platform.runLater(()->{
-            playerboardSceneController.populateUserSelect();
-            playerboardSceneController.enableControls();
+            playerboardSceneController.resetControls();
         });
     }
 
@@ -245,7 +244,10 @@ public class GUI implements View {
 
     @Override
     public void askToChooseDevelopmentCardSlot(DevelopmentCardSlot[] slots, DevelopmentCard developmentCard) {
-
+        if(getPlayerBoardSceneController() == null)return;
+        Platform.runLater(()->{
+            getPlayerBoardSceneController().chooseDevelopmentCardSlot(slots,developmentCard);
+        });
     }
 
     @Override
