@@ -39,3 +39,7 @@
     -fx-effect: dropshadow(gaussian, #FDC309, 20, 0.3, 0, 0);
     -fx-cursor: hand;
 }
+
+.discount{
+    -fx-effect: dropshadow(gaussian, #FDC309, 20, 0.3, 0, 0) !important;
+}

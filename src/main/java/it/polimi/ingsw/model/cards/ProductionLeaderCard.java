@@ -47,7 +47,7 @@ public class ProductionLeaderCard extends LeaderCard implements Producer {
     }
 
     @Override
-    public boolean isProductionLeaderCards() {
+    public boolean isProductionLeaderCard() {
         return true;
     }
 

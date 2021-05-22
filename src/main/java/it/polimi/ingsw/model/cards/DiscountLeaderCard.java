@@ -68,6 +68,19 @@ public class DiscountLeaderCard extends LeaderCard {
     }
 
     /**
+     * Returns the resource the card discounts
+     * @return the resource the card discounts
+     */
+    public ResourceType getDiscountResourceType(){
+        return discountResourceType;
+    }
+
+    @Override
+    public boolean isDiscountLeaderCard(){
+        return true;
+    }
+
+    /**
      * Returns a string representation of the object
      * @return a string representation of the object.
      */

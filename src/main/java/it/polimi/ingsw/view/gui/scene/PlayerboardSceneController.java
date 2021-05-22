@@ -470,7 +470,7 @@ public class PlayerboardSceneController extends Controller{
 
         int index = 0;
         for(LeaderCard leaderCard:playerBoard.getLeaderCards()){
-            if(leaderCard.isActive() && leaderCard.isProductionLeaderCards() && availableProductions.contains(leaderCard)){
+            if(leaderCard.isActive() && leaderCard.isProductionLeaderCard() && availableProductions.contains(leaderCard)){
                 ProductionLeaderCard productionLeaderCard = (ProductionLeaderCard) leaderCard;
                 leaderCardsImg[index].getStyleClass().add("selectable");
                 addListenerToProducer(leaderCardsImg[index],productionLeaderCard);
@@ -512,7 +512,7 @@ public class PlayerboardSceneController extends Controller{
 
         int index = 0;
         for(LeaderCard leaderCard:playerBoard.getLeaderCards()){
-            if(leaderCard.isActive() && leaderCard.isProductionLeaderCards()){
+            if(leaderCard.isActive() && leaderCard.isProductionLeaderCard()){
                 leaderCardsImg[index].getStyleClass().remove("selectable");
                 leaderCardsImg[index].getStyleClass().remove("selected");
                 leaderCardsImg[index].setDisable(true);
@@ -555,6 +555,8 @@ public class PlayerboardSceneController extends Controller{
         for(DevelopmentCardSlot slot:slots){
             System.out.println(slot);
             if(slot.accepts(developmentCard)){
+                System.out.println("index"+index);
+                System.out.println("slotsize-1"+(slot.getSize()-1));
                 slotsImg[index][slot.getSize()-1].getStyleClass().add("selectable");
                 final int slotIndex = index;
                 slotsImg[index][slot.getSize()-1].setOnMouseClicked((e)->{

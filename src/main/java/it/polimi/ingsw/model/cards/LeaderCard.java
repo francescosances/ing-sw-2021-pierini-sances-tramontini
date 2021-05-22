@@ -100,7 +100,11 @@ public abstract class LeaderCard extends Card {
         return requirements.clone();
     }
 
-    public boolean isProductionLeaderCards(){
+    public boolean isProductionLeaderCard(){
+        return false;
+    }
+
+    public boolean isDiscountLeaderCard(){
         return false;
     }
 

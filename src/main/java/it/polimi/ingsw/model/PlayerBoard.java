@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
 import it.polimi.ingsw.model.storage.*;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.ObservableFromView;
-import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.View;
 
 import java.util.ArrayList;
@@ -317,7 +316,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
                 producers.add(slot.getTopCard());
         });
         leaderCards.forEach(card -> {
-            if(card.isActive() && card.isProductionLeaderCards())
+            if(card.isActive() && card.isProductionLeaderCard())
                 producers.add((ProductionLeaderCard) card);
         });
         return producers;
