@@ -102,21 +102,7 @@ public class PlayerboardSceneController extends Controller{
 
         showLeaderCards(playerBoard.getLeaderCards());
 
-        ImageView[][] slots =
-                        {{developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2},
-                        {developmentcardslot1_0,developmentcardslot1_1,developmentcardslot1_2},
-                        {developmentcardslot2_0,developmentcardslot2_1,developmentcardslot2_2}};
-
-        int slotIndex = 0,cardIndex;
-
-        for(DevelopmentCardSlot slot : playerBoard.getDevelopmentCardSlots()){
-            cardIndex = 0;
-            for(Card card : slot){
-                slots[slotIndex][cardIndex].setImage(new Image("/images/cards/FRONT/"+card.getCardName()+".png"));
-                slots[slotIndex][cardIndex++].setVisible(true);
-            }
-            slotIndex++;
-        }
+        showDevelopmentCards(playerBoard.getDevelopmentCardSlots());
 
         showWarehouse(playerBoard.getWarehouse());
 
@@ -136,6 +122,24 @@ public class PlayerboardSceneController extends Controller{
         selectUser.setDisable(false);
 
         populateUserSelect();
+    }
+
+    protected void showDevelopmentCards(DevelopmentCardSlot[] developmentCardSlots) {
+        ImageView[][] slots =
+                        {{developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2},
+                        {developmentcardslot1_0,developmentcardslot1_1,developmentcardslot1_2},
+                        {developmentcardslot2_0,developmentcardslot2_1,developmentcardslot2_2}};
+
+        int slotIndex = 0,cardIndex;
+
+        for(DevelopmentCardSlot slot : developmentCardSlots){
+            cardIndex = 0;
+            for(Card card : slot){
+                slots[slotIndex][cardIndex].setImage(new Image("/images/cards/FRONT/"+card.getCardName()+".png"));
+                slots[slotIndex][cardIndex++].setVisible(true);
+            }
+            slotIndex++;
+        }
     }
 
     public void populateUserSelect(){
@@ -420,68 +424,51 @@ public class PlayerboardSceneController extends Controller{
 
     }
 
-    private void selectProducer(){
-
+    private void addListenerToProducer(ImageView imageView, Producer producer){
+        imageView.setOnMouseClicked((e)->{
+            if(selectedProducers.contains(producer)){
+                selectedProducers.remove(producer);
+                imageView.getStyleClass().remove("selected");
+            }else{
+                selectedProducers.add(producer);
+                imageView.getStyleClass().add("selected");
+            }
+        });
     }
 
     public void askProductionsToStart(List<Producer> availableProductions) {
         selectUser.setDisable(true);
         selectedProducers = new ArrayList<>();
 
-        baseProductionBtn.getStyleClass().add("btnProduction");
-        baseProductionBtn.setOnMouseClicked((e)->{
-            if(selectedProducers.contains(DevelopmentCard.getBaseProduction())){
-                selectedProducers.remove(DevelopmentCard.getBaseProduction());
-                baseProductionBtn.getStyleClass().remove("selected");
-            }else{
-                selectedProducers.add(DevelopmentCard.getBaseProduction());
-                baseProductionBtn.getStyleClass().add("selected");
-            }
-            System.out.println(selectedProducers);
-        });
+        if(availableProductions.contains(DevelopmentCard.getBaseProduction())) {
+            baseProductionBtn.getStyleClass().add("btnProduction");
+            addListenerToProducer(baseProductionBtn, DevelopmentCard.getBaseProduction());
+        }
 
         ImageView[] leaderCardsImg = {leadercard0,leadercard1};
 
         int index = 0;
         for(LeaderCard leaderCard:playerBoard.getLeaderCards()){
-            System.out.println(leaderCard);
-            if(leaderCard.isActive() && leaderCard.isProductionLeaderCards()){
+            if(leaderCard.isActive() && leaderCard.isProductionLeaderCards() && availableProductions.contains(leaderCard)){
                 ProductionLeaderCard productionLeaderCard = (ProductionLeaderCard) leaderCard;
                 leaderCardsImg[index].getStyleClass().add("selectable");
-                final int finalIndex = index;
                 leaderCardsImg[index].setDisable(false);
-                leaderCardsImg[index].setOnMouseClicked((e)->{
-                    if(selectedProducers.contains(productionLeaderCard)){
-                        selectedProducers.remove(productionLeaderCard);
-                        leaderCardsImg[finalIndex].getStyleClass().remove("selected");
-                    }else{
-                        selectedProducers.add(productionLeaderCard);
-                        leaderCardsImg[finalIndex].getStyleClass().add("selected");
-                    }
-                    System.out.println(selectedProducers);
-                });
+                addListenerToProducer(leaderCardsImg[index],productionLeaderCard);
             }
             index++;
         }
 
-        ImageView[] slots = {developmentcardslot0_0,developmentcardslot1_0,developmentcardslot2_0};
+        ImageView[][] slots =
+                        {{developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2},
+                        {developmentcardslot1_0,developmentcardslot1_1,developmentcardslot1_2},
+                        {developmentcardslot2_0,developmentcardslot2_1,developmentcardslot2_2}};
 
         index = 0;
         for(DevelopmentCardSlot slot:playerBoard.getDevelopmentCardSlots()){
-            if(!slot.isEmpty()){
+            if(!slot.isEmpty() && availableProductions.contains(slot.getTopCard())){
                 DevelopmentCard card = slot.getTopCard();
-                slots[index].getStyleClass().add("selectable");
-                final int finalIndex = index;
-                slots[index].setOnMouseClicked((e)->{
-                    if(selectedProducers.contains(card)){
-                        selectedProducers.remove(card);
-                        slots[finalIndex].getStyleClass().remove("selected");
-                    }else{
-                        selectedProducers.add(card);
-                        slots[finalIndex].getStyleClass().add("selected");
-                    }
-                    System.out.println(selectedProducers);
-                });
+                slots[index][slot.getSize()-1].getStyleClass().add("selectable");
+                addListenerToProducer(slots[index][slot.getSize()-1],card);
             }
             index++;
         }

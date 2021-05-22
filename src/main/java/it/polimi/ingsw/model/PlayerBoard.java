@@ -67,6 +67,13 @@ public class PlayerBoard implements Cloneable{
         strongbox = new Strongbox();
         faithTrack = new FaithTrack(match);
         developmentCardSlots = Stream.generate(DevelopmentCardSlot::new).limit(3).toArray(DevelopmentCardSlot[]::new);
+
+        //TODO: rimuovere bypass
+        developmentCardSlots[0].addCard(match.getDevelopmentCardDecks().get(0).top());
+        developmentCardSlots[0].addCard(match.getDevelopmentCardDecks().get(1).top());
+        developmentCardSlots[1].addCard(match.getDevelopmentCardDecks().get(3).top());
+
+
         leaderCards = new ArrayList<>();
     }
 
