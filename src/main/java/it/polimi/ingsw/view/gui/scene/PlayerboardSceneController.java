@@ -38,7 +38,7 @@ public class PlayerboardSceneController extends Controller{
     protected Button marketBtn,startProductionBtn,buyDevelopmentcardBtn,rollbackBtn;
 
     @FXML
-    protected ImageView warehouse0,warehouse1,warehouse2,warehouse3,warehouse4,warehouse5;
+    protected ImageView warehouse0,warehouse1,warehouse2,warehouse3,warehouse4,warehouse5,warehouse_void_0,warehouse_void_1,warehouse_void_2;
 
     @FXML
     protected ImageView strongbox0,strongbox1,strongbox2,strongbox3;
@@ -68,15 +68,13 @@ public class PlayerboardSceneController extends Controller{
 
     protected boolean controlsEnabled = false;
 
-    private boolean choosingProductions = false;
-
     protected Integer selectedWarehouseRow = null;
 
     private final static double[][] FAITH_TRACK_CELLS = {{22,212}, {64,212}, {106,212}, {106,170}, {106,128}, {148,128}, {190,128}, {232,128}, {276,128}, {318,128}, {318,170}, {318,212}, {360,212}, {402,212}, {446,212}, {488,212}, {530,212}, {530,170}, {530,128}, {572,128}, {614,128}, {658,128}, {700,128}, {742,128}, {784,128}};
 
     private PlayerBoard playerBoard;
 
-    private List<Producer> selectedProducers;
+    private List<Producer> selectedProducers = new ArrayList<>();
 
     private Runnable onRollbackAction = ()->{};
 
@@ -98,6 +96,7 @@ public class PlayerboardSceneController extends Controller{
 
         marker.setX(FAITH_TRACK_CELLS[playerBoard.getFaithTrack().getFaithMarker()][0]);
         marker.setY(FAITH_TRACK_CELLS[playerBoard.getFaithTrack().getFaithMarker()][1]);
+        marker.setVisible(true);
 
         showLeaderCards(playerBoard.getLeaderCards());
 
@@ -121,6 +120,12 @@ public class PlayerboardSceneController extends Controller{
         selectUser.setDisable(false);
 
         populateUserSelect();
+    }
+
+    @FXML
+    public void rollback(){
+        onRollbackAction.run();
+        clientController.rollback();
     }
 
     protected void showDevelopmentCards(DevelopmentCardSlot[] developmentCardSlots) {
@@ -225,10 +230,13 @@ public class PlayerboardSceneController extends Controller{
 
     @FXML
     public void startProduction() {
-        disableControls();
-        selectUser.setDisable(true);
-        choosingProductions = true;
-        clientController.performAction(Action.ACTIVATE_PRODUCTION);
+        if (selectedProducers.isEmpty()) {
+            disableControls();
+            selectUser.setDisable(true);
+            clientController.performAction(Action.ACTIVATE_PRODUCTION);
+        }else{
+            chooseResourcesForProduction();
+        }
     }
 
     @FXML
@@ -240,9 +248,9 @@ public class PlayerboardSceneController extends Controller{
         this.playerBoard.setWarehouse(warehouse);
 
         ImageView[][] imgWarehouse = {
-                {warehouse0},
-                {warehouse1,warehouse2},
-                {warehouse3,warehouse4,warehouse5}
+                {warehouse_void_0},
+                {warehouse_void_1},
+                {warehouse_void_2}
         };
 
         List<Depot> depots = warehouse.getDepots();
@@ -261,9 +269,9 @@ public class PlayerboardSceneController extends Controller{
 
         warehouseRow0.hoverProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue && controlsEnabled) {
-                warehouse0.getStyleClass().add("card-selected");
+                warehouse_void_0.getStyleClass().add("card-selected");
             } else if(selectedWarehouseRow == null || selectedWarehouseRow != 0){
-                warehouse0.getStyleClass().remove("card-selected");
+                warehouse_void_0.getStyleClass().remove("card-selected");
             }
         });
         warehouseRow0.setOnMouseClicked((e)->{
@@ -271,11 +279,11 @@ public class PlayerboardSceneController extends Controller{
                 return;
             if(selectedWarehouseRow == null){
                 selectedWarehouseRow = 0;
-                warehouse0.getStyleClass().add("card-selected");
+                warehouse_void_0.getStyleClass().add("card-selected");
             }else{
                 if (selectedWarehouseRow == 0) {
                     selectedWarehouseRow = null;
-                    warehouse0.getStyleClass().remove("card-selected");
+                    warehouse_void_0.getStyleClass().remove("card-selected");
                 }else{
                     System.out.println("SWAPPO "+selectedWarehouseRow+" e 0");
                     clientController.swapDepots(selectedWarehouseRow,0);
@@ -287,11 +295,9 @@ public class PlayerboardSceneController extends Controller{
 //TODO: impedire swap depositi altrui
         warehouseRow1.hoverProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue && controlsEnabled) {
-                warehouse1.getStyleClass().add("card-selected");
-                warehouse2.getStyleClass().add("card-selected");
+                warehouse_void_1.getStyleClass().add("selected");
             } else if(selectedWarehouseRow == null || selectedWarehouseRow != 1){
-                warehouse1.getStyleClass().remove("card-selected");
-                warehouse2.getStyleClass().remove("card-selected");
+                warehouse_void_1.getStyleClass().remove("selected");
             }
         });
         warehouseRow1.setOnMouseClicked((e)->{
@@ -299,13 +305,11 @@ public class PlayerboardSceneController extends Controller{
                 return;
             if(selectedWarehouseRow == null){
                 selectedWarehouseRow = 1;
-                warehouse1.getStyleClass().add("card-selected");
-                warehouse2.getStyleClass().add("card-selected");
+                warehouse_void_1.getStyleClass().add("selected");
             }else{
                 if (selectedWarehouseRow == 1) {
                     selectedWarehouseRow = null;
-                    warehouse1.getStyleClass().remove("card-selected");
-                    warehouse2.getStyleClass().remove("card-selected");
+                    warehouse_void_1.getStyleClass().remove("selected");
                 }else{
                     System.out.println("SWAPPO "+selectedWarehouseRow+" e 1");
                     clientController.swapDepots(selectedWarehouseRow,1);
@@ -317,13 +321,9 @@ public class PlayerboardSceneController extends Controller{
 
         warehouseRow2.hoverProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue && controlsEnabled) {
-                warehouse3.getStyleClass().add("card-selected");
-                warehouse4.getStyleClass().add("card-selected");
-                warehouse5.getStyleClass().add("card-selected");
+                warehouse_void_2.getStyleClass().add("selected");
             } else if(selectedWarehouseRow == null || selectedWarehouseRow != 2){
-                warehouse3.getStyleClass().remove("card-selected");
-                warehouse4.getStyleClass().remove("card-selected");
-                warehouse5.getStyleClass().remove("card-selected");
+                warehouse_void_2.getStyleClass().remove("selected");
             }
         });
 
@@ -332,15 +332,11 @@ public class PlayerboardSceneController extends Controller{
                 return;
             if(selectedWarehouseRow == null){
                 selectedWarehouseRow = 2;
-                warehouse3.getStyleClass().add("card-selected");
-                warehouse4.getStyleClass().add("card-selected");
-                warehouse5.getStyleClass().add("card-selected");
+                warehouse_void_2.getStyleClass().add("selected");
             }else{
                 if (selectedWarehouseRow == 2) {
                     selectedWarehouseRow = null;
-                    warehouse3.getStyleClass().remove("card-selected");
-                    warehouse4.getStyleClass().remove("card-selected");
-                    warehouse5.getStyleClass().remove("card-selected");
+                    warehouse_void_2.getStyleClass().remove("selected");
                 }else{
                     System.out.println("SWAPPO "+selectedWarehouseRow+" e 2");
                     clientController.swapDepots(selectedWarehouseRow,2);
@@ -352,6 +348,9 @@ public class PlayerboardSceneController extends Controller{
     }
 
     private void clearWarehouseSelection(){
+        warehouse_void_0.getStyleClass().remove("selected");
+        warehouse_void_1.getStyleClass().remove("selected");
+        warehouse_void_2.getStyleClass().remove("selected");
         warehouse0.getStyleClass().remove("card-selected");
         warehouse1.getStyleClass().remove("card-selected");
         warehouse2.getStyleClass().remove("card-selected");
@@ -433,6 +432,7 @@ public class PlayerboardSceneController extends Controller{
                 selectedProducers.add(producer);
                 imageView.getStyleClass().add("selected");
             }
+            startProductionBtn.setDisable(selectedProducers.isEmpty());
         });
     }
 
@@ -440,10 +440,10 @@ public class PlayerboardSceneController extends Controller{
         selectUser.setDisable(true);
         selectedProducers = new ArrayList<>();
 
-        startProductionBtn.setVisible(false);
         marketBtn.setVisible(false);
         buyDevelopmentcardBtn.setVisible(false);
         rollbackBtn.setVisible(true);
+        startProductionBtn.setVisible(true);
 
         if(availableProductions.contains(DevelopmentCard.getBaseProduction())) {
             baseProductionBtn.getStyleClass().add("btnProduction");
@@ -520,9 +520,7 @@ public class PlayerboardSceneController extends Controller{
         }
     }
 
-    @FXML
-    public void rollback(){
-        onRollbackAction.run();
-        clientController.rollback();
+    private void chooseResourcesForProduction() {
     }
+
 }
