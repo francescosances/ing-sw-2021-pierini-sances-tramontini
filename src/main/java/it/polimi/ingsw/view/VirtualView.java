@@ -106,6 +106,11 @@ public class VirtualView implements View {
     }
 
     @Override
+    public void showLeaderCards(List<LeaderCard> leaderCards) {
+        //TODO
+    }
+
+    @Override
     public void listDevelopmentCards(List<Deck<DevelopmentCard>> developmentCardList, int cardsToChoose, PlayerBoard userBoard) {
         Message message = new Message(Message.MessageType.DEVELOPMENT_CARDS_TO_BUY);
         message.addData("developmentCards",Serializer.serializeDevelopmentCardsDeckList(developmentCardList));

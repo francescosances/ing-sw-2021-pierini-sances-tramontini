@@ -12,7 +12,7 @@ public class ActionToken {
     /**
      * The number of spaces the black cross must move when the Action Token is drawn
      */
-    private Integer blackCrossSpaces;
+    private final Integer blackCrossSpaces;
 
     /**
      * Initialize a new ActionToken that discards DevelopmentCards when drawn
@@ -22,6 +22,7 @@ public class ActionToken {
         if (developmentCard == null)
             throw new NullPointerException();
         this.developmentCard = developmentCard;
+        blackCrossSpaces = null;
     }
 
     /**
@@ -45,6 +46,8 @@ public class ActionToken {
         if(developmentCard != null)
             match.discardDevelopmentCards(developmentCard);
         else {
+            if (blackCrossSpaces== null)
+                throw new NullPointerException();
             match.moveBlackCross(blackCrossSpaces);
             if (blackCrossSpaces == 1)
                 match.shuffleActionTokens();
@@ -63,11 +66,10 @@ public class ActionToken {
             return false;
         ActionToken o = (ActionToken) other;
 
-        if (this.blackCrossSpaces.equals(o.blackCrossSpaces)) {
-            if (this.developmentCard != null && o.developmentCard != null)
-                return this.developmentCard.equals(o.developmentCard);
-            return this.developmentCard == null && o.developmentCard == null;
-        }
+        if (this.blackCrossSpaces != null && o.blackCrossSpaces != null)
+            return this.blackCrossSpaces.equals(o.blackCrossSpaces) && this.developmentCard == null && o.developmentCard == null;
+        if (this.developmentCard != null && o.developmentCard != null)
+            return this.developmentCard.equals(o.developmentCard) && this.blackCrossSpaces == null && o.blackCrossSpaces == null;
         return false;
     }
 
