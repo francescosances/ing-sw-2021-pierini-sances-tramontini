@@ -252,15 +252,36 @@ public class PlayerboardSceneController extends Controller{
 
         List<Depot> depots = warehouse.getDepots();
 
+        System.out.println(depots);
+
         for (ImageView[] imageViews : imgWarehouse) {
             for (ImageView imageView : imageViews) imageView.setVisible(false);
         }
 
-        for(int i=0;i<depots.size();i++){
+        for(int i=0;i<3;i++){
             int j;
             for(j=0;j<depots.get(i).getOccupied();j++){
                 imgWarehouse[i][j].setImage(new Image("/images/resources/"+depots.get(i).getResourceType().toString()+".png"));
                 imgWarehouse[i][j].setVisible(true);
+            }
+        }
+
+        final ImageView[][] leaderCardsDepotImg = {
+                {leaderCardDepot00,leaderCardDepot01},
+                {leaderCardDepot10,leaderCardDepot11}
+        };
+
+        Arrays.stream(leaderCardsDepotImg).forEach(card-> Arrays.stream(card).forEach(item->item.setVisible(false)));
+
+        List<LeaderCard> leaderCards = playerBoard.getLeaderCards();
+        int depotIndex = 3;
+        for(int i=0;i<leaderCards.size();i++) {
+            if (leaderCards.get(i).isActive() && leaderCards.get(i).isDepotLeaderCard()) {
+                for (int j = 0; j < depots.get(depotIndex).getOccupied(); j++) {
+                    leaderCardsDepotImg[i][j].setImage(new Image("/images/resources/" + depots.get(depotIndex).getResourceType().toString() + ".png"));
+                    leaderCardsDepotImg[i][j].setVisible(true);
+                }
+                depotIndex++;
             }
         }
 
@@ -363,16 +384,35 @@ public class PlayerboardSceneController extends Controller{
 
         final ImageView[] warehouseVoids = {warehouse_void_0,warehouse_void_1,warehouse_void_2};
 
+        final ImageView[] leaderCardsImgs = {leadercard0,leadercard1};
+
         if(selectedWarehouseRows.contains(rowIndex)){
             selectedWarehouseRows.removeIf(i -> i == rowIndex);
-            warehouseVoids[rowIndex].getStyleClass().remove("selected");
+            //clearWarehouseSelection(); attivare
+            if(rowIndex<3){
+                warehouseVoids[rowIndex].getStyleClass().remove("selected");
+            }else{
+                Arrays.stream(leaderCardsImgs).forEach(img->img.getStyleClass().remove("selected"));
+            }
             for(ImageView imageView:imgWarehouse[rowIndex])
                 imageView.getStyleClass().remove("selected");
         }else{
             selectedWarehouseRows.add(rowIndex);
-            warehouseVoids[rowIndex].getStyleClass().add("selected");
-            for(ImageView imageView:imgWarehouse[rowIndex])
-                imageView.getStyleClass().add("selected");
+            if(rowIndex < 3) {
+                warehouseVoids[rowIndex].getStyleClass().add("selected");
+                for (ImageView imageView : imgWarehouse[rowIndex])
+                    imageView.getStyleClass().add("selected");
+            }else{
+                List<LeaderCard> leaderCards = playerBoard.getLeaderCards();
+                int cardIndex = rowIndex-3;
+                for(int i=0;i<leaderCards.size();i++){
+                    if(leaderCards.get(i).isActive() && leaderCards.get(i).isDepotLeaderCard()){
+                        if(cardIndex == i)
+                            leaderCardsImgs[cardIndex].getStyleClass().add("selected");
+                        cardIndex--;
+                    }
+                }
+            }
             action.run();
         }
     }
@@ -421,7 +461,6 @@ public class PlayerboardSceneController extends Controller{
         int depotIndex = 3;
         for(int i=0;i<leaderCards.size();i++){
              if(leaderCards.get(i).isActive() && leaderCards.get(i).isDepotLeaderCard()){
-                 depotIndex++;
                  final int cardIndex = i,depotIndexFinal = depotIndex;
                  leaderCardsImg[i].hoverProperty().addListener((observable,oldvalue,newvalue)->{
                      if(newvalue && controlsEnabled){
@@ -430,7 +469,7 @@ public class PlayerboardSceneController extends Controller{
                          leaderCardsImg[cardIndex].getStyleClass().remove("selected");
                      }
                  });
-                 leaderCardsImg[i].setOnMouseClicked((e)->{
+                 leaderCardsImg[i].setOnMouseClicked((e)->{//todo conflitto con activate/discard
                      if(!controlsEnabled)
                          return;
                      warehouseSelected(depotIndexFinal,()->{
@@ -441,6 +480,7 @@ public class PlayerboardSceneController extends Controller{
                          }
                      });
                  });
+                 depotIndex++;
              }
         }
 
@@ -458,7 +498,7 @@ public class PlayerboardSceneController extends Controller{
                     clientController.swapDepots(selectedWarehouseRow,0);
                   //  warehouse_voids[selectedWarehouseRow].getStyleClass().remove("selected");
                     clearWarehouseSelection();
-                    //TODO: aggiornare la vista
+
                 }
                 warehouse_void_0.getStyleClass().remove("selected");
             }
