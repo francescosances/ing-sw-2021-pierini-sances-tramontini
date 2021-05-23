@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.cards.Deck;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.DevelopmentColorType;
+import it.polimi.ingsw.view.View;
 
 public class SoloMatch extends Match{
 
@@ -92,10 +93,12 @@ public class SoloMatch extends Match{
     @Override
     public void endTurn(){
         super.endTurn();
-
-        //TODO: comunicare al giocatore che un ActionToken è stato pescato
+        ActionToken actionToken;
         try {
-            drawActionToken().show(this);
+            actionToken = drawActionToken().show(this);
+            for (View view: views) {
+                view.showActionToken(actionToken);
+            }
             //TODO: creare metodo endgame per contare i punti
         } catch (EndGameException e) {
             e.printStackTrace();

@@ -210,6 +210,11 @@ public class CLI implements View {
         //TODO
     }
 
+    @Override
+    public void showDevelopmentCardSlots(DevelopmentCardSlot[] developmentCardSlots) {
+        //TODO
+    }
+
     private String developmentCardColor(DevelopmentCard card) {
         switch (card.getColor()) {
             case BLUE:
@@ -436,6 +441,11 @@ public class CLI implements View {
         }
     }
 
+    @Override
+    public void showActionToken(ActionToken actionToken) {
+        //TODO
+    }
+
 
     @Override
     public void showPlayerBoard(PlayerBoard playerBoard) {
@@ -478,6 +488,11 @@ public class CLI implements View {
         output.println();
 
         showPopeFavorTiles(faithTrack);
+    }
+
+    @Override
+    public void showVaticanReportTriggered() {
+        //TODO
     }
 
     private void showPopeFavorTiles(FaithTrack faithTrack) {

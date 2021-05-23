@@ -121,9 +121,11 @@ public class PlayerController {
         currentStatus = PlayerStatus.TURN_ENDED;
 
         if(currentDevelopmentCardToStore != null){
-            for(DevelopmentCardSlot slot : playerBoard.getDevelopmentCardSlots()){
+            DevelopmentCardSlot slot;
+            for (int i = 0; i < playerBoard.getDevelopmentCardSlots().length; i++) {
+                slot = playerBoard.getDevelopmentCardSlots()[i];
                 if(slot.accepts(currentDevelopmentCardToStore)) {
-                    slot.addCard(currentDevelopmentCardToStore);
+                    playerBoard.addDevelopmentCardToSlot(currentDevelopmentCardToStore, i);
                     currentDevelopmentCardToStore = null;
                     break;
                 }
@@ -644,7 +646,7 @@ public class PlayerController {
             virtualView.askToChooseDevelopmentCardSlot(playerBoard.getDevelopmentCardSlots(),currentDevelopmentCardToStore);
             return;
         }
-        playerBoard.getDevelopmentCardSlots()[slotIndex].addCard(currentDevelopmentCardToStore);
+        playerBoard.addDevelopmentCardToSlot(currentDevelopmentCardToStore, slotIndex);
         currentDevelopmentCardToStore = null;
         nextStatus();
     }

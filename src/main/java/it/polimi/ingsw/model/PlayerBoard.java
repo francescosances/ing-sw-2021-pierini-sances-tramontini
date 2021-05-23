@@ -320,6 +320,13 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
         this.faithTrack.setMatch(match);
     }
 
+    public void addDevelopmentCardToSlot(DevelopmentCard developmentCard, int slot){
+        if (!developmentCardSlots[slot].accepts(developmentCard))
+            throw new NotSatisfiedRequirementsException("You cannot buy this card");
+        developmentCardSlots[slot].addCard(developmentCard);
+        updateSlots();
+    }
+
     /**
      * Makes the player pay the cost
      * @param costs the cost player must pay
@@ -331,6 +338,8 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
 
     public void setWarehouse(Warehouse warehouse) {
         this.warehouse = warehouse;
+        for (View view:views)
+            warehouse.addView(view);
     }
 
     /**
@@ -342,6 +351,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
         views.add(view);
         faithTrack.addView(view);
         strongbox.addView(view);
+        warehouse.addView(view);
     }
 
     /**
@@ -352,7 +362,8 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
     public void removeView(View view) {
         views.remove(view);
         faithTrack.removeView(view);
-        strongbox.addView(view);
+        strongbox.removeView(view);
+        warehouse.removeView(view);
     }
 
 
@@ -362,6 +373,11 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
     private void updateLeaderCardsList() {
         for (View view:views)
             view.showLeaderCards(leaderCards);
+    }
+
+    private void updateSlots(){
+        for (View view:views)
+            view.showDevelopmentCardSlots(developmentCardSlots);
     }
 
 

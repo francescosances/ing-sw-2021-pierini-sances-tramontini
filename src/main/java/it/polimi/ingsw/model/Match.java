@@ -54,7 +54,7 @@ public class Match implements ObservableFromView {
      */
     private GamePhase currentPhase;
 
-    private final transient List<View> views;
+    protected final transient List<View> views;
 
     public Match(String matchName) {
         this(matchName,MAX_PLAYERS);
@@ -181,6 +181,7 @@ public class Match implements ObservableFromView {
                 p.getFaithTrack().vaticanReportTriggered(vaticanReportsCount);
             }
             vaticanReportsCount++;
+            updateVaticanReport();
         }
     }
 
@@ -232,6 +233,11 @@ public class Match implements ObservableFromView {
     public void removeView(View view) {
         views.remove(view);
         players.forEach(playerBoard -> playerBoard.removeView(view));
+    }
+
+    private void updateVaticanReport() {
+        for (View view:views)
+            view.showVaticanReportTriggered();
     }
 
     @Override

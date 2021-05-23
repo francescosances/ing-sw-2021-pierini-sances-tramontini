@@ -39,7 +39,7 @@ public class ActionToken {
      * @param match the match in which the ActionToken is drawn
      * @throws EndGameException if the blackCross moved to the last FaithTrackSpace
      */
-    public void show(SoloMatch match) throws EndGameException {
+    public ActionToken show(SoloMatch match) throws EndGameException {
         if (match == null){
             throw new NullPointerException();
         }
@@ -52,6 +52,7 @@ public class ActionToken {
             if (blackCrossSpaces == 1)
                 match.shuffleActionTokens();
         }
+        return this;
     }
 
     /**

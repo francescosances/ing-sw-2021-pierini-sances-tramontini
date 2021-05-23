@@ -111,6 +111,11 @@ public class VirtualView implements View {
     }
 
     @Override
+    public void showDevelopmentCardSlots(DevelopmentCardSlot[] developmentCardSlots) {
+        //TODO
+    }
+
+    @Override
     public void listDevelopmentCards(List<Deck<DevelopmentCard>> developmentCardList, int cardsToChoose, PlayerBoard userBoard) {
         Message message = new Message(Message.MessageType.DEVELOPMENT_CARDS_TO_BUY);
         message.addData("developmentCards",Serializer.serializeDevelopmentCardsDeckList(developmentCardList));
@@ -131,6 +136,11 @@ public class VirtualView implements View {
         Message message = new Message(Message.MessageType.SHOW_FAITH_TRACK);
         message.addData("faithTrack",Serializer.serializeFaithTrack(faithTrack));
         sendMessage(message);
+    }
+
+    @Override
+    public void showVaticanReportTriggered() {
+        //TODO
     }
 
     @Override
@@ -220,6 +230,11 @@ public class VirtualView implements View {
         Message message = new Message(Message.MessageType.SHOW_PLAYERS);
         message.addData("players",new Gson().toJson(players));
         sendMessage(message);
+    }
+
+    @Override
+    public void showActionToken(ActionToken actionToken) {
+        //TODO
     }
 
     @Override

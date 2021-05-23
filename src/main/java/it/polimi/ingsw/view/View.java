@@ -86,10 +86,16 @@ public interface View {
     void showPlayerLeaderCards(List<LeaderCard> leaderCardList);
 
     /**
-     * Shows the LeaderCards
+     * Shows the LeaderCards to the player
      * @param leaderCards the list of the LeaderCards to show
      */
     void showLeaderCards(List<LeaderCard> leaderCards);
+
+    /**
+     * Shows the DevelopmentCardSlots to the player
+     * @param developmentCardSlots the DevelopmentCardSlots to show
+     */
+    void showDevelopmentCardSlots(DevelopmentCardSlot[] developmentCardSlots);
 
     /**
      * Shows a list of Development Cards and asks to choose some of them
@@ -110,6 +116,11 @@ public interface View {
      * @param faithTrack the faith track to be shown
      */
     void showFaithTrack(FaithTrack faithTrack);
+
+    /**
+     * Shows a message saying a vatican report has been triggered
+     */
+    void showVaticanReportTriggered();
 
     /**
      * List the resources stored in the warehouse
@@ -199,4 +210,10 @@ public interface View {
      * @param users a map containing all players connected to the match and their player.isActive() value
      */
     void showPlayers(Map<String, Boolean> users);
+
+    /**
+     * Shows the player the ActionToken drawn
+     * @param actionToken the ActionToken drawn
+     */
+    void showActionToken(ActionToken actionToken);
 }

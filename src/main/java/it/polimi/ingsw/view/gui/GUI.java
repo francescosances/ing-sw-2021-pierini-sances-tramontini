@@ -169,6 +169,11 @@ public class GUI implements View {
     }
 
     @Override
+    public void showDevelopmentCardSlots(DevelopmentCardSlot[] developmentCardSlots) {
+        //TODO
+    }
+
+    @Override
     public void listDevelopmentCards(List<Deck<DevelopmentCard>> developmentCardList, int cardsToChoose, PlayerBoard userBoard) {
         Platform.runLater(()->{
             SelectDeveloperCardsController controller = (SelectDeveloperCardsController) openModal("select_development_cards_scene","Select development cards",()->{clientController.rollback();});
@@ -190,6 +195,11 @@ public class GUI implements View {
 
     @Override
     public void showFaithTrack(FaithTrack faithTrack) {
+        //TODO
+    }
+
+    @Override
+    public void showVaticanReportTriggered() {
         //TODO
     }
 
@@ -283,6 +293,11 @@ public class GUI implements View {
     @Override
     public void showPlayers(Map<String, Boolean> users) {
         this.clientController.setPlayers(new ArrayList<>(users.keySet()));
+    }
+
+    @Override
+    public void showActionToken(ActionToken actionToken) {
+        //TODO
     }
 
 
