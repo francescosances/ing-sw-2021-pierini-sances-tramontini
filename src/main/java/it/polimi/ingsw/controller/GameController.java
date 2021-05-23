@@ -123,18 +123,7 @@ public class GameController implements PlayerStatusListener {
                     currentPlayerController.activateLeaderCard(Integer.parseInt(message.getData("num")));
                     break;
                 case SHOW_PLAYER_BOARD:
-                    for (PlayerController controller:players) {
-                        if (controller.getUsername().equals(username)) {
-                            String request = message.getData("username");
-                            if (request.equals(Match.YOU_STRING))
-                                request = username;
-                            PlayerBoard res = match.getPlayerBoard(request).clone();
-                            if(!username.equals(request))
-                                res.setLeaderCards(res.getLeaderCards().stream().filter(LeaderCard::isActive).collect(Collectors.toList()));
-                            controller.showPlayerBoard(res);
-                            break;
-                        }
-                    }
+                    showPlayerLeaderBoard(username, message);
                     break;
                 case ROLLBACK:
                     currentPlayerController.performAction(Action.CANCEL);
@@ -142,6 +131,26 @@ public class GameController implements PlayerStatusListener {
             }
         }catch (EndGameException e){
             setPhase(Match.GamePhase.END_GAME);
+        }
+    }
+
+    /**
+     * Sends to the player whose message is being handled the PlayerBoard requested
+     * @param username the name of the player who sent the request
+     * @param message the message containing the data
+     */
+    private void showPlayerLeaderBoard(String username, Message message) {
+        for (PlayerController controller : players) {
+            if (controller.getUsername().equals(username)) {
+                String request = message.getData("username");
+                if (request.equals(Match.YOU_STRING))
+                    request = username;
+                PlayerBoard res = match.getPlayerBoard(request).clone();
+                if (!username.equals(request))
+                    res.setLeaderCards(res.getLeaderCards().stream().filter(LeaderCard::isActive).collect(Collectors.toList()));
+                controller.showPlayerBoard(res);
+                break;
+            }
         }
     }
 
