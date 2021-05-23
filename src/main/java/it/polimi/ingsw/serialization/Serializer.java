@@ -226,11 +226,11 @@ public class Serializer {
     }
 
     public static String serializeInt(int i){
-        return new Gson().toJson(i);
+        return String.valueOf(i);
     }
 
     public static int deserializeInt(String json){
-        return new Gson().fromJson(json, int.class);
+        return Integer.parseInt(json);
     }
 
     public static String serializeFaithTrack(FaithTrack faithTrack) {

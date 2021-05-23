@@ -1,4 +1,4 @@
-package it.polimi.ingsw.network.serialization;
+package it.polimi.ingsw.serialization;
 
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.*;
