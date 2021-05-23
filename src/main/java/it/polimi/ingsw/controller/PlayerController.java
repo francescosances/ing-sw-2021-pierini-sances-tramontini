@@ -309,10 +309,10 @@ public class PlayerController {
             throw new IllegalArgumentException("Invalid number of resource of your choosing");
         try {
             if (resourcesToChoose >= 1) {
-                playerBoard.getWarehouse().addResource(2, (ResourceType) resources[0], 1);
+                playerBoard.getWarehouse().addResources(2, (ResourceType) resources[0], 1);
             }
             if (resourcesToChoose == 2) {
-                playerBoard.getWarehouse().addResource((resources[0] == resources[1]) ? 2 : 1, (ResourceType) resources[1], 1);
+                playerBoard.getWarehouse().addResources((resources[0] == resources[1]) ? 2 : 1, (ResourceType) resources[1], 1);
             }
         }catch (IncompatibleDepotException e){
             e.printStackTrace();
@@ -583,7 +583,7 @@ public class PlayerController {
     protected void storeResourceToWarehouse(int depot){
         if(depot < getPlayerBoard().getWarehouse().getDepots().size())
             try {
-                getPlayerBoard().getWarehouse().addResource(depot, (ResourceType) currentResourceToStore, 1);
+                getPlayerBoard().getWarehouse().addResources(depot, (ResourceType) currentResourceToStore, 1);
             }catch (IncompatibleDepotException e){
                 virtualView.showErrorMessage(e.getMessage());
                 getPlayerBoard().getWarehouse().pushResourceToBeStored(currentResourceToStore);

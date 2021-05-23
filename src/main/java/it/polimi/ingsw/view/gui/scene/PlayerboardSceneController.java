@@ -394,7 +394,7 @@ public class PlayerboardSceneController extends Controller{
             }else{
                 Arrays.stream(leaderCardsImgs).forEach(img->img.getStyleClass().remove("selected"));
             }
-            for(ImageView imageView:imgWarehouse[rowIndex])
+            for(ImageView imageView:imgWarehouse[rowIndex])//TODO: verificare perché può verificarsi index out of bound
                 imageView.getStyleClass().remove("selected");
         }else{
             selectedWarehouseRows.add(rowIndex);
@@ -483,28 +483,6 @@ public class PlayerboardSceneController extends Controller{
                  depotIndex++;
              }
         }
-
-    /*    warehouseRow0.setOnMouseClicked((e)->{
-            if(!controlsEnabled)
-                return;
-            if(selectedWarehouseRow == null){
-                selectedWarehouseRow = 0;
-                warehouse_void_0.getStyleClass().add("selected");
-            }else{
-                if (selectedWarehouseRow == 0) {
-                    selectedWarehouseRow = null;
-                }else{
-                    System.out.println("SWAPPO "+selectedWarehouseRow+" e 0");
-                    clientController.swapDepots(selectedWarehouseRow,0);
-                  //  warehouse_voids[selectedWarehouseRow].getStyleClass().remove("selected");
-                    clearWarehouseSelection();
-
-                }
-                warehouse_void_0.getStyleClass().remove("selected");
-            }
-        });
-*/
-
     }
 
     private void clearWarehouseSelection(){
@@ -517,6 +495,16 @@ public class PlayerboardSceneController extends Controller{
         warehouse3.getStyleClass().remove("selected");
         warehouse4.getStyleClass().remove("selected");
         warehouse5.getStyleClass().remove("selected");
+
+        final ImageView[] leaderCardsImg = {leadercard0,leadercard1};
+
+        List<LeaderCard> leaderCards = playerBoard.getLeaderCards();
+        for(int i=0;i<leaderCards.size();i++){
+            if(leaderCards.get(i).isActive() && leaderCards.get(i).isDepotLeaderCard()){
+                leaderCardsImg[i].getStyleClass().remove("selected");
+            }
+        }
+
         selectedWarehouseRows.clear();
     }
 

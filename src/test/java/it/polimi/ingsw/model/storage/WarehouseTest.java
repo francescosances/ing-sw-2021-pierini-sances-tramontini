@@ -27,7 +27,7 @@ class WarehouseTest {
 
     @Test
     void addResource() throws IncompatibleDepotException {
-        warehouse.addResource(1, ResourceType.SHIELD, 1);
+        warehouse.addResources(1, ResourceType.SHIELD, 1);
         assertEquals(ResourceType.SHIELD, warehouse.getDepots().get(1).getResourceType());
         assertEquals(1, warehouse.getDepots().get(1).getOccupied());
         assertEquals(0, warehouse.getDepots().get(0).getOccupied());
@@ -37,7 +37,7 @@ class WarehouseTest {
 
         boolean bool = false;
         try{
-            warehouse.addResource(2, ResourceType.SHIELD, 2);
+            warehouse.addResources(2, ResourceType.SHIELD, 2);
         } catch (IncompatibleDepotException e){
             assertEquals("You can’t place the same type of Resource in two different standard depots.", e.getMessage());
             bool = true;
@@ -53,7 +53,7 @@ class WarehouseTest {
         assertNull(warehouse.getDepots().get(2).getResourceType());
 
         try {
-            warehouse.addResource(1, ResourceType.SERVANT, 1);
+            warehouse.addResources(1, ResourceType.SERVANT, 1);
         } catch (IncompatibleDepotException e){
             bool = true;
             assertEquals("Resource Type not compatible with depot", e.getMessage());
@@ -69,11 +69,28 @@ class WarehouseTest {
         assertNull(warehouse.getDepots().get(2).getResourceType());
 
         try {
-            warehouse.addResource(1, ResourceType.SHIELD, 2);
+            warehouse.addResources(1, ResourceType.SHIELD, 2);
         } catch (IncompatibleDepotException e){
             assertEquals("Depot is full", e.getMessage());
             bool = true;
         }
+        assertTrue(bool);
+        bool = false;
+
+        assertEquals(ResourceType.SHIELD, warehouse.getDepots().get(1).getResourceType());
+        assertEquals(2, warehouse.getDepots().get(1).getOccupied());
+        assertEquals(0, warehouse.getDepots().get(0).getOccupied());
+        assertEquals(0, warehouse.getDepots().get(2).getOccupied());
+        assertNull(warehouse.getDepots().get(0).getResourceType());
+        assertNull(warehouse.getDepots().get(2).getResourceType());
+
+        try{
+            warehouse.addResources(0, null, 2);
+        } catch (IncompatibleDepotException e){
+            assertEquals("You can’t place the same type of Resource in two different standard depots.", e.getMessage());
+            bool = true;
+        }
+
         assertTrue(bool);
 
         assertEquals(ResourceType.SHIELD, warehouse.getDepots().get(1).getResourceType());
@@ -83,7 +100,7 @@ class WarehouseTest {
         assertNull(warehouse.getDepots().get(0).getResourceType());
         assertNull(warehouse.getDepots().get(2).getResourceType());
 
-        warehouse.addResource(0, ResourceType.COIN, 1);
+        warehouse.addResources(0, ResourceType.COIN, 1);
 
         assertEquals(ResourceType.SHIELD, warehouse.getDepots().get(1).getResourceType());
         assertEquals(ResourceType.COIN, warehouse.getDepots().get(0).getResourceType());
@@ -95,8 +112,8 @@ class WarehouseTest {
 
     @Test
     void removeResources() throws IncompatibleDepotException {
-        warehouse.addResource(2, ResourceType.SERVANT, 3);
-        warehouse.addResource(1, ResourceType.SHIELD, 1);
+        warehouse.addResources(2, ResourceType.SERVANT, 3);
+        warehouse.addResources(1, ResourceType.SHIELD, 1);
         warehouse.removeResources(new Requirements(new Pair<>(ResourceType.SERVANT, 2)));
 
         assertEquals(ResourceType.SERVANT, warehouse.getDepots().get(2).getResourceType());
@@ -182,8 +199,8 @@ class WarehouseTest {
 
     @Test
     void swapDepots() throws IncompatibleDepotException {
-        warehouse.addResource(2, ResourceType.COIN, 1);
-        warehouse.addResource(0, ResourceType.SERVANT, 1);
+        warehouse.addResources(2, ResourceType.COIN, 1);
+        warehouse.addResources(0, ResourceType.SERVANT, 1);
 
         assertEquals(ResourceType.COIN, warehouse.getDepots().get(2).getResourceType());
         assertNull(warehouse.getDepots().get(1).getResourceType());
@@ -213,8 +230,8 @@ class WarehouseTest {
 
     @Test
     void getAllResources() throws IncompatibleDepotException {
-        warehouse.addResource(1, ResourceType.COIN, 2);
-        warehouse.addResource(2,ResourceType.SHIELD, 2);
+        warehouse.addResources(1, ResourceType.COIN, 2);
+        warehouse.addResources(2,ResourceType.SHIELD, 2);
 
         assertEquals(new Requirements(new Pair<>(ResourceType.COIN, 2), new Pair<>(ResourceType.SHIELD, 2)), warehouse.getAllResources());
         assertEquals(ResourceType.SHIELD, warehouse.getDepots().get(2).getResourceType());
@@ -229,7 +246,7 @@ class WarehouseTest {
     @Test
     void addDepotLeaderCard() {
         LeaderCard leaderCard = new DepotLeaderCard("",3, null,ResourceType.SHIELD);
-        warehouse.addDepotLeaderCard(leaderCard);
+        warehouse.addDepotLeaderCard((DepotLeaderCard) leaderCard);
         assertEquals(leaderCard, warehouse.getDepots().get(3));
     }
 }

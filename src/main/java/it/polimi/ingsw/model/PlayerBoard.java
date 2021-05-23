@@ -78,8 +78,8 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
         developmentCardSlots[1].addCard(match.getDevelopmentCardDecks().get(3).top());
 
         try {
-            warehouse.addResource(0,ResourceType.SERVANT,1);
-            warehouse.addResource(1,ResourceType.SHIELD,1);
+            warehouse.addResources(0,ResourceType.SERVANT,1);
+            warehouse.addResources(1,ResourceType.SHIELD,1);
         } catch (IncompatibleDepotException e) {
             e.printStackTrace();
         }
