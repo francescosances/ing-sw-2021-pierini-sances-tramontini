@@ -222,4 +222,26 @@ public class SerializerTest {
         assertEquals(resourceRequirements, Serializer.deserializeRequirements(json));
         assertEquals(cardRequirements, Serializer.deserializeRequirements(json2));
     }
+
+    @Test
+    public void serializeFaithTrack(){
+        Match match = new Match("Test");
+        FaithTrack faithTrack = new FaithTrack(match);
+        for (int i = 0; i<3; i++)
+            faithTrack.moveMarker();
+        String json = Serializer.serializeFaithTrack(faithTrack);
+        assertEquals(faithTrack, Serializer.deserializeFaithTrack(json));
+    }
+
+    @Test
+    public void serializeDevelopmentCardSlots(){
+        DevelopmentCardSlot[] developmentCardSlots = new DevelopmentCardSlot[3];
+        for (int i = 0; i < developmentCardSlots.length; i++)
+            developmentCardSlots[i] = new DevelopmentCardSlot();
+        developmentCardSlots[1].addCard(new DevelopmentCard("",1, new Requirements(new Pair<>(ResourceType.SHIELD, 2)), 1, DevelopmentColorType.GREEN, new Requirements(new Pair<>(ResourceType.COIN, 1)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1)));
+        developmentCardSlots[1].addCard(new DevelopmentCard("",5, new Requirements(new Pair<>(ResourceType.COIN, 2)), 2, DevelopmentColorType.BLUE, new Requirements(new Pair<>(ResourceType.SHIELD, 2)), new Pair<>(ResourceType.STONE, 1)));
+        developmentCardSlots[2].addCard(new DevelopmentCard("",1, new Requirements(new Pair<>(ResourceType.STONE, 1)), 1, DevelopmentColorType.YELLOW, new Requirements(new Pair<>(ResourceType.COIN, 1)), new Pair<>(ResourceType.SERVANT, 1)));
+        String json = Serializer.serializeDevelopmentCardSlots(developmentCardSlots);
+        assertArrayEquals(developmentCardSlots, Serializer.deserializeDevelopmentCardsSlots(json));
+    }
 }

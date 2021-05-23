@@ -187,17 +187,16 @@ public class Serializer {
         return gsonBuilder.create().fromJson(json, Resource.class);
     }
 
-    public static String serializeDevelopmentCardSlots(List<DevelopmentCardSlot> availableSlots) {
+    public static String serializeDevelopmentCardSlots(DevelopmentCardSlot[] availableSlots) {
         return new Gson().toJson(availableSlots);
     }
 
-    public static List<DevelopmentCardSlot> deserializeDevelopmentCardsSlots(String slots) {
+    public static DevelopmentCardSlot[] deserializeDevelopmentCardsSlots(String slots) {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Requirements.class, new RequirementsCreator());
 
         Gson gson = gsonBuilder.create();
-        Type type = new TypeToken<List<DevelopmentCardSlot>>(){}.getType();
-        return gson.fromJson(slots, type);
+        return gson.fromJson(slots, DevelopmentCardSlot[].class);
     }
 
     public static String serializeProducerList(List<Producer> producerList){
@@ -235,8 +234,11 @@ public class Serializer {
     }
 
     public static String serializeFaithTrack(FaithTrack faithTrack) {
-        //TODO
-        return "";
+        return new Gson().toJson(faithTrack);
+    }
+
+    public static FaithTrack deserializeFaithTrack(String json){
+        return new Gson().fromJson(json, FaithTrack.class);
     }
 }
 

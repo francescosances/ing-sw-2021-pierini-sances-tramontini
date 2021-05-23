@@ -371,10 +371,14 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      * Notifies all views of the change
      */
     private void updateLeaderCardsList() {
+        List<LeaderCard> leaders = leaderCards.stream().filter(LeaderCard::isActive).collect(Collectors.toList());
         for (View view:views)
-            view.showLeaderCards(leaderCards);
+            view.showLeaderCards(leaders);
     }
 
+    /**
+     * Notifies all views of the change
+     */
     private void updateSlots(){
         for (View view:views)
             view.showDevelopmentCardSlots(developmentCardSlots);
@@ -426,6 +430,10 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
     }
 
 
+    /**
+     * Returns a new Object which is equal to this
+     * @return a new Object which is equal to this
+     */
     @Override
     public PlayerBoard clone() {
         return Serializer.deserializePlayerBoard(Serializer.serializePlayerBoard(this));

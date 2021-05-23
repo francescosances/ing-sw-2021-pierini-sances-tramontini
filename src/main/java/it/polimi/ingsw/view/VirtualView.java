@@ -107,12 +107,16 @@ public class VirtualView implements View {
 
     @Override
     public void showLeaderCards(List<LeaderCard> leaderCards) {
-        //TODO
+        Message message = new Message(Message.MessageType.SHOW_LEADER_CARDS);
+        message.addData("leaderCards", Serializer.serializeLeaderCardList(leaderCards.toArray(new LeaderCard[0])));
+        sendMessage(message);
     }
 
     @Override
     public void showDevelopmentCardSlots(DevelopmentCardSlot[] developmentCardSlots) {
-        //TODO
+        Message message = new Message(Message.MessageType.SHOW_SLOTS);
+        message.addData("slots", Serializer.serializeDevelopmentCardSlots(developmentCardSlots));
+        sendMessage(message);
     }
 
     @Override
@@ -174,7 +178,7 @@ public class VirtualView implements View {
 
     @Override
     public void showMarket(Market market) {
-        Message message = new Message(Message.MessageType.TAKE_RESOURCES_FROM_MARKET);
+        Message message = new Message(Message.MessageType.SHOW_MARKET);
         message.addData("market",Serializer.serializeMarket(market));
         sendMessage(message);
     }
@@ -205,7 +209,7 @@ public class VirtualView implements View {
     @Override
     public void askToChooseDevelopmentCardSlot(DevelopmentCardSlot[] slots, DevelopmentCard developmentCard) {
         Message message = new Message(Message.MessageType.CHOOSE_DEVELOPMENT_CARD_SLOT);
-        message.addData("slots",Serializer.serializeDevelopmentCardSlots(Arrays.asList(slots)));
+        message.addData("slots",Serializer.serializeDevelopmentCardSlots(slots));
         message.addData("developmentCard",Serializer.serializeDevelopmentCard(developmentCard));
         sendMessage(message);
     }
@@ -234,7 +238,9 @@ public class VirtualView implements View {
 
     @Override
     public void showActionToken(ActionToken actionToken) {
-        //TODO
+        Message message = new Message(Message.MessageType.ACTION_TOKEN);
+        message.addData("actionToken", Serializer.serializeActionToken(actionToken));
+        sendMessage(message);
     }
 
     @Override

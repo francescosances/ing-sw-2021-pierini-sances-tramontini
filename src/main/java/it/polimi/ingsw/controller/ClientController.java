@@ -186,7 +186,7 @@ public class ClientController {
                 break;
             case CHOOSE_DEVELOPMENT_CARD_SLOT:
                 lock.lock();
-                view.askToChooseDevelopmentCardSlot(Serializer.deserializeDevelopmentCardsSlots(message.getData("slots")).toArray(new DevelopmentCardSlot[0]), Serializer.deserializeDevelopmentCard(message.getData("developmentCard")));
+                view.askToChooseDevelopmentCardSlot(Serializer.deserializeDevelopmentCardsSlots(message.getData("slots")), Serializer.deserializeDevelopmentCard(message.getData("developmentCard")));
                 lock.unlock();
                 break;
             case PRODUCTION:

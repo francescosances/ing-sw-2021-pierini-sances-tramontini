@@ -140,7 +140,7 @@ public class CLI implements View {
 
     @Override
     public void listLeaderCards(List<LeaderCard> leaderCardList, int cardsToChoose) {
-        renderLeaderCards(leaderCardList);
+        printLeaderCards(leaderCardList);
         output.println("Choose " + cardsToChoose + " leader cards:");
         int[] choices = new int[cardsToChoose];
         LeaderCard[] cardsChosen = new LeaderCard[cardsToChoose];
@@ -171,7 +171,7 @@ public class CLI implements View {
     public void showPlayerLeaderCards(List<LeaderCard> leaderCardList) {
         while (true) {
             output.println("You have these leader cards");
-            renderLeaderCards(leaderCardList);
+            printLeaderCards(leaderCardList);
             output.println("Select which leader card you want to activate or discard");
             output.println(ANSI_WHITE + "Insert a negative number to reverse the action" + ANSI_RESET);
             int choice = input.nextInt();
@@ -452,7 +452,7 @@ public class CLI implements View {
         showFaithTrack(playerBoard.getFaithTrack());
         showStorage(playerBoard);
         showDevelopmentCards(playerBoard.getDevelopmentCardSlots());
-        renderLeaderCards(playerBoard.getLeaderCards());
+        printLeaderCards(playerBoard.getLeaderCards());
     }
 
     public void printCross(int pos, FaithTrack faithTrack) {
@@ -568,7 +568,7 @@ public class CLI implements View {
         }
     }
 
-    private void renderLeaderCards(List<LeaderCard> leaderCardList) {
+    private void printLeaderCards(List<LeaderCard> leaderCardList) {
         int victoryPoints = leaderCardList.stream()
                 .filter(LeaderCard::isActive)
                 .mapToInt(LeaderCard::getVictoryPoints)
@@ -656,6 +656,7 @@ public class CLI implements View {
 
     @Override
     public void askToStoreResource(Resource resource, Warehouse warehouse) {
+        output.println("You have to store a "+ resource);
         output.println("Where do you want to store this " + resource + " resource?");
         showWarehouse(warehouse);
         output.printf("  [%d] Move resources\n", warehouse.getDepots().size());
