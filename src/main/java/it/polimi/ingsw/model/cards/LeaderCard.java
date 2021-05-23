@@ -104,9 +104,11 @@ public abstract class LeaderCard extends Card {
         return false;
     }
 
-    public boolean isDiscountLeaderCard(){
+    public boolean isDiscountLeaderCard(){ return false; }
+
+   public boolean isDepotLeaderCard(){
         return false;
-    }
+   }
 
     /**
      * Returns a string representation of the object

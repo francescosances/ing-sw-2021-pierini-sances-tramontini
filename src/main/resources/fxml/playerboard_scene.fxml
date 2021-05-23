@@ -24,6 +24,16 @@
                   <Image url="@../images/buttons/warehouse_row_0.png" />
                </image>
             </ImageView>
+            <ImageView fx:id="warehouse_void_2" fitHeight="43.0" fitWidth="162.0" layoutX="25.0" layoutY="482.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/buttons/warehouse_row_2.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="warehouse_void_1" fitHeight="43.0" fitWidth="150.0" layoutX="33.0" layoutY="428.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/buttons/warehouse_row_1.png" />
+               </image>
+            </ImageView>
             <ImageView fx:id="leadercard0" fitHeight="211.0" fitWidth="156.0" layoutX="903.0" layoutY="105.0" pickOnBounds="true" preserveRatio="true" styleClass="card,leadercard" visible="false">
                <image>
                   <Image url="@../images/cards/BACK/64.png" />
@@ -153,16 +163,6 @@
                    <Image url="@../images/punchboard/marker.png" />
                 </image>
              </ImageView>
-            <ImageView fx:id="warehouse_void_2" fitHeight="43.0" fitWidth="162.0" layoutX="25.0" layoutY="482.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/buttons/warehouse_row_2.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="warehouse_void_1" fitHeight="43.0" fitWidth="150.0" layoutX="33.0" layoutY="428.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/buttons/warehouse_row_1.png" />
-               </image>
-            </ImageView>
             <Region fx:id="warehouseRow2" layoutX="60.0" layoutY="473.0" prefHeight="48.0" prefWidth="105.0" />
             <Region fx:id="warehouseRow1" layoutX="69.0" layoutY="415.0" prefHeight="43.0" prefWidth="87.0" />
             <Region fx:id="warehouseRow0" layoutX="90.0" layoutY="368.0" prefHeight="33.0" prefWidth="53.0" />

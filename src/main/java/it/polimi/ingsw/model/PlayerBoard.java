@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
 import it.polimi.ingsw.model.storage.*;
+import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.ObservableFromView;
 import it.polimi.ingsw.view.View;
@@ -75,6 +76,13 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
         developmentCardSlots[0].addCard(match.getDevelopmentCardDecks().get(0).top());
         developmentCardSlots[0].addCard(match.getDevelopmentCardDecks().get(1).top());
         developmentCardSlots[1].addCard(match.getDevelopmentCardDecks().get(3).top());
+
+        try {
+            warehouse.addResource(0,ResourceType.SERVANT,1);
+            warehouse.addResource(1,ResourceType.SHIELD,1);
+        } catch (IncompatibleDepotException e) {
+            e.printStackTrace();
+        }
 
 
         leaderCards = new ArrayList<>();

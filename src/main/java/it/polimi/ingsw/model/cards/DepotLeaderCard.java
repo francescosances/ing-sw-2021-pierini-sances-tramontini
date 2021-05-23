@@ -104,6 +104,10 @@ public class DepotLeaderCard extends LeaderCard implements Depot {
         occupied--;
     }
 
+    @Override
+    public boolean isDepotLeaderCard() {
+        return true;
+    }
 
     /**
      * Activates the card if the requirements are satisfied

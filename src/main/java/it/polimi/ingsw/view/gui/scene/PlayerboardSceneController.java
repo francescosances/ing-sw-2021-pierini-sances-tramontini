@@ -18,10 +18,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class PlayerboardSceneController extends Controller{
 
@@ -66,9 +63,7 @@ public class PlayerboardSceneController extends Controller{
     @FXML
     protected ImageView baseProductionBtn;
 
-    protected boolean controlsEnabled = false;
-
-    protected Integer selectedWarehouseRow = null;
+    private boolean controlsEnabled = false;
 
     private final static double[][] FAITH_TRACK_CELLS = {{22,212}, {64,212}, {106,212}, {106,170}, {106,128}, {148,128}, {190,128}, {232,128}, {276,128}, {318,128}, {318,170}, {318,212}, {360,212}, {402,212}, {446,212}, {488,212}, {530,212}, {530,170}, {530,128}, {572,128}, {614,128}, {658,128}, {700,128}, {742,128}, {784,128}};
 
@@ -77,6 +72,8 @@ public class PlayerboardSceneController extends Controller{
     private List<Producer> selectedProducers = new ArrayList<>();
 
     private Runnable onRollbackAction = ()->{};
+
+    private List<Integer> selectedWarehouseRows = new ArrayList<>();
 
     private final ChangeListener<? super Number> changeUserListener = (observableValue, value, index) -> {
         int intIndex = (Integer) index;
@@ -92,7 +89,7 @@ public class PlayerboardSceneController extends Controller{
     @FXML
     public void initialize(PlayerBoard playerBoard){
        // if(playerBoard.getUsername().equals(clientController.getUsername()))
-             this.playerBoard = playerBoard;
+        this.playerBoard = playerBoard;
 
         marker.setX(FAITH_TRACK_CELLS[playerBoard.getFaithTrack().getFaithMarker()][0]);
         marker.setY(FAITH_TRACK_CELLS[playerBoard.getFaithTrack().getFaithMarker()][1]);
@@ -248,9 +245,9 @@ public class PlayerboardSceneController extends Controller{
         this.playerBoard.setWarehouse(warehouse);
 
         ImageView[][] imgWarehouse = {
-                {warehouse_void_0},
-                {warehouse_void_1},
-                {warehouse_void_2}
+                {warehouse0},
+                {warehouse1,warehouse2},
+                {warehouse3,warehouse4,warehouse5}
         };
 
         List<Depot> depots = warehouse.getDepots();
@@ -267,16 +264,9 @@ public class PlayerboardSceneController extends Controller{
             }
         }
 
-        ImageView warehouse_voids[] = {warehouse_void_0,warehouse_void_1,warehouse_void_2};
+        enableWarehouseSelection();
 
-        warehouse_void_0.setVisible(true);
-        warehouse_void_0.setDisable(false);
-
-        warehouse_void_1.setVisible(true);
-        warehouse_void_1.setDisable(false);
-
-        warehouse_void_2.setVisible(true);
-        warehouse_void_2.setDisable(false);
+       /* ImageView[] warehouse_voids = {warehouse_void_0,warehouse_void_1,warehouse_void_2};
 
         warehouseRow0.hoverProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue && controlsEnabled) {
@@ -360,7 +350,121 @@ public class PlayerboardSceneController extends Controller{
                 }
                 warehouse_void_2.getStyleClass().remove("selected");
             }
+        });*/
+    }
+
+    private void warehouseSelected(int rowIndex,Runnable action){
+
+        final ImageView[][] imgWarehouse = {
+                {warehouse0},
+                {warehouse1,warehouse2},
+                {warehouse3,warehouse4,warehouse5}
+        };
+
+        final ImageView[] warehouseVoids = {warehouse_void_0,warehouse_void_1,warehouse_void_2};
+
+        if(selectedWarehouseRows.contains(rowIndex)){
+            selectedWarehouseRows.removeIf(i -> i == rowIndex);
+            warehouseVoids[rowIndex].getStyleClass().remove("selected");
+            for(ImageView imageView:imgWarehouse[rowIndex])
+                imageView.getStyleClass().remove("selected");
+        }else{
+            selectedWarehouseRows.add(rowIndex);
+            warehouseVoids[rowIndex].getStyleClass().add("selected");
+            for(ImageView imageView:imgWarehouse[rowIndex])
+                imageView.getStyleClass().add("selected");
+            action.run();
+        }
+    }
+
+    private void enableWarehouseSelection(){
+
+        final ImageView[][] imgWarehouse = {
+                {warehouse0},
+                {warehouse1,warehouse2},
+                {warehouse3,warehouse4,warehouse5}
+        };
+
+        final ImageView[] warehouseVoids = {warehouse_void_0,warehouse_void_1,warehouse_void_2};
+
+        final Region[] warehouseRows = {warehouseRow0,warehouseRow1,warehouseRow2};
+
+        for(int i=0;i<warehouseRows.length;i++) {
+            final int rowIndex = i;
+            warehouseRows[i].hoverProperty().addListener((observable,oldvalue,newvalue)->{
+                if(newvalue && controlsEnabled){
+                    warehouseVoids[rowIndex].getStyleClass().add("selected");
+                    for(ImageView imageView:imgWarehouse[rowIndex])
+                        imageView.getStyleClass().add("selected");
+                }else{
+                    warehouseVoids[rowIndex].getStyleClass().remove("selected");
+                    for(ImageView imageView:imgWarehouse[rowIndex])
+                        imageView.getStyleClass().remove("selected");
+                }
+            });
+            warehouseRows[i].setOnMouseClicked((e)->{
+                if(!controlsEnabled)
+                    return;
+                warehouseSelected(rowIndex,()->{
+                    if(selectedWarehouseRows.size() == 2){
+                        clientController.swapDepots(selectedWarehouseRows.get(0),selectedWarehouseRows.get(1));
+                        System.out.println("swappo "+selectedWarehouseRows.get(0)+" "+selectedWarehouseRows.get(1));
+                        clearWarehouseSelection();
+                    }
+                });
+            });
+        }
+
+        final ImageView[] leaderCardsImg = {leadercard0,leadercard1};
+
+        List<LeaderCard> leaderCards = playerBoard.getLeaderCards();
+        int depotIndex = 3;
+        for(int i=0;i<leaderCards.size();i++){
+             if(leaderCards.get(i).isActive() && leaderCards.get(i).isDepotLeaderCard()){
+                 depotIndex++;
+                 final int cardIndex = i,depotIndexFinal = depotIndex;
+                 leaderCardsImg[i].hoverProperty().addListener((observable,oldvalue,newvalue)->{
+                     if(newvalue && controlsEnabled){
+                         leaderCardsImg[cardIndex].getStyleClass().add("selected");
+                     }else{
+                         leaderCardsImg[cardIndex].getStyleClass().remove("selected");
+                     }
+                 });
+                 leaderCardsImg[i].setOnMouseClicked((e)->{
+                     if(!controlsEnabled)
+                         return;
+                     warehouseSelected(depotIndexFinal,()->{
+                         if(selectedWarehouseRows.size() == 2){
+                             clientController.swapDepots(selectedWarehouseRows.get(0),selectedWarehouseRows.get(1));
+                             System.out.println("swappo "+selectedWarehouseRows.get(0)+" "+selectedWarehouseRows.get(1));
+                             clearWarehouseSelection();
+                         }
+                     });
+                 });
+             }
+        }
+
+    /*    warehouseRow0.setOnMouseClicked((e)->{
+            if(!controlsEnabled)
+                return;
+            if(selectedWarehouseRow == null){
+                selectedWarehouseRow = 0;
+                warehouse_void_0.getStyleClass().add("selected");
+            }else{
+                if (selectedWarehouseRow == 0) {
+                    selectedWarehouseRow = null;
+                }else{
+                    System.out.println("SWAPPO "+selectedWarehouseRow+" e 0");
+                    clientController.swapDepots(selectedWarehouseRow,0);
+                  //  warehouse_voids[selectedWarehouseRow].getStyleClass().remove("selected");
+                    clearWarehouseSelection();
+                    //TODO: aggiornare la vista
+                }
+                warehouse_void_0.getStyleClass().remove("selected");
+            }
         });
+*/
+
     }
 
     private void clearWarehouseSelection(){
@@ -373,7 +477,7 @@ public class PlayerboardSceneController extends Controller{
         warehouse3.getStyleClass().remove("selected");
         warehouse4.getStyleClass().remove("selected");
         warehouse5.getStyleClass().remove("selected");
-        selectedWarehouseRow = null;
+        selectedWarehouseRows.clear();
     }
 
     public void showLeaderCards(List<LeaderCard> leaderCardList) {
@@ -575,7 +679,7 @@ public class PlayerboardSceneController extends Controller{
         buyDevelopmentcardBtn.setVisible(true);
 
         ImageView[][] slotsImg =
-                {{developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2},
+                        {{developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2},
                         {developmentcardslot1_0,developmentcardslot1_1,developmentcardslot1_2},
                         {developmentcardslot2_0,developmentcardslot2_1,developmentcardslot2_2}};
 
@@ -584,8 +688,7 @@ public class PlayerboardSceneController extends Controller{
                 imageView.getStyleClass().clear();
                 imageView.getStyleClass().add("card");
                 imageView.getStyleClass().add("developmentcard");
-                imageView.setOnMouseClicked((e) -> {
-                });
+                imageView.setOnMouseClicked((e) -> {});
             }
         }
 

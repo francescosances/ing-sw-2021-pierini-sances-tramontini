@@ -8,7 +8,7 @@
 
 <StackPane prefHeight="859.0" prefWidth="1000.0" styleClass="rootPane" stylesheets="@../css/select_development_cards_scene.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.scene.SelectDeveloperCardsController">
    <children>
-      <AnchorPane prefHeight="985.0" fx:id="rootPane" prefWidth="1000.0">
+      <AnchorPane fx:id="rootPane" prefHeight="985.0" prefWidth="1000.0">
          <children>
             <ImageView fx:id="card0_2" fitHeight="193.0" fitWidth="174.0" layoutX="122.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
                <image>
@@ -67,7 +67,7 @@
             </ImageView>
             <ImageView fx:id="card1_0" fitHeight="193.0" fitWidth="174.0" layoutX="306.0" layoutY="54.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard,topcard">
                <image>
-                  <Image url="@../images/cards/FRONT/1.png" />
+                  <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
             <ImageView fx:id="card2_2" fitHeight="193.0" fitWidth="174.0" layoutX="557.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true" styleClass="developmentcard">
