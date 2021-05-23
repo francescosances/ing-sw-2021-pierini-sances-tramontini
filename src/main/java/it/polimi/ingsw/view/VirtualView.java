@@ -92,7 +92,7 @@ public class VirtualView implements View {
         if(leaderCardList.isEmpty())
             throw new IllegalArgumentException("No leader cards given");
         Gson gson = new Gson();
-        Message message = new Message(Message.MessageType.LIST_LEADER_CARDS);
+        Message message = new Message(Message.MessageType.LIST_START_LEADER_CARDS);
         message.addData("leaderCards",Serializer.serializeLeaderCardList(leaderCardList));
         message.addData("cardsToChoose",Serializer.serializeInt(cardsToChoose));
         sendMessage(message);

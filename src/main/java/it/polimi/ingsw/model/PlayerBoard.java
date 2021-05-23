@@ -361,7 +361,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      */
     private void updateLeaderCardsList() {
         for (View view:views)
-            view.showPlayerLeaderCards(leaderCards);
+            view.showLeaderCards(leaderCards);
     }
 
 

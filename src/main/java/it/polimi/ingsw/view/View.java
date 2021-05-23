@@ -80,10 +80,16 @@ public interface View {
     void listLeaderCards(List<LeaderCard> leaderCardList,int cardsToChoose);
 
     /**
-     * Shows the LeaderCards to the player
+     * Shows player's LeaderCards to the player
      * @param leaderCardList the LeaderCards to choose
      */
     void showPlayerLeaderCards(List<LeaderCard> leaderCardList);
+
+    /**
+     * Shows the LeaderCards
+     * @param leaderCards the list of the LeaderCards to show
+     */
+    void showLeaderCards(List<LeaderCard> leaderCards);
 
     /**
      * Shows a list of Development Cards and asks to choose some of them
@@ -193,5 +199,4 @@ public interface View {
      * @param users a map containing all players connected to the match and their player.isActive() value
      */
     void showPlayers(Map<String, Boolean> users);
-
 }

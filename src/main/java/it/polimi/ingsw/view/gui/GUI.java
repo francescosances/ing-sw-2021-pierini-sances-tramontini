@@ -164,6 +164,11 @@ public class GUI implements View {
     }
 
     @Override
+    public void showLeaderCards(List<LeaderCard> leaderCards) {
+        //TODO
+    }
+
+    @Override
     public void listDevelopmentCards(List<Deck<DevelopmentCard>> developmentCardList, int cardsToChoose, PlayerBoard userBoard) {
         Platform.runLater(()->{
             SelectDeveloperCardsController controller = (SelectDeveloperCardsController) openModal("select_development_cards_scene","Select development cards",()->{clientController.rollback();});

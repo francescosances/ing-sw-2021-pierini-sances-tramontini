@@ -17,7 +17,6 @@ import it.polimi.ingsw.view.cli.CLI;
 import it.polimi.ingsw.view.gui.GUI;
 import javafx.stage.Stage;
 
-import javax.print.attribute.standard.PrinterMakeAndModel;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Arrays;
@@ -115,7 +114,7 @@ public class ClientController {
                 resumeMatch(Serializer.deserializePlayerBoard(message.getData("playerBoard")));
                 lock.unlock();
                 break;
-            case LIST_LEADER_CARDS:
+            case LIST_START_LEADER_CARDS:
                 lock.lock();
                 List<LeaderCard> leaderCardList = Serializer.deserializeLeaderCardList(message.getData("leaderCards"));
                 view.listLeaderCards(leaderCardList, Integer.parseInt(message.getData("cardsToChoose")));
@@ -198,10 +197,15 @@ public class ClientController {
                 break;
             case SHOW_PLAYER_LEADER_CARDS:
                 lock.lock();
-                List<LeaderCard> playerLeaderCard = Serializer.deserializeLeaderCardList(message.getData("leaderCards"));
-                view.showPlayerLeaderCards(playerLeaderCard);
+                List<LeaderCard> playerLeaderCards = Serializer.deserializeLeaderCardList(message.getData("leaderCards"));
+                view.showPlayerLeaderCards(playerLeaderCards);
                 lock.unlock();
                 break;
+            case SHOW_LEADER_CARDS:
+                lock.lock();
+                List<LeaderCard> leaderCards = Serializer.deserializeLeaderCardList(message.getData("leaderCards"));
+                view.showLeaderCards(leaderCards);
+                lock.unlock();
             case SHOW_PLAYERS:
                 Map<String, Boolean> players = new Gson().fromJson(message.getData("players"), Map.class);
                 view.showPlayers(players);

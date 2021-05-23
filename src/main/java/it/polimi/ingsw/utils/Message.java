@@ -96,7 +96,7 @@ public class Message{
         LOBBY_INFO,
         RESUME_MATCH,
         CURRENT_ACTIVE_USER,
-        LIST_LEADER_CARDS,
+        LIST_START_LEADER_CARDS,
         SHOW_PLAYER_BOARD,
         SHOW_FAITH_TRACK,
         ASK_FOR_ACTION,
@@ -115,6 +115,7 @@ public class Message{
         PRODUCTION,
         START_RESOURCES,
         SHOW_PLAYER_LEADER_CARDS,
+        SHOW_LEADER_CARDS,
         // from client to server
         LOGIN_REQUEST,
         LOBBY_CHOICE,

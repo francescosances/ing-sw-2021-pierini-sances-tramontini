@@ -140,7 +140,7 @@ public class CLI implements View {
 
     @Override
     public void listLeaderCards(List<LeaderCard> leaderCardList, int cardsToChoose) {
-        showLeaderCards(leaderCardList);
+        renderLeaderCards(leaderCardList);
         output.println("Choose " + cardsToChoose + " leader cards:");
         int[] choices = new int[cardsToChoose];
         LeaderCard[] cardsChosen = new LeaderCard[cardsToChoose];
@@ -171,7 +171,7 @@ public class CLI implements View {
     public void showPlayerLeaderCards(List<LeaderCard> leaderCardList) {
         while (true) {
             output.println("You have these leader cards");
-            showLeaderCards(leaderCardList);
+            renderLeaderCards(leaderCardList);
             output.println("Select which leader card you want to activate or discard");
             output.println(ANSI_WHITE + "Insert a negative number to reverse the action" + ANSI_RESET);
             int choice = input.nextInt();
@@ -203,6 +203,11 @@ public class CLI implements View {
             }
             errorOutput.println("Invalid choice");
         }
+    }
+
+    @Override
+    public void showLeaderCards(List<LeaderCard> leaderCards) {
+        //TODO
     }
 
     private String developmentCardColor(DevelopmentCard card) {
@@ -437,7 +442,7 @@ public class CLI implements View {
         showFaithTrack(playerBoard.getFaithTrack());
         showStorage(playerBoard);
         showDevelopmentCards(playerBoard.getDevelopmentCardSlots());
-        showLeaderCards(playerBoard.getLeaderCards());
+        renderLeaderCards(playerBoard.getLeaderCards());
     }
 
     public void printCross(int pos, FaithTrack faithTrack) {
@@ -548,7 +553,7 @@ public class CLI implements View {
         }
     }
 
-    private void showLeaderCards(List<LeaderCard> leaderCardList) {
+    private void renderLeaderCards(List<LeaderCard> leaderCardList) {
         int victoryPoints = leaderCardList.stream()
                 .filter(LeaderCard::isActive)
                 .mapToInt(LeaderCard::getVictoryPoints)
