@@ -1,13 +1,22 @@
 package it.polimi.ingsw.model.storage;
 
+import it.polimi.ingsw.model.cards.DepotLeaderCard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.Requirements;
+import it.polimi.ingsw.model.cards.exceptions.WrongLeaderCardException;
 import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 import it.polimi.ingsw.model.storage.exceptions.UnswappableDepotsException;
+import it.polimi.ingsw.utils.ObservableFromView;
+import it.polimi.ingsw.view.View;
 
 import java.util.*;
 
-public class Warehouse implements Storage {
+public class Warehouse implements Storage, ObservableFromView {
+
+    /**
+     * The number of StandardDepots every warehouse owns
+     */
+    private static final int STD_DEPOT_NUM = 3;
     /**
      * The list of the depots in the warehouse.
      */
@@ -19,14 +28,19 @@ public class Warehouse implements Storage {
     private final Stack<Resource> toBeStored;
 
     /**
-     * Creates a new warehouse with 3 empty standard depots.
+     * The list containing the views to update
+     */
+    private final transient List<View> views;
+
+    /**
+     * Creates a new warehouse with STD_DEPOT_NUMBER empty standard depots.
      */
     public Warehouse(){
         depots = new ArrayList<>();
-        depots.add(new StandardDepot(1));
-        depots.add(new StandardDepot(2));
-        depots.add(new StandardDepot(3));
+        for (int i = 1; i <= STD_DEPOT_NUM; i++)
+            depots.add(new StandardDepot(i));
         toBeStored = new Stack<>();
+        views = new ArrayList<>();
     }
 
     /**
@@ -36,13 +50,15 @@ public class Warehouse implements Storage {
      * @param num the amount of the resources to be added
      * @throws IncompatibleDepotException if is already existing a standard depot with the same resource type
      */
-    public void addResource(int depotNumber, ResourceType res, int num) throws IncompatibleDepotException {
-        if (depotNumber < 3)
-            for (int depotIndex = 0; depotIndex < 3; depotIndex++)
+    public void addResources(int depotNumber, ResourceType res, int num) throws IncompatibleDepotException {
+        if (depotNumber < STD_DEPOT_NUM)
+            for (int depotIndex = 0; depotIndex < STD_DEPOT_NUM; depotIndex++)
                 if (depotIndex != depotNumber && depots.get(depotIndex).getResourceType() == res)
                     throw new IncompatibleDepotException("You can’t place the same type of Resource in two different standard depots.");
         for (int i = 0; i < num; i++)
             depots.get(depotNumber).addResource(res);
+
+        updateViews();
     }
 
     /**
@@ -55,14 +71,34 @@ public class Warehouse implements Storage {
         Requirements newRequirements = requirements.clone();
         for (Map.Entry<Resource, Integer> res : requirements) {
             int toBeRemoved = res.getValue();
-            for (Depot dep : depots)
-                while (dep.getOccupied() > 0 && dep.getResourceType() == res.getKey() && toBeRemoved > 0) {
-                    dep.removeResource();
-                    toBeRemoved--;
-                    newRequirements.removeResourceRequirement(res.getKey(), 1);
+
+            Depot depot;
+            for (int i = 0; i < depots.size(); i++) {
+                depot = depots.get(i);
+                if (depot.getOccupied() > 0 && depot.getResourceType() == res.getKey() && toBeRemoved > 0){
+                    int oldToBeRemoved = toBeRemoved;
+                    toBeRemoved = removeResources(i, toBeRemoved);
+                    newRequirements.removeResourceRequirement(res.getKey(), oldToBeRemoved - toBeRemoved);
                 }
+            }
         }
+
+        updateViews();
         return newRequirements;
+    }
+
+    /**
+     * Removes the selected resources from the selected depot if possible.
+     * returns the number of resources that are still to be removed.
+     * @param depotNumber the number of the depot from which the resources are to be removed
+     * @param num the number of resources to remove
+     * @return the number of resources that are still to be removed
+     */
+    private int removeResources(int depotNumber, int num) {
+        int number = Math.min(num, depots.get(depotNumber).getOccupied());
+        for (int i = 0; i < number; i++)
+            depots.get(depotNumber).removeResource();
+        return num - number;
     }
 
     /**
@@ -71,6 +107,7 @@ public class Warehouse implements Storage {
      */
     public void toBeStored(Resource[] resources) {
         toBeStored.addAll(Arrays.asList(resources));
+        updateViews();
     }
 
     /**
@@ -79,6 +116,7 @@ public class Warehouse implements Storage {
      */
     public void pushResourceToBeStored(Resource resource){
         toBeStored.push(resource);
+        updateViews();
     }
 
     /**
@@ -87,7 +125,9 @@ public class Warehouse implements Storage {
      * @param second the number of the second depot
      */
     public void swapDepots(int first, int second) throws IncompatibleDepotException {
-        if (first == second || first >= depots.size() || second >= depots.size() || depots.get(first).getOccupied() > depots.get(second).getSize() || depots.get(second).getOccupied() > depots.get(first).getSize())
+        if (first == second || first >= depots.size() || second >= depots.size()
+                || depots.get(first).getOccupied() > depots.get(second).getSize()
+                || depots.get(second).getOccupied() > depots.get(first).getSize())
             throw new UnswappableDepotsException("Unable to swap selected depots");
 
         ResourceType firstResourceType = depots.get(first).getResourceType();
@@ -95,14 +135,20 @@ public class Warehouse implements Storage {
         int firstOccupied = depots.get(first).getOccupied();
         int secondOccupied = depots.get(second).getOccupied();
 
-        for (int i = 0; i < firstOccupied; i++)
-            depots.get(first).removeResource();
-        for (int i = 0; i < secondOccupied; i++)
-            depots.get(second).removeResource();
-        for (int i = 0; i < secondOccupied; i++)
-            depots.get(first).addResource(secondResourceType);
-        for (int i = 0; i < firstOccupied; i++)
-            depots.get(second).addResource(firstResourceType);
+        try {
+            removeResources(first, firstOccupied);
+            removeResources(second, secondOccupied);
+            addResources(first, secondResourceType, secondOccupied);
+            addResources(second, firstResourceType, firstOccupied);
+        } catch (IncompatibleDepotException e) {
+            removeResources(first, depots.get(first).getOccupied());
+            removeResources(second, depots.get(second).getOccupied());
+            addResources(first, firstResourceType, firstOccupied);
+            addResources(second, secondResourceType, secondOccupied);
+            throw new UnswappableDepotsException("Unable to swap selected depots, you chose a Depot Leader Card which couldn't be used");
+        }
+
+        updateViews();
     }
 
     /**
@@ -118,9 +164,15 @@ public class Warehouse implements Storage {
      * @return the first resource in the toBeStored storage that needs to be stored in a depot or discarded
      */
     public Resource popResourceToBeStored(){
-        return toBeStored.pop();
+        Resource res = toBeStored.pop();
+        updateViews();
+        return res;
     }
 
+    /**
+     * Returns a Requirements containing all resources in the warehouse
+     * @return a Requirements containing all resources in the warehouse
+     */
     @Override
     public Requirements getAllResources(){
         Requirements ret = new Requirements();
@@ -139,9 +191,38 @@ public class Warehouse implements Storage {
         return this.depots;
     }
 
-    public void addDepotLeaderCard(LeaderCard leaderCard){
-        Depot depotLeaderCard = (Depot) leaderCard;
+    /**
+     * Adds a DepotLeaderCard to warehouse's available depots
+     * @param depotLeaderCard the LeaderCard to add
+     */
+    public void addDepotLeaderCard(DepotLeaderCard depotLeaderCard){
         depots.add(depotLeaderCard);
+    }
+
+
+    /**
+     * Adds the view to the list of views
+     * @param view the view that has to be added
+     */
+    @Override
+    public void addView(View view) {
+        views.add(view);
+    }
+
+    /**
+     * Removes the view from the list of views
+     * @param view the view that has to be removed
+     */
+    @Override
+    public void removeView(View view) {
+        views.remove(view);
+    }
+
+    /**
+     * Notifies all views of the change
+     */
+    private void updateViews() {
+        views.forEach(view -> view.showWarehouse(this));
     }
 
     /**
