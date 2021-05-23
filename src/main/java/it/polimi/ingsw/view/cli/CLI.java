@@ -522,7 +522,8 @@ public class CLI implements View {
         return res + ANSI_RESET;
     }
 
-    private void showStrongbox(Strongbox strongbox) {
+    @Override
+    public void showStrongbox(Strongbox strongbox) {
         output.println("Strongbox:");
         for (Map.Entry<Resource, Integer> res : strongbox.getAllResources())
             output.println("  " + res.getKey() + ": " + res.getValue());

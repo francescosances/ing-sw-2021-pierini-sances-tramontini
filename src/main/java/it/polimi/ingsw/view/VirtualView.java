@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.storage.Resource;
+import it.polimi.ingsw.model.storage.Strongbox;
 import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.network.ClientHandler;
 import it.polimi.ingsw.serialization.Serializer;
@@ -131,6 +132,13 @@ public class VirtualView implements View {
     public void showWarehouse(Warehouse warehouse){
         Message message = new Message(Message.MessageType.SHOW_WAREHOUSE_STATUS);
         message.addData("warehouse",Serializer.serializeWarehouse(warehouse));
+        sendMessage(message);
+    }
+
+    @Override
+    public void showStrongbox(Strongbox strongbox) {
+        Message message = new Message(Message.MessageType.SHOW_STRONGBOX_STATUS);
+        message.addData("strongbox", Serializer.serializeStrongbox(strongbox));
         sendMessage(message);
     }
 

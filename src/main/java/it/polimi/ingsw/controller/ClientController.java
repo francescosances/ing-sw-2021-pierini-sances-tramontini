@@ -148,6 +148,11 @@ public class ClientController {
                 view.showWarehouse(Serializer.deserializeWarehouse(message.getData("warehouse")));
                 lock.unlock();
                 break;
+            case SHOW_STRONGBOX_STATUS:
+                lock.lock();
+                view.showStrongbox(Serializer.deserializeStrongbox(message.getData("strongbox")));
+                lock.unlock();
+                break;
             case TAKE_RESOURCES_FROM_MARKET:
                 lock.lock();
                 Market market = Serializer.deserializeMarket(message.getData("market"));

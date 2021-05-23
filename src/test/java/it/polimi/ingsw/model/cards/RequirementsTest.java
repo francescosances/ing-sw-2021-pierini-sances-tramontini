@@ -33,8 +33,8 @@ class RequirementsTest {
 
     @Test
     void satisfied_Resources() throws IncompatibleDepotException {
-        player.getWarehouse().addResource(0,ResourceType.STONE,1);
-        player.getWarehouse().addResource(1,ResourceType.COIN,1);
+        player.getWarehouse().addResources(0,ResourceType.STONE,1);
+        player.getWarehouse().addResources(1,ResourceType.COIN,1);
 
         player.getStrongbox().addResources(new HashMap<ResourceType, Integer>(){{
             put(ResourceType.STONE, 4);
@@ -76,9 +76,9 @@ class RequirementsTest {
 
     @Test
     void satisfied_ResourcesAndDevelopmentCards() throws IncompatibleDepotException {
-        player.getWarehouse().addResource(0,ResourceType.COIN,1);
-        player.getWarehouse().addResource(1,ResourceType.SERVANT,2);
-        player.getWarehouse().addResource(2,ResourceType.STONE,3);
+        player.getWarehouse().addResources(0,ResourceType.COIN,1);
+        player.getWarehouse().addResources(1,ResourceType.SERVANT,2);
+        player.getWarehouse().addResources(2,ResourceType.STONE,3);
 
         player.getStrongbox().addResources(new HashMap<ResourceType, Integer>(){{
             put(ResourceType.COIN, 2);

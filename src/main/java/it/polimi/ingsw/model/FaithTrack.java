@@ -34,7 +34,9 @@ public class FaithTrack implements ObservableFromView {
      * array that stores whether its vaticanReport has already been triggered or not
      */
     private final boolean[] vaticanReports;
-
+    /**
+     * List that contains all views that needs to be notified on changes
+     */
     transient private final List<View> views;
 
     /**
@@ -171,16 +173,27 @@ public class FaithTrack implements ObservableFromView {
         return count < vaticanReports.length && !vaticanReports[count];
     }
 
+    /**
+     * Adds the view to the list of views
+     * @param view the view that has to be added
+     */
     @Override
     public void addView(View view) {
         views.add(view);
     }
 
+    /**
+     * Removes the view from the list of views
+     * @param view the view that has to be removed
+     */
     @Override
     public void removeView(View view) {
         views.remove(view);
     }
 
+    /**
+     * Notifies all views of the change
+     */
     private void updateViews() {
         views.forEach(view -> view.showFaithTrack(this));
     }

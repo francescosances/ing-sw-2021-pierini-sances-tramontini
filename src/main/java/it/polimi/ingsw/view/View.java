@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.ResourceType;
+import it.polimi.ingsw.model.storage.Strongbox;
 import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.utils.Triple;
 
@@ -106,8 +107,15 @@ public interface View {
 
     /**
      * List the resources stored in the warehouse
+     * @param warehouse the warehouse to be shown
      */
     void showWarehouse(Warehouse warehouse);
+
+    /**
+     * lists the resources in the strongbox
+     * @param strongbox the strongbox to be shown
+     */
+    void showStrongbox(Strongbox strongbox);
 
     /**
      * Asks to swap two depots
@@ -180,6 +188,10 @@ public interface View {
      */
     void askToChooseStartResources(Resource[] values,int resourcesToChoose);
 
+    /**
+     * Shows the player all players connected to the match
+     * @param users a map containing all players connected to the match and their player.isActive() value
+     */
     void showPlayers(Map<String, Boolean> users);
 
 }

@@ -101,10 +101,10 @@ public class SerializerTest {
     @Test
     public void serializeWarehouse() throws IncompatibleDepotException {
         Warehouse warehouse = new Warehouse();
-        warehouse.addResource(0, ResourceType.COIN, 1);
-        warehouse.addResource(2, ResourceType.STONE, 2);
+        warehouse.addResources(0, ResourceType.COIN, 1);
+        warehouse.addResources(2, ResourceType.STONE, 2);
         LeaderCard leaderDepot = new DepotLeaderCard("",3, new Requirements(new Pair<>(ResourceType.COIN, 5)), ResourceType.STONE);
-        warehouse.addDepotLeaderCard(leaderDepot);
+        warehouse.addDepotLeaderCard((DepotLeaderCard) leaderDepot);
         String json = Serializer.serializeWarehouse(warehouse);
         assertEquals(warehouse, Serializer.deserializeWarehouse(json));
     }
@@ -116,11 +116,11 @@ public class SerializerTest {
         playerBoard.gainFaithPoints(15);
         PopeFavorTile[] popeFavorTiles = playerBoard.getFaithTrack().getPopeFavorTiles();
         popeFavorTiles[0].uncover();
-        playerBoard.getWarehouse().addResource(0, ResourceType.COIN, 1);
+        playerBoard.getWarehouse().addResources(0, ResourceType.COIN, 1);
         LeaderCard leaderCard = new DepotLeaderCard("",3, new Requirements(new Pair<>(ResourceType.STONE, 5)), ResourceType.SERVANT, true);
         playerBoard.addLeaderCard(leaderCard);
-        playerBoard.getWarehouse().addDepotLeaderCard(leaderCard);
-        playerBoard.getWarehouse().addResource(3, ResourceType.SERVANT, 2);
+        playerBoard.getWarehouse().addDepotLeaderCard((DepotLeaderCard) leaderCard);
+        playerBoard.getWarehouse().addResources(3, ResourceType.SERVANT, 2);
         Map<ResourceType, Integer> resourcesMap = new HashMap<>();
         resourcesMap.put(ResourceType.SHIELD, 3);
         resourcesMap.put(ResourceType.STONE, 7);
@@ -152,11 +152,11 @@ public class SerializerTest {
         playerBoard.gainFaithPoints(15);
         PopeFavorTile[] popeFavorTiles = playerBoard.getFaithTrack().getPopeFavorTiles();
         popeFavorTiles[0].uncover();
-        playerBoard.getWarehouse().addResource(0, ResourceType.COIN, 1);
+        playerBoard.getWarehouse().addResources(0, ResourceType.COIN, 1);
         LeaderCard leaderCard = new DepotLeaderCard("",3, new Requirements(new Pair<>(ResourceType.STONE, 5)), ResourceType.SERVANT, true);
         playerBoard.addLeaderCard(leaderCard);
-        playerBoard.getWarehouse().addDepotLeaderCard(leaderCard);
-        playerBoard.getWarehouse().addResource(3, ResourceType.SERVANT, 2);
+        playerBoard.getWarehouse().addDepotLeaderCard((DepotLeaderCard) leaderCard);
+        playerBoard.getWarehouse().addResources(3, ResourceType.SERVANT, 2);
         Map<ResourceType, Integer> resourcesMap = new HashMap<>();
         resourcesMap.put(ResourceType.SHIELD, 3);
         resourcesMap.put(ResourceType.STONE, 7);
@@ -177,11 +177,11 @@ public class SerializerTest {
         playerBoard.gainFaithPoints(15);
         PopeFavorTile[] popeFavorTiles = playerBoard.getFaithTrack().getPopeFavorTiles();
         popeFavorTiles[0].uncover();
-        playerBoard.getWarehouse().addResource(0, ResourceType.COIN, 1);
+        playerBoard.getWarehouse().addResources(0, ResourceType.COIN, 1);
         LeaderCard leaderCard = new DepotLeaderCard("",3, new Requirements(new Pair<>(ResourceType.STONE, 5)), ResourceType.SERVANT, true);
         playerBoard.addLeaderCard(leaderCard);
-        playerBoard.getWarehouse().addDepotLeaderCard(leaderCard);
-        playerBoard.getWarehouse().addResource(3, ResourceType.SERVANT, 2);
+        playerBoard.getWarehouse().addDepotLeaderCard((DepotLeaderCard) leaderCard);
+        playerBoard.getWarehouse().addResources(3, ResourceType.SERVANT, 2);
         Map<ResourceType, Integer> resourcesMap = new HashMap<>();
         resourcesMap.put(ResourceType.SHIELD, 3);
         resourcesMap.put(ResourceType.STONE, 7);

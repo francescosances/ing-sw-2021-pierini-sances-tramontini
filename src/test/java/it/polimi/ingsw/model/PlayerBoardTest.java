@@ -2,18 +2,14 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
-import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 import it.polimi.ingsw.utils.Pair;
-import it.polimi.ingsw.utils.Triple;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -60,8 +56,8 @@ public class PlayerBoardTest {
         Requirements requirements = new Requirements(new Pair<>(ResourceType.SHIELD,2), new Pair<>(ResourceType.COIN,1));
         DevelopmentCard developmentCard = new DevelopmentCard("",1, requirements,1, null, null);
 
-        playerBoard.warehouse.addResource(0, ResourceType.COIN, 1);
-        playerBoard.warehouse.addResource(2, ResourceType.SHIELD, 3);
+        playerBoard.warehouse.addResources(0, ResourceType.COIN, 1);
+        playerBoard.warehouse.addResources(2, ResourceType.SHIELD, 3);
 
         playerBoard.buyDevelopmentCard(developmentCard);
 
@@ -79,9 +75,9 @@ public class PlayerBoardTest {
         Requirements requirements = new Requirements(new Pair<>(ResourceType.SHIELD,2), new Pair<>(ResourceType.STONE,7), new Pair<>(ResourceType.COIN,1));
         DevelopmentCard developmentCard = new DevelopmentCard("",1, requirements,1, null, null);
 
-        playerBoard.warehouse.addResource(0, ResourceType.COIN, 1);
-        playerBoard.warehouse.addResource(1, ResourceType.STONE, 2);
-        playerBoard.warehouse.addResource(2, ResourceType.SHIELD, 3);
+        playerBoard.warehouse.addResources(0, ResourceType.COIN, 1);
+        playerBoard.warehouse.addResources(1, ResourceType.STONE, 2);
+        playerBoard.warehouse.addResources(2, ResourceType.SHIELD, 3);
 
         playerBoard.strongbox.addResources(new HashMap<ResourceType, Integer>(){{
             put(ResourceType.STONE, 7);
@@ -161,8 +157,8 @@ public class PlayerBoardTest {
             playerBoard.getStrongbox().addResource(ResourceType.COIN);
         for (int i = 0; i < 4; i++)
             playerBoard.getStrongbox().addResource(ResourceType.SHIELD);
-        playerBoard.getWarehouse().addResource(0, ResourceType.SERVANT, 1);
-        playerBoard.getWarehouse().addResource(2, ResourceType.SHIELD, 2);
+        playerBoard.getWarehouse().addResources(0, ResourceType.SERVANT, 1);
+        playerBoard.getWarehouse().addResources(2, ResourceType.SHIELD, 2);
 
         assertEquals(playerBoard.getLeaderCardsVictoryPoints() + playerBoard.getDevelopmentCardsVictoryPoints() + playerBoard.getResourcesVictoryPoints(),
                 playerBoard.getTotalVictoryPoints());
@@ -192,9 +188,9 @@ public class PlayerBoardTest {
         for (int i = 0; i < 4; i++)
             playerBoard.getStrongbox().addResource(ResourceType.SHIELD);
         assertEquals(2, playerBoard.getResourcesVictoryPoints());
-        playerBoard.getWarehouse().addResource(0, ResourceType.SERVANT, 1);
+        playerBoard.getWarehouse().addResources(0, ResourceType.SERVANT, 1);
         assertEquals(2, playerBoard.getResourcesVictoryPoints());
-        playerBoard.getWarehouse().addResource(2, ResourceType.SHIELD, 2);
+        playerBoard.getWarehouse().addResources(2, ResourceType.SHIELD, 2);
         assertEquals(3, playerBoard.getResourcesVictoryPoints());
     }
 

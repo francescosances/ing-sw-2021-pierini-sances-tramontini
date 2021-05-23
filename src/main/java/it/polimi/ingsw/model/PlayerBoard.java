@@ -225,8 +225,10 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      */
     public void activateLeaderCard(LeaderCard leaderCard) throws NotSatisfiedRequirementsException {
         for(LeaderCard x: leaderCards){
-            if(x.equals(leaderCard))
+            if(x.equals(leaderCard)) {
                 x.activate(this);
+                updateLeaderCardsList();
+            }
         }
     }
 
@@ -252,11 +254,11 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
                 if (temp.isActive())
                     throw new IllegalArgumentException("You cannot discard active cards");
                 iterator.remove();
+                updateLeaderCardsList();
                 this.gainFaithPoints(1);
             }
         }
     }
-
 
     /**
      * Discards the LeaderCard, makes the player gain 1 FaithPoint
@@ -264,10 +266,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      * @throws EndGameException if the player reaches the last space
      */
     public void discardLeaderCard(int num) throws EndGameException {
-        if (leaderCards.get(num).isActive())
-            throw new IllegalArgumentException("You cannot discard active cards");
-        leaderCards.remove(num);
-        this.gainFaithPoints(1);
+        discardLeaderCard(leaderCards.get(num));
     }
 
     /**
@@ -334,17 +333,37 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
         this.warehouse = warehouse;
     }
 
+    /**
+     * Adds the view to the list of views
+     * @param view the view that has to be added
+     */
     @Override
     public void addView(View view) {
         views.add(view);
         faithTrack.addView(view);
+        strongbox.addView(view);
     }
 
+    /**
+     * Removes the view from the list of views
+     * @param view the view that has to be removed
+     */
     @Override
     public void removeView(View view) {
         views.remove(view);
         faithTrack.removeView(view);
+        strongbox.addView(view);
     }
+
+
+    /**
+     * Notifies all views of the change
+     */
+    private void updateLeaderCardsList() {
+        for (View view:views)
+            view.showPlayerLeaderCards(leaderCards);
+    }
+
 
     /**
      * Returns a String representation of the object
