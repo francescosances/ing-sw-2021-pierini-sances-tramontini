@@ -138,8 +138,10 @@ public class Warehouse implements Storage, ObservableFromView {
         try {
             removeResources(first, firstOccupied);
             removeResources(second, secondOccupied);
-            addResources(first, secondResourceType, secondOccupied);
-            addResources(second, firstResourceType, firstOccupied);
+            if (secondResourceType != null)
+                addResources(first, secondResourceType, secondOccupied);
+            if (firstResourceType != null)
+                addResources(second, firstResourceType, firstOccupied);
         } catch (IncompatibleDepotException e) {
             removeResources(first, depots.get(first).getOccupied());
             removeResources(second, depots.get(second).getOccupied());
