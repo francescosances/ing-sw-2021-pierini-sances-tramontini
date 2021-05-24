@@ -225,7 +225,6 @@ public class Match implements ObservableFromView {
     public void addView(View view) {
         if (views == null)
             views = new ArrayList<>();
-        //TODO add initial views and on connect/disconnect/reconnect
         views.add(view);
         players.forEach(playerBoard -> playerBoard.addView(view));
     }

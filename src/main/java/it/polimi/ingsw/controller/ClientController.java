@@ -195,6 +195,12 @@ public class ClientController {
                 view.chooseProductions(producers, Serializer.deserializePlayerBoard(message.getData("playerboard")));
                 lock.unlock();
                 break;
+            case ACTION_TOKEN:
+                lock.lock();
+                ActionToken actionToken = Serializer.deserializeActionToken(message.getData("actionToken"));
+                view.showActionToken(actionToken);
+                lock.unlock();
+                break;
             case SHOW_PLAYER_LEADER_CARDS:
                 lock.lock();
                 List<LeaderCard> playerLeaderCards = Serializer.deserializeLeaderCardList(message.getData("leaderCards"));

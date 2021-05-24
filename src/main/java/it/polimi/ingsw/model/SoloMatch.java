@@ -5,6 +5,8 @@ import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.DevelopmentColorType;
 import it.polimi.ingsw.view.View;
 
+import java.util.ArrayList;
+
 public class SoloMatch extends Match{
 
     /**
@@ -93,9 +95,8 @@ public class SoloMatch extends Match{
     @Override
     public void endTurn(){
         super.endTurn();
-        ActionToken actionToken;
         try {
-            actionToken = drawActionToken().show(this);
+            ActionToken actionToken = drawActionToken().show(this);
             for (View view: views) {
                 view.showActionToken(actionToken);
             }
@@ -114,6 +115,19 @@ public class SoloMatch extends Match{
     public void discardResource(PlayerBoard player) throws EndGameException {
         moveBlackCross(1);
     }
+
+    @Override
+    public void addView(View view) {
+        super.addView(view);
+        blackCross.addView(view);
+    }
+
+    @Override
+    public void removeView(View view) {
+        super.removeView(view);
+        blackCross.removeView(view);
+    }
+
 
     /**
      * Returns true if other equals the ActionToken; false elsewhere

@@ -35,6 +35,22 @@ public class ActionToken {
     }
 
     /**
+     * Returns blackCrossSpaces value
+     * @return blackCrossSpaces value
+     */
+    public Integer getBlackCrossSpaces() {
+        return blackCrossSpaces;
+    }
+
+    /**
+     * Returns the DevelopmentColorType of the card to draw
+     * @return the DevelopmentColorType of the card to draw
+     */
+    public DevelopmentColorType getDevelopmentCard() {
+        return developmentCard;
+    }
+
+    /**
      * Executes the action of the Action Token. Discards a specific color development card or moves the blackCross. If the blackCross moves by 1 space, shuffles all the tokens
      * @param match the match in which the ActionToken is drawn
      * @throws EndGameException if the blackCross moved to the last FaithTrackSpace
@@ -82,4 +98,5 @@ public class ActionToken {
     public int hashCode() {
         return super.hashCode();
     }
+
 }

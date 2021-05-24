@@ -10,6 +10,8 @@ import it.polimi.ingsw.view.View;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.*;
+import java.util.function.IntFunction;
+import java.util.stream.Collectors;
 
 public class CLI implements View {
 
@@ -207,16 +209,16 @@ public class CLI implements View {
 
     @Override
     public void showLeaderCards(List<LeaderCard> leaderCards) {
-        //TODO
+        printLeaderCards(leaderCards);
     }
 
     @Override
     public void showDevelopmentCardSlots(DevelopmentCardSlot[] developmentCardSlots) {
-        //TODO
+            showDevelopmentCards(developmentCardSlots);
     }
 
-    private String developmentCardColor(DevelopmentCard card) {
-        switch (card.getColor()) {
+    private String developmentCardColor(DevelopmentColorType card) {
+        switch (card) {
             case BLUE:
                 return ANSI_BLUE;
             case YELLOW:
@@ -234,13 +236,13 @@ public class CLI implements View {
     public void listDevelopmentCards(List<Deck<DevelopmentCard>> developmentCardList, int cardsToChoose, PlayerBoard playerBoard) {
         List<DevelopmentCard> availableCards = new ArrayList<>();
         for (Deck<DevelopmentCard> deck : developmentCardList) {
-            output.print(developmentCardColor(deck.top()));
+            output.print(developmentCardColor(deck.top().getColor()));
             output.printf("%s level %d\n", deck.top().getColor(), deck.top().getLevel());
             DevelopmentCard developmentCard = deck.top();
             if (!developmentCard.getCost().satisfied(playerBoard) || !playerBoard.acceptsDevelopmentCard(developmentCard))
                 output.print(ANSI_WHITE + "[X]");
             else {
-                output.printf(developmentCardColor(developmentCard) + "[%d]", availableCards.size());
+                output.printf(developmentCardColor(developmentCard.getColor()) + "[%d]", availableCards.size());
                 availableCards.add(developmentCard);
             }
             output.println(developmentCard);
@@ -443,7 +445,19 @@ public class CLI implements View {
 
     @Override
     public void showActionToken(ActionToken actionToken) {
-        //TODO
+        output.println("An action token was drawn!");
+        if (actionToken.getDevelopmentCard() != null) {
+            output.print("Two ");
+            output.print(developmentCardColor(actionToken.getDevelopmentCard()) + actionToken.getDevelopmentCard() + " development cards " + ANSI_RESET);
+            output.println("were discarded");
+        }
+        else {
+            output.print("Black cross moved by " + actionToken.getBlackCrossSpaces() + " space");
+            if (actionToken.getBlackCrossSpaces() == 1){
+                output.println("\nAll action token were shuffled");
+            } else
+                output.println("s");
+        }
     }
 
 
