@@ -30,7 +30,7 @@ public class Warehouse implements Storage, ObservableFromView {
     /**
      * The list containing the views to update
      */
-    private final transient List<View> views;
+    private transient List<View> views;
 
     /**
      * Creates a new warehouse with STD_DEPOT_NUMBER empty standard depots.
@@ -40,7 +40,6 @@ public class Warehouse implements Storage, ObservableFromView {
         for (int i = 1; i <= STD_DEPOT_NUM; i++)
             depots.add(new StandardDepot(i));
         toBeStored = new Stack<>();
-        views = new ArrayList<>();
     }
 
     /**
@@ -208,6 +207,8 @@ public class Warehouse implements Storage, ObservableFromView {
      */
     @Override
     public void addView(View view) {
+        if (views == null)
+            views = new ArrayList<>();
         views.add(view);
     }
 

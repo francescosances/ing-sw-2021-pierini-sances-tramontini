@@ -57,7 +57,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      */
     private int boughtDevelopmentCardsCounter = 0;
 
-    private final transient List<View> views;
+    private transient List<View> views;
 
     /**
      * Initializes a new PlayerBoard object
@@ -72,7 +72,6 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
         faithTrack = new FaithTrack(match);
         developmentCardSlots = Stream.generate(DevelopmentCardSlot::new).limit(3).toArray(DevelopmentCardSlot[]::new);
         leaderCards = new ArrayList<>();
-        views = new ArrayList<>();
     }
 
     /**
@@ -348,6 +347,8 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      */
     @Override
     public void addView(View view) {
+        if (views == null)
+            views = new ArrayList<>();
         views.add(view);
         faithTrack.addView(view);
         strongbox.addView(view);

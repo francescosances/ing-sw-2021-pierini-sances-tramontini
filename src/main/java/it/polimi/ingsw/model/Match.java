@@ -54,7 +54,7 @@ public class Match implements ObservableFromView {
      */
     private GamePhase currentPhase;
 
-    protected final transient List<View> views;
+    protected transient List<View> views;
 
     public Match(String matchName) {
         this(matchName,MAX_PLAYERS);
@@ -74,7 +74,6 @@ public class Match implements ObservableFromView {
         this.vaticanReportsCount = 0;
         this.matchName = matchName;
         this.maxPlayersNumber = maxPlayersNumber;
-        this.views = new ArrayList<>();
     }
 
     public PlayerBoard getPlayerBoard(String username){
@@ -224,6 +223,8 @@ public class Match implements ObservableFromView {
 
     @Override
     public void addView(View view) {
+        if (views == null)
+            views = new ArrayList<>();
         //TODO add initial views and on connect/disconnect/reconnect
         views.add(view);
         players.forEach(playerBoard -> playerBoard.addView(view));

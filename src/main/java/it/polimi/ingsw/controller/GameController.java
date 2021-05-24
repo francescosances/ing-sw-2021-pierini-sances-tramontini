@@ -197,8 +197,10 @@ public class GameController implements PlayerStatusListener {
             players.add(playerController);
         }
         playerController.addObserver(this);
-        if(notify)
+        if (notify) {
+            match.addView(playerController.getVirtualView());
             statusObserver.onStatusChanged(this);
+        }
         return playerController;
     }
 
@@ -396,6 +398,7 @@ public class GameController implements PlayerStatusListener {
         players.forEach((user)->{
             if(user.getUsername().equals(username)) {
                 user.deactivate();
+                match.removeView(user.getVirtualView());
                 if(username.equals(players.get(getMatch().getCurrentPlayerIndex()).getUsername())) {
                     if(match.getCurrentPhase() == Match.GamePhase.PLAYERS_SETUP)
                         user.setup();
@@ -457,6 +460,7 @@ public class GameController implements PlayerStatusListener {
      * @param username the username of the player reconnecting
      */
     public void resumeMatch(String username) {
+        match.addView(getPlayerController(username).getVirtualView());
         listPlayers();
         getPlayerController(username).getVirtualView().resumeMatch(getPlayerController(username).getPlayerBoard());
     }

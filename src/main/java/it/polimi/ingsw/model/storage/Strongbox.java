@@ -11,14 +11,13 @@ public class Strongbox implements Storage, ObservableFromView {
      * Representation of the amount of each resource present in the strongbox.
      */
     private final Map<ResourceType, Integer> resources;
-    transient private final List<View> views;
+    transient private List<View> views;
 
     /**
      * Creates a new empty strongbox.
      */
     public Strongbox() {
         resources = new HashMap<>();
-        views = new ArrayList<>();
     }
 
     /**
@@ -91,6 +90,8 @@ public class Strongbox implements Storage, ObservableFromView {
      */
     @Override
     public void addView(View view) {
+        if (views == null)
+            views = new ArrayList<>();
         views.add(view);
     }
 

@@ -37,7 +37,7 @@ public class FaithTrack implements ObservableFromView {
     /**
      * List that contains all views that needs to be notified on changes
      */
-    transient private final List<View> views;
+    transient private List<View> views;
 
     /**
      * Initialize a new FaithTrack connected to the its match
@@ -52,7 +52,6 @@ public class FaithTrack implements ObservableFromView {
         faithMarker = 0;
         vaticanReports = new boolean[POPE_SPACES.length];
         Arrays.fill(vaticanReports,false);
-        views = new ArrayList<>();
     }
 
     /**
@@ -179,6 +178,8 @@ public class FaithTrack implements ObservableFromView {
      */
     @Override
     public void addView(View view) {
+        if (views == null)
+            views = new ArrayList<>();
         views.add(view);
     }
 
