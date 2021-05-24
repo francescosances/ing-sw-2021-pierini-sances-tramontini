@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.gui.scene;
 
+import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Triple;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -36,7 +37,7 @@ public class SelectLobbySceneController extends Controller{
 
                 if (matcher.find())
                 {
-                   return new Triple<>(matcher.group(1),Integer.parseInt(matcher.group(2)),Integer.parseInt(matcher.group(3)));
+                   return new Triple<>(matcher.group(1), Serializer.deserializeInt(matcher.group(2)),Serializer.deserializeInt(matcher.group(3)));
                 }
                 return new Triple<>(s,0,0);
             }
@@ -52,7 +53,7 @@ public class SelectLobbySceneController extends Controller{
         Optional<String> dialogResult = td.showAndWait();
         if (dialogResult.isPresent()) {
             try {
-                int res = Integer.parseInt(dialogResult.get());
+                int res = Serializer.deserializeInt(dialogResult.get());
                 if(res < 0 || res > 4)
                     return askNumberOfPlayers();
                 return Optional.of(res);

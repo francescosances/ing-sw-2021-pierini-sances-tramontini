@@ -4,6 +4,7 @@ import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.controller.PlayerController;
 import it.polimi.ingsw.controller.StatusObserver;
 import it.polimi.ingsw.model.Match;
+import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.FileManager;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.utils.Triple;
@@ -145,7 +146,7 @@ public class Server implements StatusObserver {
                 break;
             case LOBBY_CHOICE:
                 if(message.getData("matchOwner") == null)
-                    createNewLobby(Integer.parseInt(message.getData("playersNumber")),clientHandler);
+                    createNewLobby(Serializer.deserializeInt(message.getData("playersNumber")),clientHandler);
                 else
                     joinLobby(message.getData("matchOwner"), clientHandler);
                 getGameController(clientHandler.getUsername()).connect(clientHandler.getUsername());

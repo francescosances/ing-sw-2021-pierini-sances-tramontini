@@ -89,38 +89,38 @@ public class GameController implements PlayerStatusListener {
                     currentPlayerController.performAction(gson.fromJson(message.getData("action"), Action.class));
                     break;
                 case SWAP_DEPOTS:
-                    int depotA = Integer.parseInt(message.getData("depotA"));
-                    int depotB = Integer.parseInt(message.getData("depotB"));
+                    int depotA = Serializer.deserializeInt(message.getData("depotA"));
+                    int depotB = Serializer.deserializeInt(message.getData("depotB"));
                     currentPlayerController.swapDepots(depotA,depotB);
                     break;
                 case SELECT_MARKET_ROW:
-                    int row = Integer.parseInt(message.getData("row"));
+                    int row = Serializer.deserializeInt(message.getData("row"));
                     currentPlayerController.selectMarketRow(row);
                     break;
                 case SELECT_MARKET_COLUMN:
-                    int column = Integer.parseInt(message.getData("column"));
+                    int column = Serializer.deserializeInt(message.getData("column"));
                     currentPlayerController.selectMarketColumn(column);
                     break;
                 case WHITE_MARBLE_CONVERSION:
-                    currentPlayerController.chooseWhiteMarbleConversion(Integer.parseInt(message.getData("choice")));
+                    currentPlayerController.chooseWhiteMarbleConversion(Serializer.deserializeInt(message.getData("choice")));
                     break;
                 case RESOURCE_TO_STORE:
-                    currentPlayerController.storeResourceToWarehouse(Integer.parseInt(message.getData("choice")));
+                    currentPlayerController.storeResourceToWarehouse(Serializer.deserializeInt(message.getData("choice")));
                     break;
                 case DEVELOPMENT_CARDS_TO_BUY:
                     currentPlayerController.buyDevelopmentCard(Serializer.deserializeDevelopmentCardsList(message.getData("developmentCards")).get(0));
                     break;
                 case CHOOSE_DEVELOPMENT_CARD_SLOT:
-                    currentPlayerController.chooseDevelopmentCardSlot(Integer.parseInt(message.getData("slotIndex")));
+                    currentPlayerController.chooseDevelopmentCardSlot(Serializer.deserializeInt(message.getData("slotIndex")));
                     break;
                 case PRODUCTION:
                     currentPlayerController.chooseProductions(Serializer.deserializeRequirements(message.getData("costs")),Serializer.deserializeRequirements(message.getData("gains")));
                     break;
                 case DISCARD_LEADER_CARD:
-                    currentPlayerController.discardLeaderCard(Integer.parseInt(message.getData("num")));
+                    currentPlayerController.discardLeaderCard(Serializer.deserializeInt(message.getData("num")));
                     break;
                 case ACTIVATE_LEADER_CARD:
-                    currentPlayerController.activateLeaderCard(Integer.parseInt(message.getData("num")));
+                    currentPlayerController.activateLeaderCard(Serializer.deserializeInt(message.getData("num")));
                     break;
                 case SHOW_PLAYER_BOARD:
                     showPlayerLeaderBoard(username, message);

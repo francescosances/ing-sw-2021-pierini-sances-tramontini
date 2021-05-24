@@ -57,10 +57,6 @@ public class Serializer {
         return new Gson().toJson(developmentCardList);
     }
 
-    public static String serializeDevelopmentCardsList(List<DevelopmentCard> developmentCardList) {
-        return new Gson().toJson(developmentCardList);
-    }
-
     public static List<Deck<DevelopmentCard>> deserializeDevelopmentCardsDeckList(String serializedDeck) {
         GsonBuilder gsonbuilder = new GsonBuilder();
         gsonbuilder.registerTypeAdapter(Requirements.class, new RequirementsCreator());
@@ -68,6 +64,10 @@ public class Serializer {
         Gson gson = gsonbuilder.create();
         Type type = new TypeToken<List<Deck<DevelopmentCard>>>(){}.getType();
         return gson.fromJson(serializedDeck, type);
+    }
+
+    public static String serializeDevelopmentCardsList(List<DevelopmentCard> developmentCardList) {
+        return new Gson().toJson(developmentCardList);
     }
 
     public static List<DevelopmentCard> deserializeDevelopmentCardsList(String serializedList) {

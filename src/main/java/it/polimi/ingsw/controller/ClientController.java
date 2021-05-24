@@ -117,12 +117,12 @@ public class ClientController {
             case LIST_START_LEADER_CARDS:
                 lock.lock();
                 List<LeaderCard> leaderCardList = Serializer.deserializeLeaderCardList(message.getData("leaderCards"));
-                view.listLeaderCards(leaderCardList, Integer.parseInt(message.getData("cardsToChoose")));
+                view.listLeaderCards(leaderCardList, Serializer.deserializeInt(message.getData("cardsToChoose")));
                 lock.unlock();
                 break;
             case START_RESOURCES:
                 lock.lock();
-                view.askToChooseStartResources(Serializer.deserializeResources(message.getData("resources")), Integer.parseInt(message.getData("resourcesToChoose")));
+                view.askToChooseStartResources(Serializer.deserializeResources(message.getData("resources")), Serializer.deserializeInt(message.getData("resourcesToChoose")));
                 lock.unlock();
                 break;
             case SHOW_PLAYER_BOARD:
@@ -181,7 +181,7 @@ public class ClientController {
                 break;
             case DEVELOPMENT_CARDS_TO_BUY:
                 lock.lock();
-                view.listDevelopmentCards(Serializer.deserializeDevelopmentCardsDeckList(message.getData("developmentCards")), Integer.parseInt(message.getData("cardsToChoose")), Serializer.deserializePlayerBoard(message.getData("playerBoard")));
+                view.listDevelopmentCards(Serializer.deserializeDevelopmentCardsDeckList(message.getData("developmentCards")), Serializer.deserializeInt(message.getData("cardsToChoose")), Serializer.deserializePlayerBoard(message.getData("playerBoard")));
                 lock.unlock();
                 break;
             case CHOOSE_DEVELOPMENT_CARD_SLOT:
@@ -415,7 +415,7 @@ public class ClientController {
      */
     public void discardLeaderCard(int num) {
         Message message = new Message(Message.MessageType.DISCARD_LEADER_CARD);
-        message.addData("num", new Gson().toJson(num));
+        message.addData("num", Serializer.serializeInt(num));
         clientSocket.sendMessage(message);
     }
 
@@ -425,7 +425,7 @@ public class ClientController {
      */
     public void activateLeaderCard(int num) {
         Message message = new Message(Message.MessageType.ACTIVATE_LEADER_CARD);
-        message.addData("num", new Gson().toJson(num));
+        message.addData("num", Serializer.serializeInt(num));
         clientSocket.sendMessage(message);
     }
 
