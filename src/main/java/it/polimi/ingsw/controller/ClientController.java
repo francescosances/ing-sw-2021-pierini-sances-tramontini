@@ -3,7 +3,6 @@ package it.polimi.ingsw.controller;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.Requirements;
@@ -128,6 +127,16 @@ public class ClientController {
             case SHOW_PLAYER_BOARD:
                 lock.lock();
                 view.showPlayerBoard(Serializer.deserializePlayerBoard(message.getData("playerBoard")));
+                lock.unlock();
+                break;
+            case SHOW_FAITH_TRACK:
+                lock.lock();
+                view.showFaithTrack(Serializer.deserializeFaithTrack(message.getData("faithTrack")));
+                lock.unlock();
+                break;
+            case VATICAN_REPORT:
+                lock.lock();
+                view.showVaticanReportTriggered(message.getData("username"), Serializer.deserializeInt(message.getData("vaticanReportCount")));
                 lock.unlock();
                 break;
             case ASK_FOR_ACTION:

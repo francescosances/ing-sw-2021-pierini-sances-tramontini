@@ -255,7 +255,7 @@ public class SerializerTest {
     @Test
     public void serializeFaithTrack(){
         Match match = new Match("Test");
-        FaithTrack faithTrack = new FaithTrack(match);
+        FaithTrack faithTrack = new FaithTrack(match, "test");
         for (int i = 0; i<3; i++)
             faithTrack.moveMarker();
         String json = Serializer.serializeFaithTrack(faithTrack);

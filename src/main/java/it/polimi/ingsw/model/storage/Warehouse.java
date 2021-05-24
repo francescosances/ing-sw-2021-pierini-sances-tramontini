@@ -106,7 +106,6 @@ public class Warehouse implements Storage, ObservableFromView {
      */
     public void toBeStored(Resource[] resources) {
         toBeStored.addAll(Arrays.asList(resources));
-        updateViews();
     }
 
     /**
@@ -115,7 +114,7 @@ public class Warehouse implements Storage, ObservableFromView {
      */
     public void pushResourceToBeStored(Resource resource){
         toBeStored.push(resource);
-        updateViews();
+        updateToBeStored();
     }
 
     /**
@@ -165,9 +164,8 @@ public class Warehouse implements Storage, ObservableFromView {
      * @return the first resource in the toBeStored storage that needs to be stored in a depot or discarded
      */
     public Resource popResourceToBeStored(){
-        Resource res = toBeStored.pop();
-        updateViews();
-        return res;
+        updateToBeStored();
+        return toBeStored.pop();
     }
 
     /**
@@ -226,6 +224,14 @@ public class Warehouse implements Storage, ObservableFromView {
      */
     private void updateViews() {
         views.forEach(view -> view.showWarehouse(this));
+    }
+
+
+    /**
+     * Notifies all views of the change
+     */
+    private void updateToBeStored() {
+        views.forEach(view -> view.showResourcesGainedFromMarket(toBeStored.toArray(new Resource[0])));
     }
 
     /**

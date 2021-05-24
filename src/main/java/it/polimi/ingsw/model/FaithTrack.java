@@ -6,6 +6,7 @@ import it.polimi.ingsw.view.View;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FaithTrack implements ObservableFromView {
 
@@ -23,13 +24,17 @@ public class FaithTrack implements ObservableFromView {
      */
     private transient Match match;
     /**
+     * The PlayerBoard's name referencing this FaithTrack
+     */
+    private final String username;
+    /**
      * Contains the actual position of the faithMarker
      */
     private int faithMarker;
     /**
      * Array that contains all the PopeFavorTiles the player has
      */
-    private final PopeFavorTile[] popeFavorTiles;
+    private PopeFavorTile[] popeFavorTiles;
     /**
      * array that stores whether its vaticanReport has already been triggered or not
      */
@@ -43,7 +48,7 @@ public class FaithTrack implements ObservableFromView {
      * Initialize a new FaithTrack connected to the its match
      * @param match the match reference
      */
-    public FaithTrack(Match match){
+    public FaithTrack(Match match, String username){
         this.match = match;
         popeFavorTiles = new PopeFavorTile[POPE_SPACES.length];
         for(int i=0;i<POPE_SPACES.length;i++){
@@ -52,6 +57,7 @@ public class FaithTrack implements ObservableFromView {
         faithMarker = 0;
         vaticanReports = new boolean[POPE_SPACES.length];
         Arrays.fill(vaticanReports,false);
+        this.username = username;
     }
 
     /**
@@ -105,11 +111,19 @@ public class FaithTrack implements ObservableFromView {
      */
     public int getPopeFavorTilesVictoryPoints() {
         int ret = 0;
-        for (int i = 0; i < popeFavorTiles.length; i++) {
-            if (popeFavorTiles[i] != null)
-                ret += popeFavorTiles[i].getVictoryPoints();
+        for (PopeFavorTile popeFavorTile : popeFavorTiles) {
+            if (popeFavorTile != null)
+                ret += popeFavorTile.getVictoryPoints();
         }
         return ret;
+    }
+
+    /**
+     * Returns PlayerBoard's username referencing this FaithTrack
+     * @return PlayerBoard's username referencing this FaithTrack
+     */
+    public String getUsername() {
+        return username;
     }
 
     /**
@@ -121,17 +135,57 @@ public class FaithTrack implements ObservableFromView {
     }
 
     /**
+     * Moves the marker by specified spaces
+     * @param spaces the number of spaces the marker must move
+     * @throws EndGameException if the faithMarker is on the last space
+     */
+    public void moveMarker(int spaces) throws EndGameException {
+        for (int i = 0; i < spaces; i++) {
+            faithMarker++;
+            if (    match.getVaticanReportsCount() < vaticanReports.length &&
+                    !vaticanReports[match.getVaticanReportsCount()] && isPopeSpace(faithMarker)) {
+                match.vaticanReport(faithMarker);
+                vaticanReportUpdate();
+            }
+            if (faithMarker == SIZE) {
+                updateViews();
+                throw new EndGameException(true);
+            }
+        }
+        updateViews();
+    }
+
+    /**
      * Moves the marker by one space
      * @throws EndGameException if the faithMarker is on the last space
      */
-    public void moveMarker() throws EndGameException {
-        faithMarker++;
-        updateViews();
-        if(match.getVaticanReportsCount() < vaticanReports.length &&
-                !vaticanReports[match.getVaticanReportsCount()] && isPopeSpace(faithMarker))
-            match.vaticanReport(faithMarker);
-        if(faithMarker == SIZE)
-            throw new EndGameException(true);
+    public void moveMarker() throws EndGameException{
+        moveMarker(1);
+    }
+
+    /**
+     * uncovers the selected PopeFavorTile
+     * @param number the number of the PopeFavorTile to uncover
+     */
+    public void uncoverPopeFavorTile(int number){
+        if (number < 0 || number > popeFavorTiles.length)
+            throw new ArrayIndexOutOfBoundsException();
+        popeFavorTiles[number].uncover();
+    }
+
+    /**
+     * uncovers the selected PopeFavorTile
+     * @param number the number of the PopeFavorTile to uncover
+     */
+    public void discardPopeFavorTile(int number){
+        if (number < 0 || number > popeFavorTiles.length)
+            throw new ArrayIndexOutOfBoundsException();
+        popeFavorTiles[number] = null;
+        int count = 0;
+        for (PopeFavorTile pft:popeFavorTiles) {
+            if (pft == null)
+                count++;
+        }
     }
 
     /**
@@ -153,11 +207,20 @@ public class FaithTrack implements ObservableFromView {
     }
 
     /**
+     * Returns true if Match reference is null, false elsewhere
+     * @return true if Match reference is null, false elsewhere
+     */
+    public boolean hasMatchMissing(){
+        return match == null;
+    }
+
+    /**
      * sets the current of the vatican report to true
      * @param vaticanReportCount the number of the vatican report triggered
      */
     protected void vaticanReportTriggered(int vaticanReportCount) {
         vaticanReports[vaticanReportCount] = true;
+        updateViews();
     }
 
     /**
@@ -197,6 +260,13 @@ public class FaithTrack implements ObservableFromView {
      */
     private void updateViews() {
         views.forEach(view -> view.showFaithTrack(this));
+    }
+
+    /**
+     * Notifies all views of the happened vatican report triggered
+     */
+    private void vaticanReportUpdate() {
+        views.forEach(view -> view.showVaticanReportTriggered(username, match.getVaticanReportsCount()));
     }
 
     /**

@@ -6,7 +6,6 @@ import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.storage.Resource;
-import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.model.storage.Strongbox;
 import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.utils.Triple;
@@ -114,13 +113,16 @@ public interface View {
     /**
      * Shows the faith track
      * @param faithTrack the faith track to be shown
+     *
      */
     void showFaithTrack(FaithTrack faithTrack);
 
     /**
      * Shows a message saying a vatican report has been triggered
+     * @param username
+     * @param vaticanReportCount
      */
-    void showVaticanReportTriggered();
+    void showVaticanReportTriggered(String username, int vaticanReportCount);
 
     /**
      * List the resources stored in the warehouse

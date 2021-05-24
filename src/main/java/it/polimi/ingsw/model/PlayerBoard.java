@@ -69,7 +69,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
         this.username = username;
         warehouse = new Warehouse();
         strongbox = new Strongbox();
-        faithTrack = new FaithTrack(match);
+        faithTrack = new FaithTrack(match, username);
         developmentCardSlots = Stream.generate(DevelopmentCardSlot::new).limit(3).toArray(DevelopmentCardSlot[]::new);
         leaderCards = new ArrayList<>();
     }

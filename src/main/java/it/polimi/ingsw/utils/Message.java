@@ -85,6 +85,11 @@ public class Message{
         return new Gson().fromJson(serializedMessage,Message.class);
     }
 
+    @Override
+    public String toString() {
+        return "Message " + type;
+    }
+
     /**
      * All possible types of message.
      */
@@ -99,6 +104,7 @@ public class Message{
         LIST_START_LEADER_CARDS,
         SHOW_PLAYER_BOARD,
         SHOW_FAITH_TRACK,
+        VATICAN_REPORT,
         ASK_FOR_ACTION,
         SWAP_DEPOTS,
         TAKE_RESOURCES_FROM_MARKET,

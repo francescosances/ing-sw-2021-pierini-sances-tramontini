@@ -10,8 +10,6 @@ import it.polimi.ingsw.view.View;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.*;
-import java.util.function.IntFunction;
-import java.util.stream.Collectors;
 
 public class CLI implements View {
 
@@ -463,7 +461,7 @@ public class CLI implements View {
 
     @Override
     public void showPlayerBoard(PlayerBoard playerBoard) {
-        showFaithTrack(playerBoard.getFaithTrack());
+        printFaithTrack(playerBoard.getFaithTrack());
         showStorage(playerBoard);
         showDevelopmentCards(playerBoard.getDevelopmentCardSlots());
         printLeaderCards(playerBoard.getLeaderCards());
@@ -478,6 +476,12 @@ public class CLI implements View {
 
     @Override
     public void showFaithTrack(FaithTrack faithTrack) {
+        output.println(faithTrack.getUsername() + " got faith points!");
+        output.println("Now his faith track is:");
+        printFaithTrack(faithTrack);
+    }
+
+    public void printFaithTrack(FaithTrack faithTrack) {
         output.println("Faith track: " + faithTrack.getTrackVictoryPoints() + " victory points");
 
         printCross(0, faithTrack);
@@ -505,13 +509,21 @@ public class CLI implements View {
     }
 
     @Override
-    public void showVaticanReportTriggered() {
-        //TODO
+    public void showVaticanReportTriggered(String username, int vaticanReportCount) {
+        output.println(username + " triggered the " + vaticanReportCount + "° Vatican report!");
     }
 
     private void showPopeFavorTiles(FaithTrack faithTrack) {
+        if (faithTrack.getUsername().equals("Black Cross"))
+            return; //Black Cross doesn't have PopeFavorTiles
         output.println("Pope favor tiles: " + faithTrack.getPopeFavorTilesVictoryPoints() + " victory points");
-        Arrays.stream(faithTrack.getPopeFavorTiles()).forEach(tile -> output.println("  " + tile));
+        for (PopeFavorTile tile: faithTrack.getPopeFavorTiles()) {
+            output.print("  ");
+            if (tile == null)
+                output.println("discarded");
+            else
+                output.println(tile);
+        }
     }
 
     private void showStorage(PlayerBoard playerBoard) {
@@ -657,7 +669,7 @@ public class CLI implements View {
 
     @Override
     public void showResourcesGainedFromMarket(Resource[] resources) {
-        output.println("you got these resources from the market:");
+        output.println("You have to store these resources you gained from the market:");
         showResources(resources);
     }
 

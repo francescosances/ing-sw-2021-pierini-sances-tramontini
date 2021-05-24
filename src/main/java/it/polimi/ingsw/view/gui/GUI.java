@@ -199,7 +199,7 @@ public class GUI implements View {
     }
 
     @Override
-    public void showVaticanReportTriggered() {
+    public void showVaticanReportTriggered(String username, int vaticanReportCount) {
         //TODO
     }
 

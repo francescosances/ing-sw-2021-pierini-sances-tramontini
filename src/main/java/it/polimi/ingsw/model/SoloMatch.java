@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.cards.DevelopmentColorType;
 import it.polimi.ingsw.view.View;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class SoloMatch extends Match{
 
@@ -24,7 +25,7 @@ public class SoloMatch extends Match{
      */
     public SoloMatch(String matchName){
         super(matchName, 1);
-        blackCross = new FaithTrack(this);
+        blackCross = new FaithTrack(this, "Black Cross");
         shuffleActionTokens();
     }
 
@@ -34,9 +35,9 @@ public class SoloMatch extends Match{
      * @throws EndGameException if the black cross reaches the last space
      */
     public void moveBlackCross(int spaces) throws EndGameException {
-        for(int i=0;i<spaces;i++){
-            blackCross.moveMarker();
-        }
+        if (blackCross.hasMatchMissing())
+            blackCross.setMatch(this);
+        blackCross.moveMarker(spaces);
     }
 
     /**
@@ -96,9 +97,10 @@ public class SoloMatch extends Match{
     public void endTurn(){
         super.endTurn();
         try {
-            ActionToken actionToken = drawActionToken().show(this);
+            ActionToken actionToken = drawActionToken();
             for (View view: views) {
                 view.showActionToken(actionToken);
+                actionToken.show(this);
             }
             //TODO: creare metodo endgame per contare i punti
         } catch (EndGameException e) {

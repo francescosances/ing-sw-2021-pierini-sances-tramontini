@@ -18,7 +18,7 @@ public class Match implements ObservableFromView {
 
     public static final int MAX_PLAYERS = 4;
 
-    private int maxPlayersNumber;
+    private final int maxPlayersNumber;
 
     protected Market market;
 
@@ -174,13 +174,13 @@ public class Match implements ObservableFromView {
         if(!players.isEmpty() && players.get(0).getFaithTrack().isValidVaticanReport(popeSpace)) {
             for (PlayerBoard p : players) {
                 if (p.getFaithTrack().getFaithMarker() >= popeSpace - (3 + vaticanReportsCount))
-                    p.getFaithTrack().getPopeFavorTiles()[vaticanReportsCount].uncover();
+                    p.getFaithTrack().uncoverPopeFavorTile(vaticanReportsCount);
                 else
-                    p.getFaithTrack().getPopeFavorTiles()[vaticanReportsCount] = null;
+                    p.getFaithTrack().discardPopeFavorTile(vaticanReportsCount);
                 p.getFaithTrack().vaticanReportTriggered(vaticanReportsCount);
             }
             vaticanReportsCount++;
-            updateVaticanReport();
+
         }
     }
 
@@ -233,11 +233,6 @@ public class Match implements ObservableFromView {
     public void removeView(View view) {
         views.remove(view);
         players.forEach(playerBoard -> playerBoard.removeView(view));
-    }
-
-    private void updateVaticanReport() {
-        for (View view:views)
-            view.showVaticanReportTriggered();
     }
 
     @Override

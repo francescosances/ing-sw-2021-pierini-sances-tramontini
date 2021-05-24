@@ -597,7 +597,6 @@ public class PlayerController {
            askToStoreResource();
         else {
             resetSkipAction();
-            showWarehouseStatus();
             nextStatus();
         }
     }

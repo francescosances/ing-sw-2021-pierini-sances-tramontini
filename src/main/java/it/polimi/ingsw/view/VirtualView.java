@@ -17,7 +17,6 @@ import it.polimi.ingsw.utils.Triple;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class VirtualView implements View {
 
@@ -144,8 +143,11 @@ public class VirtualView implements View {
     }
 
     @Override
-    public void showVaticanReportTriggered() {
-        //TODO
+    public void showVaticanReportTriggered(String username, int vaticanReportCount) {
+        Message message = new Message(Message.MessageType.VATICAN_REPORT);
+        message.addData("username", username);
+        message.addData("vaticanReportCount", Serializer.serializeInt(vaticanReportCount));
+        sendMessage(message);
     }
 
     @Override

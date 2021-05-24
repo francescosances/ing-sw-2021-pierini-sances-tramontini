@@ -14,7 +14,7 @@ class FaithTrackTest {
     @BeforeEach
     void setUp() {
         match = new Match("test");
-        faithTrack = new FaithTrack(match);
+        faithTrack = new FaithTrack(match, "Test");
     }
 
     @AfterEach
