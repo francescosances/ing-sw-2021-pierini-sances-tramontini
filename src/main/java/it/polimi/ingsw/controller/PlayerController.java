@@ -380,6 +380,10 @@ public class PlayerController {
      * Asks the player what normal action they want to perform
      */
     public void askForNormalAction(){
+        setAfterDepotsSwapAction(()->{
+            showWarehouseStatus();
+            askForNormalAction();
+        });
         virtualView.askForAction(
                 playerBoard.getMatch().getPlayers().stream().map(PlayerBoard::getUsername).collect(Collectors.toList()),
                 Arrays.stream(Action.NORMAL_ACTIONS)

@@ -166,6 +166,8 @@ public class VirtualView implements View {
 
     @Override
     public void showWarehouse(Warehouse warehouse){
+        if (currentPlayerUsername.equals(username))
+            return;
         Message message = new Message(Message.MessageType.SHOW_WAREHOUSE_STATUS);
         message.addData("warehouse",Serializer.serializeWarehouse(warehouse));
         sendMessage(message);
