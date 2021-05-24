@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.utils.FileManager;
 import it.polimi.ingsw.utils.ObservableFromView;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.VirtualView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -74,11 +75,12 @@ public class Match implements ObservableFromView {
         this.vaticanReportsCount = 0;
         this.matchName = matchName;
         this.maxPlayersNumber = maxPlayersNumber;
+        views = new ArrayList<>();
     }
 
     public PlayerBoard getPlayerBoard(String username){
         for(PlayerBoard x: players){
-            if(x.username.equals(username))
+            if(x.getUsername().equals(username))
                 return x;
         }
         throw new IllegalArgumentException("Invalid username");
@@ -222,7 +224,7 @@ public class Match implements ObservableFromView {
     }
 
     @Override
-    public void addView(View view) {
+    public void addView(VirtualView view) {
         if (views == null)
             views = new ArrayList<>();
         views.add(view);
@@ -230,7 +232,7 @@ public class Match implements ObservableFromView {
     }
 
     @Override
-    public void removeView(View view) {
+    public void removeView(VirtualView view) {
         views.remove(view);
         players.forEach(playerBoard -> playerBoard.removeView(view));
     }

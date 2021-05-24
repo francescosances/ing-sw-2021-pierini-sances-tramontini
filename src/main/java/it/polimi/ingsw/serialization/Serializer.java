@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.storage.Depot;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.Strongbox;
 import it.polimi.ingsw.model.storage.Warehouse;
+import it.polimi.ingsw.utils.Triple;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -239,6 +240,15 @@ public class Serializer {
 
     public static FaithTrack deserializeFaithTrack(String json){
         return new Gson().fromJson(json, FaithTrack.class);
+    }
+
+    public static String serializeLobbies(List<Triple<String, Integer, Integer>> lobbies){
+        return new Gson().toJson(lobbies);
+    }
+
+    public static List<Triple<String, Integer, Integer>> deserializeLobbies(String json){
+        Type listType = new TypeToken<List<Triple<String, Integer, Integer>>>() {}.getType();
+        return new Gson().fromJson(json, listType);
     }
 }
 

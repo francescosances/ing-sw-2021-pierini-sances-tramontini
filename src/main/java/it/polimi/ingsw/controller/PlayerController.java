@@ -328,8 +328,9 @@ public class PlayerController {
      */
     public void askForAction(){
         resetAfterDepotsSwapAction();
+        virtualView.showCurrentActiveUser(username);
         virtualView.askForAction(
-                playerBoard.getMatch().getPlayers().stream().map(x -> x.getUsername().equals(this.username)? Match.YOU_STRING:x.getUsername()).collect(Collectors.toList()),
+                playerBoard.getMatch().getPlayers().stream().map(PlayerBoard::getUsername).collect(Collectors.toList()),
                 Arrays.stream(Action.ALL_ACTIONS)
                         .filter(x -> x != Action.CANCEL)
                         .filter(x -> !((x == Action.PLAY_LEADER) && this.playerBoard.getAvailableLeaderCards().isEmpty())) //If no leader cards are available, the options are removed from the list
@@ -380,7 +381,7 @@ public class PlayerController {
      */
     public void askForNormalAction(){
         virtualView.askForAction(
-                playerBoard.getMatch().getPlayers().stream().map(x -> x.getUsername().equals(this.username)? Match.YOU_STRING:x.getUsername()).collect(Collectors.toList()),
+                playerBoard.getMatch().getPlayers().stream().map(PlayerBoard::getUsername).collect(Collectors.toList()),
                 Arrays.stream(Action.NORMAL_ACTIONS)
                         .toArray(Action[]::new));
     }
@@ -527,7 +528,6 @@ public class PlayerController {
         getPlayerBoard().getWarehouse().toBeStored(resources);
         List<Resource> resourcesToStore = Arrays.asList(resources);
         Collections.reverse(resourcesToStore);
-        virtualView.showResourcesGainedFromMarket(resourcesToStore.toArray(new Resource[0]));
         if(resourcesToStore.isEmpty()){
             resetSkipAction();
             nextStatus();
@@ -551,9 +551,8 @@ public class PlayerController {
        currentResourceToStore = getPlayerBoard().getWarehouse().popResourceToBeStored();
        if(currentResourceToStore == NonPhysicalResourceType.VOID){
            virtualView.chooseWhiteMarbleConversion(getPlayerBoard().getLeaderCards().get(0),getPlayerBoard().getLeaderCards().get(1));
-       }else{
+       }else
            askToConfirmDepot();
-       }
     }
 
     /**

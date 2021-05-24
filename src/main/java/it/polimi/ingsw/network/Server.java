@@ -199,7 +199,7 @@ public class Server implements StatusObserver {
      * @param clientHandler the ClientHandler that manages the socket connection with the client
      */
     private synchronized void listLobbies(ClientHandler clientHandler) {
-            View view = new VirtualView(clientHandler);
+            View view = new VirtualView(clientHandler, null);
             // send the user a list of available matches (with num of joined players and size of the match)
             List<Triple<String, Integer, Integer>> availableMatches = getAvailableMatches().stream()
                     .map(match -> new Triple<>(match.getMatchName(), match.getJoinedPlayers(), match.getTotalPlayers()))
@@ -215,7 +215,7 @@ public class Server implements StatusObserver {
      */
     private synchronized void createNewLobby(int playersNumber, ClientHandler clientHandler) {
         if(playersNumber > Match.MAX_PLAYERS || playersNumber <= 0)
-            new VirtualView(clientHandler).showErrorMessage("Invalid choice");
+            new VirtualView(clientHandler, null).showErrorMessage("Invalid choice");
         else {
             GameController match = new GameController(clientHandler.getUsername(), playersNumber,this);
             addPlayerToMatch(clientHandler.getUsername(), match, clientHandler);
@@ -228,7 +228,7 @@ public class Server implements StatusObserver {
      * @param clientHandler the ClientHandler of the player who wants to join in the match
      */
     private synchronized void joinLobby(String matchName, ClientHandler clientHandler){
-        View view = new VirtualView(clientHandler);
+        View view = new VirtualView(clientHandler, null);
         if (getGameController(matchName) == null || getGameController(matchName).isFull()){
             view.showMessage("Selected match is full or does not exist");
             listLobbies(clientHandler);
@@ -268,7 +268,7 @@ public class Server implements StatusObserver {
      */
     private synchronized void reconnect(String username, ClientHandler clientHandler) {
         PlayerController playerController = getGameController(username).getPlayerController(username);
-        playerController.setVirtualView(new VirtualView(clientHandler)); //Sets the virtual view with the new clientHandler reference
+        playerController.setVirtualView(new VirtualView(clientHandler, username)); //Sets the virtual view with the new clientHandler reference
         playerController.activate();
         getGameController(username).resumeMatch(username);
         if(getGameController(username).isSuspended()) {

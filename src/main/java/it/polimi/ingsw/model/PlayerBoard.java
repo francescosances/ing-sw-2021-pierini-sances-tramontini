@@ -5,8 +5,8 @@ import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
 import it.polimi.ingsw.model.storage.*;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.ObservableFromView;
-import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.VirtualView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +25,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
     /**
      * Player's username
      */
-    protected String username;
+    private final String username;
 
     /**
      * A reference to their faith Track
@@ -57,7 +57,10 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      */
     private int boughtDevelopmentCardsCounter = 0;
 
-    private transient List<View> views;
+    /**
+     * A list containing all VirtualViews to notify on update
+     */
+    private transient List<VirtualView> views;
 
     /**
      * Initializes a new PlayerBoard object
@@ -72,6 +75,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
         faithTrack = new FaithTrack(match, username);
         developmentCardSlots = Stream.generate(DevelopmentCardSlot::new).limit(3).toArray(DevelopmentCardSlot[]::new);
         leaderCards = new ArrayList<>();
+        views = new ArrayList<>();
     }
 
     /**
@@ -337,7 +341,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
 
     public void setWarehouse(Warehouse warehouse) {
         this.warehouse = warehouse;
-        for (View view:views)
+        for (VirtualView view:views)
             warehouse.addView(view);
     }
 
@@ -346,7 +350,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      * @param view the view that has to be added
      */
     @Override
-    public void addView(View view) {
+    public void addView(VirtualView view) {
         if (views == null)
             views = new ArrayList<>();
         views.add(view);
@@ -360,11 +364,13 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      * @param view the view that has to be removed
      */
     @Override
-    public void removeView(View view) {
-        views.remove(view);
-        faithTrack.removeView(view);
-        strongbox.removeView(view);
-        warehouse.removeView(view);
+    public void removeView(VirtualView view) {
+        try {
+            views.remove(view);
+            faithTrack.removeView(view);
+            strongbox.removeView(view);
+            warehouse.removeView(view);
+        } catch (NullPointerException ignored){}
     }
 
 
@@ -372,9 +378,8 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      * Notifies all views of the change
      */
     private void updateLeaderCardsList() {
-        List<LeaderCard> leaders = leaderCards.stream().filter(LeaderCard::isActive).collect(Collectors.toList());
         for (View view:views)
-            view.showLeaderCards(leaders);
+            view.showPlayerLeaderCards(leaderCards);
     }
 
     /**

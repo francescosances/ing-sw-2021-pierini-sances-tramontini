@@ -1,8 +1,8 @@
 package it.polimi.ingsw.utils;
 
-import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.VirtualView;
 
 public interface ObservableFromView {
-    void addView(View view);
-    void removeView(View view);
+    void addView(VirtualView view);
+    void removeView(VirtualView view);
 }

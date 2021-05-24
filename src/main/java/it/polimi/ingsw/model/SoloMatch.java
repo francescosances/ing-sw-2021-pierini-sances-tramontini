@@ -4,9 +4,7 @@ import it.polimi.ingsw.model.cards.Deck;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.DevelopmentColorType;
 import it.polimi.ingsw.view.View;
-
-import java.util.ArrayList;
-import java.util.Arrays;
+import it.polimi.ingsw.view.VirtualView;
 
 public class SoloMatch extends Match{
 
@@ -26,6 +24,7 @@ public class SoloMatch extends Match{
     public SoloMatch(String matchName){
         super(matchName, 1);
         blackCross = new FaithTrack(this, "Black Cross");
+        //super.addPlayer("Black Cross");
         shuffleActionTokens();
     }
 
@@ -119,13 +118,13 @@ public class SoloMatch extends Match{
     }
 
     @Override
-    public void addView(View view) {
+    public void addView(VirtualView view) {
         super.addView(view);
         blackCross.addView(view);
     }
 
     @Override
-    public void removeView(View view) {
+    public void removeView(VirtualView view) {
         super.removeView(view);
         blackCross.removeView(view);
     }

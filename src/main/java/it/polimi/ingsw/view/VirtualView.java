@@ -14,9 +14,8 @@ import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.utils.Triple;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class VirtualView implements View {
 
@@ -25,13 +24,22 @@ public class VirtualView implements View {
      */
     private final ClientHandler clientHandler;
 
-    public VirtualView(ClientHandler clientHandler) { this.clientHandler = clientHandler; }
+    private String currentPlayerUsername;
+
+    private final String username;
+
+    public VirtualView(ClientHandler clientHandler, String username) {
+        this.clientHandler = clientHandler;
+        this.username = username;
+    }
 
     /**
      * Sends a message to the client
      * @param message the message to be sent
      */
-    private void sendMessage(Message message){ clientHandler.sendMessage(message); }
+    private void sendMessage(Message message){
+        clientHandler.sendMessage(message);
+    }
 
     @Override
     public void showMessage(String message) {
@@ -50,8 +58,7 @@ public class VirtualView implements View {
     @Override
     public void listLobbies(List<Triple<String, Integer, Integer>> availableLobbies){
         Message message = new Message(Message.MessageType.LOBBY_INFO);
-        Gson gson = new Gson();
-        message.addData("availableMatches",gson.toJson(availableLobbies));
+        message.addData("availableMatches",Serializer.serializeLobbies(availableLobbies));
         sendMessage(message);
     }
 
@@ -91,7 +98,6 @@ public class VirtualView implements View {
     public void listLeaderCards(List<LeaderCard> leaderCardList,int cardsToChoose) {
         if(leaderCardList.isEmpty())
             throw new IllegalArgumentException("No leader cards given");
-        Gson gson = new Gson();
         Message message = new Message(Message.MessageType.LIST_START_LEADER_CARDS);
         message.addData("leaderCards",Serializer.serializeLeaderCardList(leaderCardList));
         message.addData("cardsToChoose",Serializer.serializeInt(cardsToChoose));
@@ -100,6 +106,10 @@ public class VirtualView implements View {
 
     @Override
     public void showPlayerLeaderCards(List<LeaderCard> leaderCardList) {
+        if (!currentPlayerUsername.equals(username)) {
+            showLeaderCards(leaderCardList);
+            return;
+        }
         Message message = new Message(Message.MessageType.SHOW_PLAYER_LEADER_CARDS);
         message.addData("leaderCards", Serializer.serializeLeaderCardList(leaderCardList));
         sendMessage(message);
@@ -107,6 +117,7 @@ public class VirtualView implements View {
 
     @Override
     public void showLeaderCards(List<LeaderCard> leaderCardList) {
+        leaderCardList.stream().filter(LeaderCard::isActive).collect(Collectors.toList());
         Message message = new Message(Message.MessageType.SHOW_LEADER_CARDS);
         message.addData("leaderCards", Serializer.serializeLeaderCardList(leaderCardList));
         sendMessage(message);
@@ -115,6 +126,7 @@ public class VirtualView implements View {
     @Override
     public void showDevelopmentCardSlots(DevelopmentCardSlot[] developmentCardSlots) {
         Message message = new Message(Message.MessageType.SHOW_SLOTS);
+        //TODO handle in ClientController
         message.addData("slots", Serializer.serializeDevelopmentCardSlots(developmentCardSlots));
         sendMessage(message);
     }
@@ -144,6 +156,8 @@ public class VirtualView implements View {
 
     @Override
     public void showVaticanReportTriggered(String username, int vaticanReportCount) {
+        if (username.equals(this.username))
+            username = Match.YOU_STRING;
         Message message = new Message(Message.MessageType.VATICAN_REPORT);
         message.addData("username", username);
         message.addData("vaticanReportCount", Serializer.serializeInt(vaticanReportCount));
@@ -173,6 +187,10 @@ public class VirtualView implements View {
 
     @Override
     public void takeResourcesFromMarket(Market market) {
+        if (!currentPlayerUsername.equals(username)){
+            showMarket(market);
+            return;
+        }
         Message message = new Message(Message.MessageType.TAKE_RESOURCES_FROM_MARKET);
         message.addData("market",Serializer.serializeMarket(market));
         sendMessage(message);
@@ -188,10 +206,11 @@ public class VirtualView implements View {
 
     @Override
     public void showResourcesGainedFromMarket(Resource[] resources) {
-        Message message = new Message(Message.MessageType.SHOW_RESOURCES);
+        Message message = new Message(Message.MessageType.ASK_TO_STORE_RESOURCES);
         message.addData("resources",Serializer.serializeResources(resources));
         sendMessage(message);
     }
+
 
     @Override
     public void askToStoreResource(Resource resource, Warehouse warehouse) {
@@ -219,6 +238,9 @@ public class VirtualView implements View {
 
     @Override
     public void showCurrentActiveUser(String username) {
+        currentPlayerUsername = username;
+        if (this.username.equals(username))
+            username = Match.YOU_STRING;
         Message message = new Message(Message.MessageType.CURRENT_ACTIVE_USER);
         message.addData("username",username);
         sendMessage(message);
@@ -234,6 +256,8 @@ public class VirtualView implements View {
 
     @Override
     public void showPlayers(Map<String, Boolean> players) {
+        players.remove(username);
+        players.put(Match.YOU_STRING, true);
         Message message = new Message(Message.MessageType.SHOW_PLAYERS);
         message.addData("players",new Gson().toJson(players));
         sendMessage(message);
@@ -249,9 +273,10 @@ public class VirtualView implements View {
     @Override
     public void askForAction(List<String> usernames, Action... availableActions) {
         Gson gson = new Gson();
+        List<String> list = usernames.stream().map(t-> t.equals(this.username) ? t = Match.YOU_STRING : t).collect(Collectors.toList());
         Message message = new Message(Message.MessageType.ASK_FOR_ACTION);
         message.addData("availableActions",gson.toJson(Arrays.asList(availableActions)));
-        message.addData("usernames", gson.toJson(usernames));
+        message.addData("usernames", gson.toJson(list));
         sendMessage(message);
     }
 
@@ -259,8 +284,12 @@ public class VirtualView implements View {
     public void chooseProductions(List<Producer> availableProductions,PlayerBoard playerBoard) {
         Message message = new Message(Message.MessageType.PRODUCTION);
         message.addData("productions",Serializer.serializeProducerList(availableProductions));
-        message.addData("playerboard",Serializer.serializePlayerBoard(playerBoard));
+        message.addData("playerBoard",Serializer.serializePlayerBoard(playerBoard));
         sendMessage(message);
+    }
+
+    public String getCurrentPlayerUsername(){
+        return currentPlayerUsername;
     }
 
 }

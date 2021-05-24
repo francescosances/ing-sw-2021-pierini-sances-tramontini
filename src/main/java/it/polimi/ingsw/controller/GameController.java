@@ -73,7 +73,7 @@ public class GameController implements PlayerStatusListener {
     public synchronized void handleReceivedGameMessage(Message message, String username){
         Gson gson = new Gson();
         try {
-            if(message.getType() != Message.MessageType.SHOW_PLAYER_BOARD && !username.equals(players.get(match.getCurrentPlayerIndex()).getUsername())){
+            if(message.getType() != Message.MessageType.SHOW_PLAYER_BOARD && !username.equals(players.get(match.getCurrentPlayerIndex()).getUsername())) {
                 System.out.println("Invalid message received from "+username);
                 return;
             }
@@ -129,7 +129,7 @@ public class GameController implements PlayerStatusListener {
                     currentPlayerController.performAction(Action.CANCEL);
                     break;
             }
-        }catch (EndGameException e){
+        } catch (EndGameException e) {
             setPhase(Match.GamePhase.END_GAME);
         }
     }
@@ -191,9 +191,9 @@ public class GameController implements PlayerStatusListener {
         PlayerController playerController = getPlayerController(username);
         if(playerController != null){
             //Reactivating existing player
-            playerController.setVirtualView(new VirtualView(clientHandler));
+            playerController.setVirtualView(new VirtualView(clientHandler, playerController.getUsername()));
         }else{
-            playerController = new PlayerController(username, match.addPlayer(username), new VirtualView(clientHandler));
+            playerController = new PlayerController(username, match.addPlayer(username), new VirtualView(clientHandler, username));
             players.add(playerController);
         }
         playerController.addObserver(this);
@@ -444,12 +444,8 @@ public class GameController implements PlayerStatusListener {
 
         for(PlayerController playerController:players){
             map = new HashMap<>();
-            for (PlayerController p:players) {
-                if (p.getUsername().equals(playerController.getUsername()))
-                    map.put(Match.YOU_STRING, p.isActive());
-                else
-                    map.put(p.getUsername(), p.isActive());
-            }
+            for (PlayerController p:players)
+                map.put(p.getUsername(), p.isActive());
             if (playerController.getVirtualView() != null)
                 playerController.getVirtualView().showPlayers(map);
         }
@@ -462,6 +458,7 @@ public class GameController implements PlayerStatusListener {
     public void resumeMatch(String username) {
         match.addView(getPlayerController(username).getVirtualView());
         listPlayers();
+        getPlayerController(username).getVirtualView().showCurrentActiveUser(getPlayerController(username).getUsername());
         getPlayerController(username).getVirtualView().resumeMatch(getPlayerController(username).getPlayerBoard());
     }
 }

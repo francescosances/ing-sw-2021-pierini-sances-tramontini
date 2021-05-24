@@ -1,13 +1,11 @@
 package it.polimi.ingsw.model.storage;
 
 import it.polimi.ingsw.model.cards.DepotLeaderCard;
-import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.Requirements;
-import it.polimi.ingsw.model.cards.exceptions.WrongLeaderCardException;
 import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 import it.polimi.ingsw.model.storage.exceptions.UnswappableDepotsException;
 import it.polimi.ingsw.utils.ObservableFromView;
-import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.VirtualView;
 
 import java.util.*;
 
@@ -30,7 +28,7 @@ public class Warehouse implements Storage, ObservableFromView {
     /**
      * The list containing the views to update
      */
-    private transient List<View> views;
+    private transient List<VirtualView> views;
 
     /**
      * Creates a new warehouse with STD_DEPOT_NUMBER empty standard depots.
@@ -40,6 +38,7 @@ public class Warehouse implements Storage, ObservableFromView {
         for (int i = 1; i <= STD_DEPOT_NUM; i++)
             depots.add(new StandardDepot(i));
         toBeStored = new Stack<>();
+        views = new ArrayList<>();
     }
 
     /**
@@ -204,7 +203,7 @@ public class Warehouse implements Storage, ObservableFromView {
      * @param view the view that has to be added
      */
     @Override
-    public void addView(View view) {
+    public void addView(VirtualView view) {
         if (views == null)
             views = new ArrayList<>();
         views.add(view);
@@ -215,7 +214,7 @@ public class Warehouse implements Storage, ObservableFromView {
      * @param view the view that has to be removed
      */
     @Override
-    public void removeView(View view) {
+    public void removeView(VirtualView view) {
         views.remove(view);
     }
 

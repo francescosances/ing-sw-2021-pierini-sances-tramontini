@@ -10,14 +10,12 @@ import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.network.ClientSocket;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
-import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cli.CLI;
 import it.polimi.ingsw.view.gui.GUI;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -30,22 +28,18 @@ public class ClientController {
      * The socket connection to the server
      */
     private final ClientSocket clientSocket;
-
     /**
      * The view used to interact with the user
      */
     private View view;
-
     /**
      * The username of the user associated to this controller
      */
     private String username;
-
     /**
      * The usernames of the players playing this match
      */
     private List<String> players;
-
     /**
      * Helps to handle synchronization
      */
@@ -102,10 +96,7 @@ public class ClientController {
                 break;
             case LOBBY_INFO:
                 lock.lock();
-                String availableMessages = message.getData("availableMatches");
-                Type listType = new TypeToken<List<Triple<String, Integer, Integer>>>() {}.getType();
-                List<Triple<String, Integer, Integer>> matches = gson.fromJson(availableMessages, listType);
-                view.listLobbies(matches);
+                view.listLobbies(Serializer.deserializeLobbies(message.getData("availableMatches")));
                 lock.unlock();
                 break;
             case RESUME_MATCH:
@@ -115,8 +106,7 @@ public class ClientController {
                 break;
             case LIST_START_LEADER_CARDS:
                 lock.lock();
-                List<LeaderCard> leaderCardList = Serializer.deserializeLeaderCardList(message.getData("leaderCards"));
-                view.listLeaderCards(leaderCardList, Serializer.deserializeInt(message.getData("cardsToChoose")));
+                view.listLeaderCards(Serializer.deserializeLeaderCardList(message.getData("leaderCards")), Serializer.deserializeInt(message.getData("cardsToChoose")));
                 lock.unlock();
                 break;
             case START_RESOURCES:
@@ -173,7 +163,7 @@ public class ClientController {
                 view.showMarket(market);
                 lock.unlock();
                 break;
-            case SHOW_RESOURCES:
+            case ASK_TO_STORE_RESOURCES:
                 lock.lock();
                 view.showResourcesGainedFromMarket(Serializer.deserializeResources(message.getData("resources")));
                 lock.unlock();
@@ -201,7 +191,7 @@ public class ClientController {
             case PRODUCTION:
                 lock.lock();
                 List<Producer> producers = Serializer.deserializeProducerList(message.getData("productions"));
-                view.chooseProductions(producers, Serializer.deserializePlayerBoard(message.getData("playerboard")));
+                view.chooseProductions(producers, Serializer.deserializePlayerBoard(message.getData("playerBoard")));
                 lock.unlock();
                 break;
             case ACTION_TOKEN:
@@ -219,7 +209,7 @@ public class ClientController {
             case SHOW_LEADER_CARDS:
                 lock.lock();
                 List<LeaderCard> leaderCards = Serializer.deserializeLeaderCardList(message.getData("leaderCards"));
-                view.showLeaderCards(leaderCards);
+                view.showPlayerLeaderCards(leaderCards);
                 lock.unlock();
             case SHOW_PLAYERS:
                 Map<String, Boolean> players = new Gson().fromJson(message.getData("players"), Map.class);

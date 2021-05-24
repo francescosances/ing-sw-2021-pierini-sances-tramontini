@@ -469,7 +469,10 @@ public class CLI implements View {
 
     public void printCross(int pos, FaithTrack faithTrack) {
         if (pos == faithTrack.getFaithMarker())
-            output.print(ANSI_RED + "†" + ANSI_RESET);
+            if (faithTrack.getUsername().equals("Black Cross"))
+                output.print("†");
+            else
+                output.print(ANSI_RED + "†" + ANSI_RESET);
         else
             output.print(" ");
     }
@@ -669,7 +672,7 @@ public class CLI implements View {
 
     @Override
     public void showResourcesGainedFromMarket(Resource[] resources) {
-        output.println("You have to store these resources you gained from the market:");
+        output.println("This are the resources gained from market needing to be stored:");
         showResources(resources);
     }
 

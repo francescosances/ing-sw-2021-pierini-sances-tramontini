@@ -2,11 +2,11 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.ObservableFromView;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.VirtualView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class FaithTrack implements ObservableFromView {
 
@@ -58,6 +58,7 @@ public class FaithTrack implements ObservableFromView {
         vaticanReports = new boolean[POPE_SPACES.length];
         Arrays.fill(vaticanReports,false);
         this.username = username;
+        views = new ArrayList<>();
     }
 
     /**
@@ -240,7 +241,7 @@ public class FaithTrack implements ObservableFromView {
      * @param view the view that has to be added
      */
     @Override
-    public void addView(View view) {
+    public void addView(VirtualView view) {
         if (views == null)
             views = new ArrayList<>();
         views.add(view);
@@ -251,7 +252,7 @@ public class FaithTrack implements ObservableFromView {
      * @param view the view that has to be removed
      */
     @Override
-    public void removeView(View view) {
+    public void removeView(VirtualView view) {
         views.remove(view);
     }
 
