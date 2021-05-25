@@ -205,7 +205,7 @@ public class GUI implements View {
         if(getPlayerBoardSceneController() == null)
             return;
         Platform.runLater(()->{
-            playerboardSceneController.resetControls();
+            playerboardSceneController.resetControls(availableActions);
         });
     }
 

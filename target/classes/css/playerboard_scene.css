@@ -80,6 +80,23 @@
     -fx-background-image: url("../images/buttons/activate_production.png");
 }
 
+#startProductionBtn:disabled{
+    -fx-background-image: url("../images/buttons/activate_production_disabled.png");
+}
+
+
 #buyDevelopmentcardBtn{
     -fx-background-image: url("../images/buttons/buy_development_card.png");
+}
+
+#buyDevelopmentcardBtn:disabled{
+    -fx-background-image: url("../images/buttons/buy_development_card_disabled.png");
+}
+
+#buyDevelopmentcardBtn:disabled{
+    -fx-background-image: url("../images/buttons/buy_development_card_disabled.png");
+}
+
+#discardResourceBtn{
+    -fx-background-image: url("../images/buttons/discard.png");
 }
