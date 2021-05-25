@@ -305,10 +305,9 @@ public class GameController implements PlayerStatusListener {
     /**
      * Assures every non playing players receive a message showing whose turn is
      */
-    private void showCurrentActiveUser(){
-        for(int i=0;i<players.size();i++)
-            if(i != match.getCurrentPlayerIndex())
-                players.get(i).getVirtualView().showCurrentActiveUser(players.get(match.getCurrentPlayerIndex()).getUsername());
+    private void showCurrentActiveUser() {
+        for (PlayerController player : players)
+            player.getVirtualView().showCurrentActiveUser(players.get(match.getCurrentPlayerIndex()).getUsername());
     }
 
     /**

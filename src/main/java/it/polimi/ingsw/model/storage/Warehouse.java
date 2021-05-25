@@ -43,6 +43,7 @@ public class Warehouse implements Storage, ObservableFromView {
 
     /**
      * Adds the specified resources to the specified depot.
+     * Notifies of the change happened.
      * @param depotNumber the number of the depot where to add the resources
      * @param res the type of the resources to be added
      * @param num the amount of the resources to be added
@@ -50,9 +51,16 @@ public class Warehouse implements Storage, ObservableFromView {
      */
     public void addResources(int depotNumber, ResourceType res, int num) throws IncompatibleDepotException {
         putResources(depotNumber, res, num);
-        updateViews();
+        updateNonPlayingViews();
     }
 
+    /**
+     * Adds the specified resources to the specified depot.
+     * @param depotNumber the number of the depot where to add the resources
+     * @param res the type of the resources to be added
+     * @param num the amount of the resources to be added
+     * @throws IncompatibleDepotException if is already existing a standard depot with the same resource type
+     */
     private void putResources(int depotNumber, ResourceType res, int num) throws IncompatibleDepotException {
         if (depotNumber < STD_DEPOT_NUM)
             for (int depotIndex = 0; depotIndex < STD_DEPOT_NUM; depotIndex++)
@@ -84,7 +92,7 @@ public class Warehouse implements Storage, ObservableFromView {
             }
         }
 
-        updateViews();
+        updateNonPlayingViews();
         return newRequirements;
     }
 
@@ -149,7 +157,7 @@ public class Warehouse implements Storage, ObservableFromView {
             throw new UnswappableDepotsException("Unable to swap selected depots, you chose a Depot Leader Card which couldn't be used");
         }
 
-        updateViews();
+        updateAllViews();
     }
 
     /**
@@ -199,7 +207,6 @@ public class Warehouse implements Storage, ObservableFromView {
         depots.add(depotLeaderCard);
     }
 
-
     /**
      * Adds the view to the list of views
      * @param view the view that has to be added
@@ -221,12 +228,22 @@ public class Warehouse implements Storage, ObservableFromView {
     }
 
     /**
-     * Notifies all views of the change
+     * Notifies all views but the currently active player of the change
      */
-    private void updateViews() {
-        views.forEach(view -> view.showWarehouse(this));
+    private void updateNonPlayingViews() {
+        for (VirtualView view:views) {
+            if (!view.getCurrentActiveUser().equals(view.getUsername()))
+                view.showWarehouse(this);
+        }
     }
 
+    /**
+     * Notifies all views of the change
+     */
+    private void updateAllViews() {
+        for (VirtualView view:views)
+            view.showWarehouse(this);
+    }
 
     /**
      * Notifies all views of the change
@@ -247,7 +264,6 @@ public class Warehouse implements Storage, ObservableFromView {
         Warehouse warehouse = (Warehouse) o;
         return Objects.equals(depots, warehouse.depots) && Objects.equals(toBeStored, warehouse.toBeStored);
     }
-
 
     /**
      * Returns a string representation of the object

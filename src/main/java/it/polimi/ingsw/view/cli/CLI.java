@@ -410,7 +410,12 @@ public class CLI implements View {
     public void showCurrentActiveUser(String username) {
         currentActiveUser = username;
         output.println("************");
-        output.println("It's " + username + "'s turn");
+        output.print("It's ");
+        if (currentActiveUser.equals(Match.YOU_STRING))
+            output.print("your");
+        else
+            output.print(username + "'s");
+        output.println(" turn");
         output.println("************");
     }
 
@@ -540,7 +545,12 @@ public class CLI implements View {
 
     @Override
     public void showWarehouse(Warehouse warehouse) {
-        output.println(currentActiveUser + " stored a resource in their warehouse.");
+        output.print(currentActiveUser + " changed ");
+        if (currentActiveUser.equals(Match.YOU_STRING))
+            output.print("your");
+        else
+            output.print("their");
+        output.println(" warehouse");
         printWarehouse(warehouse);
     }
 

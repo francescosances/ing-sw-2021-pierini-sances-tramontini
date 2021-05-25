@@ -328,7 +328,6 @@ public class PlayerController {
      */
     public void askForAction(){
         setAfterDepotsSwapAction(this::askForAction);
-        virtualView.showCurrentActiveUser(username);
         virtualView.askForAction(
                 playerBoard.getMatch().getPlayers().stream().map(PlayerBoard::getUsername).collect(Collectors.toList()),
                 Arrays.stream(Action.ALL_ACTIONS)
