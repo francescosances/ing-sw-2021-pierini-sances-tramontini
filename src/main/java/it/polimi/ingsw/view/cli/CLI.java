@@ -215,7 +215,17 @@ public class CLI implements View {
 
     @Override
     public void showLeaderCards(List<LeaderCard> leaderCards) {
+        output.print(currentActiveUser + " changed ");
+        printPronoun();
+        output.println("leader cards hand");
         printLeaderCards(leaderCards);
+    }
+
+    private void printPronoun(){
+        if (currentActiveUser.equals(Match.YOU_STRING))
+            output.print("your");
+        else
+            output.print("their");
     }
 
     @Override
@@ -223,10 +233,7 @@ public class CLI implements View {
         output.println();
         output.println(currentActiveUser + " bought a card!");
         output.print("Now ");
-        if (currentActiveUser.equals(Match.YOU_STRING))
-            output.print("your");
-        else
-            output.print("their");
+        printPronoun();
         output.println(" development card slots are:");
         showDevelopmentCards(developmentCardSlots);
     }
@@ -580,10 +587,7 @@ public class CLI implements View {
     public void showWarehouse(Warehouse warehouse) {
         output.println();
         output.print(currentActiveUser + " changed ");
-        if (currentActiveUser.equals(Match.YOU_STRING))
-            output.print("your");
-        else
-            output.print("their");
+        printPronoun();
         output.println(" warehouse");
         printWarehouse(warehouse);
     }
@@ -627,10 +631,7 @@ public class CLI implements View {
     public void showStrongbox(Strongbox strongbox) {
         output.println();
         output.print(currentActiveUser + " changed ");
-        if (currentActiveUser.equals(Match.YOU_STRING))
-            output.print("your");
-        else
-            output.print("their");
+        printPronoun();
         output.println(" strongbox");
         printStrongbox(strongbox);
     }

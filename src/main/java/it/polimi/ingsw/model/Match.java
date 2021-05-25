@@ -55,7 +55,7 @@ public class Match implements ObservableFromView {
      */
     private GamePhase currentPhase;
 
-    protected transient List<View> views;
+    protected transient List<VirtualView> views;
 
     public Match(String matchName) {
         this(matchName,MAX_PLAYERS);
@@ -198,7 +198,13 @@ public class Match implements ObservableFromView {
         return maxPlayersNumber;
     }
 
-    public void endTurn(){}
+    public void endTurn(){
+        int nextPlayerIndex = (currentPlayerIndex + 1) % players.size();
+        for (VirtualView view:views) {
+            if (players.get(nextPlayerIndex).getUsername().equals(view.getUsername()))
+                view.showPlayerBoard(players.get(nextPlayerIndex));
+        }
+    }
 
     public Deck<LeaderCard> getLeaderCards() {
         return leaderCards;

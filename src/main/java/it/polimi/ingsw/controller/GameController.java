@@ -322,7 +322,6 @@ public class GameController implements PlayerStatusListener {
         final PlayerController playerController = players.get(match.getCurrentPlayerIndex());
         switch (player.getCurrentStatus()) {
             case TURN_ENDED:
-                playerController.showPlayerBoard();
                 match.endTurn();
                 nextTurn();
                 break;
@@ -384,7 +383,7 @@ public class GameController implements PlayerStatusListener {
         players.forEach((user)->{
             if(user.getUsername().equals(username))
                 user.activate();
-            else
+            else if (user.getVirtualView() != null)
                 user.getVirtualView().userConnected(username);
         });
     }
@@ -457,7 +456,7 @@ public class GameController implements PlayerStatusListener {
     public void resumeMatch(String username) {
         match.addView(getPlayerController(username).getVirtualView());
         listPlayers();
-        getPlayerController(username).getVirtualView().showCurrentActiveUser(getPlayerController(username).getUsername());
+        getPlayerController(username).getVirtualView().showCurrentActiveUser(players.get(match.getCurrentPlayerIndex()).getUsername());
         getPlayerController(username).getVirtualView().resumeMatch(getPlayerController(username).getPlayerBoard());
     }
 }

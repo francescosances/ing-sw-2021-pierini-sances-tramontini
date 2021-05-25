@@ -62,8 +62,8 @@ public class ClientHandler implements Runnable {
                     throw new IllegalStateException("Inactive client " + username);
                 }
                 Message message = Message.messageFromString(fromClient); //Read the new message
-                server.log("Message received from " + username);
-                server.log(message.serialize());
+                Server.log("Message received from " + username);
+                Server.log(message.serialize());
                 try {
                     server.handleReceivedMessage(message, this); // Forwards the message to the server
                 }catch (IllegalStateException | IllegalArgumentException e){
@@ -71,13 +71,13 @@ public class ClientHandler implements Runnable {
                 }
             }
             //close connections
-            server.log("Closing connection");
+            Server.log("Closing connection");
             socketIn.close();
             socketOut.close();
             socket.close();
         } catch (IOException e) {
-            server.log("Received invalid message");
-            server.log(e.getMessage());
+            Server.log("Received invalid message");
+            Server.log(e.getMessage());
         }catch (NoSuchElementException ignored){
         }catch (Exception e){
             e.printStackTrace();
@@ -85,10 +85,10 @@ public class ClientHandler implements Runnable {
            //Client disconnected
             if (username != null) {
                 server.disconnect(username);
-                server.log(username + " disconnected");
+                Server.log(username + " disconnected");
             }
         }
-        server.log("ClientHandler closed");
+        Server.log("ClientHandler closed");
     }
 
     /**
@@ -98,7 +98,7 @@ public class ClientHandler implements Runnable {
     public void sendMessage(Message message) {
         socketOut.println(message.serialize());
         socketOut.flush();
-        server.log("Message sent to client:\n"+message.serialize());
+        Server.log("Message sent to client" + username + ":\n" + message.serialize());
     }
 
 }

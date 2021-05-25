@@ -117,7 +117,8 @@ public class VirtualView implements View {
 
     @Override
     public void showLeaderCards(List<LeaderCard> leaderCardList) {
-        leaderCardList.stream().filter(LeaderCard::isActive).collect(Collectors.toList());
+        if (!currentActiveUser.equals(username))
+            leaderCardList.stream().filter(LeaderCard::isActive).collect(Collectors.toList());
         Message message = new Message(Message.MessageType.SHOW_LEADER_CARDS);
         message.addData("leaderCards", Serializer.serializeLeaderCardList(leaderCardList));
         sendMessage(message);

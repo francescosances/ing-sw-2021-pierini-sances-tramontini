@@ -216,8 +216,9 @@ public class ClientController {
             case SHOW_LEADER_CARDS:
                 lock.lock();
                 List<LeaderCard> leaderCards = Serializer.deserializeLeaderCardList(message.getData("leaderCards"));
-                view.showPlayerLeaderCards(leaderCards);
+                view.showLeaderCards(leaderCards);
                 lock.unlock();
+                break;
             case SHOW_PLAYERS:
                 Map<String, Boolean> players = new Gson().fromJson(message.getData("players"), Map.class);
                 view.showPlayers(players);
