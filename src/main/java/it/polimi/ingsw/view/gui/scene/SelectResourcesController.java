@@ -12,16 +12,7 @@ import java.util.List;
 public class SelectResourcesController extends Controller{
 
     @FXML
-    protected ImageView imgcoin;
-
-    @FXML
-    protected ImageView imgservant;
-
-    @FXML
-    protected ImageView imgshield;
-
-    @FXML
-    protected ImageView imgstone;
+    protected ImageView imgcoin, imgservant, imgshield,imgstone;
 
     @FXML
     protected Label lbl;
@@ -45,7 +36,6 @@ public class SelectResourcesController extends Controller{
         ImageView[] imageViews = {imgcoin,imgservant,imgshield,imgstone};
         for(int i=0;i<values.length;i++){
             resourcesSelected.add(false);
-
             final int index = i;
             imageViews[index].setOnMouseClicked((e)->{
                 if(resourcesSelected.get(index)){

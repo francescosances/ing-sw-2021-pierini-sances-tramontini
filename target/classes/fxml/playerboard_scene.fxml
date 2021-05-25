@@ -11,10 +11,10 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" prefHeight="720.0" prefWidth="1080.0" styleClass="rootPane" stylesheets="@../css/playerboard_scene.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.scene.PlayerboardSceneController">
+<StackPane fx:id="root" prefHeight="720.0" prefWidth="1108.0" styleClass="rootPane" stylesheets="@../css/playerboard_scene.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.scene.PlayerboardSceneController">
     <children>
         <Group scaleX="1.5" scaleY="1.5" />
-          <AnchorPane fx:id="rootPane" prefHeight="720.0" prefWidth="1080.0">
+          <AnchorPane fx:id="rootPane" prefHeight="720.0" prefWidth="1182.0">
          <children>
             <ImageView fitHeight="617.0" fitWidth="864.0" layoutY="103.0" pickOnBounds="true" preserveRatio="true" styleClass="playerboard">
                <image>
@@ -36,12 +36,12 @@
                   <Image url="@../images/buttons/warehouse_row_1.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="leadercard0" fitHeight="211.0" fitWidth="156.0" layoutX="903.0" layoutY="105.0" pickOnBounds="true" preserveRatio="true" styleClass="card,leadercard" visible="false">
+            <ImageView fx:id="leadercard0" fitHeight="211.0" fitWidth="156.0" layoutX="904.0" layoutY="184.0" pickOnBounds="true" preserveRatio="true" styleClass="card,leadercard" visible="false">
                <image>
                   <Image url="@../images/cards/BACK/64.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="leadercard1" fitHeight="211.0" fitWidth="156.0" layoutX="903.0" layoutY="349.0" pickOnBounds="true" preserveRatio="true" styleClass="card,leadercard" visible="false">
+            <ImageView fx:id="leadercard1" fitHeight="211.0" fitWidth="156.0" layoutX="903.0" layoutY="418.0" pickOnBounds="true" preserveRatio="true" styleClass="card,leadercard" visible="false">
                <image>
                   <Image url="@../images/cards/BACK/64.png" />
                </image>
@@ -91,7 +91,7 @@
                   <Image url="@../images/cards/BACK/1.png" />
                </image>
             </ImageView>
-            <ChoiceBox fx:id="selectUser" layoutX="893.0" layoutY="32.0" prefHeight="48.0" prefWidth="175.0" />
+            <ChoiceBox fx:id="selectUser" layoutX="903.0" layoutY="105.0" prefHeight="48.0" prefWidth="175.0" />
             <Button fx:id="marketBtn" layoutX="14.0" layoutY="30.0" mnemonicParsing="false" onAction="#goToMarket" prefHeight="48.0" prefWidth="208.0" styleClass="btn" />
             <Button fx:id="startProductionBtn" layoutX="250.0" layoutY="30.0" mnemonicParsing="false" onAction="#startProduction" prefHeight="48.0" prefWidth="208.0" styleClass="btn" />
             <Button fx:id="buyDevelopmentcardBtn" layoutX="487.0" layoutY="30.0" mnemonicParsing="false" onAction="#buyDevelopmentCard" prefHeight="48.0" prefWidth="208.0" styleClass="btn" />
@@ -173,22 +173,22 @@
                   <Image url="@../images/buttons/base_production.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="leaderCardDepot00" fitHeight="43.0" fitWidth="53.0" layoutX="927.0" layoutY="266.0" pickOnBounds="true" preserveRatio="true" visible="false">
+            <ImageView fx:id="leaderCardDepot00" fitHeight="43.0" fitWidth="53.0" layoutX="927.0" layoutY="345.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@../images/resources/SHIELD.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="leaderCardDepot01" fitHeight="43.0" fitWidth="53.0" layoutX="979.0" layoutY="266.0" pickOnBounds="true" preserveRatio="true" visible="false">
+            <ImageView fx:id="leaderCardDepot01" fitHeight="43.0" fitWidth="53.0" layoutX="979.0" layoutY="345.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@../images/resources/SHIELD.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="leaderCardDepot10" fitHeight="43.0" fitWidth="53.0" layoutX="927.0" layoutY="509.0" pickOnBounds="true" preserveRatio="true" visible="false">
+            <ImageView fx:id="leaderCardDepot10" fitHeight="43.0" fitWidth="53.0" layoutX="927.0" layoutY="579.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@../images/resources/SHIELD.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="leaderCardDepot11" fitHeight="43.0" fitWidth="53.0" layoutX="979.0" layoutY="509.0" pickOnBounds="true" preserveRatio="true" visible="false">
+            <ImageView fx:id="leaderCardDepot11" fitHeight="43.0" fitWidth="53.0" layoutX="979.0" layoutY="579.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@../images/resources/SHIELD.png" />
                </image>
@@ -235,6 +235,8 @@
                   <Image url="@../images/resources/SHIELD.png" />
                </image>
             </ImageView>
+            <Button fx:id="skipBtn" layoutX="887.0" layoutY="30.0" mnemonicParsing="false" onAction="#skip" prefHeight="48.0" prefWidth="208.0" styleClass="btn" visible="false" />
+            <Button fx:id="swapDepotsBtn" layoutX="887.0" layoutY="30.0" mnemonicParsing="false" onAction="#swapDepots" prefHeight="48.0" prefWidth="208.0" styleClass="btn" visible="false" />
 
          </children>
           </AnchorPane>

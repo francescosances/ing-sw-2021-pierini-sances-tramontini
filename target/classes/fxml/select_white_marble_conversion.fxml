@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="680.0" prefWidth="1000.0" styleClass="rootPane" stylesheets="@../css/select_white_marble_conversion.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.scene.SelectWhiteMarbleConversion">
+<StackPane prefHeight="680.0" prefWidth="1000.0" styleClass="rootPane" stylesheets="@../css/select_white_marble_conversion.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.scene.SelectWhiteMarbleConversionController">
     <children>
         <Group scaleX="1.5" scaleY="1.5">
             <children>
@@ -22,12 +22,12 @@
                      <children>
                         <AnchorPane prefHeight="88.0" prefWidth="320.0">
                            <children>
-                              <Label fx:id="lbl1" layoutX="96.0" layoutY="14.0" text="Convert white marble:" textAlignment="CENTER" textFill="#fdc309">
+                              <Label layoutX="96.0" layoutY="14.0" text="Convert white marble:" textAlignment="CENTER" textFill="#fdc309">
                                  <font>
                                     <Font size="17.0" />
                                  </font>
                               </Label>
-                              <ImageView fx:id="imgcoin1" fitHeight="33.0" fitWidth="30.0" layoutX="150.0" layoutY="49.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                              <ImageView fitHeight="33.0" fitWidth="30.0" layoutX="150.0" layoutY="49.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../images/marbles/WHITE.png" />
                                  </image>
@@ -36,7 +36,7 @@
                         </AnchorPane>
                         <AnchorPane prefHeight="25.0" prefWidth="303.0">
                            <children>
-                              <Label fx:id="lbl" layoutX="106.0" layoutY="2.0" text="Choose resource:" textAlignment="CENTER" textFill="#fdc309" AnchorPane.bottomAnchor="18.0">
+                              <Label layoutX="106.0" layoutY="2.0" text="Choose resource:" textAlignment="CENTER" textFill="#fdc309" AnchorPane.bottomAnchor="18.0">
                                  <font>
                                     <Font size="17.0" />
                                  </font>
@@ -48,7 +48,7 @@
                         </AnchorPane>
                         <HBox prefHeight="58.0" prefWidth="320.0">
                            <children>
-                              <ImageView fx:id="imgcoin" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                              <ImageView fx:id="imgcoin" visible="false" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
                                  <image>
                                     <Image url="@../images/resources/COIN.png" />
                                  </image>
@@ -56,7 +56,7 @@
                                     <Insets left="5.0" right="5.0" />
                                  </HBox.margin>
                               </ImageView>
-                              <ImageView fx:id="imgservant" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                              <ImageView fx:id="imgservant" visible="false" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
                                  <image>
                                     <Image url="@../images/resources/SERVANT.png" />
                                  </image>
@@ -64,7 +64,7 @@
                                     <Insets left="5.0" right="5.0" />
                                  </HBox.margin>
                               </ImageView>
-                              <ImageView fx:id="imgshield" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                              <ImageView fx:id="imgshield" visible="false" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
                                  <image>
                                     <Image url="@../images/resources/SHIELD.png" />
                                  </image>
@@ -72,7 +72,7 @@
                                     <Insets left="5.0" right="5.0" />
                                  </HBox.margin>
                               </ImageView>
-                              <ImageView fx:id="imgstone" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                              <ImageView fx:id="imgstone" visible="false" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
                                  <image>
                                     <Image url="@../images/resources/STONE.png" />
                                  </image>
@@ -82,7 +82,7 @@
                               </ImageView>
                            </children>
                         </HBox>
-                        <Button fx:id="btnChoose" prefHeight="25.0" prefWidth="320.0" styleClass="btn, btn-disabled">
+                        <Button fx:id="btnChoose" onAction="#choose" prefHeight="25.0" prefWidth="320.0" styleClass="btn, btn-disabled">
                            <VBox.margin>
                               <Insets top="30.0" />
                            </VBox.margin>

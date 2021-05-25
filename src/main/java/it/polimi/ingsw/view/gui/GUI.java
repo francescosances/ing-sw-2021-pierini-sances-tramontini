@@ -204,9 +204,7 @@ public class GUI implements View {
         clientController.setPlayers(usernames);
         if(getPlayerBoardSceneController() == null)
             return;
-        Platform.runLater(()->{
-            playerboardSceneController.resetControls(availableActions);
-        });
+        Platform.runLater(()-> playerboardSceneController.resetControls(availableActions));
     }
 
     @Override
@@ -239,7 +237,10 @@ public class GUI implements View {
 
     @Override
     public void chooseWhiteMarbleConversion(LeaderCard leaderCard, LeaderCard leaderCard1) {
-        openModal("select_white_marble_conversion","Select white marble conversion",()->chooseWhiteMarbleConversion(leaderCard,leaderCard1));
+        Platform.runLater(()->{
+           SelectWhiteMarbleConversionController controller = (SelectWhiteMarbleConversionController) openModal("select_white_marble_conversion","Select white marble conversion",()->chooseWhiteMarbleConversion(leaderCard,leaderCard1));
+           controller.initialize(leaderCard.getOutputResourceType(),leaderCard1.getOutputResourceType());
+        });
     }
 
     @Override

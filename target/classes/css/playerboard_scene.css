@@ -72,6 +72,10 @@
     -fx-background-image: url("../images/buttons/market.png");
 }
 
+#marketBtn:disabled{
+    -fx-background-image: url("../images/buttons/market_disabled.png");
+}
+
 #rollbackBtn{
     -fx-background-image: url("../images/buttons/cancel.png");
 }
@@ -99,4 +103,12 @@
 
 #discardResourceBtn{
     -fx-background-image: url("../images/buttons/discard.png");
+}
+
+#skipBtn{
+    -fx-background-image: url("../images/buttons/end_turn.png");
+}
+
+#swapDepotsBtn{
+    -fx-background-image: url("../images/buttons/swap_depots.png");
 }

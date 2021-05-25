@@ -30,7 +30,7 @@ public class PlayerboardSceneController extends Controller{
     protected ImageView developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2,developmentcardslot1_0,developmentcardslot1_1,developmentcardslot1_2,developmentcardslot2_0,developmentcardslot2_1,developmentcardslot2_2;
 
     @FXML
-    protected Button marketBtn,startProductionBtn,buyDevelopmentcardBtn,rollbackBtn,discardResourceBtn;
+    protected Button marketBtn,startProductionBtn,buyDevelopmentcardBtn,rollbackBtn,discardResourceBtn,skipBtn,swapDepotsBtn;
 
     @FXML
     protected ImageView warehouse0,warehouse1,warehouse2,warehouse3,warehouse4,warehouse5,warehouse_void_0,warehouse_void_1,warehouse_void_2;
@@ -490,6 +490,7 @@ public class PlayerboardSceneController extends Controller{
             }
         });
 
+      //  swapDepotsBtn.setVisible(true);
         discardResourceBtn.setVisible(true);
     }
 
@@ -508,6 +509,7 @@ public class PlayerboardSceneController extends Controller{
         lblStoring.setVisible(false);
         boxCurrentResource.setVisible(false);
         discardResourceBtn.setVisible(false);
+        swapDepotsBtn.setVisible(false);
     }
 
     private void addListenerToProducer(ImageView imageView, Producer producer){
@@ -629,7 +631,7 @@ public class PlayerboardSceneController extends Controller{
             if(slot.accepts(developmentCard)){
                 System.out.println("index"+index);
                 System.out.println("slotsize-1"+(slot.getSize()-1));
-                slotsImg[index][slot.getSize()-1].getStyleClass().add("selectable");
+                slotsImg[index][slot.getSize()-1].getStyleClass().add("selectable");//TODO: carta in slot vuoto solleva index out of bound
                 final int slotIndex = index;
                 slotsImg[index][slot.getSize()-1].setOnMouseClicked((e)->{
                     clientController.chooseDevelopmentCardsSlot(slotIndex);
@@ -646,6 +648,8 @@ public class PlayerboardSceneController extends Controller{
         startProductionBtn.setDisable(Arrays.stream(availableActions).noneMatch(action -> action == Action.ACTIVATE_PRODUCTION));
         marketBtn.setDisable(Arrays.stream(availableActions).noneMatch(action -> action == Action.TAKE_RESOURCES_FROM_MARKET));
         buyDevelopmentcardBtn.setDisable(Arrays.stream(availableActions).noneMatch(action -> action == Action.BUY_DEVELOPMENT_CARD));
+        skipBtn.setVisible(Arrays.stream(availableActions).anyMatch(action -> action == Action.SKIP));
+        swapDepotsBtn.setVisible(false);
 
         startProductionBtn.setVisible(true);
         marketBtn.setVisible(true);
@@ -670,4 +674,12 @@ public class PlayerboardSceneController extends Controller{
         this.clearResourceSupply();
     }
 
+    @FXML
+    public void skip(){
+        clientController.performAction(Action.SKIP);
+    }
+
+    public void swapDepots() {
+       enableWarehouseSelection(defaultWarehouseAction);
+    }
 }

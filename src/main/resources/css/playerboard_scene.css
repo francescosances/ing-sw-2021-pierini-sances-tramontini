@@ -104,3 +104,11 @@
 #discardResourceBtn{
     -fx-background-image: url("../images/buttons/discard.png");
 }
+
+#skipBtn{
+    -fx-background-image: url("../images/buttons/end_turn.png");
+}
+
+#swapDepotsBtn{
+    -fx-background-image: url("../images/buttons/swap_depots.png");
+}
