@@ -24,7 +24,7 @@ public class VirtualView implements View {
      */
     private final ClientHandler clientHandler;
 
-    private String currentPlayerUsername;
+    private String currentActiveUser;
 
     private final String username;
 
@@ -106,7 +106,7 @@ public class VirtualView implements View {
 
     @Override
     public void showPlayerLeaderCards(List<LeaderCard> leaderCardList) {
-        if (!currentPlayerUsername.equals(username)) {
+        if (!currentActiveUser.equals(username)) {
             showLeaderCards(leaderCardList);
             return;
         }
@@ -165,9 +165,7 @@ public class VirtualView implements View {
     }
 
     @Override
-    public void showWarehouse(Warehouse warehouse){
-        if (currentPlayerUsername.equals(username))
-            return;
+    public void showWarehouse(Warehouse warehouse) {
         Message message = new Message(Message.MessageType.SHOW_WAREHOUSE_STATUS);
         message.addData("warehouse",Serializer.serializeWarehouse(warehouse));
         sendMessage(message);
@@ -189,7 +187,7 @@ public class VirtualView implements View {
 
     @Override
     public void takeResourcesFromMarket(Market market) {
-        if (!currentPlayerUsername.equals(username)){
+        if (!currentActiveUser.equals(username)){
             showMarket(market);
             return;
         }
@@ -240,7 +238,7 @@ public class VirtualView implements View {
 
     @Override
     public void showCurrentActiveUser(String username) {
-        currentPlayerUsername = username;
+        currentActiveUser = username;
         if (this.username.equals(username))
             username = Match.YOU_STRING;
         Message message = new Message(Message.MessageType.CURRENT_ACTIVE_USER);
@@ -290,8 +288,11 @@ public class VirtualView implements View {
         sendMessage(message);
     }
 
-    public String getCurrentPlayerUsername(){
-        return currentPlayerUsername;
+    public String getCurrentActiveUser(){
+        return currentActiveUser;
     }
 
+    public String getUsername() {
+        return username;
+    }
 }

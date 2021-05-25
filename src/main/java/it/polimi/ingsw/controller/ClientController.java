@@ -78,6 +78,7 @@ public class ClientController {
      */
     public void handleReceivedMessage(Message message) {
         Gson gson = new Gson();
+        String currentPlayerUsername;
         switch (message.getType()) {
             case GENERIC:
                 view.showMessage(message.getData("text"));

@@ -49,14 +49,17 @@ public class Warehouse implements Storage, ObservableFromView {
      * @throws IncompatibleDepotException if is already existing a standard depot with the same resource type
      */
     public void addResources(int depotNumber, ResourceType res, int num) throws IncompatibleDepotException {
+        putResources(depotNumber, res, num);
+        updateViews();
+    }
+
+    private void putResources(int depotNumber, ResourceType res, int num) throws IncompatibleDepotException {
         if (depotNumber < STD_DEPOT_NUM)
             for (int depotIndex = 0; depotIndex < STD_DEPOT_NUM; depotIndex++)
                 if (depotIndex != depotNumber && depots.get(depotIndex).getResourceType() == res)
                     throw new IncompatibleDepotException("You can’t place the same type of Resource in two different standard depots.");
         for (int i = 0; i < num; i++)
             depots.get(depotNumber).addResource(res);
-
-        updateViews();
     }
 
     /**
@@ -113,7 +116,6 @@ public class Warehouse implements Storage, ObservableFromView {
      */
     public void pushResourceToBeStored(Resource resource){
         toBeStored.push(resource);
-        updateToBeStored();
     }
 
     /**
@@ -136,9 +138,9 @@ public class Warehouse implements Storage, ObservableFromView {
             removeResources(first, firstOccupied);
             removeResources(second, secondOccupied);
             if (secondResourceType != null)
-                addResources(first, secondResourceType, secondOccupied);
+                putResources(first, secondResourceType, secondOccupied);
             if (firstResourceType != null)
-                addResources(second, firstResourceType, firstOccupied);
+                putResources(second, firstResourceType, firstOccupied);
         } catch (IncompatibleDepotException e) {
             removeResources(first, depots.get(first).getOccupied());
             removeResources(second, depots.get(second).getOccupied());

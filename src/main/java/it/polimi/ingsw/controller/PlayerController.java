@@ -96,7 +96,7 @@ public class PlayerController {
         currentStatus = PlayerStatus.PERFORMING_ACTION;
         gotResourcesOfYourChoice = false;
         resetSkipAction();
-        resetAfterDepotsSwapAction();
+        setAfterDepotsSwapAction(this::askForAction);
     }
 
     public PlayerController(String username,PlayerBoard playerBoard){
@@ -327,7 +327,7 @@ public class PlayerController {
      * Ask to the user which action want to perform
      */
     public void askForAction(){
-        resetAfterDepotsSwapAction();
+        setAfterDepotsSwapAction(this::askForAction);
         virtualView.showCurrentActiveUser(username);
         virtualView.askForAction(
                 playerBoard.getMatch().getPlayers().stream().map(PlayerBoard::getUsername).collect(Collectors.toList()),
@@ -380,10 +380,7 @@ public class PlayerController {
      * Asks the player what normal action they want to perform
      */
     public void askForNormalAction(){
-        setAfterDepotsSwapAction(()->{
-            showWarehouseStatus();
-            askForNormalAction();
-        });
+        setAfterDepotsSwapAction(this::askForNormalAction);
         virtualView.askForAction(
                 playerBoard.getMatch().getPlayers().stream().map(PlayerBoard::getUsername).collect(Collectors.toList()),
                 Arrays.stream(Action.NORMAL_ACTIONS)
@@ -682,16 +679,6 @@ public class PlayerController {
      */
     private void setAfterDepotsSwapAction(Runnable afterDepotsSwapAction) {
         this.afterDepotsSwapAction = afterDepotsSwapAction;
-    }
-
-    /**
-     * Resets the afterDepotsSwapAction attribute to its default value
-     */
-    private void resetAfterDepotsSwapAction(){
-        setAfterDepotsSwapAction(()->{
-                showWarehouseStatus();
-                askForAction();
-        });
     }
 
     /**

@@ -157,6 +157,7 @@ public interface View {
     /**
      * Shows the market
      * @param market the market to be shown
+     *
      */
     void showMarket(Market market);
 

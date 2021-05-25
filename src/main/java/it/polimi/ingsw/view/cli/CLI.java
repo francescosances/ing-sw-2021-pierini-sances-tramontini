@@ -27,7 +27,6 @@ public class CLI implements View {
      * The controller related to this view
      */
     private final ClientController clientController;
-
     /**
      * The scanner that reads the user inputs
      */
@@ -40,7 +39,10 @@ public class CLI implements View {
      * The output stream used to communicate the errors to the user
      */
     private final PrintStream errorOutput;
-
+    /**
+     * The username of the player currently playing
+     */
+    private String currentActiveUser;
     /**
      * Helps granting optimal visualization to different screen
      */
@@ -377,7 +379,7 @@ public class CLI implements View {
         while (costs.getResources(NonPhysicalResourceType.ON_DEMAND) > 0) {
             output.println("You have to choose " + costs.getResources(NonPhysicalResourceType.ON_DEMAND) + " resources to spend");
             output.println("What resource do you want to spend?");
-            this.showResources(ResourceType.values());
+            this.printResources(ResourceType.values());
             int choice;
             do {
                 choice = input.nextInt();
@@ -388,7 +390,7 @@ public class CLI implements View {
         while (gains.getResources(NonPhysicalResourceType.ON_DEMAND) > 0) {
             output.println("You have to choose " + gains.getResources(NonPhysicalResourceType.ON_DEMAND) + " resources to gain");
             output.println("What resource do you want to gain?");
-            this.showResources(ResourceType.values());
+            this.printResources(ResourceType.values());
             int choice;
             do {
                 choice = input.nextInt();
@@ -406,6 +408,7 @@ public class CLI implements View {
 
     @Override
     public void showCurrentActiveUser(String username) {
+        currentActiveUser = username;
         output.println("************");
         output.println("It's " + username + "'s turn");
         output.println("************");
@@ -414,7 +417,7 @@ public class CLI implements View {
     @Override
     public void askToChooseStartResources(Resource[] values, int resourcesToChoose) {
         output.printf("You have to select %d resources of your choice\n", resourcesToChoose);
-        showResources(values);
+        printResources(values);
         int[] choices = new int[resourcesToChoose];
         Resource[] resourcesChosen = new Resource[resourcesToChoose];
         for (int i = 0; i < resourcesToChoose; i++) {
@@ -531,18 +534,23 @@ public class CLI implements View {
 
     private void showStorage(PlayerBoard playerBoard) {
         output.println("Storage: " + playerBoard.getResourcesVictoryPoints() + " victory points");
-        showWarehouse(playerBoard.getWarehouse());
+        printWarehouse(playerBoard.getWarehouse());
         showStrongbox(playerBoard.getStrongbox());
     }
 
     @Override
     public void showWarehouse(Warehouse warehouse) {
+        output.println(currentActiveUser + " stored a resource in their warehouse.");
+        printWarehouse(warehouse);
+    }
+
+    private void printWarehouse(Warehouse warehouse) {
         output.println("Depots:");
         for (int i = 0; i < warehouse.getDepots().size(); i++) {
             Depot depot = warehouse.getDepots().get(i);
             output.printf("  [%d] ", i);
             for (int j = 0; j < depot.getSize(); j++)
-                output.print("[" + ((depot.getOccupied() > j) ? showResource(depot.getResourceType()) : " ") + "]");
+                output.print("[" + ((depot.getOccupied() > j) ? printResource(depot.getResourceType()) : " ") + "]");
             for (int j = 10 - depot.getSize() * 3; j > 0; j--)
                 output.print(" ");
             output.print(depot.getResourceType() == null ? "Empty" : depot.getResourceType().toString());
@@ -550,7 +558,7 @@ public class CLI implements View {
         }
     }
 
-    private String showResource(ResourceType resource) {
+    private String printResource(ResourceType resource) {
         String res;
         switch (resource) {
             case SHIELD:
@@ -612,7 +620,7 @@ public class CLI implements View {
 
     @Override
     public void askToSwapDepots(Warehouse warehouse) {
-        this.showWarehouse(warehouse);
+        this.printWarehouse(warehouse);
         output.println("Select 2 depots to swap:");
         int depotA = input.nextInt();
         int depotB = input.nextInt();
@@ -630,7 +638,7 @@ public class CLI implements View {
      * @param marbleType the type of marble
      * @return a string containing the colored circle inside two brackets
      */
-    private String showMarble(MarbleType marbleType) {
+    private String printMarble(MarbleType marbleType) {
         String marble = "[";
         switch (marbleType) {
             case RED:
@@ -659,12 +667,18 @@ public class CLI implements View {
 
     @Override
     public void showMarket(Market market) {
+        output.println(currentActiveUser + " took resources from market!");
+        output.println("Now the market is:");
+        printMarket(market);
+    }
+
+    private void printMarket(Market market) {
         for (int i = 0; i < Market.COLUMNS * 3; i++)
             output.print(" ");
-        output.println(showMarble(market.getSlideMarble()));
+        output.println(printMarble(market.getSlideMarble()));
         for (int r = 0; r < Market.ROWS; r++) {
             for (int c = 0; c < Market.COLUMNS; c++) {
-                output.print(showMarble(market.getMarble(r, c)));
+                output.print(printMarble(market.getMarble(r, c)));
             }
             output.println();
         }
@@ -672,11 +686,11 @@ public class CLI implements View {
 
     @Override
     public void showResourcesGainedFromMarket(Resource[] resources) {
-        output.println("This are the resources gained from market needing to be stored:");
-        showResources(resources);
+        output.println("These are the resources gained from market needing to be stored:");
+        printResources(resources);
     }
 
-    private void showResources(Resource[] resources) {
+    private void printResources(Resource[] resources) {
         int index = 0;
         for (Resource resource : resources) {
             output.printf("[%d] %s \n", index++, resource);
@@ -687,7 +701,7 @@ public class CLI implements View {
     public void askToStoreResource(Resource resource, Warehouse warehouse) {
         output.println("You have to store a "+ resource);
         output.println("Where do you want to store this " + resource + " resource?");
-        showWarehouse(warehouse);
+        printWarehouse(warehouse);
         output.printf("  [%d] Move resources\n", warehouse.getDepots().size());
         output.printf("  [%d] Discard\n", warehouse.getDepots().size() + 1);
         int choice = input.nextInt();
@@ -720,7 +734,7 @@ public class CLI implements View {
 
     @Override
     public void takeResourcesFromMarket(Market market) {
-        showMarket(market);
+        printMarket(market);
         int choice;
         do {
             output.println("Do you want to choose a row or a column?");

@@ -229,12 +229,14 @@ public class Match implements ObservableFromView {
             views = new ArrayList<>();
         views.add(view);
         players.forEach(playerBoard -> playerBoard.addView(view));
+        market.addView(view);
     }
 
     @Override
     public void removeView(VirtualView view) {
         views.remove(view);
         players.forEach(playerBoard -> playerBoard.removeView(view));
+        market.removeView(view);
     }
 
     @Override
