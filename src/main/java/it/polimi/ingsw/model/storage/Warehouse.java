@@ -91,8 +91,8 @@ public class Warehouse implements Storage, ObservableFromView {
                 }
             }
         }
-
-        updateNonPlayingViews();
+        if (!newRequirements.equals(requirements))
+            updateAllViews();
         return newRequirements;
     }
 
@@ -141,6 +141,9 @@ public class Warehouse implements Storage, ObservableFromView {
         ResourceType secondResourceType = depots.get(second).getResourceType();
         int firstOccupied = depots.get(first).getOccupied();
         int secondOccupied = depots.get(second).getOccupied();
+
+        if (firstOccupied == secondOccupied && firstOccupied == 0)
+            return;
 
         try {
             removeResources(first, firstOccupied);

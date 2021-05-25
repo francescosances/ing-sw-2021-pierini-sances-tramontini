@@ -147,10 +147,9 @@ public class DevelopmentCard extends Card implements Producer {
         return "DevelopmentCard: " +
                 color +
                 " lv." + level +
-                ", cost=" + cost +
-                ", productionCost=" + productionCost +
-                ", productionGain=" + productionGain +
-                '}';
+                ", cost = " + cost +
+                ", productionCost = " + productionCost +
+                ", productionGain = " + productionGain;
     }
 
     /**

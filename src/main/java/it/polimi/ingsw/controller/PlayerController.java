@@ -660,15 +660,7 @@ public class PlayerController {
             askForNormalAction();
             return;
         }
-        playerBoard.payResources(costs);
-        Map<ResourceType,Integer> newGains = new HashMap<>();
-        gains.forEach(entry->{
-            if(entry.getKey() == NonPhysicalResourceType.FAITH_POINT)
-                playerBoard.gainFaithPoints(1);
-            else if(entry.getKey() instanceof ResourceType)
-                newGains.put((ResourceType) entry.getKey(),entry.getValue());
-        });
-        playerBoard.getStrongbox().addResources(newGains);
+        playerBoard.produce(costs, gains);
         nextStatus();
     }
 

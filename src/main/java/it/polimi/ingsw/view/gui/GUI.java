@@ -300,5 +300,10 @@ public class GUI implements View {
         //TODO
     }
 
+    @Override
+    public void showProduction() {
+        //TODO
+    }
+
 
 }

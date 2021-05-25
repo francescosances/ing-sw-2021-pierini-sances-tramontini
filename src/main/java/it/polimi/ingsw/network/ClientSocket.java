@@ -78,7 +78,7 @@ public class ClientSocket implements Runnable{
             try {
                 String received = socketIn.nextLine();
                 Message message = Message.messageFromString(received);
-                log("received"+received);
+                //log("received"+received);
                 Thread t = new Thread(()-> clientController.handleReceivedMessage(message));
                 t.setDaemon(true);
                 t.start();

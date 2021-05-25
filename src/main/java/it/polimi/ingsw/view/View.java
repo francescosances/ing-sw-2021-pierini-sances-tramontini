@@ -219,4 +219,9 @@ public interface View {
      * @param actionToken the ActionToken drawn
      */
     void showActionToken(ActionToken actionToken);
+
+    /**
+     * Notifies the player of the production started
+     */
+    void showProduction();
 }

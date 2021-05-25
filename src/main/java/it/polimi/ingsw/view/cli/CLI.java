@@ -94,7 +94,9 @@ public class CLI implements View {
 
     @Override
     public void waitForOtherPlayers() {
+        output.println("************");
         output.println("Waiting for other players");
+        output.println("************");
     }
 
     @Override
@@ -132,16 +134,19 @@ public class CLI implements View {
 
     @Override
     public void userConnected(String username) {
+        output.println();
         output.println(username + " has joined the match");
     }
 
     @Override
     public void userDisconnected(String username) {
+        output.println();
         output.println(username + " has been disconnected");
     }
 
     @Override
     public void listLeaderCards(List<LeaderCard> leaderCardList, int cardsToChoose) {
+        output.println();
         printLeaderCards(leaderCardList);
         output.println("Choose " + cardsToChoose + " leader cards:");
         int[] choices = new int[cardsToChoose];
@@ -171,6 +176,7 @@ public class CLI implements View {
 
     @Override
     public void showPlayerLeaderCards(List<LeaderCard> leaderCardList) {
+        output.println();
         while (true) {
             output.println("You have these leader cards");
             printLeaderCards(leaderCardList);
@@ -214,7 +220,15 @@ public class CLI implements View {
 
     @Override
     public void showDevelopmentCardSlots(DevelopmentCardSlot[] developmentCardSlots) {
-            showDevelopmentCards(developmentCardSlots);
+        output.println();
+        output.println(currentActiveUser + " bought a card!");
+        output.print("Now ");
+        if (currentActiveUser.equals(Match.YOU_STRING))
+            output.print("your");
+        else
+            output.print("their");
+        output.println(" development card slots are:");
+        showDevelopmentCards(developmentCardSlots);
     }
 
     private String developmentCardColor(DevelopmentColorType card) {
@@ -234,6 +248,7 @@ public class CLI implements View {
 
     @Override
     public void listDevelopmentCards(List<Deck<DevelopmentCard>> developmentCardList, int cardsToChoose, PlayerBoard playerBoard) {
+        output.println();
         List<DevelopmentCard> availableCards = new ArrayList<>();
         for (Deck<DevelopmentCard> deck : developmentCardList) {
             output.print(developmentCardColor(deck.top().getColor()));
@@ -277,6 +292,7 @@ public class CLI implements View {
 
     @Override
     public void askToChooseDevelopmentCardSlot(DevelopmentCardSlot[] slots, DevelopmentCard developmentCard) {
+        output.println();
         output.println("Where do you want to put the chosen card?");
         int index = 0;
         for (DevelopmentCardSlot slot : slots) {
@@ -347,6 +363,7 @@ public class CLI implements View {
 
     @Override
     public void chooseProductions(List<Producer> availableProductions, PlayerBoard playerBoard) {
+        output.println();
         listAvailableProductions(availableProductions);
         List<Integer> choices = new ArrayList<>();
         int temp;
@@ -375,29 +392,8 @@ public class CLI implements View {
             }
             temp = input.nextInt();
         }
-
-        while (costs.getResources(NonPhysicalResourceType.ON_DEMAND) > 0) {
-            output.println("You have to choose " + costs.getResources(NonPhysicalResourceType.ON_DEMAND) + " resources to spend");
-            output.println("What resource do you want to spend?");
-            this.printResources(ResourceType.values());
-            int choice;
-            do {
-                choice = input.nextInt();
-            } while (choice < 0 || choice > ResourceType.values().length);
-            costs.removeResourceRequirement(NonPhysicalResourceType.ON_DEMAND, 1);
-            costs.addResourceRequirement(ResourceType.values()[choice], 1);
-        }
-        while (gains.getResources(NonPhysicalResourceType.ON_DEMAND) > 0) {
-            output.println("You have to choose " + gains.getResources(NonPhysicalResourceType.ON_DEMAND) + " resources to gain");
-            output.println("What resource do you want to gain?");
-            this.printResources(ResourceType.values());
-            int choice;
-            do {
-                choice = input.nextInt();
-            } while (choice < 0 || choice > ResourceType.values().length);
-            gains.removeResourceRequirement(NonPhysicalResourceType.ON_DEMAND, 1);
-            gains.addResourceRequirement(ResourceType.values()[choice], 1);
-        }
+        chooseProductionResources(costs, "Spend");
+        chooseProductionResources(gains, "gain");
         if (!costs.satisfied(playerBoard)) {
             showErrorMessage("You cannot start these productions");
             chooseProductions(availableProductions, playerBoard);
@@ -406,9 +402,24 @@ public class CLI implements View {
         clientController.chooseProductions(costs, gains);
     }
 
+    private void chooseProductionResources(Requirements entries, String string) {
+        while (entries.getResources(NonPhysicalResourceType.ON_DEMAND) > 0) {
+            output.println("You have to choose " + entries.getResources(NonPhysicalResourceType.ON_DEMAND) + " resources to " + string);
+            output.println("What resource do you want to "+string+"?");
+            this.printResources(ResourceType.values());
+            int choice;
+            do {
+                choice = input.nextInt();
+            } while (choice < 0 || choice > ResourceType.values().length);
+            entries.removeResourceRequirement(NonPhysicalResourceType.ON_DEMAND, 1);
+            entries.addResourceRequirement(ResourceType.values()[choice], 1);
+        }
+    }
+
     @Override
     public void showCurrentActiveUser(String username) {
-        currentActiveUser = username;
+        output.println();
+        currentActiveUser = new String(username);
         output.println("************");
         output.print("It's ");
         if (currentActiveUser.equals(Match.YOU_STRING))
@@ -421,6 +432,7 @@ public class CLI implements View {
 
     @Override
     public void askToChooseStartResources(Resource[] values, int resourcesToChoose) {
+        output.println();
         output.printf("You have to select %d resources of your choice\n", resourcesToChoose);
         printResources(values);
         int[] choices = new int[resourcesToChoose];
@@ -439,6 +451,7 @@ public class CLI implements View {
 
     @Override
     public void showPlayers(Map<String, Boolean> users) {
+        output.println();
         clientController.setPlayers(new ArrayList<>(users.keySet()));
         output.println("The players of this match are:");
         for (String user : users.keySet()) {
@@ -451,6 +464,7 @@ public class CLI implements View {
 
     @Override
     public void showActionToken(ActionToken actionToken) {
+        output.println();
         output.println("An action token was drawn!");
         if (actionToken.getDevelopmentCard() != null) {
             output.print("Two ");
@@ -466,9 +480,16 @@ public class CLI implements View {
         }
     }
 
+    @Override
+    public void showProduction() {
+        output.println();
+        output.println(currentActiveUser + " decided to produce");
+    }
+
 
     @Override
     public void showPlayerBoard(PlayerBoard playerBoard) {
+        output.println();
         printFaithTrack(playerBoard.getFaithTrack());
         showStorage(playerBoard);
         showDevelopmentCards(playerBoard.getDevelopmentCardSlots());
@@ -487,8 +508,19 @@ public class CLI implements View {
 
     @Override
     public void showFaithTrack(FaithTrack faithTrack) {
-        output.println(faithTrack.getUsername() + " got faith points!");
-        output.println("Now his faith track is:");
+        output.println();
+        String name;
+        if (faithTrack.getUsername().equals(clientController.getUsername()))
+            name = Match.YOU_STRING;
+        else
+            name = faithTrack.getUsername();
+        output.println(name + " got faith points!");
+        output.print("Now ");
+        if (name.equals(Match.YOU_STRING))
+            output.print("your");
+        else
+            output.print("their");
+        output.println(" faith track is:");
         printFaithTrack(faithTrack);
     }
 
@@ -521,6 +553,7 @@ public class CLI implements View {
 
     @Override
     public void showVaticanReportTriggered(String username, int vaticanReportCount) {
+        output.println();
         output.println(username + " triggered the " + vaticanReportCount + "° Vatican report!");
     }
 
@@ -540,11 +573,12 @@ public class CLI implements View {
     private void showStorage(PlayerBoard playerBoard) {
         output.println("Storage: " + playerBoard.getResourcesVictoryPoints() + " victory points");
         printWarehouse(playerBoard.getWarehouse());
-        showStrongbox(playerBoard.getStrongbox());
+        printStrongbox(playerBoard.getStrongbox());
     }
 
     @Override
     public void showWarehouse(Warehouse warehouse) {
+        output.println();
         output.print(currentActiveUser + " changed ");
         if (currentActiveUser.equals(Match.YOU_STRING))
             output.print("your");
@@ -591,6 +625,17 @@ public class CLI implements View {
 
     @Override
     public void showStrongbox(Strongbox strongbox) {
+        output.println();
+        output.print(currentActiveUser + " changed ");
+        if (currentActiveUser.equals(Match.YOU_STRING))
+            output.print("your");
+        else
+            output.print("their");
+        output.println(" strongbox");
+        printStrongbox(strongbox);
+    }
+
+    private void printStrongbox(Strongbox strongbox){
         output.println("Strongbox:");
         for (Map.Entry<Resource, Integer> res : strongbox.getAllResources())
             output.println("  " + res.getKey() + ": " + res.getValue());
@@ -605,11 +650,13 @@ public class CLI implements View {
             final DevelopmentCardSlot developmentCardSlot = developmentCardSlots[i];
             if (developmentCardSlot.getSize() > 0) {
                 output.println("  Slot [" + i + "]:");
-                developmentCardSlot.iterator().forEachRemaining(developmentCard -> {
+                developmentCardSlot.forEach(developmentCard -> {
                     if (developmentCard.equals(developmentCardSlot.getTopCard()))
                         output.println("    Active: " + developmentCard);
-                    else
-                        output.println("    " + developmentCard);
+                    else {
+                        output.print("     color: " + developmentCard.getColor());
+                        output.println(" victory points: " + developmentCard.getVictoryPoints());
+                    }
                 });
             }
         }
@@ -627,9 +674,9 @@ public class CLI implements View {
         }
     }
 
-
     @Override
     public void askToSwapDepots(Warehouse warehouse) {
+        output.println();
         this.printWarehouse(warehouse);
         output.println("Select 2 depots to swap:");
         int depotA = input.nextInt();
@@ -677,6 +724,7 @@ public class CLI implements View {
 
     @Override
     public void showMarket(Market market) {
+        output.println();
         output.println(currentActiveUser + " took resources from market!");
         output.println("Now the market is:");
         printMarket(market);
@@ -696,6 +744,7 @@ public class CLI implements View {
 
     @Override
     public void showResourcesGainedFromMarket(Resource[] resources) {
+        output.println();
         output.println("These are the resources gained from market needing to be stored:");
         printResources(resources);
     }
@@ -709,6 +758,7 @@ public class CLI implements View {
 
     @Override
     public void askToStoreResource(Resource resource, Warehouse warehouse) {
+        output.println();
         output.println("You have to store a "+ resource);
         output.println("Where do you want to store this " + resource + " resource?");
         printWarehouse(warehouse);
@@ -730,6 +780,7 @@ public class CLI implements View {
 
     @Override
     public void chooseWhiteMarbleConversion(LeaderCard card1, LeaderCard card2) {
+        output.println();
         output.println("You have 2 active white marble leader cards. Choose conversion output:");
         output.println("  [0] " + card1.getOutputResourceType());
         output.println("  [1] " + card2.getOutputResourceType());
@@ -744,6 +795,7 @@ public class CLI implements View {
 
     @Override
     public void takeResourcesFromMarket(Market market) {
+        output.println();
         printMarket(market);
         int choice;
         do {
@@ -783,6 +835,7 @@ public class CLI implements View {
 
     @Override
     public void askForAction(List<String> usernames, Action... availableActions) {
+        output.println();
         output.println("Which action do you want to perform?");
         for (int i = 0; i < availableActions.length; i++) {
             output.print("  [" + i + "] ");
@@ -803,6 +856,7 @@ public class CLI implements View {
     }
 
     private void choosePlayerBoard(List<String> usernames){
+        output.println();
         output.println("Whose player board do you want to see?");
         for (int i = 0; i < usernames.size(); i++) {
             output.print("[" + i + "] ");

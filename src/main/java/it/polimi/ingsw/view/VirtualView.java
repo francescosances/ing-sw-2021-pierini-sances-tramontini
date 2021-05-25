@@ -126,7 +126,6 @@ public class VirtualView implements View {
     @Override
     public void showDevelopmentCardSlots(DevelopmentCardSlot[] developmentCardSlots) {
         Message message = new Message(Message.MessageType.SHOW_SLOTS);
-        //TODO handle in ClientController
         message.addData("slots", Serializer.serializeDevelopmentCardSlots(developmentCardSlots));
         sendMessage(message);
     }
@@ -156,10 +155,13 @@ public class VirtualView implements View {
 
     @Override
     public void showVaticanReportTriggered(String username, int vaticanReportCount) {
+        String name;
         if (username.equals(this.username))
-            username = Match.YOU_STRING;
+            name = Match.YOU_STRING;
+        else
+            name = new String(username);
         Message message = new Message(Message.MessageType.VATICAN_REPORT);
-        message.addData("username", username);
+        message.addData("username", name);
         message.addData("vaticanReportCount", Serializer.serializeInt(vaticanReportCount));
         sendMessage(message);
     }
@@ -238,11 +240,14 @@ public class VirtualView implements View {
 
     @Override
     public void showCurrentActiveUser(String username) {
-        currentActiveUser = username;
+        currentActiveUser = new String(username);
+        String name;
         if (this.username.equals(username))
-            username = Match.YOU_STRING;
+            name = Match.YOU_STRING;
+        else
+            name = new String(username);
         Message message = new Message(Message.MessageType.CURRENT_ACTIVE_USER);
-        message.addData("username",username);
+        message.addData("username",name);
         sendMessage(message);
     }
 
@@ -267,6 +272,12 @@ public class VirtualView implements View {
     public void showActionToken(ActionToken actionToken) {
         Message message = new Message(Message.MessageType.ACTION_TOKEN);
         message.addData("actionToken", Serializer.serializeActionToken(actionToken));
+        sendMessage(message);
+    }
+
+    @Override
+    public void showProduction() {
+        Message message = new Message(Message.MessageType.PRODUCTION_PERFORMED);
         sendMessage(message);
     }
 

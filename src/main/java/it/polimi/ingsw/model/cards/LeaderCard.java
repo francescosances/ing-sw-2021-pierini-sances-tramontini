@@ -116,7 +116,7 @@ public abstract class LeaderCard extends Card {
     public String toString() {
         return "LeaderCard: " +
                 (active ? "active" : "inactive") +
-                ", requirements=" + requirements;
+                ", requirements = " + requirements;
     }
 
     /**

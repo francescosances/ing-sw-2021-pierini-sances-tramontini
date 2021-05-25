@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
+import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.Requirements;
 import it.polimi.ingsw.model.storage.Resource;
@@ -201,6 +202,11 @@ public class ClientController {
                 view.showActionToken(actionToken);
                 lock.unlock();
                 break;
+            case PRODUCTION_PERFORMED:
+                lock.lock();
+                view.showProduction();
+                lock.unlock();
+                break;
             case SHOW_PLAYER_LEADER_CARDS:
                 lock.lock();
                 List<LeaderCard> playerLeaderCards = Serializer.deserializeLeaderCardList(message.getData("leaderCards"));
@@ -215,6 +221,10 @@ public class ClientController {
             case SHOW_PLAYERS:
                 Map<String, Boolean> players = new Gson().fromJson(message.getData("players"), Map.class);
                 view.showPlayers(players);
+                break;
+            case SHOW_SLOTS:
+                DevelopmentCardSlot[] developmentCardSlots = Serializer.deserializeDevelopmentCardsSlots(message.getData("slots"));
+                view.showDevelopmentCardSlots(developmentCardSlots);
                 break;
             default:
                 clientSocket.log("Received unexpected message");
@@ -243,7 +253,7 @@ public class ClientController {
     public void login(String username){
         Message message = new Message(Message.MessageType.LOGIN_REQUEST);
         message.addData("username", username);
-        this.username = username;
+        this.username = new String (username);
         clientSocket.sendMessage(message);
     }
 

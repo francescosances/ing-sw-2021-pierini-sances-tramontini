@@ -8,10 +8,7 @@ import it.polimi.ingsw.utils.ObservableFromView;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.VirtualView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -227,11 +224,9 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      * @throws NotSatisfiedRequirementsException if the LeaderCard cannot be activated
      */
     public void activateLeaderCard(LeaderCard leaderCard) throws NotSatisfiedRequirementsException {
-        for(LeaderCard x: leaderCards){
-            if(x.equals(leaderCard)) {
-                x.activate(this);
-                updateLeaderCardsList();
-            }
+        for(int i = 0; i < leaderCards.size(); i++){
+            if(leaderCards.get(i).equals(leaderCard))
+                activateLeaderCard(i);
         }
     }
 
@@ -243,6 +238,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      */
     public void activateLeaderCard(int num) throws NotSatisfiedRequirementsException {
         leaderCards.get(num).activate(this);
+        updateLeaderCardsList();
     }
 
     /**
@@ -336,7 +332,26 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      */
     public void payResources(Requirements costs) {
         costs = warehouse.removeResources(costs);
-        strongbox.removeResources(costs);
+        if (costs.getResourcesMap().isEmpty())
+            strongbox.removeResources(costs);
+    }
+
+    /**
+     * Activates the production, paying the costs and gaining the gains
+     * @param costs the cost of the production
+     * @param gains the gains of the production
+     */
+    public void produce(Requirements costs, Requirements gains){
+        updateProduction();
+        payResources(costs);
+        Map<ResourceType,Integer> newGains = new HashMap<>();
+        gains.forEach(entry->{
+            if(entry.getKey() == NonPhysicalResourceType.FAITH_POINT)
+                gainFaithPoints(1);
+            else if(entry.getKey() instanceof ResourceType)
+                newGains.put((ResourceType) entry.getKey(),entry.getValue());
+        });
+        strongbox.addResources(newGains);
     }
 
     public void setWarehouse(Warehouse warehouse) {
@@ -378,16 +393,25 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      * Notifies all views of the change
      */
     private void updateLeaderCardsList() {
-        for (View view:views)
-            view.showPlayerLeaderCards(leaderCards);
+        for (VirtualView view:views)
+            view.showLeaderCards(leaderCards);
     }
 
     /**
      * Notifies all views of the change
      */
     private void updateSlots(){
-        for (View view:views)
+        for (VirtualView view:views)
             view.showDevelopmentCardSlots(developmentCardSlots);
+    }
+
+
+    /**
+     * Notifies all views of the change
+     */
+    private void updateProduction(){
+        for (VirtualView view:views)
+            view.showProduction();
     }
 
 

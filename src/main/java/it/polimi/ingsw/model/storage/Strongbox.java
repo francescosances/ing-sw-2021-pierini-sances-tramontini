@@ -54,13 +54,13 @@ public class Strongbox implements Storage, ObservableFromView {
             if (previousValue < toBeRemoved) {
                 toBeRemoved = previousValue;
                 this.resources.remove(res.getKey());
-                updateViews();
             }
             else
                 this.resources.put((ResourceType) res.getKey(), previousValue - toBeRemoved);
             newRequirements.removeResourceRequirement(res.getKey(), toBeRemoved);
         }
-        updateViews();
+        if (!newRequirements.equals(resources))
+            updateViews();
         return newRequirements;
     }
 

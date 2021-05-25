@@ -122,7 +122,9 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
      * Returns the map of the resources in the requirements
      * @return the map of the resources in the requirements
      */
-    public Map<Resource, Integer> getResourcesMap() { return resources; }
+    public Map<Resource, Integer> getResourcesMap() {
+        return resources;
+    }
 
     /**
      * Returns the sum of the two Requirements
@@ -247,12 +249,11 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
      */
     @Override
     public String toString() {
-        String res = "resources=(" +
-                resources.entrySet().stream().map(entry -> entry.getValue() + " " + entry.getKey()).collect(Collectors.joining(", "))
-                + ")";
-        String devCards = "developmentCards=(" +
-                developmentCards.entrySet().stream().map(entry1 -> entry1.getValue().entrySet().stream().map(entry2 -> entry2.getValue() + (entry2.getKey()==0 ? " any lv." : (" lv. " + entry2.getKey())) + " " + entry1.getKey()).collect(Collectors.joining(", "))).collect(Collectors.joining(", "))
-                + ")";
+        String res = resources.entrySet().stream().map(entry -> entry.getValue() + " " + entry.getKey()).collect(Collectors.joining(", "));
+        String devCards =developmentCards.entrySet()
+                .stream().map(entry1 -> entry1.getValue().entrySet()
+                        .stream().map(entry2 -> entry2.getValue() + (entry2.getKey()==0 ? " any lv." : (" lv. " + entry2.getKey())) + " " + entry1.getKey())
+                        .collect(Collectors.joining(", "))).collect(Collectors.joining(", "));
 
         return "[" +
                 (resources.isEmpty() ? (developmentCards.isEmpty() ? "" : devCards) : (developmentCards.isEmpty() ? res : res + ", " + devCards))
