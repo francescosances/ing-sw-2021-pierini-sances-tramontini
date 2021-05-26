@@ -1,16 +1,11 @@
 package it.polimi.ingsw.model.storage;
 
 import it.polimi.ingsw.model.cards.DepotLeaderCard;
-import it.polimi.ingsw.model.cards.DepotLeaderCard;
-import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.Requirements;
-import it.polimi.ingsw.model.cards.exceptions.WrongLeaderCardException;
 import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 import it.polimi.ingsw.model.storage.exceptions.UnswappableDepotsException;
 import it.polimi.ingsw.utils.ObservableFromView;
 import it.polimi.ingsw.view.VirtualView;
-import it.polimi.ingsw.utils.ObservableFromView;
-import it.polimi.ingsw.view.View;
 
 import java.util.*;
 
@@ -56,7 +51,7 @@ public class Warehouse implements Storage, ObservableFromView {
      */
     public void addResources(int depotNumber, ResourceType res, int num) throws IncompatibleDepotException {
         putResources(depotNumber, res, num);
-        updateNonPlayingViews();
+        updateViews();
     }
 
     /**
@@ -97,7 +92,7 @@ public class Warehouse implements Storage, ObservableFromView {
             }
         }
         if (!newRequirements.equals(requirements))
-            updateAllViews();
+            updateViews();
         return newRequirements;
     }
 
@@ -165,7 +160,7 @@ public class Warehouse implements Storage, ObservableFromView {
             throw new UnswappableDepotsException("Unable to swap selected depots, you chose a Depot Leader Card which couldn't be used");
         }
 
-        updateAllViews();
+        updateViews();
     }
 
     /**
@@ -236,19 +231,9 @@ public class Warehouse implements Storage, ObservableFromView {
     }
 
     /**
-     * Notifies all views but the currently active player of the change
-     */
-    private void updateNonPlayingViews() {
-        for (VirtualView view:views) {
-            if (!view.getCurrentActiveUser().equals(view.getUsername()))
-                view.showWarehouse(this);
-        }
-    }
-
-    /**
      * Notifies all views of the change
      */
-    private void updateAllViews() {
+    private void updateViews() {
         for (VirtualView view:views)
             view.showWarehouse(this);
     }
