@@ -1,11 +1,14 @@
 package it.polimi.ingsw.model.cards;
 
+import it.polimi.ingsw.utils.ObservableFromView;
+import it.polimi.ingsw.view.View;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-public class DevelopmentCardSlot implements Iterable<DevelopmentCard>{
+public class DevelopmentCardSlot implements Iterable<DevelopmentCard> {
 
     /**
      * The list of the development cards in the slot

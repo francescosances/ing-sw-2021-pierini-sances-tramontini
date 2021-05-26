@@ -100,10 +100,15 @@ public abstract class LeaderCard extends Card {
         return requirements.clone();
     }
 
+    /**
+     * Returns true if the LeaderCard is a ProductionLeaderCard (in overriden method), false elsewhere
+     * @return true if the LeaderCard is a ProductionLeaderCard, false elsewhere
+     */
     public boolean isProductionLeaderCard(){
         return false;
     }
 
+    //TODO: javadoc
     public boolean isDiscountLeaderCard(){ return false; }
 
    public boolean isDepotLeaderCard(){
@@ -118,7 +123,7 @@ public abstract class LeaderCard extends Card {
     public String toString() {
         return "LeaderCard: " +
                 (active ? "active" : "inactive") +
-                ", requirements=" + requirements;
+                ", requirements = " + requirements;
     }
 
     /**

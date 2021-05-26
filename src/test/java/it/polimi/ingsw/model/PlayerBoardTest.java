@@ -2,18 +2,14 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
-import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 import it.polimi.ingsw.utils.Pair;
-import it.polimi.ingsw.utils.Triple;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import static org.junit.Assert.*;
 

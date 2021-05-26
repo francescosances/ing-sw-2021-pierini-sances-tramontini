@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.PlayerBoard;
-import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
 import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.ResourceType;
@@ -97,7 +96,7 @@ public class PlayerController {
         currentStatus = PlayerStatus.PERFORMING_ACTION;
         gotResourcesOfYourChoice = false;
         resetSkipAction();
-        resetAfterDepotsSwapAction();
+        setAfterDepotsSwapAction(this::askForAction);
     }
 
     public PlayerController(String username,PlayerBoard playerBoard){
@@ -122,9 +121,11 @@ public class PlayerController {
         currentStatus = PlayerStatus.TURN_ENDED;
 
         if(currentDevelopmentCardToStore != null){
-            for(DevelopmentCardSlot slot : playerBoard.getDevelopmentCardSlots()){
+            DevelopmentCardSlot slot;
+            for (int i = 0; i < playerBoard.getDevelopmentCardSlots().length; i++) {
+                slot = playerBoard.getDevelopmentCardSlots()[i];
                 if(slot.accepts(currentDevelopmentCardToStore)) {
-                    slot.addCard(currentDevelopmentCardToStore);
+                    playerBoard.addDevelopmentCardToSlot(currentDevelopmentCardToStore, i);
                     currentDevelopmentCardToStore = null;
                     break;
                 }
@@ -326,9 +327,9 @@ public class PlayerController {
      * Ask to the user which action want to perform
      */
     public void askForAction(){
-        resetAfterDepotsSwapAction();
+        setAfterDepotsSwapAction(this::askForAction);
         virtualView.askForAction(
-                playerBoard.getMatch().getPlayers().stream().map(x -> x.getUsername().equals(this.username)? Match.YOU_STRING:x.getUsername()).collect(Collectors.toList()),
+                playerBoard.getMatch().getPlayers().stream().map(PlayerBoard::getUsername).collect(Collectors.toList()),
                 Arrays.stream(Action.ALL_ACTIONS)
                         .filter(x -> x != Action.CANCEL)
                         .filter(x -> !((x == Action.PLAY_LEADER) && this.playerBoard.getAvailableLeaderCards().isEmpty())) //If no leader cards are available, the options are removed from the list
@@ -378,8 +379,9 @@ public class PlayerController {
      * Asks the player what normal action they want to perform
      */
     public void askForNormalAction(){
+        setAfterDepotsSwapAction(this::askForNormalAction);
         virtualView.askForAction(
-                playerBoard.getMatch().getPlayers().stream().map(x -> x.getUsername().equals(this.username)? Match.YOU_STRING:x.getUsername()).collect(Collectors.toList()),
+                playerBoard.getMatch().getPlayers().stream().map(PlayerBoard::getUsername).collect(Collectors.toList()),
                 Arrays.stream(Action.NORMAL_ACTIONS)
                         .toArray(Action[]::new));
     }
@@ -526,7 +528,6 @@ public class PlayerController {
         getPlayerBoard().getWarehouse().toBeStored(resources);
         List<Resource> resourcesToStore = Arrays.asList(resources);
         Collections.reverse(resourcesToStore);
-        virtualView.showResourcesGainedFromMarket(resourcesToStore.toArray(new Resource[0]));
         if(resourcesToStore.isEmpty()){
             resetSkipAction();
             nextStatus();
@@ -550,9 +551,8 @@ public class PlayerController {
        currentResourceToStore = getPlayerBoard().getWarehouse().popResourceToBeStored();
        if(currentResourceToStore == NonPhysicalResourceType.VOID){
            virtualView.chooseWhiteMarbleConversion(getPlayerBoard().getLeaderCards().get(0),getPlayerBoard().getLeaderCards().get(1));
-       }else{
+       }else
            askToConfirmDepot();
-       }
     }
 
     /**
@@ -572,7 +572,6 @@ public class PlayerController {
      */
     protected void askToConfirmDepot(){
         setAfterDepotsSwapAction(() -> virtualView.askToStoreResource(currentResourceToStore,getPlayerBoard().getWarehouse()));
-       // virtualView.showMessage("You have to store a "+currentResourceToStore);//TODO: verificare se si può spostare questo messaggio in CLI
         virtualView.askToStoreResource(currentResourceToStore, getPlayerBoard().getWarehouse());
     }
 
@@ -597,7 +596,6 @@ public class PlayerController {
            askToStoreResource();
         else {
             resetSkipAction();
-            showWarehouseStatus();
             nextStatus();
         }
     }
@@ -645,7 +643,7 @@ public class PlayerController {
             virtualView.askToChooseDevelopmentCardSlot(playerBoard.getDevelopmentCardSlots(),currentDevelopmentCardToStore);
             return;
         }
-        playerBoard.getDevelopmentCardSlots()[slotIndex].addCard(currentDevelopmentCardToStore);
+        playerBoard.addDevelopmentCardToSlot(currentDevelopmentCardToStore, slotIndex);
         currentDevelopmentCardToStore = null;
         nextStatus();
     }
@@ -662,15 +660,7 @@ public class PlayerController {
             askForNormalAction();
             return;
         }
-        playerBoard.payResources(costs);
-        Map<ResourceType,Integer> newGains = new HashMap<>();
-        gains.forEach(entry->{
-            if(entry.getKey() == NonPhysicalResourceType.FAITH_POINT)
-                playerBoard.gainFaithPoints(1);
-            else if(entry.getKey() instanceof ResourceType)
-                newGains.put((ResourceType) entry.getKey(),entry.getValue());
-        });
-        playerBoard.getStrongbox().addResources(newGains);
+        playerBoard.produce(costs, gains);
         nextStatus();
     }
 
@@ -680,16 +670,6 @@ public class PlayerController {
      */
     private void setAfterDepotsSwapAction(Runnable afterDepotsSwapAction) {
         this.afterDepotsSwapAction = afterDepotsSwapAction;
-    }
-
-    /**
-     * Resets the afterDepotsSwapAction attribute to its default value
-     */
-    private void resetAfterDepotsSwapAction(){
-        setAfterDepotsSwapAction(()->{
-                showWarehouseStatus();
-                askForAction();
-        });
     }
 
     /**

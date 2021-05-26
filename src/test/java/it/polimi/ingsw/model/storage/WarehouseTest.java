@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.cards.DepotLeaderCard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.Requirements;
 import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
+import it.polimi.ingsw.model.storage.exceptions.UnswappableDepotsException;
 import it.polimi.ingsw.utils.Pair;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -199,33 +200,62 @@ class WarehouseTest {
 
     @Test
     void swapDepots() throws IncompatibleDepotException {
-        warehouse.addResources(2, ResourceType.COIN, 1);
         warehouse.addResources(0, ResourceType.SERVANT, 1);
+        warehouse.addResources(2, ResourceType.COIN, 1);
 
-        assertEquals(ResourceType.COIN, warehouse.getDepots().get(2).getResourceType());
-        assertNull(warehouse.getDepots().get(1).getResourceType());
         assertEquals(ResourceType.SERVANT, warehouse.getDepots().get(0).getResourceType());
-        assertEquals(1, warehouse.getDepots().get(2).getOccupied());
-        assertEquals(0, warehouse.getDepots().get(1).getOccupied());
+        assertNull(warehouse.getDepots().get(1).getResourceType());
+        assertEquals(ResourceType.COIN, warehouse.getDepots().get(2).getResourceType());
         assertEquals(1, warehouse.getDepots().get(0).getOccupied());
+        assertEquals(0, warehouse.getDepots().get(1).getOccupied());
+        assertEquals(1, warehouse.getDepots().get(2).getOccupied());
+        assertFalse(warehouse.hasResourcesToStore());
 
         warehouse.swapDepots(0,2);
-        assertEquals(ResourceType.SERVANT, warehouse.getDepots().get(2).getResourceType());
-        assertNull(warehouse.getDepots().get(1).getResourceType());
         assertEquals(ResourceType.COIN, warehouse.getDepots().get(0).getResourceType());
-        assertEquals(1, warehouse.getDepots().get(2).getOccupied());
-        assertEquals(0, warehouse.getDepots().get(1).getOccupied());
+        assertNull(warehouse.getDepots().get(1).getResourceType());
+        assertEquals(ResourceType.SERVANT, warehouse.getDepots().get(2).getResourceType());
         assertEquals(1, warehouse.getDepots().get(0).getOccupied());
+        assertEquals(0, warehouse.getDepots().get(1).getOccupied());
+        assertEquals(1, warehouse.getDepots().get(2).getOccupied());
         assertFalse(warehouse.hasResourcesToStore());
 
         warehouse.swapDepots(1,0);
-        assertEquals(ResourceType.SERVANT, warehouse.getDepots().get(2).getResourceType());
-        assertEquals(ResourceType.COIN, warehouse.getDepots().get(1).getResourceType());
         assertNull(warehouse.getDepots().get(0).getResourceType());
-        assertEquals(1, warehouse.getDepots().get(2).getOccupied());
-        assertEquals(1, warehouse.getDepots().get(1).getOccupied());
+        assertEquals(ResourceType.COIN, warehouse.getDepots().get(1).getResourceType());
+        assertEquals(ResourceType.SERVANT, warehouse.getDepots().get(2).getResourceType());
         assertEquals(0, warehouse.getDepots().get(0).getOccupied());
+        assertEquals(1, warehouse.getDepots().get(1).getOccupied());
+        assertEquals(1, warehouse.getDepots().get(2).getOccupied());
         assertFalse(warehouse.hasResourcesToStore());
+
+        warehouse.swapDepots(1,0);
+        assertEquals(ResourceType.COIN, warehouse.getDepots().get(0).getResourceType());
+        assertNull(warehouse.getDepots().get(1).getResourceType());
+        assertEquals(ResourceType.SERVANT, warehouse.getDepots().get(2).getResourceType());
+        assertEquals(1, warehouse.getDepots().get(0).getOccupied());
+        assertEquals(0, warehouse.getDepots().get(1).getOccupied());
+        assertEquals(1, warehouse.getDepots().get(2).getOccupied());
+        assertFalse(warehouse.hasResourcesToStore());
+    }
+
+    @Test
+    void swapDepotsWithLeader() throws IncompatibleDepotException {
+        DepotLeaderCard leaderCard = new DepotLeaderCard("",3, null,ResourceType.SHIELD, true);
+        warehouse.addDepotLeaderCard(leaderCard);
+        warehouse.addResources(1, ResourceType.SHIELD, 1);
+        warehouse.addResources(2, ResourceType.SERVANT, 2);
+        try {
+            warehouse.swapDepots(2, 3);
+        } catch (UnswappableDepotsException e) {
+            assertEquals("Unable to swap selected depots, you chose a Depot Leader Card which couldn't be used", e.getMessage());
+        }
+        warehouse.swapDepots(1,3);
+        assertEquals(0, warehouse.getDepots().get(1).getOccupied());
+        assertEquals(1, warehouse.getDepots().get(3).getOccupied());
+        warehouse.swapDepots(1,3);
+        assertEquals(1, warehouse.getDepots().get(1).getOccupied());
+        assertEquals(0, warehouse.getDepots().get(3).getOccupied());
     }
 
     @Test
@@ -245,8 +275,8 @@ class WarehouseTest {
 
     @Test
     void addDepotLeaderCard() {
-        LeaderCard leaderCard = new DepotLeaderCard("",3, null,ResourceType.SHIELD);
-        warehouse.addDepotLeaderCard((DepotLeaderCard) leaderCard);
+        DepotLeaderCard leaderCard = new DepotLeaderCard("",3, null,ResourceType.SHIELD);
+        warehouse.addDepotLeaderCard(leaderCard);
         assertEquals(leaderCard, warehouse.getDepots().get(3));
     }
 }

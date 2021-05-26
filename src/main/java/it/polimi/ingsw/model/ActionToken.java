@@ -12,7 +12,7 @@ public class ActionToken {
     /**
      * The number of spaces the black cross must move when the Action Token is drawn
      */
-    private Integer blackCrossSpaces;
+    private final Integer blackCrossSpaces;
 
     /**
      * Initialize a new ActionToken that discards DevelopmentCards when drawn
@@ -22,6 +22,7 @@ public class ActionToken {
         if (developmentCard == null)
             throw new NullPointerException();
         this.developmentCard = developmentCard;
+        blackCrossSpaces = null;
     }
 
     /**
@@ -34,21 +35,40 @@ public class ActionToken {
     }
 
     /**
+     * Returns blackCrossSpaces value
+     * @return blackCrossSpaces value
+     */
+    public Integer getBlackCrossSpaces() {
+        return blackCrossSpaces;
+    }
+
+    /**
+     * Returns the DevelopmentColorType of the card to draw
+     * @return the DevelopmentColorType of the card to draw
+     */
+    public DevelopmentColorType getDevelopmentCard() {
+        return developmentCard;
+    }
+
+    /**
      * Executes the action of the Action Token. Discards a specific color development card or moves the blackCross. If the blackCross moves by 1 space, shuffles all the tokens
      * @param match the match in which the ActionToken is drawn
      * @throws EndGameException if the blackCross moved to the last FaithTrackSpace
      */
-    public void show(SoloMatch match) throws EndGameException {
+    public ActionToken show(SoloMatch match) throws EndGameException {
         if (match == null){
             throw new NullPointerException();
         }
         if(developmentCard != null)
             match.discardDevelopmentCards(developmentCard);
         else {
+            if (blackCrossSpaces== null)
+                throw new NullPointerException();
             match.moveBlackCross(blackCrossSpaces);
             if (blackCrossSpaces == 1)
                 match.shuffleActionTokens();
         }
+        return this;
     }
 
     /**
@@ -63,14 +83,10 @@ public class ActionToken {
             return false;
         ActionToken o = (ActionToken) other;
 
-        if (this.blackCrossSpaces!= null && o.blackCrossSpaces != null) {
-            if (this.blackCrossSpaces.equals(o.blackCrossSpaces)) {
-                if (this.developmentCard != null && o.developmentCard != null)
-                    return this.developmentCard.equals(o.developmentCard);
-                return this.developmentCard == null && o.developmentCard == null;
-            }
-        } else if (this.developmentCard != null && o.developmentCard != null)
-            return this.developmentCard.equals(o.developmentCard);
+        if (this.blackCrossSpaces != null && o.blackCrossSpaces != null)
+            return this.blackCrossSpaces.equals(o.blackCrossSpaces) && this.developmentCard == null && o.developmentCard == null;
+        if (this.developmentCard != null && o.developmentCard != null)
+            return this.developmentCard.equals(o.developmentCard) && this.blackCrossSpaces == null && o.blackCrossSpaces == null;
         return false;
     }
 
@@ -82,4 +98,5 @@ public class ActionToken {
     public int hashCode() {
         return super.hashCode();
     }
+
 }

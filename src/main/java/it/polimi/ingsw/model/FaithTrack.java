@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.ObservableFromView;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.VirtualView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,25 +24,31 @@ public class FaithTrack implements ObservableFromView {
      */
     private transient Match match;
     /**
+     * The PlayerBoard's name referencing this FaithTrack
+     */
+    private final String username;
+    /**
      * Contains the actual position of the faithMarker
      */
     private int faithMarker;
     /**
      * Array that contains all the PopeFavorTiles the player has
      */
-    private final PopeFavorTile[] popeFavorTiles;
+    private PopeFavorTile[] popeFavorTiles;
     /**
      * array that stores whether its vaticanReport has already been triggered or not
      */
     private final boolean[] vaticanReports;
-
-    transient private final List<View> views;
+    /**
+     * List that contains all views that needs to be notified on changes
+     */
+    transient private List<View> views;
 
     /**
      * Initialize a new FaithTrack connected to the its match
      * @param match the match reference
      */
-    public FaithTrack(Match match){
+    public FaithTrack(Match match, String username){
         this.match = match;
         popeFavorTiles = new PopeFavorTile[POPE_SPACES.length];
         for(int i=0;i<POPE_SPACES.length;i++){
@@ -50,6 +57,7 @@ public class FaithTrack implements ObservableFromView {
         faithMarker = 0;
         vaticanReports = new boolean[POPE_SPACES.length];
         Arrays.fill(vaticanReports,false);
+        this.username = username;
         views = new ArrayList<>();
     }
 
@@ -104,11 +112,19 @@ public class FaithTrack implements ObservableFromView {
      */
     public int getPopeFavorTilesVictoryPoints() {
         int ret = 0;
-        for (int i = 0; i < popeFavorTiles.length; i++) {
-            if (popeFavorTiles[i] != null)
-                ret += popeFavorTiles[i].getVictoryPoints();
+        for (PopeFavorTile popeFavorTile : popeFavorTiles) {
+            if (popeFavorTile != null)
+                ret += popeFavorTile.getVictoryPoints();
         }
         return ret;
+    }
+
+    /**
+     * Returns PlayerBoard's username referencing this FaithTrack
+     * @return PlayerBoard's username referencing this FaithTrack
+     */
+    public String getUsername() {
+        return username;
     }
 
     /**
@@ -120,17 +136,57 @@ public class FaithTrack implements ObservableFromView {
     }
 
     /**
+     * Moves the marker by specified spaces
+     * @param spaces the number of spaces the marker must move
+     * @throws EndGameException if the faithMarker is on the last space
+     */
+    public void moveMarker(int spaces) throws EndGameException {
+        for (int i = 0; i < spaces; i++) {
+            faithMarker++;
+            if (    match.getVaticanReportsCount() < vaticanReports.length &&
+                    !vaticanReports[match.getVaticanReportsCount()] && isPopeSpace(faithMarker)) {
+                match.vaticanReport(faithMarker);
+                vaticanReportUpdate();
+            }
+            if (faithMarker == SIZE) {
+                updateViews();
+                throw new EndGameException(true);
+            }
+        }
+        updateViews();
+    }
+
+    /**
      * Moves the marker by one space
      * @throws EndGameException if the faithMarker is on the last space
      */
-    public void moveMarker() throws EndGameException {
-        faithMarker++;
-        updateViews();
-        if(match.getVaticanReportsCount() < vaticanReports.length &&
-                !vaticanReports[match.getVaticanReportsCount()] && isPopeSpace(faithMarker))
-            match.vaticanReport(faithMarker);
-        if(faithMarker == SIZE)
-            throw new EndGameException(true);
+    public void moveMarker() throws EndGameException{
+        moveMarker(1);
+    }
+
+    /**
+     * uncovers the selected PopeFavorTile
+     * @param number the number of the PopeFavorTile to uncover
+     */
+    public void uncoverPopeFavorTile(int number){
+        if (number < 0 || number > popeFavorTiles.length)
+            throw new ArrayIndexOutOfBoundsException();
+        popeFavorTiles[number].uncover();
+    }
+
+    /**
+     * uncovers the selected PopeFavorTile
+     * @param number the number of the PopeFavorTile to uncover
+     */
+    public void discardPopeFavorTile(int number){
+        if (number < 0 || number > popeFavorTiles.length)
+            throw new ArrayIndexOutOfBoundsException();
+        popeFavorTiles[number] = null;
+        int count = 0;
+        for (PopeFavorTile pft:popeFavorTiles) {
+            if (pft == null)
+                count++;
+        }
     }
 
     /**
@@ -152,11 +208,20 @@ public class FaithTrack implements ObservableFromView {
     }
 
     /**
+     * Returns true if Match reference is null, false elsewhere
+     * @return true if Match reference is null, false elsewhere
+     */
+    public boolean hasMatchMissing(){
+        return match == null;
+    }
+
+    /**
      * sets the current of the vatican report to true
      * @param vaticanReportCount the number of the vatican report triggered
      */
     protected void vaticanReportTriggered(int vaticanReportCount) {
         vaticanReports[vaticanReportCount] = true;
+        updateViews();
     }
 
     /**
@@ -171,18 +236,38 @@ public class FaithTrack implements ObservableFromView {
         return count < vaticanReports.length && !vaticanReports[count];
     }
 
+    /**
+     * Adds the view to the list of views
+     * @param view the view that has to be added
+     */
     @Override
-    public void addView(View view) {
+    public void addView(VirtualView view) {
+        if (views == null)
+            views = new ArrayList<>();
         views.add(view);
     }
 
+    /**
+     * Removes the view from the list of views
+     * @param view the view that has to be removed
+     */
     @Override
-    public void removeView(View view) {
+    public void removeView(VirtualView view) {
         views.remove(view);
     }
 
+    /**
+     * Notifies all views of the change
+     */
     private void updateViews() {
         views.forEach(view -> view.showFaithTrack(this));
+    }
+
+    /**
+     * Notifies all views of the happened vatican report triggered
+     */
+    private void vaticanReportUpdate() {
+        views.forEach(view -> view.showVaticanReportTriggered(username, match.getVaticanReportsCount()));
     }
 
     /**

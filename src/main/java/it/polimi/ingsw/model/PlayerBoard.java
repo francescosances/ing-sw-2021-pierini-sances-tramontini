@@ -7,11 +7,9 @@ import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.ObservableFromView;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.VirtualView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -25,7 +23,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
     /**
      * Player's username
      */
-    protected String username;
+    private final String username;
 
     /**
      * A reference to their faith Track
@@ -57,7 +55,10 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      */
     private int boughtDevelopmentCardsCounter = 0;
 
-    private final transient List<View> views;
+    /**
+     * A list containing all VirtualViews to notify on update
+     */
+    private transient List<VirtualView> views;
 
     /**
      * Initializes a new PlayerBoard object
@@ -69,7 +70,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
         this.username = username;
         warehouse = new Warehouse();
         strongbox = new Strongbox();
-        faithTrack = new FaithTrack(match);
+        faithTrack = new FaithTrack(match, username);
         developmentCardSlots = Stream.generate(DevelopmentCardSlot::new).limit(3).toArray(DevelopmentCardSlot[]::new);
 
         //TODO: rimuovere bypass
@@ -239,8 +240,10 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      */
     public void activateLeaderCard(LeaderCard leaderCard) throws NotSatisfiedRequirementsException {
         for(LeaderCard x: leaderCards){
-            if(x.equals(leaderCard))
+            if(x.equals(leaderCard)) {
                 x.activate(this);
+                updateLeaderCardsList();
+            }
         }
     }
 
@@ -251,7 +254,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      * @throws NotSatisfiedRequirementsException if the LeaderCard cannot be activated
      */
     public void activateLeaderCard(int num) throws NotSatisfiedRequirementsException {
-        leaderCards.get(num).activate(this);
+        activateLeaderCard(getAvailableLeaderCards().get(num));
     }
 
     /**
@@ -266,11 +269,11 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
                 if (temp.isActive())
                     throw new IllegalArgumentException("You cannot discard active cards");
                 iterator.remove();
+                updateLeaderCardsList();
                 this.gainFaithPoints(1);
             }
         }
     }
-
 
     /**
      * Discards the LeaderCard, makes the player gain 1 FaithPoint
@@ -278,10 +281,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      * @throws EndGameException if the player reaches the last space
      */
     public void discardLeaderCard(int num) throws EndGameException {
-        if (leaderCards.get(num).isActive())
-            throw new IllegalArgumentException("You cannot discard active cards");
-        leaderCards.remove(num);
-        this.gainFaithPoints(1);
+        discardLeaderCard(leaderCards.get(num));
     }
 
     /**
@@ -335,30 +335,101 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
         this.faithTrack.setMatch(match);
     }
 
+    public void addDevelopmentCardToSlot(DevelopmentCard developmentCard, int slot){
+        if (!developmentCardSlots[slot].accepts(developmentCard))
+            throw new NotSatisfiedRequirementsException("You cannot buy this card");
+        developmentCardSlots[slot].addCard(developmentCard);
+        updateSlots();
+    }
+
     /**
      * Makes the player pay the cost
      * @param costs the cost player must pay
      */
     public void payResources(Requirements costs) {
         costs = warehouse.removeResources(costs);
-        strongbox.removeResources(costs);
+        if (costs.getResourcesMap().isEmpty())
+            strongbox.removeResources(costs);
+    }
+
+    /**
+     * Activates the production, paying the costs and gaining the gains
+     * @param costs the cost of the production
+     * @param gains the gains of the production
+     */
+    public void produce(Requirements costs, Requirements gains){
+        updateProduction();
+        payResources(costs);
+        Map<ResourceType,Integer> newGains = new HashMap<>();
+        gains.forEach(entry->{
+            if(entry.getKey() == NonPhysicalResourceType.FAITH_POINT)
+                gainFaithPoints(1);
+            else if(entry.getKey() instanceof ResourceType)
+                newGains.put((ResourceType) entry.getKey(),entry.getValue());
+        });
+        strongbox.addResources(newGains);
     }
 
     public void setWarehouse(Warehouse warehouse) {
         this.warehouse = warehouse;
+        for (VirtualView view:views)
+            warehouse.addView(view);
     }
 
+    /**
+     * Adds the view to the list of views
+     * @param view the view that has to be added
+     */
     @Override
-    public void addView(View view) {
+    public void addView(VirtualView view) {
+        if (views == null)
+            views = new ArrayList<>();
         views.add(view);
         faithTrack.addView(view);
+        strongbox.addView(view);
+        warehouse.addView(view);
     }
 
+    /**
+     * Removes the view from the list of views
+     * @param view the view that has to be removed
+     */
     @Override
-    public void removeView(View view) {
-        views.remove(view);
-        faithTrack.removeView(view);
+    public void removeView(VirtualView view) {
+        try {
+            views.remove(view);
+            faithTrack.removeView(view);
+            strongbox.removeView(view);
+            warehouse.removeView(view);
+        } catch (NullPointerException ignored){}
     }
+
+
+    /**
+     * Notifies all views of the change
+     */
+    private void updateLeaderCardsList() {
+        for (VirtualView view:views)
+            view.showLeaderCards(leaderCards);
+    }
+
+    /**
+     * Notifies all views of the change
+     */
+    private void updateSlots(){
+        for (VirtualView view:views)
+            view.showDevelopmentCardSlots(developmentCardSlots);
+    }
+
+
+    /**
+     * Notifies all views of the change
+     */
+    private void updateProduction(){
+        for (VirtualView view:views)
+            view.showProduction();
+    }
+
 
     /**
      * Returns a String representation of the object
@@ -405,6 +476,10 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
     }
 
 
+    /**
+     * Returns a new Object which is equal to this
+     * @return a new Object which is equal to this
+     */
     @Override
     public PlayerBoard clone() {
         return Serializer.deserializePlayerBoard(Serializer.serializePlayerBoard(this));

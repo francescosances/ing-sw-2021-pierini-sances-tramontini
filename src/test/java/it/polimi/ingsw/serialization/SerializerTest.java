@@ -1,4 +1,4 @@
-package it.polimi.ingsw.network.serialization;
+package it.polimi.ingsw.serialization;
 
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.*;
@@ -24,11 +24,18 @@ public class SerializerTest {
     }
 
     @Test
-    public void serializeAllLeaderCards() {
-        serializeDepotLeaderCard();
-        serializeDiscountLeaderCard();
-        serializeProductionLeaderCard();
-        serializeWhiteMarbleLeaderCard();
+    public void serializeDevelopmentCardsDeckList(){
+        List<Deck <DevelopmentCard>> deckList = new ArrayList<>();
+        for (int i = 0; i < 3; i++)
+            deckList.add(new Deck<>());
+        deckList.get(0).add(new DevelopmentCard("",1, new Requirements(new Pair<>(ResourceType.SHIELD, 2)), 1, DevelopmentColorType.GREEN, new Requirements(new Pair<>(ResourceType.COIN, 1)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1)));
+        deckList.get(0).add(new DevelopmentCard("",2, new Requirements(new Pair<>(ResourceType.SERVANT, 2)), 1, DevelopmentColorType.YELLOW, new Requirements(new Pair<>(ResourceType.SHIELD, 1)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1)));
+        deckList.get(0).add(new DevelopmentCard("",5, new Requirements(new Pair<>(ResourceType.SHIELD, 4)), 2, DevelopmentColorType.BLUE, new Requirements(new Pair<>(ResourceType.STONE, 3)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1), new Pair<>(ResourceType.SERVANT, 1)));
+        deckList.get(1).add(new DevelopmentCard("",1, new Requirements(new Pair<>(ResourceType.STONE, 2)), 1, DevelopmentColorType.GREEN, new Requirements(new Pair<>(ResourceType.SERVANT, 1)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1)));
+        deckList.get(1).add(new DevelopmentCard("",2, new Requirements(new Pair<>(ResourceType.COIN, 2)), 3, DevelopmentColorType.BLUE, new Requirements(new Pair<>(ResourceType.SHIELD, 1)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1)));
+        deckList.get(2).add(new DevelopmentCard("",5, new Requirements(new Pair<>(ResourceType.SERVANT, 4)), 2, DevelopmentColorType.PURPLE, new Requirements(new Pair<>(ResourceType.COIN, 3)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1), new Pair<>(ResourceType.SHIELD, 1)));
+        String json = Serializer.serializeDevelopmentCardsDeckList(deckList);
+        assertEquals(deckList,Serializer.deserializeDevelopmentCardsDeckList(json));
     }
 
     @Test
@@ -60,7 +67,7 @@ public class SerializerTest {
     }
 
     @Test
-    public void serializeLeaderCardDeck() {
+    public void serializeLeaderCardList() {
         List<LeaderCard> ret = new ArrayList<>();
         ret.add(new DepotLeaderCard("",3, new Requirements(new Pair<>(ResourceType.COIN, 5)), ResourceType.STONE));
         ret.add(new DepotLeaderCard("",3, new Requirements(new Pair<>(ResourceType.STONE, 5)), ResourceType.SERVANT));
@@ -68,6 +75,18 @@ public class SerializerTest {
         ret.add(new DepotLeaderCard("",3, new Requirements(new Pair<>(ResourceType.SHIELD, 5)), ResourceType.COIN));
         String json = Serializer.serializeLeaderCardList(ret.toArray(new LeaderCard[0]));
         assertEquals(ret, Serializer.deserializeLeaderCardList(json));
+        json = Serializer.serializeLeaderCardList(ret);
+        assertEquals(ret, Serializer.deserializeLeaderCardList(json));
+    }
+
+    @Test
+    public void serializeDevelopmentCardsList() {
+        List<DevelopmentCard> cardsList = new ArrayList<>();
+        cardsList.add(new DevelopmentCard("",1, new Requirements(new Pair<>(ResourceType.SHIELD, 2)), 1, DevelopmentColorType.GREEN, new Requirements(new Pair<>(ResourceType.COIN, 1)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1)));
+        cardsList.add(new DevelopmentCard("",2, new Requirements(new Pair<>(ResourceType.SERVANT, 2)), 1, DevelopmentColorType.YELLOW, new Requirements(new Pair<>(ResourceType.SHIELD, 1)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1)));
+        cardsList.add(new DevelopmentCard("",5, new Requirements(new Pair<>(ResourceType.SHIELD, 4)), 2, DevelopmentColorType.BLUE, new Requirements(new Pair<>(ResourceType.STONE, 3)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1), new Pair<>(ResourceType.SERVANT, 1)));
+        String json = Serializer.serializeDevelopmentCardsList(cardsList);
+        assertEquals(cardsList, Serializer.deserializeDevelopmentCardsList(json));
     }
 
     @Test
@@ -166,7 +185,17 @@ public class SerializerTest {
         developmentCardSlots[1].addCard(developmentCard);
         String json = Serializer.serializeMatchState(match);
         assertEquals(match, Serializer.deserializeMatchState(json));
+    }
 
+    @Test
+    public void serializeProducerList(){
+        List<Producer> producers = new ArrayList<>();
+        producers.add(new DevelopmentCard("",1, new Requirements(new Pair<>(ResourceType.SHIELD, 2)), 1, DevelopmentColorType.GREEN, new Requirements(new Pair<>(ResourceType.COIN, 1)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1)));
+        producers.add(new DevelopmentCard("",2, new Requirements(new Pair<>(ResourceType.SERVANT, 2)), 1, DevelopmentColorType.YELLOW, new Requirements(new Pair<>(ResourceType.SHIELD, 1)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1)));
+        producers.add(new DevelopmentCard("",5, new Requirements(new Pair<>(ResourceType.SHIELD, 4)), 2, DevelopmentColorType.BLUE, new Requirements(new Pair<>(ResourceType.STONE, 3)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1), new Pair<>(ResourceType.SERVANT, 1)));
+        producers.add(new ProductionLeaderCard("",4, new Requirements(new Triple<>(DevelopmentColorType.YELLOW, 2, 1)), new Requirements(new Pair<>(ResourceType.SHIELD, 1))));
+        String json = Serializer.serializeProducerList(producers);
+        assertEquals(producers, Serializer.deserializeProducerList(json));
     }
 
     @Test
@@ -221,5 +250,33 @@ public class SerializerTest {
         String json2 = Serializer.serializeRequirements(cardRequirements);
         assertEquals(resourceRequirements, Serializer.deserializeRequirements(json));
         assertEquals(cardRequirements, Serializer.deserializeRequirements(json2));
+    }
+
+    @Test
+    public void serializeFaithTrack(){
+        Match match = new Match("Test");
+        FaithTrack faithTrack = new FaithTrack(match, "test");
+        for (int i = 0; i<3; i++)
+            faithTrack.moveMarker();
+        String json = Serializer.serializeFaithTrack(faithTrack);
+        assertEquals(faithTrack, Serializer.deserializeFaithTrack(json));
+    }
+
+    @Test
+    public void serializeDevelopmentCardSlots(){
+        DevelopmentCardSlot[] developmentCardSlots = new DevelopmentCardSlot[3];
+        for (int i = 0; i < developmentCardSlots.length; i++)
+            developmentCardSlots[i] = new DevelopmentCardSlot();
+        developmentCardSlots[1].addCard(new DevelopmentCard("",1, new Requirements(new Pair<>(ResourceType.SHIELD, 2)), 1, DevelopmentColorType.GREEN, new Requirements(new Pair<>(ResourceType.COIN, 1)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1)));
+        developmentCardSlots[1].addCard(new DevelopmentCard("",5, new Requirements(new Pair<>(ResourceType.COIN, 2)), 2, DevelopmentColorType.BLUE, new Requirements(new Pair<>(ResourceType.SHIELD, 2)), new Pair<>(ResourceType.STONE, 1)));
+        developmentCardSlots[2].addCard(new DevelopmentCard("",1, new Requirements(new Pair<>(ResourceType.STONE, 1)), 1, DevelopmentColorType.YELLOW, new Requirements(new Pair<>(ResourceType.COIN, 1)), new Pair<>(ResourceType.SERVANT, 1)));
+        String json = Serializer.serializeDevelopmentCardSlots(developmentCardSlots);
+        assertArrayEquals(developmentCardSlots, Serializer.deserializeDevelopmentCardsSlots(json));
+    }
+
+    @Test
+    public void serializeInt(){
+        String json = Serializer.serializeInt(10);
+        assertEquals(10, Serializer.deserializeInt(json));
     }
 }

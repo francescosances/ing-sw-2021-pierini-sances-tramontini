@@ -78,7 +78,7 @@ public class ClientSocket implements Runnable{
             try {
                 String received = socketIn.nextLine();
                 Message message = Message.messageFromString(received);
-                log("received"+received);
+                //log("received"+received);
                 Thread t = new Thread(()-> clientController.handleReceivedMessage(message));
                 t.setDaemon(true);
                 t.start();
@@ -87,7 +87,7 @@ public class ClientSocket implements Runnable{
                 break;
             }
         }
-        //TODO: in caso di no line found e quindi chiusura della connessione dal server, chiudere anche thread javafx o settarli come demoni
+        //TODO: in caso di no line found e quindi chiusura della connessione dal server, chiudere anche thread javafx o settarlo come demone
         socketIn.close();
         socketOut.close();
         try {

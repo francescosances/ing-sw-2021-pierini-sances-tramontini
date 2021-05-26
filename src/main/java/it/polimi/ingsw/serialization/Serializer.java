@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.storage.Depot;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.Strongbox;
 import it.polimi.ingsw.model.storage.Warehouse;
+import it.polimi.ingsw.utils.Triple;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -57,10 +58,6 @@ public class Serializer {
         return new Gson().toJson(developmentCardList);
     }
 
-    public static String serializeDevelopmentCardsList(List<DevelopmentCard> developmentCardList) {
-        return new Gson().toJson(developmentCardList);
-    }
-
     public static List<Deck<DevelopmentCard>> deserializeDevelopmentCardsDeckList(String serializedDeck) {
         GsonBuilder gsonbuilder = new GsonBuilder();
         gsonbuilder.registerTypeAdapter(Requirements.class, new RequirementsCreator());
@@ -68,6 +65,10 @@ public class Serializer {
         Gson gson = gsonbuilder.create();
         Type type = new TypeToken<List<Deck<DevelopmentCard>>>(){}.getType();
         return gson.fromJson(serializedDeck, type);
+    }
+
+    public static String serializeDevelopmentCardsList(List<DevelopmentCard> developmentCardList) {
+        return new Gson().toJson(developmentCardList);
     }
 
     public static List<DevelopmentCard> deserializeDevelopmentCardsList(String serializedList) {
@@ -187,17 +188,16 @@ public class Serializer {
         return gsonBuilder.create().fromJson(json, Resource.class);
     }
 
-    public static String serializeDevelopmentCardSlots(List<DevelopmentCardSlot> availableSlots) {
+    public static String serializeDevelopmentCardSlots(DevelopmentCardSlot[] availableSlots) {
         return new Gson().toJson(availableSlots);
     }
 
-    public static List<DevelopmentCardSlot> deserializeDevelopmentCardsSlots(String slots) {
+    public static DevelopmentCardSlot[] deserializeDevelopmentCardsSlots(String slots) {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Requirements.class, new RequirementsCreator());
 
         Gson gson = gsonBuilder.create();
-        Type type = new TypeToken<List<DevelopmentCardSlot>>(){}.getType();
-        return gson.fromJson(slots, type);
+        return gson.fromJson(slots, DevelopmentCardSlot[].class);
     }
 
     public static String serializeProducerList(List<Producer> producerList){
@@ -227,16 +227,28 @@ public class Serializer {
     }
 
     public static String serializeInt(int i){
-        return new Gson().toJson(i);
+        return String.valueOf(i);
     }
 
     public static int deserializeInt(String json){
-        return new Gson().fromJson(json, int.class);
+        return Integer.parseInt(json);
     }
 
     public static String serializeFaithTrack(FaithTrack faithTrack) {
-        //TODO
-        return "";
+        return new Gson().toJson(faithTrack);
+    }
+
+    public static FaithTrack deserializeFaithTrack(String json){
+        return new Gson().fromJson(json, FaithTrack.class);
+    }
+
+    public static String serializeLobbies(List<Triple<String, Integer, Integer>> lobbies){
+        return new Gson().toJson(lobbies);
+    }
+
+    public static List<Triple<String, Integer, Integer>> deserializeLobbies(String json){
+        Type listType = new TypeToken<List<Triple<String, Integer, Integer>>>() {}.getType();
+        return new Gson().fromJson(json, listType);
     }
 }
 

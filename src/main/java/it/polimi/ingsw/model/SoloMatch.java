@@ -3,6 +3,8 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.cards.Deck;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.DevelopmentColorType;
+import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.VirtualView;
 
 public class SoloMatch extends Match{
 
@@ -21,7 +23,8 @@ public class SoloMatch extends Match{
      */
     public SoloMatch(String matchName){
         super(matchName, 1);
-        blackCross = new FaithTrack(this);
+        blackCross = new FaithTrack(this, "Black Cross");
+        //super.addPlayer("Black Cross");
         shuffleActionTokens();
     }
 
@@ -31,9 +34,9 @@ public class SoloMatch extends Match{
      * @throws EndGameException if the black cross reaches the last space
      */
     public void moveBlackCross(int spaces) throws EndGameException {
-        for(int i=0;i<spaces;i++){
-            blackCross.moveMarker();
-        }
+        if (blackCross.hasMatchMissing())
+            blackCross.setMatch(this);
+        blackCross.moveMarker(spaces);
     }
 
     /**
@@ -92,10 +95,12 @@ public class SoloMatch extends Match{
     @Override
     public void endTurn(){
         super.endTurn();
-
-        //TODO: comunicare al giocatore che un ActionToken è stato pescato
         try {
-            drawActionToken().show(this);
+            ActionToken actionToken = drawActionToken();
+            for (View view: views) {
+                view.showActionToken(actionToken);
+                actionToken.show(this);
+            }
             //TODO: creare metodo endgame per contare i punti
         } catch (EndGameException e) {
             e.printStackTrace();
@@ -111,6 +116,19 @@ public class SoloMatch extends Match{
     public void discardResource(PlayerBoard player) throws EndGameException {
         moveBlackCross(1);
     }
+
+    @Override
+    public void addView(VirtualView view) {
+        super.addView(view);
+        blackCross.addView(view);
+    }
+
+    @Override
+    public void removeView(VirtualView view) {
+        super.removeView(view);
+        blackCross.removeView(view);
+    }
+
 
     /**
      * Returns true if other equals the ActionToken; false elsewhere

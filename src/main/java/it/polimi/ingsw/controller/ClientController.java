@@ -3,23 +3,20 @@ package it.polimi.ingsw.controller;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
+import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.Requirements;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.network.ClientSocket;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
-import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cli.CLI;
 import it.polimi.ingsw.view.gui.GUI;
 import javafx.stage.Stage;
 
-import javax.print.attribute.standard.PrinterMakeAndModel;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -32,22 +29,18 @@ public class ClientController {
      * The socket connection to the server
      */
     private final ClientSocket clientSocket;
-
     /**
      * The view used to interact with the user
      */
     private View view;
-
     /**
      * The username of the user associated to this controller
      */
     private String username;
-
     /**
      * The usernames of the players playing this match
      */
     private List<String> players;
-
     /**
      * Helps to handle synchronization
      */
@@ -86,6 +79,7 @@ public class ClientController {
      */
     public void handleReceivedMessage(Message message) {
         Gson gson = new Gson();
+        String currentPlayerUsername;
         switch (message.getType()) {
             case GENERIC:
                 view.showMessage(message.getData("text"));
@@ -104,10 +98,7 @@ public class ClientController {
                 break;
             case LOBBY_INFO:
                 lock.lock();
-                String availableMessages = message.getData("availableMatches");
-                Type listType = new TypeToken<List<Triple<String, Integer, Integer>>>() {}.getType();
-                List<Triple<String, Integer, Integer>> matches = gson.fromJson(availableMessages, listType);
-                view.listLobbies(matches);
+                view.listLobbies(Serializer.deserializeLobbies(message.getData("availableMatches")));
                 lock.unlock();
                 break;
             case RESUME_MATCH:
@@ -115,20 +106,29 @@ public class ClientController {
                 resumeMatch(Serializer.deserializePlayerBoard(message.getData("playerBoard")));
                 lock.unlock();
                 break;
-            case LIST_LEADER_CARDS:
+            case LIST_START_LEADER_CARDS:
                 lock.lock();
-                List<LeaderCard> leaderCardList = Serializer.deserializeLeaderCardList(message.getData("leaderCards"));
-                view.listLeaderCards(leaderCardList, Integer.parseInt(message.getData("cardsToChoose")));
+                view.listLeaderCards(Serializer.deserializeLeaderCardList(message.getData("leaderCards")), Serializer.deserializeInt(message.getData("cardsToChoose")));
                 lock.unlock();
                 break;
             case START_RESOURCES:
                 lock.lock();
-                view.askToChooseStartResources(Serializer.deserializeResources(message.getData("resources")), Integer.parseInt(message.getData("resourcesToChoose")));
+                view.askToChooseStartResources(Serializer.deserializeResources(message.getData("resources")), Serializer.deserializeInt(message.getData("resourcesToChoose")));
                 lock.unlock();
                 break;
             case SHOW_PLAYER_BOARD:
                 lock.lock();
                 view.showPlayerBoard(Serializer.deserializePlayerBoard(message.getData("playerBoard")));
+                lock.unlock();
+                break;
+            case SHOW_FAITH_TRACK:
+                lock.lock();
+                view.showFaithTrack(Serializer.deserializeFaithTrack(message.getData("faithTrack")));
+                lock.unlock();
+                break;
+            case VATICAN_REPORT:
+                lock.lock();
+                view.showVaticanReportTriggered(message.getData("username"), Serializer.deserializeInt(message.getData("vaticanReportCount")));
                 lock.unlock();
                 break;
             case ASK_FOR_ACTION:
@@ -148,6 +148,11 @@ public class ClientController {
                 view.showWarehouse(Serializer.deserializeWarehouse(message.getData("warehouse")));
                 lock.unlock();
                 break;
+            case SHOW_STRONGBOX_STATUS:
+                lock.lock();
+                view.showStrongbox(Serializer.deserializeStrongbox(message.getData("strongbox")));
+                lock.unlock();
+                break;
             case TAKE_RESOURCES_FROM_MARKET:
                 lock.lock();
                 Market market = Serializer.deserializeMarket(message.getData("market"));
@@ -160,7 +165,7 @@ public class ClientController {
                 view.showMarket(market);
                 lock.unlock();
                 break;
-            case SHOW_RESOURCES:
+            case ASK_TO_STORE_RESOURCES:
                 lock.lock();
                 view.showResourcesGainedFromMarket(Serializer.deserializeResources(message.getData("resources")));
                 lock.unlock();
@@ -177,29 +182,50 @@ public class ClientController {
                 break;
             case DEVELOPMENT_CARDS_TO_BUY:
                 lock.lock();
-                view.listDevelopmentCards(Serializer.deserializeDevelopmentCardsDeckList(message.getData("developmentCards")), Integer.parseInt(message.getData("cardsToChoose")), Serializer.deserializePlayerBoard(message.getData("playerBoard")));
+                view.listDevelopmentCards(Serializer.deserializeDevelopmentCardsDeckList(message.getData("developmentCards")), Serializer.deserializeInt(message.getData("cardsToChoose")), Serializer.deserializePlayerBoard(message.getData("playerBoard")));
                 lock.unlock();
                 break;
             case CHOOSE_DEVELOPMENT_CARD_SLOT:
                 lock.lock();
-                view.askToChooseDevelopmentCardSlot(Serializer.deserializeDevelopmentCardsSlots(message.getData("slots")).toArray(new DevelopmentCardSlot[0]), Serializer.deserializeDevelopmentCard(message.getData("developmentCard")));
+                view.askToChooseDevelopmentCardSlot(Serializer.deserializeDevelopmentCardsSlots(message.getData("slots")), Serializer.deserializeDevelopmentCard(message.getData("developmentCard")));
                 lock.unlock();
                 break;
             case PRODUCTION:
                 lock.lock();
                 List<Producer> producers = Serializer.deserializeProducerList(message.getData("productions"));
-                view.chooseProductions(producers, Serializer.deserializePlayerBoard(message.getData("playerboard")));
+                view.chooseProductions(producers, Serializer.deserializePlayerBoard(message.getData("playerBoard")));
+                lock.unlock();
+                break;
+            case ACTION_TOKEN:
+                lock.lock();
+                ActionToken actionToken = Serializer.deserializeActionToken(message.getData("actionToken"));
+                view.showActionToken(actionToken);
+                lock.unlock();
+                break;
+            case PRODUCTION_PERFORMED:
+                lock.lock();
+                view.showProduction();
                 lock.unlock();
                 break;
             case SHOW_PLAYER_LEADER_CARDS:
                 lock.lock();
-                List<LeaderCard> playerLeaderCard = Serializer.deserializeLeaderCardList(message.getData("leaderCards"));
-                view.showPlayerLeaderCards(playerLeaderCard);
+                List<LeaderCard> playerLeaderCards = Serializer.deserializeLeaderCardList(message.getData("leaderCards"));
+                view.showPlayerLeaderCards(playerLeaderCards);
+                lock.unlock();
+                break;
+            case SHOW_LEADER_CARDS:
+                lock.lock();
+                List<LeaderCard> leaderCards = Serializer.deserializeLeaderCardList(message.getData("leaderCards"));
+                view.showLeaderCards(leaderCards);
                 lock.unlock();
                 break;
             case SHOW_PLAYERS:
                 Map<String, Boolean> players = new Gson().fromJson(message.getData("players"), Map.class);
                 view.showPlayers(players);
+                break;
+            case SHOW_SLOTS:
+                DevelopmentCardSlot[] developmentCardSlots = Serializer.deserializeDevelopmentCardsSlots(message.getData("slots"));
+                view.showDevelopmentCardSlots(developmentCardSlots);
                 break;
             default:
                 clientSocket.log("Received unexpected message");
@@ -228,7 +254,7 @@ public class ClientController {
     public void login(String username){
         Message message = new Message(Message.MessageType.LOGIN_REQUEST);
         message.addData("username", username);
-        this.username = username;
+        this.username = new String (username);
         clientSocket.sendMessage(message);
     }
 
@@ -406,7 +432,7 @@ public class ClientController {
      */
     public void discardLeaderCard(int num) {
         Message message = new Message(Message.MessageType.DISCARD_LEADER_CARD);
-        message.addData("num", new Gson().toJson(num));
+        message.addData("num", Serializer.serializeInt(num));
         clientSocket.sendMessage(message);
     }
 
@@ -416,7 +442,7 @@ public class ClientController {
      */
     public void activateLeaderCard(int num) {
         Message message = new Message(Message.MessageType.ACTIVATE_LEADER_CARD);
-        message.addData("num", new Gson().toJson(num));
+        message.addData("num", Serializer.serializeInt(num));
         clientSocket.sendMessage(message);
     }
 

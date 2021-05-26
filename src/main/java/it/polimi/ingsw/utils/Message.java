@@ -85,6 +85,11 @@ public class Message{
         return new Gson().fromJson(serializedMessage,Message.class);
     }
 
+    @Override
+    public String toString() {
+        return "Message " + type;
+    }
+
     /**
      * All possible types of message.
      */
@@ -96,24 +101,30 @@ public class Message{
         LOBBY_INFO,
         RESUME_MATCH,
         CURRENT_ACTIVE_USER,
-        LIST_LEADER_CARDS,
+        LIST_START_LEADER_CARDS,
         SHOW_PLAYER_BOARD,
         SHOW_FAITH_TRACK,
+        VATICAN_REPORT,
         ASK_FOR_ACTION,
         SWAP_DEPOTS,
         TAKE_RESOURCES_FROM_MARKET,
         SHOW_MARKET,
         SELECT_MARKET_ROW,
         SELECT_MARKET_COLUMN,
-        SHOW_RESOURCES,
+        ASK_TO_STORE_RESOURCES,
         RESOURCE_TO_STORE,
         WHITE_MARBLE_CONVERSION,
         SHOW_WAREHOUSE_STATUS,
+        SHOW_STRONGBOX_STATUS,
         DEVELOPMENT_CARDS_TO_BUY,
         CHOOSE_DEVELOPMENT_CARD_SLOT,
         PRODUCTION,
+        ACTION_TOKEN,
+        PRODUCTION_PERFORMED,
         START_RESOURCES,
         SHOW_PLAYER_LEADER_CARDS,
+        SHOW_LEADER_CARDS,
+        SHOW_SLOTS,
         // from client to server
         LOGIN_REQUEST,
         LOBBY_CHOICE,

@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.storage.Resource;
-import it.polimi.ingsw.model.storage.ResourceType;
+import it.polimi.ingsw.model.storage.Strongbox;
 import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.utils.Triple;
 
@@ -79,10 +79,22 @@ public interface View {
     void listLeaderCards(List<LeaderCard> leaderCardList,int cardsToChoose);
 
     /**
-     * Shows the LeaderCards to the player
+     * Shows player's LeaderCards to the player
      * @param leaderCardList the LeaderCards to choose
      */
     void showPlayerLeaderCards(List<LeaderCard> leaderCardList);
+
+    /**
+     * Shows the LeaderCards to the player
+     * @param leaderCards the list of the LeaderCards to show
+     */
+    void showLeaderCards(List<LeaderCard> leaderCards);
+
+    /**
+     * Shows the DevelopmentCardSlots to the player
+     * @param developmentCardSlots the DevelopmentCardSlots to show
+     */
+    void showDevelopmentCardSlots(DevelopmentCardSlot[] developmentCardSlots);
 
     /**
      * Shows a list of Development Cards and asks to choose some of them
@@ -101,13 +113,28 @@ public interface View {
     /**
      * Shows the faith track
      * @param faithTrack the faith track to be shown
+     *
      */
     void showFaithTrack(FaithTrack faithTrack);
 
     /**
+     * Shows a message saying a vatican report has been triggered
+     * @param username
+     * @param vaticanReportCount
+     */
+    void showVaticanReportTriggered(String username, int vaticanReportCount);
+
+    /**
      * List the resources stored in the warehouse
+     * @param warehouse the warehouse to be shown
      */
     void showWarehouse(Warehouse warehouse);
+
+    /**
+     * lists the resources in the strongbox
+     * @param strongbox the strongbox to be shown
+     */
+    void showStrongbox(Strongbox strongbox);
 
     /**
      * Asks to swap two depots
@@ -130,6 +157,7 @@ public interface View {
     /**
      * Shows the market
      * @param market the market to be shown
+     *
      */
     void showMarket(Market market);
 
@@ -180,6 +208,20 @@ public interface View {
      */
     void askToChooseStartResources(Resource[] values,int resourcesToChoose);
 
+    /**
+     * Shows the player all players connected to the match
+     * @param users a map containing all players connected to the match and their player.isActive() value
+     */
     void showPlayers(Map<String, Boolean> users);
 
+    /**
+     * Shows the player the ActionToken drawn
+     * @param actionToken the ActionToken drawn
+     */
+    void showActionToken(ActionToken actionToken);
+
+    /**
+     * Notifies the player of the production started
+     */
+    void showProduction();
 }

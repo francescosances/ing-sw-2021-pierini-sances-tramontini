@@ -73,7 +73,7 @@ public class GameController implements PlayerStatusListener {
     public synchronized void handleReceivedGameMessage(Message message, String username){
         Gson gson = new Gson();
         try {
-            if(message.getType() != Message.MessageType.SHOW_PLAYER_BOARD && !username.equals(players.get(match.getCurrentPlayerIndex()).getUsername())){
+            if(message.getType() != Message.MessageType.SHOW_PLAYER_BOARD && !username.equals(players.get(match.getCurrentPlayerIndex()).getUsername())) {
                 System.out.println("Invalid message received from "+username);
                 return;
             }
@@ -89,59 +89,68 @@ public class GameController implements PlayerStatusListener {
                     currentPlayerController.performAction(gson.fromJson(message.getData("action"), Action.class));
                     break;
                 case SWAP_DEPOTS:
-                    int depotA = Integer.parseInt(message.getData("depotA"));
-                    int depotB = Integer.parseInt(message.getData("depotB"));
+                    int depotA = Serializer.deserializeInt(message.getData("depotA"));
+                    int depotB = Serializer.deserializeInt(message.getData("depotB"));
                     currentPlayerController.swapDepots(depotA,depotB);
                     break;
                 case SELECT_MARKET_ROW:
-                    int row = Integer.parseInt(message.getData("row"));
+                    int row = Serializer.deserializeInt(message.getData("row"));
                     currentPlayerController.selectMarketRow(row);
                     break;
                 case SELECT_MARKET_COLUMN:
-                    int column = Integer.parseInt(message.getData("column"));
+                    int column = Serializer.deserializeInt(message.getData("column"));
                     currentPlayerController.selectMarketColumn(column);
                     break;
                 case WHITE_MARBLE_CONVERSION:
-                    currentPlayerController.chooseWhiteMarbleConversion(Integer.parseInt(message.getData("choice")));
+                    currentPlayerController.chooseWhiteMarbleConversion(Serializer.deserializeInt(message.getData("choice")));
                     break;
                 case RESOURCE_TO_STORE:
-                    currentPlayerController.storeResourceToWarehouse(Integer.parseInt(message.getData("choice")));
+                    currentPlayerController.storeResourceToWarehouse(Serializer.deserializeInt(message.getData("choice")));
                     break;
                 case DEVELOPMENT_CARDS_TO_BUY:
                     currentPlayerController.buyDevelopmentCard(Serializer.deserializeDevelopmentCardsList(message.getData("developmentCards")).get(0));
                     break;
                 case CHOOSE_DEVELOPMENT_CARD_SLOT:
-                    currentPlayerController.chooseDevelopmentCardSlot(Integer.parseInt(message.getData("slotIndex")));
+                    currentPlayerController.chooseDevelopmentCardSlot(Serializer.deserializeInt(message.getData("slotIndex")));
                     break;
                 case PRODUCTION:
                     currentPlayerController.chooseProductions(Serializer.deserializeRequirements(message.getData("costs")),Serializer.deserializeRequirements(message.getData("gains")));
                     break;
                 case DISCARD_LEADER_CARD:
-                    currentPlayerController.discardLeaderCard(Integer.parseInt(message.getData("num")));
+                    currentPlayerController.discardLeaderCard(Serializer.deserializeInt(message.getData("num")));
                     break;
                 case ACTIVATE_LEADER_CARD:
-                    currentPlayerController.activateLeaderCard(Integer.parseInt(message.getData("num")));
+                    currentPlayerController.activateLeaderCard(Serializer.deserializeInt(message.getData("num")));
                     break;
                 case SHOW_PLAYER_BOARD:
-                    for (PlayerController controller:players) {
-                        if (controller.getUsername().equals(username)) {
-                            String request = message.getData("username");
-                            if (request.equals(Match.YOU_STRING))
-                                request = username;
-                            PlayerBoard res = match.getPlayerBoard(request).clone();
-                            if(!username.equals(request))
-                                res.setLeaderCards(res.getLeaderCards().stream().filter(LeaderCard::isActive).collect(Collectors.toList()));
-                            controller.showPlayerBoard(res);
-                            break;
-                        }
-                    }
+                    showPlayerLeaderBoard(username, message);
                     break;
                 case ROLLBACK:
                     currentPlayerController.performAction(Action.CANCEL);
                     break;
             }
-        }catch (EndGameException e){
+        } catch (EndGameException e) {
             setPhase(Match.GamePhase.END_GAME);
+        }
+    }
+
+    /**
+     * Sends to the player whose message is being handled the PlayerBoard requested
+     * @param username the name of the player who sent the request
+     * @param message the message containing the data
+     */
+    private void showPlayerLeaderBoard(String username, Message message) {
+        for (PlayerController controller : players) {
+            if (controller.getUsername().equals(username)) {
+                String request = message.getData("username");
+                if (request.equals(Match.YOU_STRING))
+                    request = username;
+                PlayerBoard res = match.getPlayerBoard(request).clone();
+                if (!username.equals(request))
+                    res.setLeaderCards(res.getLeaderCards().stream().filter(LeaderCard::isActive).collect(Collectors.toList()));
+                controller.showPlayerBoard(res);
+                break;
+            }
         }
     }
 
@@ -182,14 +191,16 @@ public class GameController implements PlayerStatusListener {
         PlayerController playerController = getPlayerController(username);
         if(playerController != null){
             //Reactivating existing player
-            playerController.setVirtualView(new VirtualView(clientHandler));
+            playerController.setVirtualView(new VirtualView(clientHandler, playerController.getUsername()));
         }else{
-            playerController = new PlayerController(username, match.addPlayer(username), new VirtualView(clientHandler));
+            playerController = new PlayerController(username, match.addPlayer(username), new VirtualView(clientHandler, username));
             players.add(playerController);
         }
         playerController.addObserver(this);
-        if(notify)
+        if (notify) {
+            match.addView(playerController.getVirtualView());
             statusObserver.onStatusChanged(this);
+        }
         return playerController;
     }
 
@@ -294,10 +305,9 @@ public class GameController implements PlayerStatusListener {
     /**
      * Assures every non playing players receive a message showing whose turn is
      */
-    private void showCurrentActiveUser(){
-        for(int i=0;i<players.size();i++)
-            if(i != match.getCurrentPlayerIndex())
-                players.get(i).getVirtualView().showCurrentActiveUser(players.get(match.getCurrentPlayerIndex()).getUsername());
+    private void showCurrentActiveUser() {
+        for (PlayerController player : players)
+            player.getVirtualView().showCurrentActiveUser(players.get(match.getCurrentPlayerIndex()).getUsername());
     }
 
     /**
@@ -312,7 +322,6 @@ public class GameController implements PlayerStatusListener {
         final PlayerController playerController = players.get(match.getCurrentPlayerIndex());
         switch (player.getCurrentStatus()) {
             case TURN_ENDED:
-                playerController.showPlayerBoard();
                 match.endTurn();
                 nextTurn();
                 break;
@@ -374,7 +383,7 @@ public class GameController implements PlayerStatusListener {
         players.forEach((user)->{
             if(user.getUsername().equals(username))
                 user.activate();
-            else
+            else if (user.getVirtualView() != null)
                 user.getVirtualView().userConnected(username);
         });
     }
@@ -387,6 +396,7 @@ public class GameController implements PlayerStatusListener {
         players.forEach((user)->{
             if(user.getUsername().equals(username)) {
                 user.deactivate();
+                match.removeView(user.getVirtualView());
                 if(username.equals(players.get(getMatch().getCurrentPlayerIndex()).getUsername())) {
                     if(match.getCurrentPhase() == Match.GamePhase.PLAYERS_SETUP)
                         user.setup();
@@ -432,12 +442,8 @@ public class GameController implements PlayerStatusListener {
 
         for(PlayerController playerController:players){
             map = new HashMap<>();
-            for (PlayerController p:players) {
-                if (p.getUsername().equals(playerController.getUsername()))
-                    map.put(Match.YOU_STRING, p.isActive());
-                else
-                    map.put(p.getUsername(), p.isActive());
-            }
+            for (PlayerController p:players)
+                map.put(p.getUsername(), p.isActive());
             if (playerController.getVirtualView() != null)
                 playerController.getVirtualView().showPlayers(map);
         }
@@ -448,7 +454,9 @@ public class GameController implements PlayerStatusListener {
      * @param username the username of the player reconnecting
      */
     public void resumeMatch(String username) {
+        match.addView(getPlayerController(username).getVirtualView());
         listPlayers();
+        getPlayerController(username).getVirtualView().showCurrentActiveUser(players.get(match.getCurrentPlayerIndex()).getUsername());
         getPlayerController(username).getVirtualView().resumeMatch(getPlayerController(username).getPlayerBoard());
     }
 }

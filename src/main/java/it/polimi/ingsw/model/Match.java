@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.utils.FileManager;
 import it.polimi.ingsw.utils.ObservableFromView;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.VirtualView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class Match implements ObservableFromView {
 
     public static final int MAX_PLAYERS = 4;
 
-    private int maxPlayersNumber;
+    private final int maxPlayersNumber;
 
     protected Market market;
 
@@ -54,7 +55,7 @@ public class Match implements ObservableFromView {
      */
     private GamePhase currentPhase;
 
-    private final transient List<View> views;
+    protected transient List<VirtualView> views;
 
     public Match(String matchName) {
         this(matchName,MAX_PLAYERS);
@@ -74,12 +75,12 @@ public class Match implements ObservableFromView {
         this.vaticanReportsCount = 0;
         this.matchName = matchName;
         this.maxPlayersNumber = maxPlayersNumber;
-        this.views = new ArrayList<>();
+        views = new ArrayList<>();
     }
 
     public PlayerBoard getPlayerBoard(String username){
         for(PlayerBoard x: players){
-            if(x.username.equals(username))
+            if(x.getUsername().equals(username))
                 return x;
         }
         throw new IllegalArgumentException("Invalid username");
@@ -175,12 +176,13 @@ public class Match implements ObservableFromView {
         if(!players.isEmpty() && players.get(0).getFaithTrack().isValidVaticanReport(popeSpace)) {
             for (PlayerBoard p : players) {
                 if (p.getFaithTrack().getFaithMarker() >= popeSpace - (3 + vaticanReportsCount))
-                    p.getFaithTrack().getPopeFavorTiles()[vaticanReportsCount].uncover();
+                    p.getFaithTrack().uncoverPopeFavorTile(vaticanReportsCount);
                 else
-                    p.getFaithTrack().getPopeFavorTiles()[vaticanReportsCount] = null;
+                    p.getFaithTrack().discardPopeFavorTile(vaticanReportsCount);
                 p.getFaithTrack().vaticanReportTriggered(vaticanReportsCount);
             }
             vaticanReportsCount++;
+
         }
     }
 
@@ -196,7 +198,13 @@ public class Match implements ObservableFromView {
         return maxPlayersNumber;
     }
 
-    public void endTurn(){}
+    public void endTurn(){
+        int nextPlayerIndex = (currentPlayerIndex + 1) % players.size();
+        for (VirtualView view:views) {
+            if (players.get(nextPlayerIndex).getUsername().equals(view.getUsername()))
+                view.showPlayerBoard(players.get(nextPlayerIndex));
+        }
+    }
 
     public Deck<LeaderCard> getLeaderCards() {
         return leaderCards;
@@ -222,16 +230,19 @@ public class Match implements ObservableFromView {
     }
 
     @Override
-    public void addView(View view) {
-        //TODO add initial views and on connect/disconnect/reconnect
+    public void addView(VirtualView view) {
+        if (views == null)
+            views = new ArrayList<>();
         views.add(view);
         players.forEach(playerBoard -> playerBoard.addView(view));
+        market.addView(view);
     }
 
     @Override
-    public void removeView(View view) {
+    public void removeView(VirtualView view) {
         views.remove(view);
         players.forEach(playerBoard -> playerBoard.removeView(view));
+        market.removeView(view);
     }
 
     @Override

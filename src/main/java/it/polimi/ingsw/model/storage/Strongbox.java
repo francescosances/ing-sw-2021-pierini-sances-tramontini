@@ -1,22 +1,25 @@
 package it.polimi.ingsw.model.storage;
 
 import it.polimi.ingsw.model.cards.Requirements;
+import it.polimi.ingsw.utils.ObservableFromView;
+import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.VirtualView;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
-public class Strongbox implements Storage {
+public class Strongbox implements Storage, ObservableFromView {
     /**
      * Representation of the amount of each resource present in the strongbox.
      */
     private final Map<ResourceType, Integer> resources;
+    transient private List<View> views;
 
     /**
      * Creates a new empty strongbox.
      */
     public Strongbox() {
         resources = new HashMap<>();
+        views = new ArrayList<>();
     }
 
     /**
@@ -25,6 +28,7 @@ public class Strongbox implements Storage {
      */
     public void addResources(Map<ResourceType, Integer> resources) {
         resources.forEach((res, num) -> this.resources.put(res, this.resources.containsKey(res) ? this.resources.get(res) + num : num));
+        updateViews();
     }
 
     /**
@@ -33,6 +37,7 @@ public class Strongbox implements Storage {
      */
     public void addResource(ResourceType resource){
         resources.put(resource, resources.containsKey(resource) ? resources.get(resource) + 1 : 1);
+        updateViews();
     }
 
     /**
@@ -54,6 +59,8 @@ public class Strongbox implements Storage {
                 this.resources.put((ResourceType) res.getKey(), previousValue - toBeRemoved);
             newRequirements.removeResourceRequirement(res.getKey(), toBeRemoved);
         }
+        if (!newRequirements.equals(resources))
+            updateViews();
         return newRequirements;
     }
 
@@ -76,6 +83,34 @@ public class Strongbox implements Storage {
         Requirements ret = new Requirements();
         resources.forEach(ret::addResourceRequirement);
         return ret;
+    }
+
+
+    /**
+     * Adds the view to the list of views
+     * @param view the view that has to be added
+     */
+    @Override
+    public void addView(VirtualView view) {
+        if (views == null)
+            views = new ArrayList<>();
+        views.add(view);
+    }
+
+    /**
+     * Removes the view from the list of views
+     * @param view the view that has to be removed
+     */
+    @Override
+    public void removeView(VirtualView view) {
+        views.remove(view);
+    }
+
+    /**
+     * Notifies all views of the change
+     */
+    private void updateViews() {
+        views.forEach(view -> view.showStrongbox(this));
     }
 
     /**
@@ -110,4 +145,5 @@ public class Strongbox implements Storage {
     public int hashCode() {
         return super.hashCode();
     }
+
 }

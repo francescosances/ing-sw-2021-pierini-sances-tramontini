@@ -1,11 +1,14 @@
 package it.polimi.ingsw.model.storage;
 
 import it.polimi.ingsw.model.cards.DepotLeaderCard;
+import it.polimi.ingsw.model.cards.DepotLeaderCard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.Requirements;
 import it.polimi.ingsw.model.cards.exceptions.WrongLeaderCardException;
 import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 import it.polimi.ingsw.model.storage.exceptions.UnswappableDepotsException;
+import it.polimi.ingsw.utils.ObservableFromView;
+import it.polimi.ingsw.view.VirtualView;
 import it.polimi.ingsw.utils.ObservableFromView;
 import it.polimi.ingsw.view.View;
 
@@ -30,7 +33,7 @@ public class Warehouse implements Storage, ObservableFromView {
     /**
      * The list containing the views to update
      */
-    private final transient List<View> views;
+    private transient List<VirtualView> views;
 
     /**
      * Creates a new warehouse with STD_DEPOT_NUMBER empty standard depots.
@@ -45,20 +48,31 @@ public class Warehouse implements Storage, ObservableFromView {
 
     /**
      * Adds the specified resources to the specified depot.
+     * Notifies of the change happened.
      * @param depotNumber the number of the depot where to add the resources
      * @param res the type of the resources to be added
      * @param num the amount of the resources to be added
      * @throws IncompatibleDepotException if is already existing a standard depot with the same resource type
      */
     public void addResources(int depotNumber, ResourceType res, int num) throws IncompatibleDepotException {
+        putResources(depotNumber, res, num);
+        updateNonPlayingViews();
+    }
+
+    /**
+     * Adds the specified resources to the specified depot.
+     * @param depotNumber the number of the depot where to add the resources
+     * @param res the type of the resources to be added
+     * @param num the amount of the resources to be added
+     * @throws IncompatibleDepotException if is already existing a standard depot with the same resource type
+     */
+    private void putResources(int depotNumber, ResourceType res, int num) throws IncompatibleDepotException {
         if (depotNumber < STD_DEPOT_NUM)
             for (int depotIndex = 0; depotIndex < STD_DEPOT_NUM; depotIndex++)
                 if (depotIndex != depotNumber && depots.get(depotIndex).getResourceType() == res)
                     throw new IncompatibleDepotException("You can’t place the same type of Resource in two different standard depots.");
         for (int i = 0; i < num; i++)
             depots.get(depotNumber).addResource(res);
-
-        updateViews();
     }
 
     /**
@@ -82,8 +96,8 @@ public class Warehouse implements Storage, ObservableFromView {
                 }
             }
         }
-
-        updateViews();
+        if (!newRequirements.equals(requirements))
+            updateAllViews();
         return newRequirements;
     }
 
@@ -107,7 +121,6 @@ public class Warehouse implements Storage, ObservableFromView {
      */
     public void toBeStored(Resource[] resources) {
         toBeStored.addAll(Arrays.asList(resources));
-        updateViews();
     }
 
     /**
@@ -116,7 +129,6 @@ public class Warehouse implements Storage, ObservableFromView {
      */
     public void pushResourceToBeStored(Resource resource){
         toBeStored.push(resource);
-        updateViews();
     }
 
     /**
@@ -135,11 +147,16 @@ public class Warehouse implements Storage, ObservableFromView {
         int firstOccupied = depots.get(first).getOccupied();
         int secondOccupied = depots.get(second).getOccupied();
 
+        if (firstOccupied == secondOccupied && firstOccupied == 0)
+            return;
+
         try {
             removeResources(first, firstOccupied);
             removeResources(second, secondOccupied);
-            addResources(first, secondResourceType, secondOccupied);
-            addResources(second, firstResourceType, firstOccupied);
+            if (secondResourceType != null)
+                putResources(first, secondResourceType, secondOccupied);
+            if (firstResourceType != null)
+                putResources(second, firstResourceType, firstOccupied);
         } catch (IncompatibleDepotException e) {
             removeResources(first, depots.get(first).getOccupied());
             removeResources(second, depots.get(second).getOccupied());
@@ -148,7 +165,7 @@ public class Warehouse implements Storage, ObservableFromView {
             throw new UnswappableDepotsException("Unable to swap selected depots, you chose a Depot Leader Card which couldn't be used");
         }
 
-        updateViews();
+        updateAllViews();
     }
 
     /**
@@ -164,9 +181,8 @@ public class Warehouse implements Storage, ObservableFromView {
      * @return the first resource in the toBeStored storage that needs to be stored in a depot or discarded
      */
     public Resource popResourceToBeStored(){
-        Resource res = toBeStored.pop();
-        updateViews();
-        return res;
+        updateToBeStored();
+        return toBeStored.pop();
     }
 
     /**
@@ -199,13 +215,14 @@ public class Warehouse implements Storage, ObservableFromView {
         depots.add(depotLeaderCard);
     }
 
-
     /**
      * Adds the view to the list of views
      * @param view the view that has to be added
      */
     @Override
-    public void addView(View view) {
+    public void addView(VirtualView view) {
+        if (views == null)
+            views = new ArrayList<>();
         views.add(view);
     }
 
@@ -214,15 +231,33 @@ public class Warehouse implements Storage, ObservableFromView {
      * @param view the view that has to be removed
      */
     @Override
-    public void removeView(View view) {
+    public void removeView(VirtualView view) {
         views.remove(view);
+    }
+
+    /**
+     * Notifies all views but the currently active player of the change
+     */
+    private void updateNonPlayingViews() {
+        for (VirtualView view:views) {
+            if (!view.getCurrentActiveUser().equals(view.getUsername()))
+                view.showWarehouse(this);
+        }
     }
 
     /**
      * Notifies all views of the change
      */
-    private void updateViews() {
-        views.forEach(view -> view.showWarehouse(this));
+    private void updateAllViews() {
+        for (VirtualView view:views)
+            view.showWarehouse(this);
+    }
+
+    /**
+     * Notifies all views of the change
+     */
+    private void updateToBeStored() {
+        views.forEach(view -> view.showResourcesGainedFromMarket(toBeStored.toArray(new Resource[0])));
     }
 
     /**
@@ -237,7 +272,6 @@ public class Warehouse implements Storage, ObservableFromView {
         Warehouse warehouse = (Warehouse) o;
         return Objects.equals(depots, warehouse.depots) && Objects.equals(toBeStored, warehouse.toBeStored);
     }
-
 
     /**
      * Returns a string representation of the object
