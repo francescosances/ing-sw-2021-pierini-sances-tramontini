@@ -108,9 +108,16 @@ public abstract class LeaderCard extends Card {
         return false;
     }
 
-    //TODO: javadoc
+    /**
+     * Returns true if the LeaderCard is a DiscountLeaderCard (in overriden method), false elsewhere
+     * @return true if the LeaderCard is a DiscountLeaderCard, false elsewhere
+     */
     public boolean isDiscountLeaderCard(){ return false; }
 
+    /**
+     * Returns true if the LeaderCard is a DepotLeaderCard (in overriden method), false elsewhere
+     * @return true if the LeaderCard is a DepotLeaderCard, false elsewhere
+     */
    public boolean isDepotLeaderCard(){
         return false;
    }

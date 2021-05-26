@@ -93,6 +93,7 @@ public class SoloMatch extends Match{
      */
     @Override
     public void endTurn(){
+        //TODO: eliminare chiamata iniziale che fa avanzare gli action token inutilmente
         super.endTurn();
         try {
             ActionToken actionToken = drawActionToken();
