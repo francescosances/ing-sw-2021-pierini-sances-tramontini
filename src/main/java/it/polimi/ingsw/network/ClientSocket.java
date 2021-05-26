@@ -47,13 +47,6 @@ public class ClientSocket implements Runnable{
     }
 
     /**
-     * Set the view to Command Line Interface and launch it via the controller
-     */
-    public void startCli() {
-        clientController.startCli();
-    }
-
-    /**
      * Establishes the connection with the server and set the input and output streams
      * @param ip the server ip address
      * @param port the server port
@@ -78,7 +71,7 @@ public class ClientSocket implements Runnable{
             try {
                 String received = socketIn.nextLine();
                 Message message = Message.messageFromString(received);
-                //log("received"+received);
+                log("received"+received);
                 Thread t = new Thread(()-> clientController.handleReceivedMessage(message));
                 t.setDaemon(true);
                 t.start();

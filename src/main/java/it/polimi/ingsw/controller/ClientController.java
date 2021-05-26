@@ -79,7 +79,6 @@ public class ClientController {
      */
     public void handleReceivedMessage(Message message) {
         Gson gson = new Gson();
-        String currentPlayerUsername;
         switch (message.getType()) {
             case GENERIC:
                 view.showMessage(message.getData("text"));
@@ -118,7 +117,9 @@ public class ClientController {
                 break;
             case SHOW_PLAYER_BOARD:
                 lock.lock();
-                view.showPlayerBoard(Serializer.deserializePlayerBoard(message.getData("playerBoard")));
+                PlayerBoard playerBoard = Serializer.deserializePlayerBoard(message.getData("playerBoard"));
+                playerBoard.addView(view);
+                view.showPlayerBoard(playerBoard);
                 lock.unlock();
                 break;
             case SHOW_FAITH_TRACK:
