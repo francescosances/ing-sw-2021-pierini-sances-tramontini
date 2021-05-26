@@ -237,6 +237,26 @@
             </ImageView>
             <Button fx:id="skipBtn" layoutX="887.0" layoutY="30.0" mnemonicParsing="false" onAction="#skip" prefHeight="48.0" prefWidth="208.0" styleClass="btn" visible="false" />
             <Button fx:id="swapDepotsBtn" layoutX="887.0" layoutY="30.0" mnemonicParsing="false" onAction="#swapDepots" prefHeight="48.0" prefWidth="208.0" styleClass="btn" visible="false" />
+            <Label fx:id="lblCoinStrongbox" layoutX="58.0" layoutY="585.0" styleClass="lblStrongbox" text="0" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblShieldStrongbox" layoutX="128.0" layoutY="587.0" styleClass="lblStrongbox" text="0" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblStoneStrongbox" layoutX="126.0" layoutY="640.0" styleClass="lblStrongbox" text="0" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblServantStrongbox" layoutX="57.0" layoutY="640.0" styleClass="lblStrongbox" text="0" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
 
          </children>
           </AnchorPane>

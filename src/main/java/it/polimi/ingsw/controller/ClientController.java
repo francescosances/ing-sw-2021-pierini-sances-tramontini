@@ -205,7 +205,7 @@ public class ClientController {
                 break;
             case PRODUCTION_PERFORMED:
                 lock.lock();
-                view.showProduction();
+                view.showProducerUser();
                 lock.unlock();
                 break;
             case SHOW_PLAYER_LEADER_CARDS:

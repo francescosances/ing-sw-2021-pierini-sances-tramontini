@@ -1,9 +1,6 @@
 package it.polimi.ingsw.view.gui.scene;
 
-import it.polimi.ingsw.model.Action;
-import it.polimi.ingsw.model.Match;
-import it.polimi.ingsw.model.PlayerBoard;
-import it.polimi.ingsw.model.Producer;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.*;
 import javafx.beans.value.ChangeListener;
@@ -45,7 +42,7 @@ public class PlayerboardSceneController extends Controller{
     protected ImageView resources_supply,resources_supply_0,resources_supply_1,resources_supply_2,resources_supply_3,currentResource,boxCurrentResource;
 
     @FXML
-    protected Label lblStoring;
+    protected Label lblStoring,lblCoinStrongbox,lblStoneStrongbox,lblShieldStrongbox,lblServantStrongbox;
 
     @FXML
     protected ImageView marker;
@@ -72,9 +69,9 @@ public class PlayerboardSceneController extends Controller{
 
     private Runnable onRollbackAction = ()->{};
 
-    private List<Integer> selectedWarehouseRows = new ArrayList<>();
+    private final List<Integer> selectedWarehouseRows = new ArrayList<>();
 
-    private Runnable defaultWarehouseAction = ()->{
+    private final Runnable defaultWarehouseAction = ()->{
         if(selectedWarehouseRows.size() == 2){
             clientController.swapDepots(selectedWarehouseRows.get(0),selectedWarehouseRows.get(1));
             System.out.println("swappo "+selectedWarehouseRows.get(0)+" "+selectedWarehouseRows.get(1));
@@ -95,30 +92,7 @@ public class PlayerboardSceneController extends Controller{
 
     @FXML
     public void initialize(PlayerBoard playerBoard){
-       // if(playerBoard.getUsername().equals(clientController.getUsername()))
-        this.playerBoard = playerBoard;
-
-        marker.setX(FAITH_TRACK_CELLS[playerBoard.getFaithTrack().getFaithMarker()][0]);
-        marker.setY(FAITH_TRACK_CELLS[playerBoard.getFaithTrack().getFaithMarker()][1]);
-        marker.setVisible(true);
-
-        showLeaderCards(playerBoard.getLeaderCards());
-
-        showDevelopmentCards(playerBoard.getDevelopmentCardSlots());
-
-        showWarehouse(playerBoard.getWarehouse());
-
-        ImageView[] popeFavorTiles = {vaticanreport0,vaticanreport1,vaticanreport2};
-        for(int i=0;i<3;i++){
-            popeFavorTiles[i].setImage(new Image("/images/punchboard/pope_favor_tile_missed_"+i+".png"));
-            popeFavorTiles[i].setVisible(true);
-            if(playerBoard.getFaithTrack().getPopeFavorTiles()[i] == null){
-                popeFavorTiles[i].setVisible(false);
-            }else if(playerBoard.getFaithTrack().getPopeFavorTiles()[i].isUncovered()) {
-                popeFavorTiles[i].setImage(new Image("/images/punchboard/pope_favor_tile" + i + ".png"));
-                popeFavorTiles[i].setVisible(true);
-            }
-        }
+        showPlayerBoard(playerBoard);
 
         disableControls();
         selectUser.setDisable(false);
@@ -641,6 +615,20 @@ public class PlayerboardSceneController extends Controller{
         }
     }
 
+    private void showPlayerBoard(PlayerBoard playerBoard){
+        this.playerBoard = playerBoard;
+
+        showLeaderCards(playerBoard.getLeaderCards());
+
+        showDevelopmentCards(playerBoard.getDevelopmentCardSlots());
+
+        showWarehouse(playerBoard.getWarehouse());
+
+        showStrongbox(playerBoard.getStrongbox());
+
+        showFaithTrack(playerBoard.getFaithTrack());
+    }
+
     public void resetControls(Action[] availableActions) {
         this.populateUserSelect();
         this.enableControls();
@@ -681,5 +669,35 @@ public class PlayerboardSceneController extends Controller{
 
     public void swapDepots() {
        enableWarehouseSelection(defaultWarehouseAction);
+    }
+
+    public void showFaithTrack(FaithTrack faithTrack) {
+        playerBoard.setFaithTrack(faithTrack);
+
+        marker.setX(FAITH_TRACK_CELLS[faithTrack.getFaithMarker()][0]);
+        marker.setY(FAITH_TRACK_CELLS[faithTrack.getFaithMarker()][1]);
+        marker.setVisible(true);
+
+        ImageView[] popeFavorTiles = {vaticanreport0,vaticanreport1,vaticanreport2};
+        for(int i=0;i<3;i++){
+            popeFavorTiles[i].setImage(new Image("/images/punchboard/pope_favor_tile_missed_"+i+".png"));
+            popeFavorTiles[i].setVisible(true);
+            if(faithTrack.getPopeFavorTiles()[i] == null){
+                popeFavorTiles[i].setVisible(false);
+            }else if(faithTrack.getPopeFavorTiles()[i].isUncovered()) {
+                popeFavorTiles[i].setImage(new Image("/images/punchboard/pope_favor_tile" + i + ".png"));
+                popeFavorTiles[i].setVisible(true);
+            }
+        }
+
+    }
+
+    public void showStrongbox(Strongbox strongbox){
+        this.playerBoard.setStrongbox(strongbox);
+
+        lblCoinStrongbox.setText(String.valueOf(strongbox.getResourcesNum(ResourceType.COIN)));
+        lblStoneStrongbox.setText(String.valueOf(strongbox.getResourcesNum(ResourceType.STONE)));
+        lblShieldStrongbox.setText(String.valueOf(strongbox.getResourcesNum(ResourceType.SHIELD)));
+        lblServantStrongbox.setText(String.valueOf(strongbox.getResourcesNum(ResourceType.SERVANT)));
     }
 }

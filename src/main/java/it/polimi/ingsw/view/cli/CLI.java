@@ -488,7 +488,7 @@ public class CLI implements View {
     }
 
     @Override
-    public void showProduction() {
+    public void showProducerUser() {
         output.println();
         output.println(currentActiveUser + " decided to produce");
     }

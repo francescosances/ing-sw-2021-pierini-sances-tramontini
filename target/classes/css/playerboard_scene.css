@@ -112,3 +112,7 @@
 #swapDepotsBtn{
     -fx-background-image: url("../images/buttons/swap_depots.png");
 }
+
+.lblStrongbox{
+    -fx-effect: dropshadow(gaussian, #FDC309, 10, 0.5, 1, 1);
+}

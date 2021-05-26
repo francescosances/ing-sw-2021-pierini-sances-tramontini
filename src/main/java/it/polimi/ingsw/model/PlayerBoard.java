@@ -7,7 +7,6 @@ import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.view.ObservableFromView;
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.VirtualView;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -371,10 +370,36 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
         strongbox.addResources(newGains);
     }
 
+    /**
+     * Set the warehouse associated to the playerboard
+     * @param warehouse the warehouse associated to the playerboard
+     */
     public void setWarehouse(Warehouse warehouse) {
         this.warehouse = warehouse;
         for (View view:views)
             warehouse.addView(view);
+    }
+
+    //TODO: verificare se vale la pena di spostare i setter su una nuova classe mutable
+
+    /**
+     * Set the faithTrack associated to the playerboard
+     * @param faithTrack the faith track associated to the playerboard
+     */
+    public void setFaithTrack(FaithTrack faithTrack){
+        this.faithTrack = faithTrack;
+        for (View view:views)
+            faithTrack.addView(view);
+    }
+
+    /**
+     * Set the strongbox associated to the playerboard
+     * @param strongbox the strongbox associated to the playerboard
+     */
+    public void setStrongbox(Strongbox strongbox){
+        this.strongbox = strongbox;
+        for (View view:views)
+            strongbox.addView(view);
     }
 
     /**
@@ -428,7 +453,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      */
     private void updateProduction(){
         for (View view:views)
-            view.showProduction();
+            view.showProducerUser();
     }
 
 
@@ -453,7 +478,6 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      * @param o that is confronted
      * @return true if o is equal to the object, false elsewhere
      */
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

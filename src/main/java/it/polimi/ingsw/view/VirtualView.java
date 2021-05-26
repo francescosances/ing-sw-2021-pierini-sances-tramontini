@@ -279,7 +279,7 @@ public class VirtualView implements View {
     }
 
     @Override
-    public void showProduction() {
+    public void showProducerUser() {
         Message message = new Message(Message.MessageType.PRODUCTION_PERFORMED);
         sendMessage(message);
     }

@@ -187,8 +187,6 @@ public class GUI implements View {
         Platform.runLater(()->{
             if(playerboardSceneController == null)
                 playerboardSceneController = (PlayerboardSceneController) loadScene("playerboard_scene");
-          //  PlayerboardSceneController controller = (PlayerboardSceneController) loadScene("playerboard_scene",playerboardSceneController == null || playerBoard.getUsername().equals(playerboardSceneController.getClientController().getUsername()));
-          //  this.playerboardSceneController = controller;
             playerBoardSemaphore.release();
             playerboardSceneController.initialize(playerBoard);
         });
@@ -196,7 +194,11 @@ public class GUI implements View {
 
     @Override
     public void showFaithTrack(FaithTrack faithTrack) {
-        //TODO
+        Platform.runLater(()->{
+            if(getPlayerBoardSceneController() == null)
+                return;
+            getPlayerBoardSceneController().showFaithTrack(faithTrack);
+        });
     }
 
     @Override
@@ -206,12 +208,16 @@ public class GUI implements View {
 
     @Override
     public void showWarehouse(Warehouse warehouse) {
-        playerboardSceneController.showWarehouse(warehouse);
+        if(getPlayerBoardSceneController() == null)
+            return;
+        Platform.runLater(()-> getPlayerBoardSceneController().showWarehouse(warehouse));
     }
 
     @Override
     public void showStrongbox(Strongbox strongbox) {
-        //TODO
+        if(getPlayerBoardSceneController() == null)
+            return;
+        Platform.runLater(()-> getPlayerBoardSceneController().showStrongbox(strongbox));
     }
 
     @Override
@@ -225,7 +231,7 @@ public class GUI implements View {
         clientController.setPlayers(usernames);
         if(getPlayerBoardSceneController() == null)
             return;
-        Platform.runLater(()-> playerboardSceneController.resetControls(availableActions));
+        Platform.runLater(()-> getPlayerBoardSceneController().resetControls(availableActions));
     }
 
     @Override
@@ -309,7 +315,7 @@ public class GUI implements View {
     }
 
     @Override
-    public void showProduction() {
+    public void showProducerUser() {
         //TODO
     }
 

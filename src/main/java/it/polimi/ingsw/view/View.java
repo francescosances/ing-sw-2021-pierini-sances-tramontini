@@ -223,7 +223,7 @@ public interface View {
     /**
      * Notifies the player of the production started
      */
-    void showProduction();
+    void showProducerUser();
 
     /**
      * Returns the username of the player
