@@ -2,9 +2,11 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.PlayerBoard;
-import it.polimi.ingsw.model.cards.DevelopmentCard;
-import it.polimi.ingsw.model.cards.DevelopmentColorType;
-import it.polimi.ingsw.model.cards.Requirements;
+import it.polimi.ingsw.model.cards.*;
+import it.polimi.ingsw.model.storage.ResourceType;
+import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
+import it.polimi.ingsw.utils.Pair;
+import it.polimi.ingsw.view.VirtualView;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +22,7 @@ class PlayerControllerTest {
         Match match = new Match("Test");
         PlayerBoard playerBoard = new PlayerBoard("Test", match);
         playerController = new PlayerController(playerBoard.getUsername(), playerBoard, null);
+        playerController.active = true;
     }
 
     @AfterEach
@@ -29,6 +32,7 @@ class PlayerControllerTest {
 
     @Test
     void activate() {
+        playerController.active = false;
         playerController.activate();
         assertTrue(playerController.isActive());
         assertEquals(PlayerController.PlayerStatus.TURN_ENDED, playerController.getCurrentStatus());
@@ -54,19 +58,19 @@ class PlayerControllerTest {
     }
 
     @Test
-    void startTurn() {
-    }
-
-    @Test
-    void turnEnded() {
-    }
-
-    @Test
-    void getVirtualView() {
+    void startTurn_turnEnded() {
+        assertEquals(playerController.getCurrentStatus(), PlayerController.PlayerStatus.PERFORMING_ACTION);
+        playerController.turnEnded();
+        assertEquals(playerController.getCurrentStatus(), PlayerController.PlayerStatus.TURN_ENDED);
+        playerController.startTurn();
+        assertEquals(playerController.getCurrentStatus(), PlayerController.PlayerStatus.PERFORMING_ACTION);
     }
 
     @Test
     void setVirtualView() {
+        VirtualView virtualView = new VirtualView(null, playerController.username);
+        playerController.setView(virtualView);
+        assertEquals(virtualView, playerController.getView());
     }
 
     @Test
@@ -75,10 +79,23 @@ class PlayerControllerTest {
 
     @Test
     void setup() {
+        try {
+            for (int i = 0; i <= 3; i++) {
+                playerController.setPlayerIndex(i);
+                playerController.setup();
+                assertEquals(i / 2, playerController.getPlayerBoard().getFaithTrack().getFaithMarker());
+            }
+        } catch (NullPointerException ignored){} //virtualView is null
     }
 
     @Test
     void defaultSetup() {
+        playerController.setPlayerIndex(2);
+        playerController.deactivate();
+        playerController.setup();
+        assertEquals(1, playerController.getPlayerBoard().getFaithTrack().getFaithMarker());
+        assertEquals(1, playerController.getPlayerBoard().getWarehouse().getDepots().get(2).getOccupied());
+        assertEquals(2, playerController.getPlayerBoard().getLeaderCards().size());
     }
 
     @Test
@@ -91,10 +108,25 @@ class PlayerControllerTest {
 
     @Test
     void discardLeaderCard() {
+        playerController.setPlayerIndex(0);
+        playerController.deactivate();
+        playerController.setup();
+        LeaderCard leaderCard = playerController.getPlayerBoard().getLeaderCards().get(0);
+        playerController.discardLeaderCard(0);
+        assertTrue(playerController.getPlayerBoard().getLeaderCards().stream().noneMatch(c->c.equals(leaderCard)));
     }
 
     @Test
-    void activateLeaderCard() {
+    void activateLeaderCard() throws IncompatibleDepotException {
+        LeaderCard leaderCard = new DepotLeaderCard("",3,new Requirements(new Pair<>(ResourceType.COIN, 1)),ResourceType.SHIELD);
+        playerController.getPlayerBoard().getLeaderCards().add(leaderCard);
+        try{
+            playerController.activateLeaderCard(0);
+        } catch (NullPointerException ignored) {} //virtualView is null
+        assertFalse(playerController.getPlayerBoard().getLeaderCards().get(0).isActive());
+        playerController.getPlayerBoard().getWarehouse().getDepots().get(0).addResource(ResourceType.COIN);
+        playerController.activateLeaderCard(0);
+        assertTrue(playerController.getPlayerBoard().getLeaderCards().get(0).isActive());
     }
 
     @Test

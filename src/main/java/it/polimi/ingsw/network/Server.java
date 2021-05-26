@@ -269,7 +269,7 @@ public class Server implements StatusObserver {
      */
     private synchronized void reconnect(String username, ClientHandler clientHandler) {
         PlayerController playerController = getGameController(username).getPlayerController(username);
-        playerController.setVirtualView(new VirtualView(clientHandler, username)); //Sets the virtual view with the new clientHandler reference
+        playerController.setView(new VirtualView(clientHandler, username)); //Sets the virtual view with the new clientHandler reference
         getGameController(username).connect(username);
         getGameController(username).resumeMatch(username);
         if(getGameController(username).isSuspended()) {

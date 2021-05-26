@@ -191,14 +191,14 @@ public class GameController implements PlayerStatusListener {
         PlayerController playerController = getPlayerController(username);
         if(playerController != null){
             //Reactivating existing player
-            playerController.setVirtualView(new VirtualView(clientHandler, playerController.getUsername()));
+            playerController.setView(new VirtualView(clientHandler, playerController.getUsername()));
         }else{
             playerController = new PlayerController(username, match.addPlayer(username), new VirtualView(clientHandler, username));
             players.add(playerController);
         }
         playerController.addObserver(this);
         if (notify) {
-            match.addView(playerController.getVirtualView());
+            match.addView(playerController.getView());
             statusObserver.onStatusChanged(this);
         }
         return playerController;
@@ -307,7 +307,7 @@ public class GameController implements PlayerStatusListener {
      */
     private void showCurrentActiveUser() {
         for (PlayerController player : players)
-            player.getVirtualView().showCurrentActiveUser(players.get(match.getCurrentPlayerIndex()).getUsername());
+            player.getView().showCurrentActiveUser(players.get(match.getCurrentPlayerIndex()).getUsername());
     }
 
     /**
@@ -362,7 +362,7 @@ public class GameController implements PlayerStatusListener {
      */
     protected void broadcastMessage(String message){
         for (PlayerController player : players) {
-            player.getVirtualView().showMessage(message);
+            player.getView().showMessage(message);
         }
     }
 
@@ -383,8 +383,8 @@ public class GameController implements PlayerStatusListener {
         players.forEach((user)->{
             if(user.getUsername().equals(username))
                 user.activate();
-            else if (user.getVirtualView() != null)
-                user.getVirtualView().userConnected(username);
+            else if (user.getView() != null)
+                user.getView().userConnected(username);
         });
     }
 
@@ -396,15 +396,15 @@ public class GameController implements PlayerStatusListener {
         players.forEach((user)->{
             if(user.getUsername().equals(username)) {
                 user.deactivate();
-                match.removeView(user.getVirtualView());
+                match.removeView(user.getView());
                 if(username.equals(players.get(getMatch().getCurrentPlayerIndex()).getUsername())) {
                     if(match.getCurrentPhase() == Match.GamePhase.PLAYERS_SETUP)
                         user.setup();
                     nextTurn();
                 }
             }else {
-                if(user.getVirtualView() != null)
-                    user.getVirtualView().userDisconnected(username);
+                if(user.getView() != null)
+                    user.getView().userDisconnected(username);
             }
         });
     }
@@ -444,8 +444,8 @@ public class GameController implements PlayerStatusListener {
             map = new HashMap<>();
             for (PlayerController p:players)
                 map.put(p.getUsername(), p.isActive());
-            if (playerController.getVirtualView() != null)
-                playerController.getVirtualView().showPlayers(map);
+            if (playerController.getView() != null)
+                playerController.getView().showPlayers(map);
         }
     }
 
@@ -454,9 +454,9 @@ public class GameController implements PlayerStatusListener {
      * @param username the username of the player reconnecting
      */
     public void resumeMatch(String username) {
-        match.addView(getPlayerController(username).getVirtualView());
+        match.addView(getPlayerController(username).getView());
         listPlayers();
-        getPlayerController(username).getVirtualView().showCurrentActiveUser(players.get(match.getCurrentPlayerIndex()).getUsername());
-        getPlayerController(username).getVirtualView().resumeMatch(getPlayerController(username).getPlayerBoard());
+        getPlayerController(username).getView().showCurrentActiveUser(players.get(match.getCurrentPlayerIndex()).getUsername());
+        getPlayerController(username).getView().resumeMatch(getPlayerController(username).getPlayerBoard());
     }
 }

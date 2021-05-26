@@ -1,7 +1,6 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Action;
-import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
@@ -9,6 +8,7 @@ import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 import it.polimi.ingsw.model.storage.exceptions.UnswappableDepotsException;
+import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.VirtualView;
 
 import java.util.*;
@@ -31,7 +31,7 @@ public class PlayerController {
     /**
      * The virtual view connected to the client via socket
      */
-    private transient VirtualView virtualView;
+    private transient View view;
     /**
      * Represent the current status of the player
      */
@@ -86,13 +86,13 @@ public class PlayerController {
      * Initialize a new player controller active and waiting for his turn.
      * @param username the username of the player associated with the player controller
      * @param playerBoard the playerboard of the user
-     * @param virtualView the virtual view containing the reference to the socket connection
+     * @param View the virtual view containing the reference to the socket connection
      */
-    public PlayerController(String username,PlayerBoard playerBoard,VirtualView virtualView){
+    public PlayerController(String username,PlayerBoard playerBoard,View View){
         this.username = username;
         this.playerBoard = playerBoard;
         this.active = true;
-        this.virtualView = virtualView;
+        this.view = View;
         currentStatus = PlayerStatus.PERFORMING_ACTION;
         gotResourcesOfYourChoice = false;
         resetSkipAction();
@@ -171,16 +171,16 @@ public class PlayerController {
      * Returns the virtual view containing the reference to the socket connection
      * @return the virtual view containing the reference to the socket connection
      */
-    public VirtualView getVirtualView(){
-        return virtualView;
+    public View getView(){
+        return view;
     }
 
     /**
      * Sets the virtual view containing the reference to the socket connection
-     * @param virtualView the virtual view containing the reference to the socket connection
+     * @param view the virtual view containing the reference to the socket connection
      */
-    public void setVirtualView(VirtualView virtualView){
-        this.virtualView = virtualView;
+    public void setView(VirtualView view){
+        this.view = view;
     }
 
     /**
@@ -246,7 +246,7 @@ public class PlayerController {
      */
     public void listLeaderCards(){
         List<LeaderCard> leaderCardList = playerBoard.getMatch().drawLeaderCards(4);
-        virtualView.listLeaderCards(leaderCardList,2);
+        view.listLeaderCards(leaderCardList,2);
         leaderCardsChooser = cards -> {
             for (LeaderCard card : cards) {
                 playerBoard.addLeaderCard(card);
@@ -273,7 +273,6 @@ public class PlayerController {
         for (PlayerStatusListener x : this.observers) {
             x.onPlayerStatusChanged(this);
         }
-        virtualView.showPlayerLeaderCards(playerBoard.getLeaderCards());
     }
 
     /**
@@ -284,13 +283,12 @@ public class PlayerController {
         try {
             playerBoard.activateLeaderCard(num);
         } catch (Exception e){
-            virtualView.showErrorMessage(e.getMessage());
+            view.showErrorMessage(e.getMessage());
         } finally {
             for (PlayerStatusListener x : this.observers) {
                 x.onPlayerStatusChanged(this);
             }
         }
-        virtualView.showPlayerLeaderCards(playerBoard.getLeaderCards());
     }
 
     /**
@@ -298,7 +296,7 @@ public class PlayerController {
      * @param resourcesToChoose the number of resource the player is allowed to choose
      */
     public void askToChooseStartResources(int resourcesToChoose){
-        virtualView.askToChooseStartResources(ResourceType.values(),resourcesToChoose);
+        view.askToChooseStartResources(ResourceType.values(),resourcesToChoose);
     }
 
     /**
@@ -328,7 +326,7 @@ public class PlayerController {
      */
     public void askForAction(){
         setAfterDepotsSwapAction(this::askForAction);
-        virtualView.askForAction(
+        view.askForAction(
                 playerBoard.getMatch().getPlayers().stream().map(PlayerBoard::getUsername).collect(Collectors.toList()),
                 Arrays.stream(Action.ALL_ACTIONS)
                         .filter(x -> x != Action.CANCEL)
@@ -349,7 +347,7 @@ public class PlayerController {
                 listPlayableLeaderCards();
                 break;
             case MOVE_RESOURCES:
-                virtualView.askToSwapDepots(getPlayerBoard().getWarehouse());
+                view.askToSwapDepots(getPlayerBoard().getWarehouse());
                 break;
             case TAKE_RESOURCES_FROM_MARKET:
                 takeResourcesFromMarket();
@@ -358,7 +356,7 @@ public class PlayerController {
                 listDevelopmentCardToBuy();
                 break;
             case ACTIVATE_PRODUCTION:
-                virtualView.chooseProductions(playerBoard.getAvailableProductions(),playerBoard);
+                view.chooseProductions(playerBoard.getAvailableProductions(),playerBoard);
                 break;
             case SKIP:
                 skipAction.run();
@@ -380,7 +378,7 @@ public class PlayerController {
      */
     public void askForNormalAction(){
         setAfterDepotsSwapAction(this::askForNormalAction);
-        virtualView.askForAction(
+        view.askForAction(
                 playerBoard.getMatch().getPlayers().stream().map(PlayerBoard::getUsername).collect(Collectors.toList()),
                 Arrays.stream(Action.NORMAL_ACTIONS)
                         .toArray(Action[]::new));
@@ -390,14 +388,14 @@ public class PlayerController {
      * Send the cards in the hand of the user to the player.
      */
     public void listPlayableLeaderCards(){
-        virtualView.showPlayerLeaderCards(playerBoard.getAvailableLeaderCards());
+        view.showPlayerLeaderCards(playerBoard.getAvailableLeaderCards());
     }
 
     /**
      * List the resources stored in the warehouse depots
      */
     public void showWarehouseStatus(){
-        virtualView.showWarehouse(playerBoard.getWarehouse());
+        view.showWarehouse(playerBoard.getWarehouse());
     }
 
     /**
@@ -418,7 +416,8 @@ public class PlayerController {
                 newCard.setCost(requirements);
                 newDeck.add(newCard);
             }
-        }virtualView.listDevelopmentCards(newCards, 1, getPlayerBoard());
+        }
+        view.listDevelopmentCards(newCards, 1, getPlayerBoard());
     }
 
     /**
@@ -469,7 +468,7 @@ public class PlayerController {
      * Organizes the endGame Phase
      */
     public void endGame(){
-        virtualView.showMessage("MATCH ENDED");//TODO: gestire messaggi sul vincitore
+        view.showMessage("MATCH ENDED");//TODO: gestire messaggi sul vincitore
     }
 
     /**
@@ -481,7 +480,7 @@ public class PlayerController {
         try {
             playerBoard.getWarehouse().swapDepots(depotA, depotB);
         }catch (UnswappableDepotsException | IncompatibleDepotException e){
-            virtualView.showErrorMessage(e.getMessage());
+            view.showErrorMessage(e.getMessage());
         }
         afterDepotsSwapAction.run();
     }
@@ -519,7 +518,7 @@ public class PlayerController {
                 }
             } if (resources[i] == NonPhysicalResourceType.FAITH_POINT) {
                 playerBoard.gainFaithPoints(1);
-                virtualView.showMessage("You gained a faith point");
+                view.showMessage("You gained a faith point");
                 resources[i] = null;
             }
         }
@@ -541,7 +540,7 @@ public class PlayerController {
      * and asking them what they want to choose
      */
     public void takeResourcesFromMarket(){
-        virtualView.takeResourcesFromMarket(playerBoard.getMatch().getMarket());
+        view.takeResourcesFromMarket(playerBoard.getMatch().getMarket());
     }
 
     /**
@@ -550,7 +549,7 @@ public class PlayerController {
     public void askToStoreResource(){
        currentResourceToStore = getPlayerBoard().getWarehouse().popResourceToBeStored();
        if(currentResourceToStore == NonPhysicalResourceType.VOID){
-           virtualView.chooseWhiteMarbleConversion(getPlayerBoard().getLeaderCards().get(0),getPlayerBoard().getLeaderCards().get(1));
+           view.chooseWhiteMarbleConversion(getPlayerBoard().getLeaderCards().get(0),getPlayerBoard().getLeaderCards().get(1));
        }else
            askToConfirmDepot();
     }
@@ -571,8 +570,8 @@ public class PlayerController {
      * Asks the player what depot they want to store currentResourceToStore into
      */
     protected void askToConfirmDepot(){
-        setAfterDepotsSwapAction(() -> virtualView.askToStoreResource(currentResourceToStore,getPlayerBoard().getWarehouse()));
-        virtualView.askToStoreResource(currentResourceToStore, getPlayerBoard().getWarehouse());
+        setAfterDepotsSwapAction(() -> view.askToStoreResource(currentResourceToStore,getPlayerBoard().getWarehouse()));
+        view.askToStoreResource(currentResourceToStore, getPlayerBoard().getWarehouse());
     }
 
     /**
@@ -584,7 +583,7 @@ public class PlayerController {
             try {
                 getPlayerBoard().getWarehouse().addResources(depot, (ResourceType) currentResourceToStore, 1);
             }catch (IncompatibleDepotException e){
-                virtualView.showErrorMessage(e.getMessage());
+                view.showErrorMessage(e.getMessage());
                 getPlayerBoard().getWarehouse().pushResourceToBeStored(currentResourceToStore);
                 askToStoreResource();
                 return;
@@ -604,7 +603,7 @@ public class PlayerController {
      * shows the player their PlayerBoard
      */
     public void showPlayerBoard() {
-        this.virtualView.showPlayerBoard(this.playerBoard);
+        this.view.showPlayerBoard(this.playerBoard);
     }
 
     /**
@@ -612,7 +611,7 @@ public class PlayerController {
      * @param playerBoard the PlayerBoard to be shown
      */
     public void showPlayerBoard(PlayerBoard playerBoard){
-        this.virtualView.showPlayerBoard(playerBoard);
+        this.view.showPlayerBoard(playerBoard);
         for (PlayerStatusListener x : this.observers)
             x.onPlayerStatusChanged(this);
     }
@@ -624,13 +623,13 @@ public class PlayerController {
      */
     public void buyDevelopmentCard(DevelopmentCard developmentCard) {
         if(!developmentCard.getCost().satisfied(getPlayerBoard())){
-            virtualView.showErrorMessage("You cannot buy this card");
+            view.showErrorMessage("You cannot buy this card");
             listDevelopmentCardToBuy();
             return;
         }
         playerBoard.buyDevelopmentCard(developmentCard);
         this.currentDevelopmentCardToStore = developmentCard;
-        virtualView.askToChooseDevelopmentCardSlot(playerBoard.getDevelopmentCardSlots(),developmentCard);
+        view.askToChooseDevelopmentCardSlot(playerBoard.getDevelopmentCardSlots(),developmentCard);
     }
 
     /**
@@ -639,8 +638,8 @@ public class PlayerController {
      */
     public void chooseDevelopmentCardSlot(int slotIndex) {
         if(!playerBoard.getDevelopmentCardSlots()[slotIndex].accepts(currentDevelopmentCardToStore)){
-            virtualView.showErrorMessage("You cannot choose this slot");
-            virtualView.askToChooseDevelopmentCardSlot(playerBoard.getDevelopmentCardSlots(),currentDevelopmentCardToStore);
+            view.showErrorMessage("You cannot choose this slot");
+            view.askToChooseDevelopmentCardSlot(playerBoard.getDevelopmentCardSlots(),currentDevelopmentCardToStore);
             return;
         }
         playerBoard.addDevelopmentCardToSlot(currentDevelopmentCardToStore, slotIndex);
@@ -656,7 +655,7 @@ public class PlayerController {
      */
     public void chooseProductions(Requirements costs,Requirements gains) {
         if(!costs.satisfied(playerBoard)){
-            virtualView.showErrorMessage("You cannot activate these productions");
+            view.showErrorMessage("You cannot activate these productions");
             askForNormalAction();
             return;
         }
