@@ -302,7 +302,10 @@ public class GUI implements View {
 
     @Override
     public void showActionToken(ActionToken actionToken) {
-        //TODO
+        Platform.runLater(()->{
+           ActionTokenSceneController controller = (ActionTokenSceneController) openModal("action_token_scene","Action token",()->{});
+           controller.initialize(actionToken);
+        });
     }
 
     @Override

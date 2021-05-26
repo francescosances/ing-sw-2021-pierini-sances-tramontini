@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane prefHeight="408.0" prefWidth="575.0" styleClass="rootPane" stylesheets="@../css/action_token_scene.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.scene.ActionTokenSceneController">
+   <Group scaleX="1.5" scaleY="1.5" />
+   <ImageView fx:id="actionTokenImg" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+      <image>
+         <Image url="@../images/punchboard/action_token_back.png" />
+      </image>
+   </ImageView>
+</StackPane>

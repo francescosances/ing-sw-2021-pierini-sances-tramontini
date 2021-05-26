@@ -199,9 +199,9 @@ public class PlayerboardSceneController extends Controller{
         Optional result = dialog.showAndWait();
         if(result.isPresent()){
             if(result.get().equals("activate")){
-                clientController.activateLeaderCard(cardIndex);
+                clientController.activateLeaderCard(playerBoard.getLeaderCards().get(0).isActive()?0:cardIndex);
             }else if(result.get().equals("discard")){
-                clientController.discardLeaderCard(cardIndex);
+                clientController.discardLeaderCard(playerBoard.getLeaderCards().get(0).isActive()?0:cardIndex);
             }
         }
     }
