@@ -124,7 +124,7 @@ public class Match implements ObservableFromView {
     }
 
     public PlayerBoard addPlayer(String username){
-        if(players.size() >= MAX_PLAYERS)
+        if(players.size() >= maxPlayersNumber)
             throw new IllegalStateException("Maximum number of players reached");
         if(containsUsername(username))
             throw new IllegalArgumentException("Username already inserted");
