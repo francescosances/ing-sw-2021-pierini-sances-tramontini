@@ -310,5 +310,10 @@ public class GUI implements View {
         //TODO
     }
 
+    @Override
+    public String getUsername() {
+        return clientController.getUsername();
+    }
+
 
 }

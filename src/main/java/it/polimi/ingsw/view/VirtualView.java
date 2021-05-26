@@ -202,6 +202,8 @@ public class VirtualView implements View {
 
     @Override
     public void showMarket(Market market) {
+        if (currentActiveUser.equals(username))
+            return;
         Message message = new Message(Message.MessageType.SHOW_MARKET);
         message.addData("market",Serializer.serializeMarket(market));
         sendMessage(message);

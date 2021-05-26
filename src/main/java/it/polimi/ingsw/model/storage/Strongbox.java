@@ -1,9 +1,8 @@
 package it.polimi.ingsw.model.storage;
 
 import it.polimi.ingsw.model.cards.Requirements;
-import it.polimi.ingsw.utils.ObservableFromView;
+import it.polimi.ingsw.view.ObservableFromView;
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.VirtualView;
 
 import java.util.*;
 
@@ -91,7 +90,7 @@ public class Strongbox implements Storage, ObservableFromView {
      * @param view the view that has to be added
      */
     @Override
-    public void addView(VirtualView view) {
+    public void addView(View view) {
         if (views == null)
             views = new ArrayList<>();
         views.add(view);
@@ -102,7 +101,7 @@ public class Strongbox implements Storage, ObservableFromView {
      * @param view the view that has to be removed
      */
     @Override
-    public void removeView(VirtualView view) {
+    public void removeView(View view) {
         views.remove(view);
     }
 

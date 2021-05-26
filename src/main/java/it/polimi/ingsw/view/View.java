@@ -224,4 +224,10 @@ public interface View {
      * Notifies the player of the production started
      */
     void showProduction();
+
+    /**
+     * Returns the username of the player
+     * @return the username of the player
+     */
+    String getUsername();
 }

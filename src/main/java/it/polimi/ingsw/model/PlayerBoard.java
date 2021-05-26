@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
 import it.polimi.ingsw.model.storage.*;
 import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 import it.polimi.ingsw.serialization.Serializer;
-import it.polimi.ingsw.utils.ObservableFromView;
+import it.polimi.ingsw.view.ObservableFromView;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.VirtualView;
 
@@ -58,7 +58,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
     /**
      * A list containing all VirtualViews to notify on update
      */
-    private transient List<VirtualView> views;
+    private transient List<View> views;
 
     /**
      * Initializes a new PlayerBoard object
@@ -358,6 +358,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      * @param gains the gains of the production
      */
     public void produce(Requirements costs, Requirements gains){
+        //TODO verificare che la produzione sia possibile
         updateProduction();
         payResources(costs);
         Map<ResourceType,Integer> newGains = new HashMap<>();
@@ -372,7 +373,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
 
     public void setWarehouse(Warehouse warehouse) {
         this.warehouse = warehouse;
-        for (VirtualView view:views)
+        for (View view:views)
             warehouse.addView(view);
     }
 
@@ -381,7 +382,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      * @param view the view that has to be added
      */
     @Override
-    public void addView(VirtualView view) {
+    public void addView(View view) {
         if (views == null)
             views = new ArrayList<>();
         views.add(view);
@@ -395,7 +396,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      * @param view the view that has to be removed
      */
     @Override
-    public void removeView(VirtualView view) {
+    public void removeView(View view) {
         try {
             views.remove(view);
             faithTrack.removeView(view);
@@ -409,7 +410,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      * Notifies all views of the change
      */
     private void updateLeaderCardsList() {
-        for (VirtualView view:views)
+        for (View view:views)
             view.showLeaderCards(leaderCards);
     }
 
@@ -417,7 +418,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      * Notifies all views of the change
      */
     private void updateSlots(){
-        for (VirtualView view:views)
+        for (View view:views)
             view.showDevelopmentCardSlots(developmentCardSlots);
     }
 
@@ -426,7 +427,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      * Notifies all views of the change
      */
     private void updateProduction(){
-        for (VirtualView view:views)
+        for (View view:views)
             view.showProduction();
     }
 

@@ -2,7 +2,8 @@ package it.polimi.ingsw.model;
 
 
 import it.polimi.ingsw.model.storage.Resource;
-import it.polimi.ingsw.utils.ObservableFromView;
+import it.polimi.ingsw.view.ObservableFromView;
+import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.VirtualView;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class Market implements ObservableFromView {
 
     private final MarbleType[][] marbles;
     private MarbleType slideMarble;
-    private transient List<VirtualView> views;
+    private transient List<View> views;
 
     public Market(){
         marbles = new MarbleType[ROWS][COLUMNS];
@@ -101,22 +102,20 @@ public class Market implements ObservableFromView {
     }
 
     @Override
-    public void addView(VirtualView view) {
+    public void addView(View view) {
         if (views == null)
             views = new ArrayList<>();
         views.add(view);
     }
 
     @Override
-    public void removeView(VirtualView view) {
+    public void removeView(View view) {
         views.remove(view);
     }
 
     private void updateViews(){
-        for (VirtualView view:views) {
-            if (!view.getCurrentActiveUser().equals(view.getUsername()))
-                view.showMarket(this);
-        }
+        for (View view:views)
+            view.showMarket(this);
     }
 
     @Override

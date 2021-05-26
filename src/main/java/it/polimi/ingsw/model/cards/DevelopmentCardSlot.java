@@ -1,8 +1,5 @@
 package it.polimi.ingsw.model.cards;
 
-import it.polimi.ingsw.utils.ObservableFromView;
-import it.polimi.ingsw.view.View;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

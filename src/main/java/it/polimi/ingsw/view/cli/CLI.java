@@ -493,6 +493,11 @@ public class CLI implements View {
         output.println(currentActiveUser + " decided to produce");
     }
 
+    @Override
+    public String getUsername() {
+        return clientController.getUsername();
+    }
+
 
     @Override
     public void showPlayerBoard(PlayerBoard playerBoard) {

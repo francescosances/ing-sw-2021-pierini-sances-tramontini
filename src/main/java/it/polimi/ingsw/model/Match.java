@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.DevelopmentColorType;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.utils.FileManager;
-import it.polimi.ingsw.utils.ObservableFromView;
+import it.polimi.ingsw.view.ObservableFromView;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.VirtualView;
 
@@ -55,7 +55,7 @@ public class Match implements ObservableFromView {
      */
     private GamePhase currentPhase;
 
-    protected transient List<VirtualView> views;
+    protected transient List<View> views;
 
     public Match(String matchName) {
         this(matchName,MAX_PLAYERS);
@@ -200,7 +200,7 @@ public class Match implements ObservableFromView {
 
     public void endTurn(){
         int nextPlayerIndex = (currentPlayerIndex + 1) % players.size();
-        for (VirtualView view:views) {
+        for (View view:views) {
             if (players.get(nextPlayerIndex).getUsername().equals(view.getUsername()))
                 view.showPlayerBoard(players.get(nextPlayerIndex));
         }
@@ -230,7 +230,7 @@ public class Match implements ObservableFromView {
     }
 
     @Override
-    public void addView(VirtualView view) {
+    public void addView(View view) {
         if (views == null)
             views = new ArrayList<>();
         views.add(view);
@@ -239,7 +239,7 @@ public class Match implements ObservableFromView {
     }
 
     @Override
-    public void removeView(VirtualView view) {
+    public void removeView(View view) {
         views.remove(view);
         players.forEach(playerBoard -> playerBoard.removeView(view));
         market.removeView(view);
