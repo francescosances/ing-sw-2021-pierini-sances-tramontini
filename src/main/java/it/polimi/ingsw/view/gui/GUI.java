@@ -166,12 +166,16 @@ public class GUI implements View {
 
     @Override
     public void showLeaderCards(List<LeaderCard> leaderCards) {
-        //TODO
+        if(getPlayerBoardSceneController() == null)
+            return;
+        Platform.runLater(()-> getPlayerBoardSceneController().showLeaderCards(leaderCards));
     }
 
     @Override
     public void showDevelopmentCardSlots(DevelopmentCardSlot[] developmentCardSlots) {
-        //TODO
+        if(getPlayerBoardSceneController() == null)
+            return;
+        Platform.runLater(()-> getPlayerBoardSceneController().showDevelopmentCards(developmentCardSlots));
     }
 
     @Override
@@ -248,18 +252,14 @@ public class GUI implements View {
     public void showResourcesGainedFromMarket(Resource[] resources) {
         if(getPlayerBoardSceneController() == null)
             return;
-        Platform.runLater(()->{
-            playerboardSceneController.storeResourcesFromMarket(resources);
-        });
+        Platform.runLater(()-> playerboardSceneController.storeResourcesFromMarket(resources));
     }
 
     @Override
     public void askToStoreResource(Resource resource, Warehouse warehouse) {
         if(getPlayerBoardSceneController() == null)
             return;
-        Platform.runLater(()->{
-            playerboardSceneController.askToStoreResource(resource,warehouse);
-        });
+        Platform.runLater(()-> playerboardSceneController.askToStoreResource(resource,warehouse));
     }
 
     @Override
@@ -273,9 +273,7 @@ public class GUI implements View {
     @Override
     public void askToChooseDevelopmentCardSlot(DevelopmentCardSlot[] slots, DevelopmentCard developmentCard) {
         if(getPlayerBoardSceneController() == null)return;
-        Platform.runLater(()->{
-            getPlayerBoardSceneController().chooseDevelopmentCardSlot(slots,developmentCard);
-        });
+        Platform.runLater(()-> getPlayerBoardSceneController().chooseDevelopmentCardSlot(slots,developmentCard));
     }
 
     @Override
@@ -295,10 +293,7 @@ public class GUI implements View {
 
     @Override
     public void askToChooseStartResources(Resource[] values, int resourcesToChoose) {
-        Platform.runLater(()->{
-            SelectResourcesController controller = (SelectResourcesController) loadScene("select_resources_scene");
-            controller.initialize(values,resourcesToChoose);
-        });
+        Platform.runLater(()-> ((SelectResourcesController) loadScene("select_resources_scene")).initialize(values,resourcesToChoose));
     }
 
     @Override

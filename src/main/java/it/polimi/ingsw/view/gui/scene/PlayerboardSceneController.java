@@ -95,6 +95,7 @@ public class PlayerboardSceneController extends Controller{
         showPlayerBoard(playerBoard);
 
         disableControls();
+
         selectUser.setDisable(false);
 
         populateUserSelect();
@@ -106,23 +107,6 @@ public class PlayerboardSceneController extends Controller{
         clientController.rollback();
     }
 
-    protected void showDevelopmentCards(DevelopmentCardSlot[] developmentCardSlots) {
-        ImageView[][] slots =
-                        {{developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2},
-                        {developmentcardslot1_0,developmentcardslot1_1,developmentcardslot1_2},
-                        {developmentcardslot2_0,developmentcardslot2_1,developmentcardslot2_2}};
-
-        int slotIndex = 0,cardIndex;
-
-        for(DevelopmentCardSlot slot : developmentCardSlots){
-            cardIndex = 0;
-            for(Card card : slot){
-                slots[slotIndex][cardIndex].setImage(new Image("/images/cards/FRONT/"+card.getCardName()+".png"));
-                slots[slotIndex][cardIndex++].setVisible(true);
-            }
-            slotIndex++;
-        }
-    }
 
     public void populateUserSelect(){
         List<String> players = clientController.getPlayers();
@@ -394,32 +378,6 @@ public class PlayerboardSceneController extends Controller{
         }
 
         selectedWarehouseRows.clear();
-    }
-
-    public void showLeaderCards(List<LeaderCard> leaderCardList) {
-        this.playerBoard.setLeaderCards(leaderCardList);
-
-        ImageView[] leaderCards = {leadercard0,leadercard1};
-
-        Arrays.stream(leaderCards).forEach(card->card.setVisible(false));
-
-        for(int i=0;i<leaderCardList.size();i++){
-            LeaderCard card = leaderCardList.get(i);
-            leaderCards[i].setImage(new Image("/images/cards/FRONT/" + card.getCardName() + ".png"));
-            final int index = i;
-
-            if(card.isActive()) {
-                playerBoard.activateLeaderCard(card);
-                leaderCards[i].getStyleClass().remove("leadercard");
-                leaderCards[i].getStyleClass().add("active-leadercard");
-                leaderCards[i].setOnMouseClicked((e)->{});
-            }else {
-                leaderCards[i].getStyleClass().add("leadercard");
-                leaderCards[i].getStyleClass().remove("active-leadercard");
-                leaderCards[i].setOnMouseClicked((e) -> leaderCardClicked(index));
-            }
-            leaderCards[i].setVisible(true);
-        }
     }
 
     public void storeResourcesFromMarket(Resource[] resources){
@@ -699,5 +657,49 @@ public class PlayerboardSceneController extends Controller{
         lblStoneStrongbox.setText(String.valueOf(strongbox.getResourcesNum(ResourceType.STONE)));
         lblShieldStrongbox.setText(String.valueOf(strongbox.getResourcesNum(ResourceType.SHIELD)));
         lblServantStrongbox.setText(String.valueOf(strongbox.getResourcesNum(ResourceType.SERVANT)));
+    }
+
+    public void showLeaderCards(List<LeaderCard> leaderCardList) {
+        this.playerBoard.setLeaderCards(leaderCardList);
+
+        ImageView[] leaderCards = {leadercard0,leadercard1};
+
+        Arrays.stream(leaderCards).forEach(card->card.setVisible(false));
+
+        for(int i=0;i<leaderCardList.size();i++){
+            LeaderCard card = leaderCardList.get(i);
+            leaderCards[i].setImage(new Image("/images/cards/FRONT/" + card.getCardName() + ".png"));
+            final int index = i;
+
+            if(card.isActive()) {
+                playerBoard.activateLeaderCard(card);
+                leaderCards[i].getStyleClass().remove("leadercard");
+                leaderCards[i].getStyleClass().add("active-leadercard");
+                leaderCards[i].setOnMouseClicked((e)->{});
+            }else {
+                leaderCards[i].getStyleClass().add("leadercard");
+                leaderCards[i].getStyleClass().remove("active-leadercard");
+                leaderCards[i].setOnMouseClicked((e) -> leaderCardClicked(index));
+            }
+            leaderCards[i].setVisible(true);
+        }
+    }
+
+    public void showDevelopmentCards(DevelopmentCardSlot[] developmentCardSlots) {
+        ImageView[][] slots =
+                {{developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2},
+                        {developmentcardslot1_0,developmentcardslot1_1,developmentcardslot1_2},
+                        {developmentcardslot2_0,developmentcardslot2_1,developmentcardslot2_2}};
+
+        int slotIndex = 0,cardIndex;
+
+        for(DevelopmentCardSlot slot : developmentCardSlots){
+            cardIndex = 0;
+            for(Card card : slot){
+                slots[slotIndex][cardIndex].setImage(new Image("/images/cards/FRONT/"+card.getCardName()+".png"));
+                slots[slotIndex][cardIndex++].setVisible(true);
+            }
+            slotIndex++;
+        }
     }
 }
