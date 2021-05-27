@@ -11,23 +11,29 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerControllerTest {
 
     PlayerController playerController;
+    String expectedMessage;
 
     @BeforeEach
     void setUp() {
         Match match = new Match("Test");
         PlayerBoard playerBoard = new PlayerBoard("Test", match);
-        playerController = new PlayerController(playerBoard.getUsername(), playerBoard, null);
+        playerController = new PlayerController(playerBoard.getUsername(), playerBoard, new FakeView(this));
         playerController.active = true;
     }
 
     @AfterEach
     void tearDown() {
         playerController = null;
+        expectedMessage = null;
     }
 
     @Test
@@ -44,15 +50,17 @@ class PlayerControllerTest {
         playerController.deactivate();
         assertFalse(playerController.isActive());
         assertEquals(PlayerController.PlayerStatus.TURN_ENDED, playerController.getCurrentStatus());
-        for (int i = 0; i < playerController.getPlayerBoard().getDevelopmentCardSlots().length; i++) {
+        DevelopmentCardSlot[] developmentCardSlots = new DevelopmentCardSlot[3];
+        for (int j = 0; j < developmentCardSlots.length; j++)
+            developmentCardSlots[j] = new DevelopmentCardSlot();
+        Requirements cost = new Requirements();
+        DevelopmentCard developmentCard = new DevelopmentCard("", 1, cost, 1, DevelopmentColorType.GREEN, null, (Requirements) null);
+        for (int i = 0; i < /*playerController.getPlayerBoard().getDevelopmentCardSlots().length*/ 2; i++) {
             playerController.activate();
-            Requirements cost = new Requirements();
-            DevelopmentCard developmentCard = new DevelopmentCard("", 1, cost, 1, DevelopmentColorType.GREEN, null, (Requirements) null);
-            try {
-                playerController.buyDevelopmentCard(developmentCard);
-            } catch (NullPointerException ignored) {
-            } //virtual view is null
+            expectedMessage = Arrays.toString(developmentCardSlots) + developmentCard;
+            playerController.buyDevelopmentCard(developmentCard);
             playerController.deactivate();
+            developmentCardSlots[i].addCard(developmentCard);
             assertEquals(developmentCard, playerController.getPlayerBoard().getDevelopmentCardSlots()[i].getTopCard());
         }
     }
@@ -79,13 +87,25 @@ class PlayerControllerTest {
 
     @Test
     void setup() {
-        try {
-            for (int i = 0; i <= 3; i++) {
-                playerController.setPlayerIndex(i);
-                playerController.setup();
-                assertEquals(i / 2, playerController.getPlayerBoard().getFaithTrack().getFaithMarker());
+        for (int i = 0; i < 4; i++) {
+            playerController.setPlayerIndex(i);
+            if (i == 0) {
+                List<LeaderCard> leaderCardList = new ArrayList<>();
+                for (int j = 0; j < 4; j++)
+                    leaderCardList.add(playerController.getPlayerBoard().getMatch().getLeaderCards().get(j));
+                expectedMessage = leaderCardList.toString();
+            } else {
+                int num = 1;
+                if (i == 3)
+                    num = 2;
+                expectedMessage = "[COIN, SERVANT, SHIELD, STONE]" + num;
             }
-        } catch (NullPointerException ignored){} //virtualView is null
+            playerController.setup();
+            assertEquals(i / 2, playerController.getPlayerBoard().getFaithTrack().getFaithMarker());
+            tearDown();
+            setUp();
+        }
+
     }
 
     @Test
@@ -99,11 +119,16 @@ class PlayerControllerTest {
     }
 
     @Test
-    void listLeaderCards() {
-    }
-
-    @Test
-    void chooseLeaderCards() {
+    void listAndChooseLeaderCards() {
+        List<LeaderCard> leaderCardList = new ArrayList<>();
+        for (int j = 0; j < 4; j++)
+            leaderCardList.add(playerController.getPlayerBoard().getMatch().getLeaderCards().get(j));
+        expectedMessage = leaderCardList.toString();
+        playerController.listLeaderCards();
+        leaderCardList.subList(0, 2).clear();
+        playerController.chooseLeaderCards(leaderCardList.get(0), leaderCardList.get(1));
+        assertEquals(leaderCardList.get(0), playerController.getPlayerBoard().getLeaderCards().get(0));
+        assertEquals(leaderCardList.get(1), playerController.getPlayerBoard().getLeaderCards().get(1));
     }
 
     @Test
@@ -120,9 +145,8 @@ class PlayerControllerTest {
     void activateLeaderCard() throws IncompatibleDepotException {
         LeaderCard leaderCard = new DepotLeaderCard("",3,new Requirements(new Pair<>(ResourceType.COIN, 1)),ResourceType.SHIELD);
         playerController.getPlayerBoard().getLeaderCards().add(leaderCard);
-        try{
-            playerController.activateLeaderCard(0);
-        } catch (NullPointerException ignored) {} //virtualView is null
+        expectedMessage = "You cannot activate this card";
+        playerController.activateLeaderCard(0);
         assertFalse(playerController.getPlayerBoard().getLeaderCards().get(0).isActive());
         playerController.getPlayerBoard().getWarehouse().getDepots().get(0).addResource(ResourceType.COIN);
         playerController.activateLeaderCard(0);
@@ -135,6 +159,56 @@ class PlayerControllerTest {
 
     @Test
     void chooseStartResources() {
+        ResourceType[] resources = new ResourceType[1];
+        resources[0] = ResourceType.COIN;
+        playerController.setPlayerIndex(0);
+        playerController.setup();
+
+        List<LeaderCard> leaderCardList = new ArrayList<>();
+        for (int j = 0; j < 4; j++)
+            leaderCardList.add(playerController.getPlayerBoard().getMatch().getLeaderCards().get(j));
+        expectedMessage = leaderCardList.toString();
+
+        boolean bool = false;
+        try {
+            playerController.chooseStartResources(resources);
+        } catch (IllegalArgumentException e){
+            assertEquals("Invalid number of resources of your choice", e.getMessage());
+            bool = true;
+        }
+        assertTrue(bool);
+
+        tearDown();
+        setUp();
+
+        playerController.setPlayerIndex(1);
+
+        expectedMessage = "[COIN, SERVANT, SHIELD, STONE]" + 1;
+
+        playerController.setup(); // virtualView was null
+        try {
+            playerController.chooseStartResources(resources);
+        } catch (NullPointerException ignored) {} //virtualView is null
+        assertEquals(ResourceType.COIN, playerController.getPlayerBoard().getWarehouse().getDepots().get(2).getResourceType());
+        assertEquals(1, playerController.getPlayerBoard().getWarehouse().getDepots().get(2).getOccupied());
+
+        tearDown();
+        setUp();
+
+        resources = new ResourceType[2];
+        resources[0] = ResourceType.COIN;
+        resources[1] = ResourceType.STONE;
+
+        playerController.setPlayerIndex(3);
+
+        expectedMessage = "[COIN, SERVANT, SHIELD, STONE]" + 2;
+
+        playerController.setup();
+        playerController.chooseStartResources(resources);
+        assertEquals(ResourceType.COIN, playerController.getPlayerBoard().getWarehouse().getDepots().get(2).getResourceType());
+        assertEquals(1, playerController.getPlayerBoard().getWarehouse().getDepots().get(2).getOccupied());
+        assertEquals(ResourceType.STONE, playerController.getPlayerBoard().getWarehouse().getDepots().get(1).getResourceType());
+        assertEquals(1, playerController.getPlayerBoard().getWarehouse().getDepots().get(1).getOccupied());
     }
 
     @Test
@@ -235,5 +309,9 @@ class PlayerControllerTest {
 
     @Test
     void setPlayerIndex() {
+    }
+
+    void testMessage(String providedMessage){
+        assertEquals(expectedMessage, providedMessage);
     }
 }

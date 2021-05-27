@@ -305,14 +305,12 @@ public class PlayerController {
      */
     public void chooseStartResources(Resource[] resources) {
         if(resources.length != resourcesToChoose)
-            throw new IllegalArgumentException("Invalid number of resource of your choosing");
+            throw new IllegalArgumentException("Invalid number of resources of your choice");
         try {
-            if (resourcesToChoose >= 1) {
+            if (resourcesToChoose >= 1)
                 playerBoard.getWarehouse().addResources(2, (ResourceType) resources[0], 1);
-            }
-            if (resourcesToChoose == 2) {
+            if (resourcesToChoose == 2)
                 playerBoard.getWarehouse().addResources((resources[0] == resources[1]) ? 2 : 1, (ResourceType) resources[1], 1);
-            }
         }catch (IncompatibleDepotException e){
             e.printStackTrace();
         }
@@ -322,7 +320,7 @@ public class PlayerController {
     }
 
     /**
-     * Ask to the user which action want to perform
+     * Asks the user which action they want to perform
      */
     public void askForAction(){
         setAfterDepotsSwapAction(this::askForAction);
@@ -335,7 +333,7 @@ public class PlayerController {
     }
 
     /**
-     * Start the action chosen by the user
+     * Starts the action chosen by the user
      * @param action the action that must be performed
      */
     public void performAction(Action action) {
@@ -389,13 +387,6 @@ public class PlayerController {
      */
     public void listPlayableLeaderCards(){
         view.showPlayerLeaderCards(playerBoard.getAvailableLeaderCards());
-    }
-
-    /**
-     * List the resources stored in the warehouse depots
-     */
-    public void showWarehouseStatus(){
-        view.showWarehouse(playerBoard.getWarehouse());
     }
 
     /**
