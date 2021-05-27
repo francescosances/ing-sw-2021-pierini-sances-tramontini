@@ -2,4 +2,4 @@
 
 
 ## Coverage report
-![Coverage report](https://raw.githubusercontent.com/francescosances/ing-sw-2021-pierini-sances-tramontini/master/coverage/coverage_report.png?token=AFKDTIGVXKOOJ33MYE4MA6DAXCVUK)
+![Coverage report](https://github.com/francescosances/ing-sw-2021-pierini-sances-tramontini/blob/master/coverage/coverage_report.png?raw=true)

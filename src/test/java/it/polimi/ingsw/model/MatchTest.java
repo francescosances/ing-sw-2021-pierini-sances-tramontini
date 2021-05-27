@@ -1,12 +1,19 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.cards.Deck;
+import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.LeaderCard;
+import it.polimi.ingsw.model.storage.ResourceType;
+import it.polimi.ingsw.serialization.Serializer;
+import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.VirtualView;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -19,6 +26,7 @@ public class MatchTest {
         match = new Match("TestMatch",3);
         match.addPlayer("first");
         match.addPlayer("second");
+        match.getPlayerBoard("second").getStrongbox().addResources(Map.ofEntries(Map.entry(ResourceType.STONE,5),Map.entry(ResourceType.SHIELD,5),Map.entry(ResourceType.COIN,5),Map.entry(ResourceType.SERVANT,5)));
     }
 
     @After
@@ -84,6 +92,37 @@ public class MatchTest {
             else
                 assertEquals(markerPositionsBefore.get(index) +1,match.getPlayers().get(index).getFaithTrack().getFaithMarker());
         }
+    }
+
+    @Test
+    public void buyDevelopmentCardTest(){
+        List<Deck<DevelopmentCard>> before = Serializer.deserializeDevelopmentCardsDeckList(Serializer.serializeDevelopmentCardsDeckList(match.getDevelopmentCardDecks()));
+        match.buyDevelopmentCard(before.get(0).top(),match.getPlayerBoard("first"));
+        assertEquals(before.get(0).top(),match.getDevelopmentCardDecks().get(0).top());
+        match.buyDevelopmentCard(before.get(0).top(),match.getPlayerBoard("second"));
+        assertNotEquals(before.get(0).top(),match.getDevelopmentCardDecks().get(0).top());
+        assertNotEquals(match.getDevelopmentCardDecks().get(0).size(),before.get(0).size());
+    }
+
+    @Test
+    public void addViewTest(){
+        View view = new VirtualView(null,"first");
+        int oldSize = match.views.size();
+        match.views = null;
+        match.addView(view);
+        assertNotNull(match.views);
+        assertEquals(oldSize+1,match.views.size());
+        assertTrue(match.views.contains(view));
+    }
+
+    @Test
+    public void removeViewTest(){
+        View view = new VirtualView(null,"first");
+        match.addView(view);
+        int oldSize = match.views.size();
+        match.removeView(view);
+        assertEquals(oldSize-1,match.views.size());
+        assertFalse(match.views.contains(view));
     }
 
 }
