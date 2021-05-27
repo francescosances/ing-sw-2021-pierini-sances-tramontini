@@ -595,7 +595,7 @@ public class PlayerController {
      * @param developmentCard the DevelopmentCard the player wants to buy
      */
     public void buyDevelopmentCard(DevelopmentCard developmentCard) {
-        if(!developmentCard.getCost().satisfied(getPlayerBoard())){
+        if(!developmentCard.getCost().satisfied(getPlayerBoard())) {
             view.showErrorMessage("You cannot buy this card");
             listDevelopmentCardToBuy();
             return;

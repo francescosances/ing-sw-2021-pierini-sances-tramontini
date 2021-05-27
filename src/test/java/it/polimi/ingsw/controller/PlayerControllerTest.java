@@ -1,6 +1,8 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Action;
+import it.polimi.ingsw.model.MarbleType;
+import it.polimi.ingsw.model.Market;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
@@ -340,14 +342,48 @@ class PlayerControllerTest implements FakeViewTester {
         playerController.getPlayerBoard().getWarehouse().addResources(2, ResourceType.STONE, 1);
         askForActionNoLeadersFormat();
         playerController.swapDepots(0, 2);
+        //TODO: Testare anche il lancio dell'eccezione
+        // invia due messaggi, gestire multithreading
     }
 
     @Test
     void selectMarketRow() {
+        Market market = playerController.getPlayerBoard().getMatch().getMarket();
+        List<MarbleType> marbles = new ArrayList<>();
+        int j = 0;
+        do {
+            for (int i = 0; i < Market.COLUMNS; i++) {
+                MarbleType marbleType = market.getMarble(j, i);
+                if (!(marbleType == MarbleType.RED || marbleType == MarbleType.WHITE))
+                    marbles.add(marbleType);
+            }
+            j++;
+        } while (marbles.isEmpty());
+        List<Resource> resources = marbles.stream().map(MarbleType::toResource).collect(Collectors.toList());
+        Warehouse warehouse = new Warehouse();
+        warehouse.toBeStored(resources.subList(0, resources.size()-1).toArray(Resource[]::new));
+        expectedMessage = resources.get(resources.size()-1).toString() + warehouse;
+        playerController.selectMarketRow(j-1);
     }
 
     @Test
     void selectMarketColumn() {
+        Market market = playerController.getPlayerBoard().getMatch().getMarket();
+        List<MarbleType> marbles = new ArrayList<>();
+        int j = 0;
+        do {
+            for (int i = 0; i < Market.ROWS; i++) {
+                MarbleType marbleType = market.getMarble(i, j);
+                if (!(marbleType == MarbleType.RED || marbleType == MarbleType.WHITE))
+                    marbles.add(marbleType);
+            }
+            j++;
+        } while (marbles.isEmpty());
+        List<Resource> resources = marbles.stream().map(MarbleType::toResource).collect(Collectors.toList());
+        Warehouse warehouse = new Warehouse();
+        warehouse.toBeStored(resources.subList(0, resources.size()-1).toArray(Resource[]::new));
+        expectedMessage = resources.get(resources.size()-1).toString() + warehouse;
+        playerController.selectMarketColumn(j-1);
     }
 
     @Test
@@ -374,8 +410,6 @@ class PlayerControllerTest implements FakeViewTester {
         tearDown();
         setUp();
 
-        //Tests NonPhysicalResources only
-        //Tests no message is sent
         resources = new Resource[2];
         resources[0] = NonPhysicalResourceType.VOID;
         resources[1] = NonPhysicalResourceType.FAITH_POINT;
@@ -385,7 +419,7 @@ class PlayerControllerTest implements FakeViewTester {
     }
 
     @Test
-    void askToStoreResource() {
+    void askToStoreResource() throws IncompatibleDepotException {
         Resource[] resources = new Resource[2];
         resources[0] = ResourceType.SERVANT;
         resources[1] = ResourceType.SHIELD;
@@ -396,6 +430,11 @@ class PlayerControllerTest implements FakeViewTester {
         warehouse.toBeStored(resources1);
         expectedMessage = resources[1].toString() + warehouse;
         playerController.askToStoreResource();
+
+        warehouse = new Warehouse();
+        warehouse.addResources(0, ResourceType.SHIELD, 1);
+        expectedMessage = resources[0].toString() + warehouse;
+        playerController.storeResourceToWarehouse(0);
     }
 
     @Test
@@ -411,31 +450,28 @@ class PlayerControllerTest implements FakeViewTester {
     }
 
     @Test
-    void askToConfirmDepot() {
-    }
-
-    @Test
-    void storeResourceToWarehouse() {
-    }
-
-    @Test
     void showPlayerBoard() {
+        expectedMessage = playerController.getPlayerBoard().toString();
+        playerController.showPlayerBoard();
+        playerController.showPlayerBoard(playerController.getPlayerBoard());
     }
 
     @Test
-    void testShowPlayerBoard() {
-    }
+    void buyDevelopmentCard() throws IncompatibleDepotException {
+        DevelopmentCard developmentCard = new DevelopmentCard("",1, new Requirements(new Pair<>(ResourceType.SHIELD, 1)), 1, DevelopmentColorType.GREEN, new Requirements(new Pair<>(ResourceType.COIN, 1)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1));
+        //TODO: Testare anche il lancio dell'eccezione
+        // invia due messaggi, gestire multithreading
+        playerController.getPlayerBoard().getWarehouse().addResources(0, ResourceType.SHIELD, 1);
+        expectedMessage = Arrays.toString(playerController.getPlayerBoard().getDevelopmentCardSlots()) + developmentCard;
+        playerController.buyDevelopmentCard(developmentCard);
 
-    @Test
-    void buyDevelopmentCard() {
-    }
-
-    @Test
-    void chooseDevelopmentCardSlot() {
+        playerController.chooseDevelopmentCardSlot(1);
+        assertEquals(PlayerController.PlayerStatus.ACTION_PERFORMED, playerController.getCurrentStatus());
     }
 
     @Test
     void chooseProductions() {
+
     }
 
     @Override

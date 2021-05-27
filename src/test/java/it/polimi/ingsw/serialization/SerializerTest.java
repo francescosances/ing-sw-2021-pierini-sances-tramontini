@@ -279,4 +279,16 @@ public class SerializerTest {
         String json = Serializer.serializeInt(10);
         assertEquals(10, Serializer.deserializeInt(json));
     }
+
+    @Test
+    public void serializeLobbies(){
+        List<Triple<String, Integer, Integer>> lobbies = new ArrayList<>();
+        lobbies.add(new Triple<>("Test", 1,2));
+        String json = Serializer.serializeLobbies(lobbies);
+        List<Triple<String, Integer, Integer>> lobbies1 = Serializer.deserializeLobbies(json);
+        assertEquals(lobbies.get(0).getFirst(), lobbies1.get(0).getFirst());
+        assertEquals(lobbies.get(0).getSecond(), lobbies1.get(0).getSecond());
+        assertEquals(lobbies.get(0).getThird(), lobbies1.get(0).getThird());
+
+    }
 }
