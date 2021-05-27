@@ -257,6 +257,21 @@
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
+            <ImageView fx:id="desk0" fitHeight="168.0" fitWidth="141.0" layoutX="343.0" layoutY="506.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/buttons/desk0.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="desk1" fitHeight="168.0" fitWidth="141.0" layoutX="509.0" layoutY="505.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/buttons/desk1.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="desk2" fitHeight="168.0" fitWidth="141.0" layoutX="667.0" layoutY="504.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/buttons/desk2.png" />
+               </image>
+            </ImageView>
 
          </children>
           </AnchorPane>

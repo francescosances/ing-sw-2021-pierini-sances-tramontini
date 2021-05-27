@@ -24,7 +24,7 @@ public class PlayerboardSceneController extends Controller{
     protected ImageView leaderCardDepot00,leaderCardDepot01,leaderCardDepot10,leaderCardDepot11;
 
     @FXML
-    protected ImageView developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2,developmentcardslot1_0,developmentcardslot1_1,developmentcardslot1_2,developmentcardslot2_0,developmentcardslot2_1,developmentcardslot2_2;
+    protected ImageView developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2,developmentcardslot1_0,developmentcardslot1_1,developmentcardslot1_2,developmentcardslot2_0,developmentcardslot2_1,developmentcardslot2_2,desk0,desk1,desk2;
 
     @FXML
     protected Button marketBtn,startProductionBtn,buyDevelopmentcardBtn,rollbackBtn,discardResourceBtn,skipBtn,swapDepotsBtn;
