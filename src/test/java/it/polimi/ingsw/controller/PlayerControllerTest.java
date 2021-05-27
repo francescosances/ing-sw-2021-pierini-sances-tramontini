@@ -6,6 +6,8 @@ import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 import it.polimi.ingsw.utils.Pair;
+import it.polimi.ingsw.view.ObservableFromView;
+import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.VirtualView;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +19,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PlayerControllerTest {
+class PlayerControllerTest implements FakeViewTester {
 
     PlayerController playerController;
     String expectedMessage;
@@ -311,7 +313,8 @@ class PlayerControllerTest {
     void setPlayerIndex() {
     }
 
-    void testMessage(String providedMessage){
+    @Override
+    public void testMessage(String providedMessage){
         assertEquals(expectedMessage, providedMessage);
     }
 }

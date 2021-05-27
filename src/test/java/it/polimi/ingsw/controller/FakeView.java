@@ -13,35 +13,34 @@ import it.polimi.ingsw.view.View;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 class FakeView implements View {
 
-    PlayerControllerTest playerControllerTest;
+    FakeViewTester fakeViewTester;
 
-    public FakeView(PlayerControllerTest playerControllerTest){
-        this.playerControllerTest = playerControllerTest;
+    public FakeView(FakeViewTester fakeViewTester){
+        this.fakeViewTester = fakeViewTester;
     }
 
     @Override
     public void showMessage(String message) {
-        playerControllerTest.testMessage(message);
+        fakeViewTester.testMessage(message);
     }
 
     @Override
     public void showErrorMessage(String message) {
-        playerControllerTest.testMessage(message);
+        fakeViewTester.testMessage(message);
     }
 
     @Override
     public void listLobbies(List<Triple<String, Integer, Integer>> availableLobbies) {
-        playerControllerTest.testMessage(availableLobbies.toString());
+        fakeViewTester.testMessage(availableLobbies.toString());
     }
 
     @Override
     public void resumeMatch(PlayerBoard playerBoard) {
-        playerControllerTest.testMessage(playerBoard.toString());
+        fakeViewTester.testMessage(playerBoard.toString());
     }
 
     @Override
@@ -58,12 +57,12 @@ class FakeView implements View {
 
     @Override
     public void userConnected(String username) {
-        playerControllerTest.testMessage(username);
+        fakeViewTester.testMessage(username);
     }
 
     @Override
     public void userDisconnected(String username) {
-        playerControllerTest.testMessage(username);
+        fakeViewTester.testMessage(username);
     }
 
     @Override
@@ -73,17 +72,17 @@ class FakeView implements View {
 
     @Override
     public void showPlayerLeaderCards(List<LeaderCard> leaderCardList) {
-        playerControllerTest.testMessage(leaderCardList.toString());
+        fakeViewTester.testMessage(leaderCardList.toString());
     }
 
     @Override
     public void showLeaderCards(List<LeaderCard> leaderCards) {
-        playerControllerTest.testMessage(leaderCards.toString());
+        fakeViewTester.testMessage(leaderCards.toString());
     }
 
     @Override
     public void showDevelopmentCardSlots(DevelopmentCardSlot[] developmentCardSlots) {
-        playerControllerTest.testMessage(Arrays.toString(developmentCardSlots));
+        fakeViewTester.testMessage(Arrays.toString(developmentCardSlots));
     }
 
     @Override
@@ -93,105 +92,105 @@ class FakeView implements View {
 
     @Override
     public void showPlayerBoard(PlayerBoard playerBoard) {
-        playerControllerTest.testMessage(playerBoard.toString());
+        fakeViewTester.testMessage(playerBoard.toString());
 
     }
 
     @Override
     public void showFaithTrack(FaithTrack faithTrack) {
-        playerControllerTest.testMessage(faithTrack.toString());
+        fakeViewTester.testMessage(faithTrack.toString());
 
     }
 
     @Override
     public void showVaticanReportTriggered(String username, int vaticanReportCount) {
-        playerControllerTest.testMessage(username + vaticanReportCount);
+        fakeViewTester.testMessage(username + vaticanReportCount);
     }
 
     @Override
     public void showWarehouse(Warehouse warehouse) {
-        playerControllerTest.testMessage(warehouse.toString());
+        fakeViewTester.testMessage(warehouse.toString());
 
     }
 
     @Override
     public void showStrongbox(Strongbox strongbox) {
-        playerControllerTest.testMessage(strongbox.toString());
+        fakeViewTester.testMessage(strongbox.toString());
 
     }
 
     @Override
     public void askToSwapDepots(Warehouse warehouse) {
-        playerControllerTest.testMessage(warehouse.toString());
+        fakeViewTester.testMessage(warehouse.toString());
 
     }
 
     @Override
     public void askForAction(List<String> usernames, Action... availableActions) {
-        playerControllerTest.testMessage(usernames.toString()
+        fakeViewTester.testMessage(usernames.toString()
                 + Arrays.toString(availableActions));
     }
 
     @Override
     public void takeResourcesFromMarket(Market market) {
-        playerControllerTest.testMessage(market.toString());
+        fakeViewTester.testMessage(market.toString());
 
     }
 
     @Override
     public void showMarket(Market market) {
-        playerControllerTest.testMessage(market.toString());
+        fakeViewTester.testMessage(market.toString());
 
     }
 
     @Override
     public void showResourcesGainedFromMarket(Resource[] resources) {
-        playerControllerTest.testMessage(Arrays.toString(resources));
+        fakeViewTester.testMessage(Arrays.toString(resources));
 
     }
 
     @Override
     public void askToStoreResource(Resource resource, Warehouse warehouse) {
-        playerControllerTest.testMessage(resource.toString() + warehouse.toString());
+        fakeViewTester.testMessage(resource.toString() + warehouse.toString());
 
     }
 
     @Override
     public void chooseWhiteMarbleConversion(LeaderCard leaderCard, LeaderCard leaderCard1) {
-        playerControllerTest.testMessage(leaderCard.toString() + leaderCard1.toString());
+        fakeViewTester.testMessage(leaderCard.toString() + leaderCard1.toString());
 
     }
 
     @Override
     public void askToChooseDevelopmentCardSlot(DevelopmentCardSlot[] slots, DevelopmentCard developmentCard) {
-        playerControllerTest.testMessage(Arrays.toString(slots) + developmentCard.toString());
+        fakeViewTester.testMessage(Arrays.toString(slots) + developmentCard.toString());
 
     }
 
     @Override
     public void chooseProductions(List<Producer> availableProductions, PlayerBoard playerBoard) {
-        playerControllerTest.testMessage(availableProductions.toString() + playerBoard.toString());
+        fakeViewTester.testMessage(availableProductions.toString() + playerBoard.toString());
     }
 
     @Override
     public void showCurrentActiveUser(String username) {
-        playerControllerTest.testMessage(username);
+        fakeViewTester.testMessage(username);
 
     }
 
     @Override
     public void askToChooseStartResources(Resource[] values, int resourcesToChoose) {
-        playerControllerTest.testMessage(Arrays.toString(values) + resourcesToChoose);
+        fakeViewTester.testMessage(Arrays.toString(values) + resourcesToChoose);
     }
 
     @Override
     public void showPlayers(Map<String, Boolean> users) {
-        playerControllerTest.testMessage(users.toString());
+        fakeViewTester.testMessage(users.toString());
     }
 
     @Override
     public void showActionToken(ActionToken actionToken) {
-        playerControllerTest.testMessage(actionToken.toString());
+        fakeViewTester.testMessage(actionToken.toString());
 
     }
 
