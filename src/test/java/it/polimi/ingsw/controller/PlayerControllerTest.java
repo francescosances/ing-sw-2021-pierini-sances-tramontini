@@ -1,13 +1,15 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.Match;
-import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.*;
+import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
+import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.ResourceType;
+import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 import it.polimi.ingsw.utils.Pair;
-import it.polimi.ingsw.view.ObservableFromView;
-import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.VirtualView;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +18,8 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Semaphore;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,9 +30,9 @@ class PlayerControllerTest implements FakeViewTester {
 
     @BeforeEach
     void setUp() {
-        Match match = new Match("Test");
-        PlayerBoard playerBoard = new PlayerBoard("Test", match);
-        playerController = new PlayerController(playerBoard.getUsername(), playerBoard, new FakeView(this));
+        String username = "Test";
+        Match match = new Match(username);
+        playerController = new PlayerController(username, match.addPlayer(username), new FakeView(this));
         playerController.active = true;
     }
 
@@ -156,10 +160,6 @@ class PlayerControllerTest implements FakeViewTester {
     }
 
     @Test
-    void askToChooseStartResources() {
-    }
-
-    @Test
     void chooseStartResources() {
         ResourceType[] resources = new ResourceType[1];
         resources[0] = ResourceType.COIN;
@@ -215,26 +215,111 @@ class PlayerControllerTest implements FakeViewTester {
 
     @Test
     void askForAction() {
+        askForActionNoLeadersFormat();
+        playerController.askForAction();
+        LeaderCard leaderCard = new DepotLeaderCard("",3,new Requirements(new Pair<>(ResourceType.COIN, 1)),ResourceType.SHIELD);
+        playerController.getPlayerBoard().getLeaderCards().add(leaderCard);
+        askForActionSomeLeadersFormat();
+        playerController.askForAction();
     }
 
-    @Test
-    void performAction() {
+    private void askForActionNoLeadersFormat(){
+        expectedMessage = playerController.getPlayerBoard().getMatch().getPlayers().stream().map(p->p.getUsername()).collect(Collectors.toList())
+                + "[Take resources from market, Buy development card, Activate production, Move resources, Show a player board]";
     }
 
-    @Test
-    void startNormalAction() {
+    private void askForActionSomeLeadersFormat(){
+        expectedMessage = playerController.getPlayerBoard().getMatch().getPlayers().stream().map(p->p.getUsername()).collect(Collectors.toList())
+                + "[Take resources from market, Buy development card, Activate production, Move resources, Activate or discard a leader card, Show a player board]";
     }
 
     @Test
     void askForNormalAction() {
+        askForNormalActionNoLeadersFormat();
+        playerController.askForNormalAction();
+        LeaderCard leaderCard = new DepotLeaderCard("",3,new Requirements(new Pair<>(ResourceType.COIN, 1)),ResourceType.SHIELD);
+        playerController.getPlayerBoard().getLeaderCards().add(leaderCard);
+        askForNormalActionSomeLeadersFormat();
+        playerController.askForNormalAction();
+    }
+
+    private void askForNormalActionNoLeadersFormat(){
+        expectedMessage = playerController.getPlayerBoard().getMatch().getPlayers().stream().map(p->p.getUsername()).collect(Collectors.toList())
+                + "[Go ahead / Skip, Move resources, Show a player board]";
+    }
+
+    private void askForNormalActionSomeLeadersFormat(){
+        expectedMessage = playerController.getPlayerBoard().getMatch().getPlayers().stream().map(p->p.getUsername()).collect(Collectors.toList())
+                + "[Go ahead / Skip, Move resources, Activate or discard a leader card, Show a player board]";
+    }
+
+    @Test
+    void rollback(){
+        playerController.performAction(Action.CANCEL);
     }
 
     @Test
     void listPlayableLeaderCards() {
+        List<LeaderCard> leaderCardList = new ArrayList<>();
+        expectedMessage = leaderCardList.toString();
+        playerController.performAction(Action.PLAY_LEADER);
+
+        LeaderCard leaderCard = new DepotLeaderCard("",3,new Requirements(new Pair<>(ResourceType.COIN, 0)),ResourceType.SHIELD);
+        leaderCardList.add(leaderCard);
+        playerController.getPlayerBoard().getLeaderCards().add(leaderCard);
+        expectedMessage = leaderCardList.toString();
+        playerController.performAction(Action.PLAY_LEADER);
+
+        leaderCard = new DiscountLeaderCard("",2, new Requirements(new Triple<>(DevelopmentColorType.YELLOW, 1, 0)), ResourceType.SERVANT);
+        leaderCardList.add(leaderCard);
+        playerController.getPlayerBoard().getLeaderCards().add(leaderCard);
+        expectedMessage = leaderCardList.toString();
+        playerController.performAction(Action.PLAY_LEADER);
+
+        leaderCardList.remove(0);
+        playerController.getPlayerBoard().getLeaderCards().get(0).activate(playerController.getPlayerBoard());
+        expectedMessage = leaderCardList.toString();
+        playerController.performAction(Action.PLAY_LEADER);
     }
 
     @Test
-    void showWarehouseStatus() {
+    void performAction_moveResources() throws IncompatibleDepotException {
+        playerController.getPlayerBoard().getWarehouse().addResources(0, ResourceType.COIN, 1);
+        playerController.getPlayerBoard().getWarehouse().addResources(2, ResourceType.STONE, 2);
+        LeaderCard leaderCard = new DepotLeaderCard("",3,new Requirements(new Pair<>(ResourceType.COIN, 1)),ResourceType.SHIELD);
+        playerController.getPlayerBoard().getLeaderCards().add(leaderCard);
+        playerController.getPlayerBoard().getLeaderCards().get(0).activate(playerController.getPlayerBoard());
+        expectedMessage = playerController.getPlayerBoard().getWarehouse().toString();
+        playerController.performAction(Action.MOVE_RESOURCES);
+    }
+
+    @Test
+    void takeResourcesFromMarket(){
+        expectedMessage = playerController.getPlayerBoard().getMatch().getMarket().toString();
+        playerController.performAction(Action.TAKE_RESOURCES_FROM_MARKET);
+    }
+
+    @Test
+    void listDevelopmentCardToBuy(){
+        expectedMessage = playerController.getPlayerBoard().getMatch().getDevelopmentCardDecks().stream().map(t->t.top()).collect(Collectors.toList()).toString();
+        playerController.performAction(Action.BUY_DEVELOPMENT_CARD);
+    }
+
+    @Test
+    void performAction_activateProduction(){
+        expectedMessage = playerController.getPlayerBoard().getAvailableProductions().toString() + playerController.getPlayerBoard().toString();
+        playerController.performAction(Action.ACTIVATE_PRODUCTION);
+    }
+
+    @Test
+    void next_status(){
+        assertEquals(PlayerController.PlayerStatus.PERFORMING_ACTION, playerController.getCurrentStatus());
+        playerController.performAction(Action.SKIP);
+        assertEquals(PlayerController.PlayerStatus.ACTION_PERFORMED, playerController.getCurrentStatus());
+        playerController.performAction(Action.SKIP);
+        assertEquals(PlayerController.PlayerStatus.TURN_ENDED, playerController.getCurrentStatus());
+        playerController.performAction(Action.SKIP);
+        assertEquals(PlayerController.PlayerStatus.PERFORMING_ACTION, playerController.getCurrentStatus());
     }
 
     @Test
@@ -246,15 +331,15 @@ class PlayerControllerTest implements FakeViewTester {
     }
 
     @Test
-    void getPlayerBoard() {
-    }
-
-    @Test
     void endGame() {
     }
 
     @Test
-    void swapDepots() {
+    void swapDepots() throws IncompatibleDepotException {
+        playerController.getPlayerBoard().getWarehouse().addResources(0, ResourceType.COIN, 1);
+        playerController.getPlayerBoard().getWarehouse().addResources(2, ResourceType.STONE, 1);
+        askForActionNoLeadersFormat();
+        playerController.swapDepots(0, 2);
     }
 
     @Test
@@ -267,18 +352,62 @@ class PlayerControllerTest implements FakeViewTester {
 
     @Test
     void askToStoreResourcesFromMarket() {
-    }
+        Resource[] resources = new Resource[3];
+        resources[0] = NonPhysicalResourceType.VOID;
+        resources[1] = NonPhysicalResourceType.FAITH_POINT;
+        resources[2] = ResourceType.COIN;
+        expectedMessage = ResourceType.COIN.toString() + playerController.getPlayerBoard().getWarehouse();
+        playerController.askToStoreResourcesFromMarket(resources);
+        assertEquals(1, playerController.getPlayerBoard().getFaithTrack().getFaithMarker());
 
-    @Test
-    void takeResourcesFromMarket() {
+        tearDown();
+        setUp();
+
+        resources = new Resource[1];
+        resources[0] = NonPhysicalResourceType.VOID;
+        LeaderCard leaderCard = new WhiteMarbleLeaderCard("",5, new Requirements(new Triple<>(DevelopmentColorType.GREEN, 1, 0)), ResourceType.SHIELD, true);
+        playerController.getPlayerBoard().getLeaderCards().add(leaderCard);
+        Warehouse warehouse = new Warehouse();
+        expectedMessage = leaderCard.getOutputResourceType().toString() + warehouse;
+        playerController.askToStoreResourcesFromMarket(resources);
+
+        tearDown();
+        setUp();
+
+        //Tests NonPhysicalResources only
+        //Tests no message is sent
+        resources = new Resource[2];
+        resources[0] = NonPhysicalResourceType.VOID;
+        resources[1] = NonPhysicalResourceType.FAITH_POINT;
+        playerController.askToStoreResourcesFromMarket(resources);
+        assertEquals(1, playerController.getPlayerBoard().getFaithTrack().getFaithMarker());
+        assertEquals(PlayerController.PlayerStatus.ACTION_PERFORMED, playerController.getCurrentStatus());
     }
 
     @Test
     void askToStoreResource() {
+        Resource[] resources = new Resource[2];
+        resources[0] = ResourceType.SERVANT;
+        resources[1] = ResourceType.SHIELD;
+        playerController.getPlayerBoard().getWarehouse().toBeStored(resources);
+        Warehouse warehouse = new Warehouse();
+        Resource[] resources1 = new Resource[1];
+        resources1[0] = ResourceType.SERVANT;
+        warehouse.toBeStored(resources1);
+        expectedMessage = resources[1].toString() + warehouse;
+        playerController.askToStoreResource();
     }
 
     @Test
     void chooseWhiteMarbleConversion() {
+        Resource[] resources = new Resource[1];
+        resources[0] = NonPhysicalResourceType.VOID;
+        LeaderCard leaderCard = new WhiteMarbleLeaderCard("",5, new Requirements(new Triple<>(DevelopmentColorType.GREEN, 1, 0)), ResourceType.SHIELD, true);
+        LeaderCard leaderCard1 = new WhiteMarbleLeaderCard("",5, new Requirements(new Triple<>(DevelopmentColorType.GREEN, 1, 0)), ResourceType.COIN, true);
+        playerController.getPlayerBoard().getLeaderCards().add(leaderCard);
+        playerController.getPlayerBoard().getLeaderCards().add(leaderCard1);
+        expectedMessage = leaderCard.toString() + leaderCard1;
+        playerController.askToStoreResourcesFromMarket(resources);
     }
 
     @Test
@@ -307,10 +436,6 @@ class PlayerControllerTest implements FakeViewTester {
 
     @Test
     void chooseProductions() {
-    }
-
-    @Test
-    void setPlayerIndex() {
     }
 
     @Override

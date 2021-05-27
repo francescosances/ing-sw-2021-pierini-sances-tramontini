@@ -63,11 +63,6 @@ public class PlayerController {
     private Runnable afterDepotsSwapAction;
 
     /**
-     * Runnable with the action that allows to skip an action
-     */
-    private Runnable skipAction;
-
-    /**
      * True if the user has already choose the start resources
      */
     private boolean gotResourcesOfYourChoice;
@@ -95,7 +90,6 @@ public class PlayerController {
         this.view = View;
         currentStatus = PlayerStatus.PERFORMING_ACTION;
         gotResourcesOfYourChoice = false;
-        resetSkipAction();
         setAfterDepotsSwapAction(this::askForAction);
     }
 
@@ -162,9 +156,7 @@ public class PlayerController {
      */
     public void turnEnded(){
         currentStatus = PlayerStatus.TURN_ENDED;
-        for (PlayerStatusListener x : this.observers) {
-            x.onPlayerStatusChanged(this);
-        }
+        notifyPlayerStatusListeners();
     }
 
     /**
@@ -270,9 +262,7 @@ public class PlayerController {
      */
     public void discardLeaderCard(int num){
         playerBoard.discardLeaderCard(num);
-        for (PlayerStatusListener x : this.observers) {
-            x.onPlayerStatusChanged(this);
-        }
+        notifyPlayerStatusListeners();
     }
 
     /**
@@ -356,19 +346,9 @@ public class PlayerController {
             case ACTIVATE_PRODUCTION:
                 view.chooseProductions(playerBoard.getAvailableProductions(),playerBoard);
                 break;
-            case SKIP:
-                skipAction.run();
-                break;
             default:
                 nextStatus();
         }
-    }
-
-    /**
-     * Starts a normal Action
-     */
-    public void startNormalAction(){
-        askForNormalAction();
     }
 
     /**
@@ -379,13 +359,14 @@ public class PlayerController {
         view.askForAction(
                 playerBoard.getMatch().getPlayers().stream().map(PlayerBoard::getUsername).collect(Collectors.toList()),
                 Arrays.stream(Action.NORMAL_ACTIONS)
+                        .filter(x -> !((x == Action.PLAY_LEADER) && this.playerBoard.getAvailableLeaderCards().isEmpty())) //If no leader cards are available, the options are removed from the list
                         .toArray(Action[]::new));
     }
 
     /**
      * Send the cards in the hand of the user to the player.
      */
-    public void listPlayableLeaderCards(){
+    private void listPlayableLeaderCards(){
         view.showPlayerLeaderCards(playerBoard.getAvailableLeaderCards());
     }
 
@@ -416,15 +397,20 @@ public class PlayerController {
      */
     private void nextStatus(){
         currentStatus = currentStatus.nextStatus();
-        for (PlayerStatusListener x : this.observers) {
-            x.onPlayerStatusChanged(this);
-        }
+        notifyPlayerStatusListeners();
     }
 
     /**
      * Makes the controller choose a new action and notifies the observers of the rollback
      */
     private void rollback(){
+        notifyPlayerStatusListeners();
+    }
+
+    /**
+     * Makes the controller choose a new action and notifies the observers of the rollback
+     */
+    private void notifyPlayerStatusListeners(){
         for (PlayerStatusListener x : this.observers) {
             x.onPlayerStatusChanged(this);
         }
@@ -509,7 +495,6 @@ public class PlayerController {
                 }
             } if (resources[i] == NonPhysicalResourceType.FAITH_POINT) {
                 playerBoard.gainFaithPoints(1);
-                view.showMessage("You gained a faith point");
                 resources[i] = null;
             }
         }
@@ -519,7 +504,6 @@ public class PlayerController {
         List<Resource> resourcesToStore = Arrays.asList(resources);
         Collections.reverse(resourcesToStore);
         if(resourcesToStore.isEmpty()){
-            resetSkipAction();
             nextStatus();
             return;
         }
@@ -530,7 +514,7 @@ public class PlayerController {
      * Starts the "take resources from market" action by showing the player the market
      * and asking them what they want to choose
      */
-    public void takeResourcesFromMarket(){
+    private void takeResourcesFromMarket(){
         view.takeResourcesFromMarket(playerBoard.getMatch().getMarket());
     }
 
@@ -584,10 +568,8 @@ public class PlayerController {
         currentResourceToStore = null;
         if(getPlayerBoard().getWarehouse().hasResourcesToStore())
            askToStoreResource();
-        else {
-            resetSkipAction();
+        else
             nextStatus();
-        }
     }
 
     /**
@@ -660,21 +642,6 @@ public class PlayerController {
      */
     private void setAfterDepotsSwapAction(Runnable afterDepotsSwapAction) {
         this.afterDepotsSwapAction = afterDepotsSwapAction;
-    }
-
-    /**
-     * Sets the skipAction attribute
-     * @param skipAction the method the runnable must run when called
-     */
-    private void setSkipAction(Runnable skipAction){
-        this.skipAction = skipAction;
-    }
-
-    /**
-     * Resets the resetSkipAction attribute to its default value
-     */
-    private void resetSkipAction(){
-        setSkipAction(this::nextStatus);
     }
 
     /**

@@ -330,7 +330,7 @@ public class GameController implements PlayerStatusListener {
                 match.setCurrentPhase(Match.GamePhase.TURN);
                 break;
             case ACTION_PERFORMED:
-                playerController.startNormalAction();
+                playerController.askForNormalAction();
                 match.setCurrentPhase(Match.GamePhase.TURN);
                 break;
         }
