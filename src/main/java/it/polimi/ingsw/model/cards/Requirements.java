@@ -87,7 +87,7 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
      */
     public boolean satisfied(PlayerBoard player){
 
-        //if(true)return true;//TODO: rimuovere questo bypass
+        if(true)return true;//TODO: rimuovere questo bypass
 
         //Resources check
         Requirements playerResources = player.getAllResources();
