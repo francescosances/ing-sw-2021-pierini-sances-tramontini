@@ -13,6 +13,7 @@ import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.VirtualView;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,10 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -448,6 +453,8 @@ class PlayerControllerTest {
         playerController.getPlayerBoard().getLeaderCards().add(leaderCard1);
         expectedMessage = leaderCard.toString() + leaderCard1;
         playerController.askToStoreResourcesFromMarket(resources);
+        expectedMessage = leaderCard1.getOutputResourceType().toString() + playerController.getPlayerBoard().getWarehouse();
+        playerController.chooseWhiteMarbleConversion(1);
     }
 
     @Test

@@ -42,6 +42,10 @@ public class FaithTrack implements ObservableFromView {
      * List that contains all views that needs to be notified on changes
      */
     transient private List<View> views;
+    /**
+     * True if FaithTrack is BlackCross
+     */
+    private boolean blackCross;
 
     /**
      * Initialize a new FaithTrack connected to the its match
@@ -58,6 +62,7 @@ public class FaithTrack implements ObservableFromView {
         Arrays.fill(vaticanReports,false);
         this.username = username;
         views = new ArrayList<>();
+        blackCross = false;
     }
 
     /**
@@ -71,6 +76,22 @@ public class FaithTrack implements ObservableFromView {
                 return true;
         }
         return false;
+    }
+
+    /**
+     * Sets the blackCross parameter
+     * @param boo the value blackCross must be set to
+     */
+    public void setBlackCross(boolean boo){
+        blackCross = boo;
+    }
+
+    /**
+     * Returns true if is a BlackCross FaithTrack, false elsewhere
+     * @return true if is a BlackCross FaithTrack, false elsewhere
+     */
+    public boolean isBlackCross() {
+        return blackCross;
     }
 
     /**

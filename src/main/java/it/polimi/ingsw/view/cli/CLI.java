@@ -510,7 +510,7 @@ public class CLI implements View {
 
     public void printCross(int pos, FaithTrack faithTrack) {
         if (pos == faithTrack.getFaithMarker())
-            if (faithTrack.getUsername().equals("Black Cross"))
+            if (faithTrack.isBlackCross())
                 output.print("†");
             else
                 output.print(ANSI_RED + "†" + ANSI_RESET);
@@ -570,7 +570,7 @@ public class CLI implements View {
     }
 
     private void showPopeFavorTiles(FaithTrack faithTrack) {
-        if (faithTrack.getUsername().equals("Black Cross"))
+        if (faithTrack.isBlackCross())
             return; //Black Cross doesn't have PopeFavorTiles
         output.println("Pope favor tiles: " + faithTrack.getPopeFavorTilesVictoryPoints() + " victory points");
         for (PopeFavorTile tile: faithTrack.getPopeFavorTiles()) {
