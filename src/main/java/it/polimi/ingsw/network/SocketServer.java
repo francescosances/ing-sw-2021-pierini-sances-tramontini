@@ -31,8 +31,6 @@ public class SocketServer {
      * to each client joining
      */
     public void start(){
-        //It creates threads when necessary, otherwise it re-uses existing one when possible
-        ExecutorService executor = Executors.newCachedThreadPool();
         ServerSocket serverSocket;
         try{
             serverSocket = new ServerSocket(port);
@@ -45,13 +43,12 @@ public class SocketServer {
             try{
                 Socket socket = serverSocket.accept();
                 Server.log("User connected");
-                executor.submit(new ClientHandler(socket,server));
+                new Thread(new ClientHandler(socket,server)).start();
             }catch(IOException e){
                 e.printStackTrace();
                 break; //In case the serverSocket gets closed
             }
         }
-        executor.shutdown();
         try {
             serverSocket.close();
         }catch (IOException e){
