@@ -98,7 +98,7 @@ public class MatchTest {
     public void buyDevelopmentCardTest(){
         List<Deck<DevelopmentCard>> before = Serializer.deserializeDevelopmentCardsDeckList(Serializer.serializeDevelopmentCardsDeckList(match.getDevelopmentCardDecks()));
         match.buyDevelopmentCard(before.get(0).top(),match.getPlayerBoard("first"));
-        assertEquals(before.get(0).top(),match.getDevelopmentCardDecks().get(0).top());
+        assertNotEquals(before.get(0).top(),match.getDevelopmentCardDecks().get(0).top());
         match.buyDevelopmentCard(before.get(0).top(),match.getPlayerBoard("second"));
         assertNotEquals(before.get(0).top(),match.getDevelopmentCardDecks().get(0).top());
         assertNotEquals(match.getDevelopmentCardDecks().get(0).size(),before.get(0).size());
