@@ -44,7 +44,7 @@ public class CLI implements View {
     /**
      * Handles synchronization on output stream
      */
-    private Lock outputLock;
+    private final Lock outputLock;
     /**
      * The username of the player currently playing
      */
@@ -531,6 +531,7 @@ public class CLI implements View {
     public void showPlayerBoard(PlayerBoard playerBoard) {
         outputLock.lock();
         output.println();
+        output.println(playerBoard.getUsername() + "'s player board is");
         printFaithTrack(playerBoard.getFaithTrack());
         printStorage(playerBoard);
         printDevelopmentCards(playerBoard.getDevelopmentCardSlots());
@@ -684,7 +685,7 @@ public class CLI implements View {
                     if (developmentCard.equals(developmentCardSlot.getTopCard()))
                         output.println("    Active: " + developmentCard);
                     else {
-                        output.print("     color: " + developmentCard.getColor());
+                        output.print("           color: " + developmentCard.getColor());
                         output.println(" victory points: " + developmentCard.getVictoryPoints());
                     }
                 });
@@ -784,10 +785,10 @@ public class CLI implements View {
     }
 
     private void printResources(Resource[] resources) {
-        int index = 0;
-        for (Resource resource : resources) {
-            output.printf("[%d] %s \n", index++, resource);
-        }
+        List<Resource> resourceList = Arrays.asList(resources);
+        Collections.reverse(resourceList);
+        for (Resource resource : resourceList)
+            output.printf("    %s \n", resource);
     }
 
     @Override
@@ -850,7 +851,7 @@ public class CLI implements View {
         } while (choice != 0 && choice != 1);
 
         if (choice == 0) {//rows
-            output.print("Which row would you like to choose? [0-" + (Market.ROWS - 1) + "]");
+            output.println("Which row would you like to choose? [0-" + (Market.ROWS - 1) + "]");
             int row = input.nextInt();
             if (row < 0 || row >= Market.ROWS) {
                 showErrorMessage("Invalid choice");
@@ -859,7 +860,7 @@ public class CLI implements View {
             }
             clientController.chooseMarketRow(row);
         } else {//columns
-            output.print("Which column would you like to choose? [0-" + (Market.COLUMNS - 1) + "]");
+            output.println("Which column would you like to choose? [0-" + (Market.COLUMNS - 1) + "]");
             int column = input.nextInt();
             if (column < 0 || column >= Market.COLUMNS) {
                 showErrorMessage("Invalid choice");

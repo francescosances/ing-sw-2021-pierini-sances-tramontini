@@ -7,7 +7,6 @@ import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.utils.FileManager;
 import it.polimi.ingsw.view.ObservableFromView;
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.VirtualView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -202,7 +201,7 @@ public class Match implements ObservableFromView {
         int nextPlayerIndex = (currentPlayerIndex + 1) % players.size();
         for (View view:views) {
             if (players.get(nextPlayerIndex).getUsername().equals(view.getUsername()))
-                view.showPlayerBoard(players.get(nextPlayerIndex));
+                updatePlayerBoard(players.get(nextPlayerIndex));
         }
     }
 
@@ -217,7 +216,7 @@ public class Match implements ObservableFromView {
     protected void buyDevelopmentCard(DevelopmentCard developmentCard, PlayerBoard player){
         for(Deck<DevelopmentCard> deck : developmentDecks){
             for(int i=0;i<deck.size();i++){
-                if(deck.get(i).equals(developmentCard) && deck.get(i).getCost().satisfied(player)) {
+                if(deck.get(i).equals(developmentCard)) {
                     deck.remove(i);
                     return;
                 }
@@ -243,6 +242,11 @@ public class Match implements ObservableFromView {
         views.remove(view);
         players.forEach(playerBoard -> playerBoard.removeView(view));
         market.removeView(view);
+    }
+
+    private void updatePlayerBoard(PlayerBoard playerBoard) {
+        for (View view:views)
+            view.showPlayerBoard(playerBoard);
     }
 
     @Override

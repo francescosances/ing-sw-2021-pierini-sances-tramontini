@@ -98,7 +98,7 @@ public class ClientHandler implements Runnable {
     public void sendMessage(Message message) {
         socketOut.println(message.serialize());
         socketOut.flush();
-        Server.log("Message sent to client" + username + ":\n" + message.serialize());
+        Server.log("Message sent to client " + username + ":\n" + message.serialize());
     }
 
 }

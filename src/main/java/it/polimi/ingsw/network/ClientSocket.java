@@ -3,6 +3,7 @@ package it.polimi.ingsw.network;
 import it.polimi.ingsw.controller.ClientController;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.view.cli.CLI;
+import it.polimi.ingsw.view.gui.GUI;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -71,7 +72,11 @@ public class ClientSocket implements Runnable{
             try {
                 String received = socketIn.nextLine();
                 Message message = Message.messageFromString(received);
-                log("received"+received);
+
+                //TODO ELIMINARE STA ROBA
+                if (clientController.getView() instanceof GUI)
+                    log("received"+received);
+
                 Thread t = new Thread(()-> clientController.handleReceivedMessage(message));
                 t.setDaemon(true);
                 t.start();

@@ -141,7 +141,10 @@ public class VirtualView implements View {
     }
 
     @Override
-    public void showPlayerBoard(PlayerBoard playerBoard){
+    public void showPlayerBoard(PlayerBoard pb){
+        PlayerBoard playerBoard = pb.clone();
+        if (!pb.getUsername().equals(this.username))
+            playerBoard.getLeaderCards().removeIf(card -> !card.isActive());
         Message message = new Message(Message.MessageType.SHOW_PLAYER_BOARD);
         message.addData("playerBoard",Serializer.serializePlayerBoard(playerBoard));
         sendMessage(message);

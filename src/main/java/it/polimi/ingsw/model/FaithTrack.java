@@ -164,10 +164,8 @@ public class FaithTrack implements ObservableFromView {
         for (int i = 0; i < spaces; i++) {
             faithMarker++;
             if (    match.getVaticanReportsCount() < vaticanReports.length &&
-                    !vaticanReports[match.getVaticanReportsCount()] && isPopeSpace(faithMarker)) {
+                    !vaticanReports[match.getVaticanReportsCount()] && isPopeSpace(faithMarker))
                 match.vaticanReport(faithMarker);
-                vaticanReportUpdate();
-            }
             if (faithMarker == SIZE) {
                 updateViews();
                 throw new EndGameException(true);
@@ -241,6 +239,7 @@ public class FaithTrack implements ObservableFromView {
      */
     protected void vaticanReportTriggered(int vaticanReportCount) {
         vaticanReports[vaticanReportCount] = true;
+        vaticanReportUpdate();
         updateViews();
     }
 
