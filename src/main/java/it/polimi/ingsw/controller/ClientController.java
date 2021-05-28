@@ -241,8 +241,10 @@ public class ClientController {
                 view.showPlayers(players);
                 break;
             case SHOW_SLOTS:
+                lock.lock();
                 DevelopmentCardSlot[] developmentCardSlots = Serializer.deserializeDevelopmentCardsSlots(message.getData("slots"));
                 view.showDevelopmentCardSlots(developmentCardSlots);
+                lock.unlock();
                 break;
             default:
                 clientSocket.log("Received unexpected message");
@@ -271,7 +273,7 @@ public class ClientController {
     public void login(String username){
         Message message = new Message(Message.MessageType.LOGIN_REQUEST);
         message.addData("username", username);
-        this.username = username;
+        this.username = new String(username);
         clientSocket.sendMessage(message);
     }
 
