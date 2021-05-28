@@ -28,7 +28,7 @@ public class ClientController {
     /**
      * The socket connection to the server
      */
-    private final ClientSocket clientSocket;
+    private ClientSocket clientSocket;
     /**
      * The view used to interact with the user
      */
@@ -49,9 +49,17 @@ public class ClientController {
     /**
      * Default empty constructor that initialize a new socket
      */
-    public ClientController(){
-        clientSocket = new ClientSocket(this);
+    public ClientController() {
+        this.clientSocket = new ClientSocket(this);
         lock = new ReentrantLock();
+    }
+
+    /**
+     * Sets a new ClientSocket
+     * @param clientSocket the ClientSocket to be set
+     */
+    protected void setClientSocket(ClientSocket clientSocket) {
+        this.clientSocket = clientSocket;
     }
 
     /**
@@ -255,7 +263,7 @@ public class ClientController {
     public void login(String username){
         Message message = new Message(Message.MessageType.LOGIN_REQUEST);
         message.addData("username", username);
-        this.username = new String (username);
+        this.username = username;
         clientSocket.sendMessage(message);
     }
 
