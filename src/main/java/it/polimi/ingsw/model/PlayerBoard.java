@@ -71,7 +71,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
         strongbox = new Strongbox();
         faithTrack = new FaithTrack(match, username);
         developmentCardSlots = Stream.generate(DevelopmentCardSlot::new).limit(3).toArray(DevelopmentCardSlot[]::new);
-/*
+
         //TODO: rimuovere bypass
         developmentCardSlots[0].addCard(match.getDevelopmentCardDecks().get(0).top());
         developmentCardSlots[0].addCard(match.getDevelopmentCardDecks().get(1).top());
@@ -84,7 +84,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
             e.printStackTrace();
         }
 
- */
+
 
 
         leaderCards = new ArrayList<>();

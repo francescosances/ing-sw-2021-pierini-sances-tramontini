@@ -345,13 +345,9 @@ public class PlayerboardSceneController extends Controller{
                  leaderCardsImg[i].setOnMouseClicked((e)->{//todo conflitto con activate/discard
                      if(!controlsEnabled)
                          return;
-                     warehouseSelected(depotIndexFinal,()->{
-                         if(selectedWarehouseRows.size() == 2){
-                             clientController.swapDepots(selectedWarehouseRows.get(0),selectedWarehouseRows.get(1));
-                             clearWarehouseSelection();
-                         }
-                     });
+                        warehouseSelected(depotIndexFinal,onDepotSelectedAction);
                  });
+                 leaderCardsImg[i].setDisable(false);
                  depotIndex++;
              }
         }
