@@ -10,37 +10,43 @@ import it.polimi.ingsw.model.storage.Strongbox;
 import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.VirtualView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-class FakeView implements View {
+class ViewStub implements View {
+    
+    List<String> messages;
 
-    FakeViewTester fakeViewTester;
+    public ViewStub() {
+        messages = new ArrayList<>();
+    }
 
-    public FakeView(FakeViewTester fakeViewTester){
-        this.fakeViewTester = fakeViewTester;
+    public String popMessage() {
+        return messages.remove(0);
     }
 
     @Override
     public void showMessage(String message) {
-        fakeViewTester.testMessage(message);
+        messages.add(message);
     }
 
     @Override
     public void showErrorMessage(String message) {
-        fakeViewTester.testMessage(message);
+        messages.add(message);
     }
 
     @Override
     public void listLobbies(List<Triple<String, Integer, Integer>> availableLobbies) {
-        fakeViewTester.testMessage(availableLobbies.toString());
+        messages.add(availableLobbies.toString());
     }
 
     @Override
     public void resumeMatch(PlayerBoard playerBoard) {
-        fakeViewTester.testMessage(playerBoard.toString());
+        messages.add(playerBoard.toString());
     }
 
     @Override
@@ -49,6 +55,7 @@ class FakeView implements View {
 
     @Override
     public void askLogin() {
+        messages.add("a");
     }
 
     @Override
@@ -57,12 +64,12 @@ class FakeView implements View {
 
     @Override
     public void userConnected(String username) {
-        fakeViewTester.testMessage(username);
+        messages.add(username);
     }
 
     @Override
     public void userDisconnected(String username) {
-        fakeViewTester.testMessage(username);
+        messages.add(username);
     }
 
     @Override
@@ -72,17 +79,17 @@ class FakeView implements View {
 
     @Override
     public void showPlayerLeaderCards(List<LeaderCard> leaderCardList) {
-        fakeViewTester.testMessage(leaderCardList.toString());
+        messages.add(leaderCardList.toString());
     }
 
     @Override
     public void showLeaderCards(List<LeaderCard> leaderCards) {
-        fakeViewTester.testMessage(leaderCards.toString());
+        messages.add(leaderCards.toString());
     }
 
     @Override
     public void showDevelopmentCardSlots(DevelopmentCardSlot[] developmentCardSlots) {
-        fakeViewTester.testMessage(Arrays.toString(developmentCardSlots));
+        messages.add(Arrays.toString(developmentCardSlots));
     }
 
     @Override
@@ -92,105 +99,105 @@ class FakeView implements View {
 
     @Override
     public void showPlayerBoard(PlayerBoard playerBoard) {
-        fakeViewTester.testMessage(playerBoard.toString());
+        messages.add(playerBoard.toString());
 
     }
 
     @Override
     public void showFaithTrack(FaithTrack faithTrack) {
-        fakeViewTester.testMessage(faithTrack.toString());
+        messages.add(faithTrack.toString());
 
     }
 
     @Override
     public void showVaticanReportTriggered(String username, int vaticanReportCount) {
-        fakeViewTester.testMessage(username + vaticanReportCount);
+        messages.add(username + vaticanReportCount);
     }
 
     @Override
     public void showWarehouse(Warehouse warehouse) {
-        fakeViewTester.testMessage(warehouse.toString());
+        messages.add(warehouse.toString());
 
     }
 
     @Override
     public void showStrongbox(Strongbox strongbox) {
-        fakeViewTester.testMessage(strongbox.toString());
+        messages.add(strongbox.toString());
 
     }
 
     @Override
     public void askToSwapDepots(Warehouse warehouse) {
-        fakeViewTester.testMessage(warehouse.toString());
+        messages.add(warehouse.toString());
 
     }
 
     @Override
     public void askForAction(List<String> usernames, Action... availableActions) {
-        fakeViewTester.testMessage(usernames.toString()
+        messages.add(usernames.toString()
                 + Arrays.toString(availableActions));
     }
 
     @Override
     public void takeResourcesFromMarket(Market market) {
-        fakeViewTester.testMessage(market.toString());
+        messages.add(market.toString());
 
     }
 
     @Override
     public void showMarket(Market market) {
-        fakeViewTester.testMessage(market.toString());
+        messages.add(market.toString());
 
     }
 
     @Override
     public void showResourcesGainedFromMarket(Resource[] resources) {
-        fakeViewTester.testMessage(Arrays.toString(resources));
+        messages.add(Arrays.toString(resources));
 
     }
 
     @Override
     public void askToStoreResource(Resource resource, Warehouse warehouse) {
-        fakeViewTester.testMessage(resource.toString() + warehouse.toString());
+        messages.add(resource.toString() + warehouse.toString());
 
     }
 
     @Override
     public void chooseWhiteMarbleConversion(LeaderCard leaderCard, LeaderCard leaderCard1) {
-        fakeViewTester.testMessage(leaderCard.toString() + leaderCard1.toString());
+        messages.add(leaderCard.toString() + leaderCard1.toString());
 
     }
 
     @Override
     public void askToChooseDevelopmentCardSlot(DevelopmentCardSlot[] slots, DevelopmentCard developmentCard) {
-        fakeViewTester.testMessage(Arrays.toString(slots) + developmentCard.toString());
+        messages.add(Arrays.toString(slots) + developmentCard.toString());
 
     }
 
     @Override
     public void chooseProductions(List<Producer> availableProductions, PlayerBoard playerBoard) {
-        fakeViewTester.testMessage(availableProductions.toString() + playerBoard.toString());
+        messages.add(availableProductions.toString() + playerBoard.toString());
     }
 
     @Override
     public void showCurrentActiveUser(String username) {
-        fakeViewTester.testMessage(username);
+        messages.add(username);
 
     }
 
     @Override
     public void askToChooseStartResources(Resource[] values, int resourcesToChoose) {
-        fakeViewTester.testMessage(Arrays.toString(values) + resourcesToChoose);
+        messages.add(Arrays.toString(values) + resourcesToChoose);
     }
 
     @Override
     public void showPlayers(Map<String, Boolean> users) {
-        fakeViewTester.testMessage(users.toString());
+        messages.add(users.toString());
     }
 
     @Override
     public void showActionToken(ActionToken actionToken) {
-        fakeViewTester.testMessage(actionToken.toString());
+        messages.add(actionToken.toString());
 
     }
 
@@ -200,6 +207,6 @@ class FakeView implements View {
 
     @Override
     public String getUsername() {
-        return "FakeView";
+        return "ViewStub";
     }
 }

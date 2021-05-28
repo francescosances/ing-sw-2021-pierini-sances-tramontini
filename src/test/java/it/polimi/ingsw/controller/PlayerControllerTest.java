@@ -20,21 +20,22 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Semaphore;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PlayerControllerTest implements FakeViewTester {
+class PlayerControllerTest {
 
     PlayerController playerController;
-    String expectedMessage;
+    ViewStub viewStub;
+    String expectedMessage; //TODO use ViewStub instead of expectedMessage
 
     @BeforeEach
     void setUp() {
         String username = "Test";
         Match match = new Match(username);
-        playerController = new PlayerController(username, match.addPlayer(username), new FakeView(this));
+        viewStub = new ViewStub();
+        playerController = new PlayerController(username, match.addPlayer(username), viewStub);
         playerController.active = true;
     }
 
@@ -65,9 +66,9 @@ class PlayerControllerTest implements FakeViewTester {
         DevelopmentCard developmentCard = new DevelopmentCard("", 1, cost, 1, DevelopmentColorType.GREEN, null, (Requirements) null);
         for (int i = 0; i < /*playerController.getPlayerBoard().getDevelopmentCardSlots().length*/ 2; i++) {
             playerController.activate();
-            expectedMessage = Arrays.toString(developmentCardSlots) + developmentCard;
             playerController.buyDevelopmentCard(developmentCard);
             playerController.deactivate();
+            assertEquals(Arrays.toString(developmentCardSlots) + developmentCard, viewStub.popMessage());
             developmentCardSlots[i].addCard(developmentCard);
             assertEquals(developmentCard, playerController.getPlayerBoard().getDevelopmentCardSlots()[i].getTopCard());
         }
@@ -472,10 +473,5 @@ class PlayerControllerTest implements FakeViewTester {
     @Test
     void chooseProductions() {
 
-    }
-
-    @Override
-    public void testMessage(String providedMessage){
-        assertEquals(expectedMessage, providedMessage);
     }
 }

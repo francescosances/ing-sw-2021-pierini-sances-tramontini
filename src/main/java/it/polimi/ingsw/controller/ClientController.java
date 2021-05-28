@@ -82,6 +82,14 @@ public class ClientController {
     }
 
     /**
+     * Sets a new View
+     * @param view the view to be set
+     */
+    protected void setView(View view) {
+        this.view = view;
+    }
+
+    /**
      * Method that map a message with the the action that must be executed
      * @param message the message received from the server via socket
      */

@@ -2,14 +2,16 @@ package it.polimi.ingsw.controller;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.model.Action;
-import it.polimi.ingsw.model.cards.DevelopmentCard;
-import it.polimi.ingsw.model.cards.DevelopmentColorType;
-import it.polimi.ingsw.model.cards.Requirements;
+import it.polimi.ingsw.model.Match;
+import it.polimi.ingsw.model.PlayerBoard;
+import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
+import it.polimi.ingsw.utils.Pair;
+import it.polimi.ingsw.utils.Triple;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,19 +25,22 @@ import static org.junit.jupiter.api.Assertions.*;
 class ClientControllerTest {
     private ClientController clientController;
     private ClientSocketStub clientSocketStub; // for testing ClientController -> server
-    //private ViewStub for testing ClientController -> View
+    private ViewStub viewStub; // for testing ClientController -> View
 
     @BeforeEach
     void setUp() {
+        viewStub = new ViewStub();
         clientController = new ClientController();
         clientSocketStub = new ClientSocketStub(clientController);
         clientController.setClientSocket(clientSocketStub);
+        clientController.setView(viewStub);
     }
 
     @AfterEach
     void tearDown() {
         clientController = null;
         clientSocketStub = null;
+        viewStub = null;
     }
 
     @Test
@@ -60,23 +65,43 @@ class ClientControllerTest {
 
     @Test
     void createNewLobby() {
+        clientController.createNewLobby(1);
+        assertEquals(Message.MessageType.LOBBY_CHOICE, clientSocketStub.getMessage().getType());
+        assertNull(clientSocketStub.getMessage().getData("matchOwner"));
+        assertEquals("1", clientSocketStub.getMessage().getData("playersNumber"));
+        clientController.createNewLobby(2);
+        assertEquals(Message.MessageType.LOBBY_CHOICE, clientSocketStub.getMessage().getType());
+        assertNull(clientSocketStub.getMessage().getData("matchOwner"));
+        assertEquals("2", clientSocketStub.getMessage().getData("playersNumber"));
     }
 
     @Test
     void lobbyChoice() {
+        clientController.lobbyChoice("TestMatch", 2);
+        assertEquals(Message.MessageType.LOBBY_CHOICE, clientSocketStub.getMessage().getType());
+        assertEquals("TestMatch", clientSocketStub.getMessage().getData("matchOwner"));
     }
 
     @Test
     void leaderCardsChoice() {
+        LeaderCard[] leaderCards = new LeaderCard[] {
+                new DepotLeaderCard("",3, new Requirements(new Pair<>(ResourceType.SERVANT, 5)), ResourceType.SHIELD),
+                new ProductionLeaderCard("",4, new Requirements(new Triple<>(DevelopmentColorType.YELLOW, 2, 1)), new Requirements(new Pair<>(ResourceType.SHIELD, 1)))
+        };
+        clientController.leaderCardsChoice(leaderCards);
+        assertEquals(Message.MessageType.LEADER_CARDS_CHOICE, clientSocketStub.getMessage().getType());
+        assertEquals(Arrays.asList(leaderCards), Serializer.deserializeLeaderCardList(clientSocketStub.getMessage().getData("leaderCards")));
     }
 
     @Test
     void chooseDevelopmentCards() {
-        DevelopmentCard devCard1 = new DevelopmentCard("TestDevCard1", 2, new Requirements(), 1, DevelopmentColorType.GREEN, new Requirements(), new Requirements());
-        DevelopmentCard devCard2 = new DevelopmentCard("TestDevCard1", 5, new Requirements(), 2, DevelopmentColorType.BLUE, new Requirements(), new Requirements());
-        clientController.chooseDevelopmentCards(devCard1, devCard2);
+        DevelopmentCard[] developmentCards = new DevelopmentCard[]{
+                new DevelopmentCard("TestDevCard1", 2, new Requirements(), 1, DevelopmentColorType.GREEN, new Requirements(), new Requirements()),
+                new DevelopmentCard("TestDevCard1", 5, new Requirements(), 2, DevelopmentColorType.BLUE, new Requirements(), new Requirements())
+        };
+        clientController.chooseDevelopmentCards(developmentCards);
         assertEquals(Message.MessageType.DEVELOPMENT_CARDS_TO_BUY, clientSocketStub.getMessage().getType());
-        assertEquals(Arrays.asList(devCard1, devCard2), Serializer.deserializeDevelopmentCardsList(clientSocketStub.getMessage().getData("developmentCards")));
+        assertEquals(Arrays.asList(developmentCards), Serializer.deserializeDevelopmentCardsList(clientSocketStub.getMessage().getData("developmentCards")));
     }
 
     @Test
@@ -165,6 +190,9 @@ class ClientControllerTest {
 
     @Test
     void resumeMatch() {
+        PlayerBoard playerBoard = new PlayerBoard("TestUsername", new Match("TestMatch"));
+        clientController.resumeMatch(playerBoard);
+        assertEquals(playerBoard.toString(), viewStub.popMessage());
     }
 
     @Test
