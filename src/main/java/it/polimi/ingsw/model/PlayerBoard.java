@@ -72,10 +72,12 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
         faithTrack = new FaithTrack(match, username);
         developmentCardSlots = Stream.generate(DevelopmentCardSlot::new).limit(3).toArray(DevelopmentCardSlot[]::new);
 
+        /*
         //TODO: rimuovere bypass
         developmentCardSlots[0].addCard(match.getDevelopmentCardDecks().get(0).top());
         developmentCardSlots[0].addCard(match.getDevelopmentCardDecks().get(1).top());
         developmentCardSlots[1].addCard(match.getDevelopmentCardDecks().get(3).top());
+
 
         try {
             warehouse.addResources(0,ResourceType.SERVANT,1);
@@ -83,6 +85,8 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
         } catch (IncompatibleDepotException e) {
             e.printStackTrace();
         }
+
+         */
 
 
 
