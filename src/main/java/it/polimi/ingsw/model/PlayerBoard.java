@@ -83,8 +83,8 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
         } catch (IncompatibleDepotException e) {
             e.printStackTrace();
         }
+*/
 
- */
 
 
         leaderCards = new ArrayList<>();
