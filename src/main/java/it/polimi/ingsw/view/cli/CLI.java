@@ -594,7 +594,7 @@ public class CLI implements View {
     }
 
     private void printPopeFavorTiles(FaithTrack faithTrack) {
-        if (faithTrack.isBlackCross()))
+        if (faithTrack.isBlackCross())
             return; //Black Cross doesn't have PopeFavorTiles
         output.println("Pope favor tiles: " + faithTrack.getPopeFavorTilesVictoryPoints() + " victory points");
         for (PopeFavorTile tile: faithTrack.getPopeFavorTiles()) {
