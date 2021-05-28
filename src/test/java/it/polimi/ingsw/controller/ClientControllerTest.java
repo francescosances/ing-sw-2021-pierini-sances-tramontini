@@ -8,8 +8,6 @@ import it.polimi.ingsw.model.cards.Requirements;
 import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.ResourceType;
-import it.polimi.ingsw.network.Server;
-import it.polimi.ingsw.network.SocketServer;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
 import org.junit.jupiter.api.AfterEach;
@@ -19,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.concurrent.locks.ReadWriteLock;
 
 import static org.junit.jupiter.api.Assertions.*;
 
