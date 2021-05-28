@@ -553,6 +553,8 @@ public class PlayerboardSceneController extends Controller{
                         {developmentcardslot1_0,developmentcardslot1_1,developmentcardslot1_2},
                         {developmentcardslot2_0,developmentcardslot2_1,developmentcardslot2_2}};
 
+        ImageView[] desks = {desk0,desk1,desk2};
+
         buyDevelopmentcardBtn.setVisible(false);
         marketBtn.setVisible(false);
         startProductionBtn.setVisible(false);
@@ -563,11 +565,10 @@ public class PlayerboardSceneController extends Controller{
             if(slot.accepts(developmentCard)){
                 System.out.println("index"+index);
                 System.out.println("slotsize-1"+(slot.getSize()-1));
-                slotsImg[index][slot.getSize()-1].getStyleClass().add("selectable");//TODO: carta in slot vuoto solleva index out of bound
                 final int slotIndex = index;
-                slotsImg[index][slot.getSize()-1].setOnMouseClicked((e)->{
-                    clientController.chooseDevelopmentCardsSlot(slotIndex);
-                });
+                ImageView selectedImageView = slot.isEmpty()?desks[index]:slotsImg[index][slot.getSize()-1];
+                selectedImageView.getStyleClass().add("selectable");
+                selectedImageView.setOnMouseClicked((e)-> clientController.chooseDevelopmentCardsSlot(slotIndex));
             }
             index++;
         }
