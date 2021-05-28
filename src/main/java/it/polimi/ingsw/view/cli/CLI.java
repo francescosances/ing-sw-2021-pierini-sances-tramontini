@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class CLI implements View {
 
@@ -59,6 +60,7 @@ public class CLI implements View {
         this.output = System.out;
         this.errorOutput = System.out;
         this.lightMode = lightMode;
+        this.outputLock = new ReentrantLock();
     }
 
     @Override
