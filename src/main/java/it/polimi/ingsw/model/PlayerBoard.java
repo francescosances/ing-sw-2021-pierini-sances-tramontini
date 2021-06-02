@@ -72,7 +72,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
         faithTrack = new FaithTrack(match, username);
         developmentCardSlots = Stream.generate(DevelopmentCardSlot::new).limit(3).toArray(DevelopmentCardSlot[]::new);
 
-        /*
+/*
         //TODO: rimuovere bypass
         developmentCardSlots[0].addCard(match.getDevelopmentCardDecks().get(0).top());
         developmentCardSlots[0].addCard(match.getDevelopmentCardDecks().get(1).top());
@@ -85,11 +85,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
         } catch (IncompatibleDepotException e) {
             e.printStackTrace();
         }
-
-         */
-
-
-
+*/
 
         leaderCards = new ArrayList<>();
         views = new ArrayList<>();
@@ -382,8 +378,14 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      */
     public void setWarehouse(Warehouse warehouse) {
         this.warehouse = warehouse;
-        for (View view:views)
-            warehouse.addView(view);
+        addObservers(warehouse);
+    }
+
+    private void addObservers(ObservableFromView observable){
+        if(views == null)
+            views = new ArrayList<>();
+        for (View temp:views)
+            observable.addView(temp);
     }
 
     //TODO: verificare se vale la pena di spostare i setter su una nuova classe mutable
@@ -394,8 +396,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      */
     public void setFaithTrack(FaithTrack faithTrack){
         this.faithTrack = faithTrack;
-        for (View view:views)
-            faithTrack.addView(view);
+        addObservers(faithTrack);
     }
 
     /**
@@ -404,8 +405,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      */
     public void setStrongbox(Strongbox strongbox){
         this.strongbox = strongbox;
-        for (View view:views)
-            strongbox.addView(view);
+        addObservers(strongbox);
     }
 
     /**

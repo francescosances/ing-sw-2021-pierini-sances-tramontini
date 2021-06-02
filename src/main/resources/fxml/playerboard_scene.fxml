@@ -36,6 +36,7 @@
                   <Image url="@../images/buttons/desk2.png" />
                </image>
             </ImageView>
+
             <ImageView fx:id="warehouse_void_0" fitHeight="33.0" fitWidth="105.0" layoutX="55.0" layoutY="377.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/buttons/warehouse_row_0.png" />

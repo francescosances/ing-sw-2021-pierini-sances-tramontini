@@ -330,7 +330,7 @@ public class PlayerboardSceneController extends Controller{
 
         final ImageView[] leaderCardsImg = {leadercard0,leadercard1};
 
-        List<LeaderCard> leaderCards = playerBoard.getLeaderCards();
+  /*      List<LeaderCard> leaderCards = playerBoard.getLeaderCards();
         int depotIndex = 3;
         for(int i=0;i<leaderCards.size();i++){
              if(leaderCards.get(i).isActive() && leaderCards.get(i).isDepotLeaderCard()){
@@ -350,7 +350,7 @@ public class PlayerboardSceneController extends Controller{
                  leaderCardsImg[i].setDisable(false);
                  depotIndex++;
              }
-        }
+        }*/
     }
 
     private void clearWarehouseSelection(){
@@ -669,9 +669,9 @@ public class PlayerboardSceneController extends Controller{
             final int index = i;
 
             if(card.isActive()) {
-                playerBoard.activateLeaderCard(card);
                 leaderCards[i].getStyleClass().remove("leadercard");
                 leaderCards[i].getStyleClass().add("active-leadercard");
+                leaderCards[i].setDisable(true);
                 leaderCards[i].setOnMouseClicked((e)->{});
             }else {
                 leaderCards[i].getStyleClass().add("leadercard");
