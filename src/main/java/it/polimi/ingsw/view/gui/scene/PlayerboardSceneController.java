@@ -45,7 +45,7 @@ public class PlayerboardSceneController extends Controller{
     protected Label lblStoring,lblCoinStrongbox,lblStoneStrongbox,lblShieldStrongbox,lblServantStrongbox;
 
     @FXML
-    protected ImageView marker;
+    protected ImageView marker,blackCross;
 
     @FXML
     protected StackPane root;
@@ -627,22 +627,28 @@ public class PlayerboardSceneController extends Controller{
     }
 
     public void showFaithTrack(FaithTrack faithTrack) {
-        playerBoard.setFaithTrack(faithTrack);
+        if(!faithTrack.isBlackCross()) {
+            playerBoard.setFaithTrack(faithTrack);
 
-        marker.setX(FAITH_TRACK_CELLS[faithTrack.getFaithMarker()][0]);
-        marker.setY(FAITH_TRACK_CELLS[faithTrack.getFaithMarker()][1]);
-        marker.setVisible(true);
+            marker.setX(FAITH_TRACK_CELLS[faithTrack.getFaithMarker()][0]);
+            marker.setY(FAITH_TRACK_CELLS[faithTrack.getFaithMarker()][1]);
+            marker.setVisible(true);
 
-        ImageView[] popeFavorTiles = {vaticanreport0,vaticanreport1,vaticanreport2};
-        for(int i=0;i<3;i++){
-            popeFavorTiles[i].setImage(new Image("/images/punchboard/pope_favor_tile_missed_"+i+".png"));
-            popeFavorTiles[i].setVisible(true);
-            if(faithTrack.getPopeFavorTiles()[i] == null){
-                popeFavorTiles[i].setVisible(false);
-            }else if(faithTrack.getPopeFavorTiles()[i].isUncovered()) {
-                popeFavorTiles[i].setImage(new Image("/images/punchboard/pope_favor_tile" + i + ".png"));
+            ImageView[] popeFavorTiles = {vaticanreport0, vaticanreport1, vaticanreport2};
+            for (int i = 0; i < 3; i++) {
+                popeFavorTiles[i].setImage(new Image("/images/punchboard/pope_favor_tile_missed_" + i + ".png"));
                 popeFavorTiles[i].setVisible(true);
+                if (faithTrack.getPopeFavorTiles()[i] == null) {
+                    popeFavorTiles[i].setVisible(false);
+                } else if (faithTrack.getPopeFavorTiles()[i].isUncovered()) {
+                    popeFavorTiles[i].setImage(new Image("/images/punchboard/pope_favor_tile" + i + ".png"));
+                    popeFavorTiles[i].setVisible(true);
+                }
             }
+        }else{
+            blackCross.setX(FAITH_TRACK_CELLS[faithTrack.getFaithMarker()][0]);
+            blackCross.setY(FAITH_TRACK_CELLS[faithTrack.getFaithMarker()][1]);
+            blackCross.setVisible(true);
         }
 
     }
