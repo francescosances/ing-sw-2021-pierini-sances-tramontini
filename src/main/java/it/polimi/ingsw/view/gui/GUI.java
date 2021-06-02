@@ -245,7 +245,7 @@ public class GUI implements View {
 
     @Override
     public void showMarket(Market market) {
-        ((MarketSceneController)openModal("market_scene","Market",()->clientController.rollback())).initialize(market);
+        Platform.runLater(()-> ((MarketSceneController)openModal("market_scene","Market",()->clientController.rollback())).initialize(market));
     }
 
     @Override

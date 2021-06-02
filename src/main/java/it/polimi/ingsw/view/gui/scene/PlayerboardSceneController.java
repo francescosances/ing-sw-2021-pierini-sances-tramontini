@@ -250,7 +250,7 @@ public class PlayerboardSceneController extends Controller{
             }
         }
 
-        //enableWarehouseSelection(defaultWarehouseAction);
+        enableWarehouseSelection(defaultWarehouseAction);
     }
 
     private void warehouseSelected(int rowIndex,Runnable action){
@@ -330,7 +330,7 @@ public class PlayerboardSceneController extends Controller{
 
         final ImageView[] leaderCardsImg = {leadercard0,leadercard1};
 
-  /*      List<LeaderCard> leaderCards = playerBoard.getLeaderCards();
+       List<LeaderCard> leaderCards = playerBoard.getLeaderCards();
         int depotIndex = 3;
         for(int i=0;i<leaderCards.size();i++){
              if(leaderCards.get(i).isActive() && leaderCards.get(i).isDepotLeaderCard()){
@@ -350,7 +350,7 @@ public class PlayerboardSceneController extends Controller{
                  leaderCardsImg[i].setDisable(false);
                  depotIndex++;
              }
-        }*/
+        }
     }
 
     private void clearWarehouseSelection(){

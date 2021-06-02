@@ -86,7 +86,6 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
             e.printStackTrace();
         }
 */
-
         leaderCards = new ArrayList<>();
         views = new ArrayList<>();
     }
