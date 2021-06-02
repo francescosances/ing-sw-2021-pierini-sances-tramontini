@@ -160,10 +160,10 @@ public class VirtualView implements View {
     @Override
     public void showVaticanReportTriggered(String username, int vaticanReportCount) {
         String name;
-        if (username.equals(this.username))
+        if (username.equals(this.username))//TODO: in caso di black cross compare comunque "you"
             name = Match.YOU_STRING;
         else
-            name = new String(username);
+            name = username;
         Message message = new Message(Message.MessageType.VATICAN_REPORT);
         message.addData("username", name);
         message.addData("vaticanReportCount", Serializer.serializeInt(vaticanReportCount));

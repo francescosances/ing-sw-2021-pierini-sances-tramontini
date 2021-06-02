@@ -593,6 +593,7 @@ public class CLI implements View {
 
     @Override
     public void showVaticanReportTriggered(String username, int vaticanReportCount) {
+        vaticanReportCount++;
         output.println("\n" + username + " triggered the " + vaticanReportCount + "° Vatican report!");
     }
 

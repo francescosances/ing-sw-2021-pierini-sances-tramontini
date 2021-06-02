@@ -557,14 +557,15 @@ public class PlayerboardSceneController extends Controller{
 
         int index = 0;
         for(DevelopmentCardSlot slot:slots){
-            System.out.println(slot);
             if(slot.accepts(developmentCard)){
-                System.out.println("index"+index);
-                System.out.println("slotsize-1"+(slot.getSize()-1));
                 final int slotIndex = index;
-                ImageView selectedImageView = slot.isEmpty()?desks[index]:slotsImg[index][slot.getSize()-1];
+                final ImageView selectedImageView = slot.isEmpty()?desks[index]:slotsImg[index][slot.getSize()-1];
                 selectedImageView.getStyleClass().add("selectable");
-                selectedImageView.setOnMouseClicked((e)-> clientController.chooseDevelopmentCardsSlot(slotIndex));
+                selectedImageView.setOnMouseClicked((e)-> {
+                    selectedImageView.getStyleClass().remove("selectable");
+                    selectedImageView.setOnMouseClicked((e2)->{});
+                    clientController.chooseDevelopmentCardsSlot(slotIndex);
+                });
             }
             index++;
         }
