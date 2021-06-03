@@ -705,6 +705,8 @@ public class PlayerboardSceneController extends Controller{
     }
 
     public void showDevelopmentCards(DevelopmentCardSlot[] developmentCardSlots) {
+
+        //TODO: nascondere carte di default
         ImageView[][] slots =
                 {{developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2},
                         {developmentcardslot1_0,developmentcardslot1_1,developmentcardslot1_2},
