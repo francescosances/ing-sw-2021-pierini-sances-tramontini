@@ -354,8 +354,9 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
 
     /**
      * Activates the production, paying the costs and gaining the gains
-     * @param costs the cost of the production
-     * @param gains the gains of the production
+     * @param choices the indexes of the chosen producers
+     * @param onDemandCosts the cost of the production
+     * @param onDemandGains the gains of the production
      */
     public void produce(List<Integer> choices, Requirements onDemandCosts, Requirements onDemandGains){
         Requirements costs = new Requirements();
@@ -369,10 +370,15 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
                 gains.getResources(NonPhysicalResourceType.ON_DEMAND) != onDemandGains.getTotalResourcesNumber())
             throw new NotSatisfiedRequirementsException("Wrong on demand choices");
 
-        for (:) {
-            //TODO Da FINì
+        while (costs.getResources(NonPhysicalResourceType.ON_DEMAND) > 0)
+            costs.removeResourceRequirement(NonPhysicalResourceType.ON_DEMAND, 1);
+        costs.sum(onDemandCosts);
+        while (gains.getResources(NonPhysicalResourceType.ON_DEMAND) > 0)
+            gains.removeResourceRequirement(NonPhysicalResourceType.ON_DEMAND, 1);
+        gains.sum(onDemandGains);
 
-        }
+        if (!costs.satisfied(this))
+            throw new NotSatisfiedRequirementsException("Costs not satisfied");
 
         updateProduction();
         payResources(costs);
