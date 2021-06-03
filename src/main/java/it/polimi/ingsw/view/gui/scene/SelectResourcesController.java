@@ -1,9 +1,11 @@
 package it.polimi.ingsw.view.gui.scene;
 
+import it.polimi.ingsw.model.cards.Requirements;
 import it.polimi.ingsw.model.storage.Resource;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
@@ -20,6 +22,12 @@ public class SelectResourcesController extends Controller{
     @FXML
     protected Button btnChoose;
 
+    @FXML
+    protected Button coin_minus,coin_plus,servant_minus,servant_plus,shield_minus,shield_plus,stone_minus,stone_plus;
+
+    @FXML
+    protected TextField coin_input,servant_input,shield_input,stone_input;
+
     private int resourcesToChoose;
 
     private List<Boolean> resourcesSelected = new ArrayList<>();
@@ -28,8 +36,51 @@ public class SelectResourcesController extends Controller{
 
     private Resource[] resources;
 
+
     @FXML
     public void initialize(Resource[] values, int resourcesToChoose) {
+
+        Button[] minusButtons = {coin_minus,servant_minus,shield_minus,stone_minus};
+        TextField[] textFields = {coin_input,servant_input,shield_input,stone_input};
+        Button[] plusButtons = {coin_plus,servant_plus,shield_plus,stone_plus};
+
+        numResourcesSelected = 0;
+
+        for(int i=0;i<minusButtons.length;i++){
+            final int index = i;
+            minusButtons[i].setOnMouseClicked((e)->{
+                String value = textFields[index].getText();
+                int intValue = Integer.parseInt(value);
+                int newValue = intValue-1;
+                if(newValue < 0)
+                    newValue = 0;
+                else {
+                    numResourcesSelected--;
+                    if(numResourcesSelected < resourcesToChoose){
+                        btnChoose.getStyleClass().add("btn-disabled");
+                        btnChoose.getStyleClass().remove("btn-active");
+                    }
+                }
+                textFields[index].setText(String.valueOf(newValue));
+            });
+            plusButtons[i].setOnMouseClicked((e)->{
+                String value = textFields[index].getText();
+                int intValue = Integer.parseInt(value);
+                int newValue = intValue+1;
+                if(numResourcesSelected+1 > resourcesToChoose)
+                    newValue = intValue;
+                else {
+                    numResourcesSelected++;
+                    if(numResourcesSelected == resourcesToChoose){
+                        btnChoose.getStyleClass().remove("btn-disabled");
+                        btnChoose.getStyleClass().add("btn-active");
+                    }
+                }
+                textFields[index].setText(String.valueOf(newValue));
+            });
+        }
+
+/*
         this.resourcesToChoose = resourcesToChoose;
         this.resources = values;
         lbl.setText("Choose "+resourcesToChoose+" resources:");
@@ -56,7 +107,7 @@ public class SelectResourcesController extends Controller{
                     btnChoose.getStyleClass().remove("btn-active");
                 }
             });
-        }
+        }*/
     }
 
     @FXML

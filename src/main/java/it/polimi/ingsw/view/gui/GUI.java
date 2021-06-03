@@ -167,16 +167,18 @@ public class GUI implements View {
 
     @Override
     public void showLeaderCards(List<LeaderCard> leaderCards) {
-        if(getPlayerBoardSceneController() == null)
-            return;
-        Platform.runLater(()-> getPlayerBoardSceneController().showLeaderCards(leaderCards));
+        Platform.runLater(()-> {
+            if(getPlayerBoardSceneController() != null)
+                getPlayerBoardSceneController().showLeaderCards(leaderCards);
+        });
     }
 
     @Override
     public void showDevelopmentCardSlots(DevelopmentCardSlot[] developmentCardSlots) {
-        if(getPlayerBoardSceneController() == null)
-            return;
-        Platform.runLater(()-> getPlayerBoardSceneController().showDevelopmentCards(developmentCardSlots));
+        Platform.runLater(()-> {
+           if(getPlayerBoardSceneController() != null)
+            getPlayerBoardSceneController().showDevelopmentCards(developmentCardSlots);
+        });
     }
 
     @Override
@@ -199,8 +201,7 @@ public class GUI implements View {
     @Override
     public void showFaithTrack(FaithTrack faithTrack) {
         Platform.runLater(()->{
-            if(getPlayerBoardSceneController() == null)
-                return;
+           if(getPlayerBoardSceneController() != null)
             getPlayerBoardSceneController().showFaithTrack(faithTrack);
         });
     }
@@ -212,16 +213,18 @@ public class GUI implements View {
 
     @Override
     public void showWarehouse(Warehouse warehouse) {
-        if(getPlayerBoardSceneController() == null)
-            return;
-        Platform.runLater(()-> getPlayerBoardSceneController().showWarehouse(warehouse));
+        Platform.runLater(()-> {
+           if(getPlayerBoardSceneController() != null)
+            getPlayerBoardSceneController().showWarehouse(warehouse);
+        });
     }
 
     @Override
     public void showStrongbox(Strongbox strongbox) {
-        if(getPlayerBoardSceneController() == null)
-            return;
-        Platform.runLater(()-> getPlayerBoardSceneController().showStrongbox(strongbox));
+        Platform.runLater(()-> {
+           if(getPlayerBoardSceneController() != null)
+            getPlayerBoardSceneController().showStrongbox(strongbox);
+        });
     }
 
     @Override
@@ -233,9 +236,10 @@ public class GUI implements View {
     @Override
     public void askForAction(List<String> usernames, Action... availableActions) {
         clientController.setPlayers(usernames);
-        if(getPlayerBoardSceneController() == null)
-            return;
-        Platform.runLater(()-> getPlayerBoardSceneController().resetControls(availableActions));
+        Platform.runLater(()-> {
+           if(getPlayerBoardSceneController() != null)
+            getPlayerBoardSceneController().resetControls(availableActions);
+        });
     }
 
     @Override
@@ -250,16 +254,18 @@ public class GUI implements View {
 
     @Override
     public void showResourcesGainedFromMarket(Resource[] resources) {
-        if(getPlayerBoardSceneController() == null)
-            return;
-        Platform.runLater(()-> playerboardSceneController.storeResourcesFromMarket(resources));
+        Platform.runLater(()-> {
+            if(getPlayerBoardSceneController() != null)
+             playerboardSceneController.storeResourcesFromMarket(resources);
+        });
     }
 
     @Override
     public void askToStoreResource(Resource resource, Warehouse warehouse) {
-        if(getPlayerBoardSceneController() == null)
-            return;
-        Platform.runLater(()-> playerboardSceneController.askToStoreResource(resource,warehouse));
+        Platform.runLater(()-> {
+            if(getPlayerBoardSceneController() != null)
+                playerboardSceneController.askToStoreResource(resource,warehouse);
+        });
     }
 
     @Override
@@ -272,25 +278,27 @@ public class GUI implements View {
 
     @Override
     public void askToChooseDevelopmentCardSlot(DevelopmentCardSlot[] slots, DevelopmentCard developmentCard) {
-        if(getPlayerBoardSceneController() == null)return;
-        Platform.runLater(()-> getPlayerBoardSceneController().chooseDevelopmentCardSlot(slots,developmentCard));
+        Platform.runLater(()-> {
+            if(getPlayerBoardSceneController() != null)
+                getPlayerBoardSceneController().chooseDevelopmentCardSlot(slots,developmentCard);
+        });
     }
 
     @Override
     public void chooseProductions(List<Producer> availableProductions, PlayerBoard playerBoard) {
-        if(getPlayerBoardSceneController() == null)
-            return;
+
         Platform.runLater(()->{
-            playerboardSceneController.initialize(playerBoard);
-            playerboardSceneController.askProductionsToStart(availableProductions);
+            if(getPlayerBoardSceneController() != null) {
+                playerboardSceneController.initialize(playerBoard);
+                playerboardSceneController.askProductionsToStart(availableProductions);
+            }
         });
     }
 
     @Override
     public void showCurrentActiveUser(String username) {
         Platform.runLater(()->{
-            if(getPlayerBoardSceneController() == null)
-                return;
+           if(getPlayerBoardSceneController() != null)
             getPlayerBoardSceneController().showCurrentActiveUser(username);
         });
     }
@@ -320,7 +328,10 @@ public class GUI implements View {
 
     @Override
     public void actionPerformed() {
-        //TODO
+        Platform.runLater(()->{
+           if(getPlayerBoardSceneController() != null)
+            getPlayerBoardSceneController().performedAction();
+        });
     }
 
     @Override

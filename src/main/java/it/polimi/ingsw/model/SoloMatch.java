@@ -22,9 +22,8 @@ public class SoloMatch extends Match{
      */
     public SoloMatch(String matchName){
         super(matchName, 1);
-        blackCross = new FaithTrack(this, "Black Cross");
+        blackCross = new FaithTrack(this, FaithTrack.BLACK_CROSS);
         blackCross.setBlackCross(true);
-        //super.addPlayer("Black Cross");
         shuffleActionTokens();
     }
 
