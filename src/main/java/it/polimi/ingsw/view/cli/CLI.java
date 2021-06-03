@@ -86,8 +86,8 @@ public class CLI implements View {
         int serverPort = input.nextInt();
         try {
             clientController.connect(serverAddress, serverPort);
-        } catch (IOException e) {
-            output.println("Unable to connect");
+        } catch (Exception e) {
+            showErrorMessage("An error has occurred. Try again");
             askConnection();
         }
     }
@@ -434,7 +434,7 @@ public class CLI implements View {
             outputLock.lock();
             output.println("You have to choose " + entries.getResources(NonPhysicalResourceType.ON_DEMAND) + " resources to " + string);
             output.println("What resource do you want to "+string+"?");
-            this.printResources(ResourceType.values());
+            this.printResources(ResourceType.values(), true);
             outputLock.unlock();
             int choice;
             do {
@@ -465,7 +465,7 @@ public class CLI implements View {
     public void askToChooseStartResources(Resource[] values, int resourcesToChoose) {
         outputLock.lock();
         output.printf("\nYou have to select %d resources of your choice\n", resourcesToChoose);
-        printResources(values);
+        printResources(values, true);
         int[] choices = new int[resourcesToChoose];
         Resource[] resourcesChosen = new Resource[resourcesToChoose];
         outputLock.unlock();
@@ -563,7 +563,9 @@ public class CLI implements View {
         else
             name = faithTrack.getUsername();
         output.println(name + " got faith points!");
-        output.println("Now " + getPronoun() + " faith track is:");
+        output.println("Now " +
+                (faithTrack.getUsername().equals(clientController.getUsername()) ? "your" : "their") +
+                " faith track is:");
         printFaithTrack(faithTrack);
         outputLock.unlock();
     }
@@ -784,15 +786,18 @@ public class CLI implements View {
     public void showResourcesGainedFromMarket(Resource[] resources) {
         outputLock.lock();
         output.println("\nThese are the resources gained from market needing to be stored:");
-        printResources(resources);
+        printResources(resources, false);
         outputLock.unlock();
     }
 
-    private void printResources(Resource[] resources) {
+    private void printResources(Resource[] resources, boolean showNumbers) {
         List<Resource> resourceList = Arrays.asList(resources);
         Collections.reverse(resourceList);
-        for (Resource resource : resourceList)
-            output.printf("    %s \n", resource);
+        for (int i = 0; i < resourceList.size(); i++) {
+            if (showNumbers)
+                output.printf("  [%d]", i);
+            output.println("  " + resourceList.get(i));
+        }
     }
 
     @Override
