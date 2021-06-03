@@ -522,6 +522,10 @@ public class CLI implements View {
     }
 
     @Override
+    public void actionPerformed() {
+    }
+
+    @Override
     public String getUsername() {
         return clientController.getUsername();
     }

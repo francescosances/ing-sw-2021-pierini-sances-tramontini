@@ -224,6 +224,11 @@ public class ClientController {
                 view.showProducerUser();
                 lock.unlock();
                 break;
+            case ACTION_PERFORMED:
+                lock.lock();
+                view.actionPerformed();
+                lock.unlock();
+                break;
             case SHOW_PLAYER_LEADER_CARDS:
                 lock.lock();
                 List<LeaderCard> playerLeaderCards = Serializer.deserializeLeaderCardList(message.getData("leaderCards"));

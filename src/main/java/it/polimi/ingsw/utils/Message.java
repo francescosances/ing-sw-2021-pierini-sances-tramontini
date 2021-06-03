@@ -121,6 +121,7 @@ public class Message{
         PRODUCTION,
         ACTION_TOKEN,
         PRODUCTION_PERFORMED,
+        ACTION_PERFORMED,
         START_RESOURCES,
         SHOW_PLAYER_LEADER_CARDS,
         SHOW_LEADER_CARDS,

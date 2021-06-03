@@ -318,6 +318,11 @@ public class GUI implements View {
     }
 
     @Override
+    public void actionPerformed() {
+        //TODO
+    }
+
+    @Override
     public String getUsername() {
         return clientController.getUsername();
     }

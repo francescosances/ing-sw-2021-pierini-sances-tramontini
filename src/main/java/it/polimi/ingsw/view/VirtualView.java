@@ -288,6 +288,12 @@ public class VirtualView implements View {
     }
 
     @Override
+    public void actionPerformed() {
+        Message message = new Message(Message.MessageType.ACTION_PERFORMED);
+        sendMessage(message);
+    }
+
+    @Override
     public void askForAction(List<String> usernames, Action... availableActions) {
         Gson gson = new Gson();
         List<String> list = usernames.stream().map(t-> t.equals(this.username) ? t = Match.YOU_STRING : t).collect(Collectors.toList());

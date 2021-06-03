@@ -226,6 +226,11 @@ public interface View {
     void showProducerUser();
 
     /**
+     * Notifies the user the current player has performed his main action
+     */
+    void actionPerformed();
+
+    /**
      * Returns the username of the player
      * @return the username of the player
      */
