@@ -604,6 +604,8 @@ public class PlayerboardSceneController extends Controller{
         this.populateUserSelect();
         this.enableControls();
 
+        selectUser.setDisable(false);
+
         startProductionBtn.setDisable(Arrays.stream(availableActions).noneMatch(action -> action == Action.ACTIVATE_PRODUCTION));
         marketBtn.setDisable(Arrays.stream(availableActions).noneMatch(action -> action == Action.TAKE_RESOURCES_FROM_MARKET));
         buyDevelopmentcardBtn.setDisable(Arrays.stream(availableActions).noneMatch(action -> action == Action.BUY_DEVELOPMENT_CARD));
@@ -706,11 +708,12 @@ public class PlayerboardSceneController extends Controller{
 
     public void showDevelopmentCards(DevelopmentCardSlot[] developmentCardSlots) {
 
-        //TODO: nascondere carte di default
         ImageView[][] slots =
                 {{developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2},
                         {developmentcardslot1_0,developmentcardslot1_1,developmentcardslot1_2},
                         {developmentcardslot2_0,developmentcardslot2_1,developmentcardslot2_2}};
+
+        Arrays.stream(slots).forEach(slotRow -> Arrays.stream(slotRow).forEach(slot ->slot.setVisible(false)));
 
         int slotIndex = 0,cardIndex;
 
@@ -725,10 +728,15 @@ public class PlayerboardSceneController extends Controller{
     }
 
     public void showCurrentActiveUser(String username) {
-        if(!username.equals(clientController.getUsername())){
+        if(!username.equals(clientController.getUsername()) && !username.equals(Match.YOU_STRING)){
             selectUser.setValue(username);
             selectUser.setDisable(true);
             skipBtn.setVisible(false);
         }
     }
+
+    public void performedAction(){
+        clearResourceSupply();
+    }
+
 }
