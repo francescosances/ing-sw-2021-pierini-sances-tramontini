@@ -423,7 +423,6 @@ public class PlayerboardSceneController extends Controller{
 
     public void discardResource() {
         clientController.chooseDepot(playerBoard.getWarehouse().getDepots().size() + 1);
-        System.out.println("discard");
     }
 
     private void clearResourceSupply(){

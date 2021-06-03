@@ -19,6 +19,11 @@ public class FaithTrack implements ObservableFromView {
     public static final int SIZE = 24;
 
     /**
+     * Default black cross username
+     */
+    public static final String BLACK_CROSS = "Black Cross";
+
+    /**
      * Reference to the match
      */
     private transient Match match;
@@ -50,8 +55,10 @@ public class FaithTrack implements ObservableFromView {
     /**
      * Initialize a new FaithTrack connected to the its match
      * @param match the match reference
+     * @param username the username of the faith track owner
+     * @param blackCross true if the faith track is a black cross
      */
-    public FaithTrack(Match match, String username){
+    public FaithTrack(Match match, String username,boolean blackCross){
         this.match = match;
         popeFavorTiles = new PopeFavorTile[POPE_SPACES.length];
         for(int i=0;i<POPE_SPACES.length;i++){
@@ -62,7 +69,16 @@ public class FaithTrack implements ObservableFromView {
         Arrays.fill(vaticanReports,false);
         this.username = username;
         views = new ArrayList<>();
-        blackCross = false;
+        this.blackCross = blackCross;
+    }
+
+    /**
+     * Initialize a new FaithTrack connected to the its match
+     * @param match the match reference
+     * @param username the username of the faith track owner
+     */
+    public FaithTrack(Match match,String username){
+        this(match,username,false);
     }
 
     /**
