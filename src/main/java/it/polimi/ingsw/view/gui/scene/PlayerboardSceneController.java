@@ -74,7 +74,6 @@ public class PlayerboardSceneController extends Controller{
     private final Runnable defaultWarehouseAction = ()->{
         if(selectedWarehouseRows.size() == 2){
             clientController.swapDepots(selectedWarehouseRows.get(0),selectedWarehouseRows.get(1));
-            System.out.println("swappo "+selectedWarehouseRows.get(0)+" "+selectedWarehouseRows.get(1));
             clearWarehouseSelection();
         }
     };

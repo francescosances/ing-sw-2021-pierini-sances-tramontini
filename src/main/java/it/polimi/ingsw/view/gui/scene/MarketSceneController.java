@@ -21,7 +21,7 @@ public class MarketSceneController extends Controller{
     protected ImageView column0,column1,column2,column3;
 
     @FXML
-    public void initialize(Market market){
+    public void initialize(Market market,boolean controlsEnabled){
 
         ImageView[][] tray = {
                 {marble0,marble1,marble2,marble3},
@@ -37,14 +37,30 @@ public class MarketSceneController extends Controller{
 
         slide.setImage(new Image("/images/marbles/"+market.getSlideMarble().toString()+".png"));
 
-        column0.setOnMouseClicked((e)->columnClicked(0));
-        column1.setOnMouseClicked((e)->columnClicked(1));
-        column2.setOnMouseClicked((e)->columnClicked(2));
-        column3.setOnMouseClicked((e)->columnClicked(3));
+        ImageView[] columns = {column0,column1,column2,column3};
+        ImageView[] rows = {row0,row1,row2};
 
-        row0.setOnMouseClicked((e)->rowClicked(0));
-        row1.setOnMouseClicked((e)->rowClicked(1));
-        row2.setOnMouseClicked((e)->rowClicked(2));
+        if(controlsEnabled) {
+            for(int i=0;i<columns.length;i++){
+                final int index = i;
+                columns[i].setOnMouseClicked((e) -> columnClicked(index));
+                columns[i].setVisible(true);
+            }
+
+            for(int i=0;i<rows.length;i++){
+                final int index = i;
+                rows[i].setOnMouseClicked((e) -> rowClicked(index));
+                rows[i].setVisible(true);
+            }
+        }else{
+            for (ImageView column : columns) {
+                column.setVisible(false);
+            }
+
+            for (ImageView row : rows) {
+                row.setVisible(false);
+            }
+        }
     }
 
     protected void columnClicked(int columnIndex){
