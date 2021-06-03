@@ -171,7 +171,7 @@ public class Match implements ObservableFromView {
         return vaticanReportsCount;
     }
 
-    public void vaticanReport(int popeSpace){
+    public boolean vaticanReport(int popeSpace){
         if(!players.isEmpty() && players.get(0).getFaithTrack().isValidVaticanReport(popeSpace)) {
             for (PlayerBoard p : players) {
                 if (p.getFaithTrack().getFaithMarker() >= popeSpace - (3 + vaticanReportsCount))
@@ -181,8 +181,9 @@ public class Match implements ObservableFromView {
                 p.getFaithTrack().vaticanReportTriggered(vaticanReportsCount);
             }
             vaticanReportsCount++;
-
+            return true;
         }
+        return false;
     }
 
     public String getMatchName(){
