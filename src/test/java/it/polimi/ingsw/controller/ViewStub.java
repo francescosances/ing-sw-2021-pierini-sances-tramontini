@@ -206,6 +206,10 @@ class ViewStub implements View {
     }
 
     @Override
+    public void actionPerformed() {
+    }
+
+    @Override
     public String getUsername() {
         return "ViewStub";
     }
