@@ -63,6 +63,7 @@ public class GUI implements View {
         stage.setResizable(false);
         stage.setAlwaysOnTop(true);
         stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initOwner(mainStage);
         stage.setOnCloseRequest((e)-> onClose.run());
         stage.setTitle(title);
         stage.show();
@@ -239,12 +240,12 @@ public class GUI implements View {
 
     @Override
     public void takeResourcesFromMarket(Market market) {
-        Platform.runLater(()-> showMarket(market));
+        Platform.runLater(()-> ((MarketSceneController)openModal("market_scene","Market",()->clientController.rollback())).initialize(market,true));
     }
 
     @Override
     public void showMarket(Market market) {
-        Platform.runLater(()-> ((MarketSceneController)openModal("market_scene","Market",()->clientController.rollback())).initialize(market));
+        Platform.runLater(()-> ((MarketSceneController)openModal("market_scene","Market",()->{})).initialize(market,false));
     }
 
     @Override
