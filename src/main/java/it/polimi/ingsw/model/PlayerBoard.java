@@ -357,8 +357,23 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      * @param costs the cost of the production
      * @param gains the gains of the production
      */
-    public void produce(Requirements costs, Requirements gains){
-        //TODO verificare che la produzione sia possibile
+    public void produce(List<Integer> choices, Requirements onDemandCosts, Requirements onDemandGains){
+        Requirements costs = new Requirements();
+        Requirements gains = new Requirements();
+        for (int i:choices){
+            costs.sum(getAvailableProductions().get(i).getProductionCost());
+            gains.sum(getAvailableProductions().get(i).getProductionGain());
+        }
+
+        if (    costs.getResources(NonPhysicalResourceType.ON_DEMAND) != onDemandCosts.getTotalResourcesNumber() ||
+                gains.getResources(NonPhysicalResourceType.ON_DEMAND) != onDemandGains.getTotalResourcesNumber())
+            throw new NotSatisfiedRequirementsException("Wrong on demand choices");
+
+        for (:) {
+            //TODO Da FINì
+
+        }
+
         updateProduction();
         payResources(costs);
         Map<ResourceType,Integer> newGains = new HashMap<>();

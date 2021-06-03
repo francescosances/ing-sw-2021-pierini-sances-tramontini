@@ -7,7 +7,6 @@ import it.polimi.ingsw.model.storage.*;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
 
-import java.io.IOException;
 import java.io.PrintStream;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
@@ -395,41 +394,37 @@ public class CLI implements View {
         int temp;
         output.println("Choose the productions to activate.");
         output.println(ANSI_WHITE + "Insert a negative number to exit." + ANSI_RESET);
-        Requirements costs = new Requirements();
-        Requirements gains = new Requirements();
         outputLock.unlock();
         temp = input.nextInt();
         if (temp < 0) {
             clientController.rollback();
             return;
         }
+        Requirements onDemandCosts = new Requirements();
+        Requirements onDemandGains = new Requirements();
         while (temp >= 0) {
-            int finalTemp = temp;
-            if (choices.stream().anyMatch(v -> (v == finalTemp)))
+            if (choices.contains(temp))
                 showErrorMessage("You have already chosen to produce this");
             else {
                 try {
-                    Producer producer = availableProductions.get(temp);
                     choices.add(temp);
-                    costs.sum(producer.getProductionCost());
-                    gains.sum(producer.getProductionGain());
+                    Producer producer = availableProductions.get(temp);
+                    onDemandCosts.addResourceRequirement(NonPhysicalResourceType.ON_DEMAND, producer.getProductionCost().getResources(NonPhysicalResourceType.ON_DEMAND));
+                    onDemandGains.addResourceRequirement(NonPhysicalResourceType.ON_DEMAND, producer.getProductionGain().getResources(NonPhysicalResourceType.ON_DEMAND));
                 } catch (IndexOutOfBoundsException e) {
                     showErrorMessage("You don't have a Producer associated with this number");
                 }
             }
             temp = input.nextInt();
         }
-        chooseProductionResources(costs, "Spend");
-        chooseProductionResources(gains, "gain");
-        if (!costs.satisfied(playerBoard)) {
-            showErrorMessage("You cannot start these productions");
-            chooseProductions(availableProductions, playerBoard);
-            return;
-        }
-        clientController.chooseProductions(costs, gains);
+
+        chooseOnDemandResources(onDemandCosts, "Spend");
+        chooseOnDemandResources(onDemandGains, "gain");
+
+        clientController.chooseProductions(choices, onDemandCosts, onDemandGains);
     }
 
-    private void chooseProductionResources(Requirements entries, String string) {
+    private void chooseOnDemandResources(Requirements entries, String string) {
         while (entries.getResources(NonPhysicalResourceType.ON_DEMAND) > 0) {
             outputLock.lock();
             output.println("You have to choose " + entries.getResources(NonPhysicalResourceType.ON_DEMAND) + " resources to " + string);

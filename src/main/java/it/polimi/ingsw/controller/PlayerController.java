@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.PlayerBoard;
+import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
 import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.ResourceType;
@@ -626,13 +627,16 @@ public class PlayerController {
      * @param costs the Requirements the player must pay to activate the production
      * @param gains the Resources the player gain if the production is activated
      */
-    public void chooseProductions(Requirements costs,Requirements gains) {
-        if(!costs.satisfied(playerBoard)){
+    public void chooseProductions(List<Integer> choices, Requirements costs,Requirements gains) {
+        try {
+            playerBoard.produce(choices, costs, gains);
+        } catch (IndexOutOfBoundsException e) {
             view.showErrorMessage("You cannot activate these productions");
             askForNormalAction();
-            return;
+        } catch (NotSatisfiedRequirementsException e){
+            view.showErrorMessage(e.getMessage());
+            askForNormalAction();
         }
-        playerBoard.produce(costs, gains);
         nextStatus();
     }
 

@@ -406,13 +406,15 @@ public class ClientController {
     /**
      * Sends to the server a Requirements Object containing the sum of all productions costs
      * and a Requirements Object containing the sum of all productions gains
-     * @param costs the sum of all productions costs
-     * @param gains the sum of all productions gains
+     * @param choices the numbers list of the producers chosen
+     * @param onDemandCosts the sum of all productions costs
+     * @param onDemandGains the sum of all productions gains
      */
-    public void chooseProductions(Requirements costs,Requirements gains) {
+    public void chooseProductions(List<Integer> choices, Requirements onDemandCosts, Requirements onDemandGains) {
         Message message = new Message(Message.MessageType.PRODUCTION);
-        message.addData("costs",Serializer.serializeRequirements(costs));
-        message.addData("gains",Serializer.serializeRequirements(gains));
+        message.addData("choices",Serializer.serializeIntList(choices));
+        message.addData("costs",Serializer.serializeRequirements(onDemandCosts));
+        message.addData("gains",Serializer.serializeRequirements(onDemandGains));
         clientSocket.sendMessage(message);
     }
 

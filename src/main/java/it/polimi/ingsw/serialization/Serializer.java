@@ -250,5 +250,14 @@ public class Serializer {
         Type listType = new TypeToken<List<Triple<String, Integer, Integer>>>() {}.getType();
         return new Gson().fromJson(json, listType);
     }
+
+    public static String serializeIntList(List<Integer> list) {
+        return new Gson().toJson(list);
+    }
+
+    public static List<Integer> deserializeIntList(String choices) {
+        Type listType = new TypeToken<List<Integer>>() {}.getType();
+        return new Gson().fromJson(choices, listType);
+    }
 }
 

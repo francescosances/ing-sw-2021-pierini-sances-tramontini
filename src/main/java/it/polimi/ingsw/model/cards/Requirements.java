@@ -220,6 +220,10 @@ public class Requirements implements Cloneable, Iterable<Map.Entry<Resource, Int
         return resources.size();
     }
 
+    public int getTotalResourcesNumber(){
+        return resources.values().stream().reduce(0, Integer::sum);
+    }
+
     /**
      * Returns an Iterator of the Requirements class
      * @return an Iterator of the Requirements class

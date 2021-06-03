@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller;
 import com.google.gson.Gson;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.LeaderCard;
+import it.polimi.ingsw.model.cards.Requirements;
 import it.polimi.ingsw.network.ClientHandler;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
@@ -114,7 +115,10 @@ public class GameController implements PlayerStatusListener {
                     currentPlayerController.chooseDevelopmentCardSlot(Serializer.deserializeInt(message.getData("slotIndex")));
                     break;
                 case PRODUCTION:
-                    currentPlayerController.chooseProductions(Serializer.deserializeRequirements(message.getData("costs")),Serializer.deserializeRequirements(message.getData("gains")));
+                    List<Integer> choices = Serializer.deserializeIntList(message.getData("choices"));
+                    Requirements onDemandGains = Serializer.deserializeRequirements(message.getData("gains"));
+                    Requirements onDemandCosts = Serializer.deserializeRequirements(message.getData("costs"));
+                    currentPlayerController.chooseProductions(choices, onDemandCosts,onDemandGains);
                     break;
                 case DISCARD_LEADER_CARD:
                     currentPlayerController.discardLeaderCard(Serializer.deserializeInt(message.getData("num")));

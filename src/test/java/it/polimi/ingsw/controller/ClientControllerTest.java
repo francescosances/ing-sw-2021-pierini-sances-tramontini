@@ -168,7 +168,8 @@ class ClientControllerTest {
                         put(1, 1);
                     }});
                 }});
-        clientController.chooseProductions(costs, gains);
+        //TODO
+        clientController.chooseProductions(null, costs, gains);
         assertEquals(Message.MessageType.PRODUCTION, clientSocketStub.getMessage().getType());
         assertEquals(costs, Serializer.deserializeRequirements(clientSocketStub.getMessage().getData("costs")));
         assertEquals(gains, Serializer.deserializeRequirements(clientSocketStub.getMessage().getData("gains")));
