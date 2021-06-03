@@ -1,3 +1,5 @@
+package it.polimi.ingsw;
+
 import it.polimi.ingsw.controller.ClientController;
 import it.polimi.ingsw.view.gui.JavaFXGui;
 import javafx.application.Application;
