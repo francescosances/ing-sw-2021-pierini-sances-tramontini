@@ -33,7 +33,7 @@ public class FaithTrack implements ObservableFromView {
     /**
      * Array that contains all the PopeFavorTiles the player has
      */
-    private PopeFavorTile[] popeFavorTiles;
+    private final PopeFavorTile[] popeFavorTiles;
     /**
      * array that stores whether its vaticanReport has already been triggered or not
      */
@@ -164,8 +164,10 @@ public class FaithTrack implements ObservableFromView {
         for (int i = 0; i < spaces; i++) {
             faithMarker++;
             if (    match.getVaticanReportsCount() < vaticanReports.length &&
-                    !vaticanReports[match.getVaticanReportsCount()] && isPopeSpace(faithMarker))
-                match.vaticanReport(faithMarker);
+                    !vaticanReports[match.getVaticanReportsCount()] && isPopeSpace(faithMarker)) {
+                if (match.vaticanReport(faithMarker))
+                    vaticanReportUpdate();
+            }
             if (faithMarker == SIZE) {
                 updateViews();
                 throw new EndGameException(true);
@@ -239,7 +241,6 @@ public class FaithTrack implements ObservableFromView {
      */
     protected void vaticanReportTriggered(int vaticanReportCount) {
         vaticanReports[vaticanReportCount] = true;
-        vaticanReportUpdate();
         updateViews();
     }
 

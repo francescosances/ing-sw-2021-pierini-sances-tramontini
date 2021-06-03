@@ -206,7 +206,6 @@ public class GUI implements View {
 
     @Override
     public void showVaticanReportTriggered(String username, int vaticanReportCount) {
-        vaticanReportCount++;
         showMessage( username + " triggered the " + vaticanReportCount + "° Vatican report!");
     }
 
