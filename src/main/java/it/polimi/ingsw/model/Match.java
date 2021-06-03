@@ -234,7 +234,11 @@ public class Match implements ObservableFromView {
         if (views == null)
             views = new ArrayList<>();
         views.add(view);
-        players.forEach(playerBoard -> playerBoard.addView(view));
+        for (PlayerBoard playerBoard:players) {
+            playerBoard.addView(view);
+            for (View otherView:views)
+                playerBoard.addView(otherView);
+        }
         market.addView(view);
     }
 

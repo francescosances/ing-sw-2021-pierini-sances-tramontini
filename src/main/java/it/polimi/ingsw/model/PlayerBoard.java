@@ -415,10 +415,12 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
     public void addView(View view) {
         if (views == null)
             views = new ArrayList<>();
-        views.add(view);
-        faithTrack.addView(view);
-        strongbox.addView(view);
-        warehouse.addView(view);
+        if (!views.contains(view)) {
+            views.add(view);
+            faithTrack.addView(view);
+            strongbox.addView(view);
+            warehouse.addView(view);
+        }
     }
 
     /**
