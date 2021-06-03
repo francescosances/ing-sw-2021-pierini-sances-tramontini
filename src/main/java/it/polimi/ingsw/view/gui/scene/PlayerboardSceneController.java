@@ -461,6 +461,10 @@ public class PlayerboardSceneController extends Controller{
         rollbackBtn.setVisible(true);
         startProductionBtn.setVisible(true);
 
+        startProductionBtn.setOnAction((e)->{
+            //TODO: aprire schermata selezione risorse
+        });
+
         if(availableProductions.contains(DevelopmentCard.getBaseProduction())) {
             baseProductionBtn.getStyleClass().add("btnProduction");
             addListenerToProducer(baseProductionBtn, DevelopmentCard.getBaseProduction());

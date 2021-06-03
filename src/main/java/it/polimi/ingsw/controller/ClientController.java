@@ -513,4 +513,6 @@ public class ClientController {
         Message message = new Message(Message.MessageType.LOBBY_INFO);
         clientSocket.sendMessage(message);
     }
+
+
 }

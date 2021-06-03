@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.gui.scene;
 
-import it.polimi.ingsw.model.cards.Requirements;
 import it.polimi.ingsw.model.storage.Resource;
+import it.polimi.ingsw.model.storage.ResourceType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -30,21 +30,22 @@ public class SelectResourcesController extends Controller{
 
     private int resourcesToChoose;
 
-    private List<Boolean> resourcesSelected = new ArrayList<>();
-
     private int numResourcesSelected = 0;
 
-    private Resource[] resources;
 
+    private ResourcesChooser onAction;
 
     @FXML
-    public void initialize(Resource[] values, int resourcesToChoose) {
+    public void initialize(int resourcesToChoose,ResourcesChooser onAction) {
 
         Button[] minusButtons = {coin_minus,servant_minus,shield_minus,stone_minus};
         TextField[] textFields = {coin_input,servant_input,shield_input,stone_input};
         Button[] plusButtons = {coin_plus,servant_plus,shield_plus,stone_plus};
 
         numResourcesSelected = 0;
+        this.resourcesToChoose = resourcesToChoose;
+
+        this.onAction = onAction;
 
         for(int i=0;i<minusButtons.length;i++){
             final int index = i;
@@ -79,48 +80,39 @@ public class SelectResourcesController extends Controller{
                 textFields[index].setText(String.valueOf(newValue));
             });
         }
-
-/*
-        this.resourcesToChoose = resourcesToChoose;
-        this.resources = values;
-        lbl.setText("Choose "+resourcesToChoose+" resources:");
-        ImageView[] imageViews = {imgcoin,imgservant,imgshield,imgstone};
-        for(int i=0;i<values.length;i++){
-            resourcesSelected.add(false);
-            final int index = i;
-            imageViews[index].setOnMouseClicked((e)->{
-                if(resourcesSelected.get(index)){
-                    imageViews[index].getStyleClass().remove("card-selected");
-                    numResourcesSelected--;
-                }else{
-                    if (numResourcesSelected == resourcesToChoose)
-                        return;
-                    imageViews[index].getStyleClass().add("card-selected");
-                    numResourcesSelected++;
-                }
-                resourcesSelected.set(index,!resourcesSelected.get(index));
-                if(numResourcesSelected == resourcesToChoose){
-                    btnChoose.getStyleClass().remove("btn-disabled");
-                    btnChoose.getStyleClass().add("btn-active");
-                }else{
-                    btnChoose.getStyleClass().add("btn-disabled");
-                    btnChoose.getStyleClass().remove("btn-active");
-                }
-            });
-        }*/
     }
 
     @FXML
     public void choose(){
         if(numResourcesSelected != resourcesToChoose)
             return;
+
         Resource[] resourcesChosen = new Resource[resourcesToChoose];
-        int added =0;
-        for(int i=0;i<resources.length;i++){
-            if(resourcesSelected.get(i))
-                resourcesChosen[added++] = resources[i];
-        }
-        clientController.chooseStartResources(resourcesChosen);
+
+        int coin    = Integer.parseInt(coin_input.getText());
+        int servant = Integer.parseInt(servant_input.getText());
+        int shield  = Integer.parseInt(shield_input.getText());
+        int stone   = Integer.parseInt(stone_input.getText());
+
+        int added = 0;
+        for(int i=0;i<coin;i++)
+            resourcesChosen[added++] = ResourceType.COIN;
+
+        for(int i=0;i<servant;i++)
+            resourcesChosen[added++] = ResourceType.SERVANT;
+
+        for(int i=0;i<shield;i++)
+            resourcesChosen[added++] = ResourceType.SHIELD;
+
+        for(int i=0;i<stone;i++)
+            resourcesChosen[added++] = ResourceType.STONE;
+
+        onAction.choose(resourcesChosen);
+    }
+
+    public interface ResourcesChooser{
+
+        void choose(Resource[] resourcesChosen);
 
     }
 }

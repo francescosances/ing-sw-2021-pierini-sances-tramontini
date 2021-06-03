@@ -286,7 +286,6 @@ public class GUI implements View {
 
     @Override
     public void chooseProductions(List<Producer> availableProductions, PlayerBoard playerBoard) {
-
         Platform.runLater(()->{
             if(getPlayerBoardSceneController() != null) {
                 playerboardSceneController.initialize(playerBoard);
@@ -305,7 +304,7 @@ public class GUI implements View {
 
     @Override
     public void askToChooseStartResources(Resource[] values, int resourcesToChoose) {
-        Platform.runLater(()-> ((SelectResourcesController) loadScene("select_resources_scene")).initialize(values,resourcesToChoose));
+        Platform.runLater(()-> ((SelectResourcesController) loadScene("select_resources_scene")).initialize(resourcesToChoose,(resources)-> clientController.chooseStartResources(resources)));
     }
 
     @Override
