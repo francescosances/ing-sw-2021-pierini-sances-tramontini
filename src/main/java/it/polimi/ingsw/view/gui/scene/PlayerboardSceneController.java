@@ -722,4 +722,12 @@ public class PlayerboardSceneController extends Controller{
             slotIndex++;
         }
     }
+
+    public void showCurrentActiveUser(String username) {
+        if(!username.equals(clientController.getUsername())){
+            selectUser.setValue(username);
+            selectUser.setDisable(true);
+            skipBtn.setVisible(false);
+        }
+    }
 }

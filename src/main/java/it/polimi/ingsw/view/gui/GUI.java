@@ -288,7 +288,11 @@ public class GUI implements View {
 
     @Override
     public void showCurrentActiveUser(String username) {
-
+        Platform.runLater(()->{
+            if(getPlayerBoardSceneController() == null)
+                return;
+            getPlayerBoardSceneController().showCurrentActiveUser(username);
+        });
     }
 
     @Override
