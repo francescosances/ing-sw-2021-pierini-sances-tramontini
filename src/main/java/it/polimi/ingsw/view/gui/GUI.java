@@ -189,8 +189,7 @@ public class GUI implements View {
     @Override
     public void showPlayerBoard(PlayerBoard playerBoard) {
         Platform.runLater(()->{
-            if(playerboardSceneController == null)
-                playerboardSceneController = (PlayerboardSceneController) loadScene("playerboard_scene");
+            playerboardSceneController = (PlayerboardSceneController) loadScene("playerboard_scene");
             playerBoardSemaphore.release();
             playerboardSceneController.initialize(playerBoard);
         });

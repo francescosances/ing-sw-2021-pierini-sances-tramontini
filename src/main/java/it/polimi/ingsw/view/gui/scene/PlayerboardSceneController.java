@@ -342,7 +342,7 @@ public class PlayerboardSceneController extends Controller{
                          leaderCardsImg[cardIndex].getStyleClass().remove("selected");
                      }
                  });
-                 leaderCardsImg[i].setOnMouseClicked((e)->{//todo conflitto con activate/discard
+                 leaderCardsImg[i].setOnMouseClicked((e)->{
                      if(!controlsEnabled)
                          return;
                         warehouseSelected(depotIndexFinal,onDepotSelectedAction);

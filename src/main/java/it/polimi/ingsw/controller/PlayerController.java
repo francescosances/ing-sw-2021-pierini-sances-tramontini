@@ -148,7 +148,7 @@ public class PlayerController {
      * Mark the player as currently playing and notify the status update to the virtual view
      */
     public void startTurn(){
-         nextStatus();
+        nextStatus();
     }
 
     /**
