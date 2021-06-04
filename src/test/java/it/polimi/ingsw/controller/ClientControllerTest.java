@@ -17,10 +17,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -159,9 +157,6 @@ class ClientControllerTest {
 
     @Test
     void chooseProductions() {
-        List<Integer> choices = new ArrayList<>();
-        choices.add(1);
-        choices.add(3);
         Requirements costs = new Requirements(new HashMap<>(){{
             put(ResourceType.SHIELD, 1);
             put(ResourceType.COIN, 3);
@@ -173,9 +168,9 @@ class ClientControllerTest {
                         put(1, 1);
                     }});
                 }});
-        clientController.chooseProductions(choices, costs, gains);
+        //TODO
+        clientController.chooseProductions(null, costs, gains);
         assertEquals(Message.MessageType.PRODUCTION, clientSocketStub.getMessage().getType());
-        assertEquals(choices, Serializer.deserializeIntList(clientSocketStub.getMessage().getData("choices")));
         assertEquals(costs, Serializer.deserializeRequirements(clientSocketStub.getMessage().getData("costs")));
         assertEquals(gains, Serializer.deserializeRequirements(clientSocketStub.getMessage().getData("gains")));
     }

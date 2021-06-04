@@ -289,15 +289,7 @@ public class SerializerTest {
         assertEquals(lobbies.get(0).getFirst(), lobbies1.get(0).getFirst());
         assertEquals(lobbies.get(0).getSecond(), lobbies1.get(0).getSecond());
         assertEquals(lobbies.get(0).getThird(), lobbies1.get(0).getThird());
-    }
 
-    @Test
-    public void serializeIntList(){
-        List<Integer> list = new ArrayList<>();
-        list.add(1);
-        list.add(3);
-        String json = Serializer.serializeIntList(list);
-        assertEquals(list, Serializer.deserializeIntList(json));
     }
 
     @Test

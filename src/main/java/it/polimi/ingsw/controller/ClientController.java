@@ -7,20 +7,19 @@ import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.Requirements;
+import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.network.ClientSocket;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
+import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cli.CLI;
 import it.polimi.ingsw.view.gui.GUI;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -45,6 +44,8 @@ public class ClientController {
      * Helps to handle synchronization
      */
     private final Lock lock;
+
+    private List<Producer> selectedProducers = new ArrayList<>();
 
     /**
      * Default empty constructor that initialize a new socket
@@ -427,10 +428,27 @@ public class ClientController {
         message.addData("costs",Serializer.serializeRequirements(onDemandCosts));
         message.addData("gains",Serializer.serializeRequirements(onDemandGains));
         clientSocket.sendMessage(message);
+        selectedProducers = new ArrayList<>();
+    }
+
+    public Pair<Requirements,Requirements> calculateRequirements(List<Producer> producers){
+        Requirements onDemandCosts = new Requirements();
+        Requirements onDemandGains = new Requirements();
+
+        for(Producer producer:producers) {
+            onDemandCosts.addResourceRequirement(NonPhysicalResourceType.ON_DEMAND, producer.getProductionCost().getResources(NonPhysicalResourceType.ON_DEMAND));
+            onDemandGains.addResourceRequirement(NonPhysicalResourceType.ON_DEMAND, producer.getProductionGain().getResources(NonPhysicalResourceType.ON_DEMAND));
+        }
+
+        return new Pair<>(onDemandCosts,onDemandGains);
     }
 
     public void chooseProductionCosts(Requirements requirements){
         view.askToChooseProductionCosts(requirements);
+    }
+
+    public void chooseProductionGain(Requirements requirements){
+        view.askToChooseProductionGains(requirements);
     }
 
     /**
@@ -529,5 +547,11 @@ public class ClientController {
         clientSocket.sendMessage(message);
     }
 
+    public List<Producer> getSelectedProducers() {
+        return selectedProducers;
+    }
 
+    public void setSelectedProducers(ArrayList<Producer> producers) {
+        this.selectedProducers = producers;
+    }
 }
