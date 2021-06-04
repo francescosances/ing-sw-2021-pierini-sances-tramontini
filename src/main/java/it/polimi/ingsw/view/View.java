@@ -1,10 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.cards.Deck;
-import it.polimi.ingsw.model.cards.DevelopmentCard;
-import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
-import it.polimi.ingsw.model.cards.LeaderCard;
+import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.Strongbox;
 import it.polimi.ingsw.model.storage.Warehouse;
@@ -194,6 +191,10 @@ public interface View {
      * @param playerBoard the Player Board of the user
      */
     void chooseProductions(List<Producer> availableProductions,PlayerBoard playerBoard);
+
+    void askToChooseProductionCosts(Requirements requirements);
+
+    void askToChooseProductionGains(Requirements requirements);
 
     /**
      * Shows who is the current player

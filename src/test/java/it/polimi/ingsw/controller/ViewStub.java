@@ -1,16 +1,12 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.cards.Deck;
-import it.polimi.ingsw.model.cards.DevelopmentCard;
-import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
-import it.polimi.ingsw.model.cards.LeaderCard;
+import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.Strongbox;
 import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.VirtualView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -177,6 +173,16 @@ class ViewStub implements View {
     @Override
     public void chooseProductions(List<Producer> availableProductions, PlayerBoard playerBoard) {
         messages.add(availableProductions.toString() + playerBoard.toString());
+    }
+
+    @Override
+    public void askToChooseProductionCosts(Requirements requirements) {
+
+    }
+
+    @Override
+    public void askToChooseProductionGains(Requirements requirements) {
+
     }
 
     @Override

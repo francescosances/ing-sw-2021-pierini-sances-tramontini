@@ -462,7 +462,17 @@ public class PlayerboardSceneController extends Controller{
         startProductionBtn.setVisible(true);
 
         startProductionBtn.setOnAction((e)->{
-            //TODO: aprire schermata selezione risorse
+
+            Requirements onDemandCosts = new Requirements();
+            Requirements onDemandGains = new Requirements();
+
+            for(Producer producer:selectedProducers) {
+                onDemandCosts.addResourceRequirement(NonPhysicalResourceType.ON_DEMAND, producer.getProductionCost().getResources(NonPhysicalResourceType.ON_DEMAND));
+                onDemandGains.addResourceRequirement(NonPhysicalResourceType.ON_DEMAND, producer.getProductionGain().getResources(NonPhysicalResourceType.ON_DEMAND));
+            }
+
+            clientController.chooseProductionCosts(onDemandCosts);
+
         });
 
         if(availableProductions.contains(DevelopmentCard.getBaseProduction())) {

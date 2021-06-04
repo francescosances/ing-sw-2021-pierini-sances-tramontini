@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.gui;
 import it.polimi.ingsw.controller.ClientController;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.*;
+import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.Strongbox;
 import it.polimi.ingsw.model.storage.Warehouse;
@@ -292,6 +293,22 @@ public class GUI implements View {
                 playerboardSceneController.askProductionsToStart(availableProductions);
             }
         });
+    }
+
+    @Override
+    public void askToChooseProductionCosts(Requirements requirements) {
+        Platform.runLater(()-> ((SelectResourcesController) loadScene("select_resources_scene")).initialize(requirements.getResources(NonPhysicalResourceType.ON_DEMAND),(resources)-> {
+            System.out.println("Risorse scelte cost");
+            System.out.println(resources);
+        }));
+    }
+
+    @Override
+    public void askToChooseProductionGains(Requirements requirements) {
+        Platform.runLater(()-> ((SelectResourcesController) loadScene("select_resources_scene")).initialize(requirements.getResources(NonPhysicalResourceType.ON_DEMAND),(resources)-> {
+            System.out.println("Risorse scelte gain");
+            System.out.println(resources);
+        }));
     }
 
     @Override
