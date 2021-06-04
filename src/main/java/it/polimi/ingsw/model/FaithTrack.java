@@ -186,7 +186,7 @@ public class FaithTrack implements ObservableFromView {
             }
             if (faithMarker == SIZE) {
                 updateViews();
-                throw new EndGameException(true);
+                throw new EndGameException();
             }
         }
         updateViews();
