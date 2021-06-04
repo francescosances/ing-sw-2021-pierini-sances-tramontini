@@ -216,6 +216,11 @@ class ViewStub implements View {
     }
 
     @Override
+    public void showEndGameTriggered() {
+
+    }
+
+    @Override
     public void showCharts(List<PlayerBoard> playerList) {
         messages.add(playerList.toString());
     }
