@@ -299,4 +299,15 @@ public class SerializerTest {
         String json = Serializer.serializeIntList(list);
         assertEquals(list, Serializer.deserializeIntList(json));
     }
+
+    @Test
+    public void serializePlayerBoardList(){
+        List<PlayerBoard> list = new ArrayList<>();
+        Match match = new Match("Test");
+        list.add(new PlayerBoard("Test0", match));
+        list.add(new PlayerBoard("Test1", match));
+        list.add(new PlayerBoard("Test2", match));
+        String json = Serializer.serializePlayerBoardList(list);
+        assertEquals(list, Serializer.deserializePlayerBoardList(json));
+    }
 }

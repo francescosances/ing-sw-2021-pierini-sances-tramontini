@@ -10,7 +10,6 @@ import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 import it.polimi.ingsw.model.storage.exceptions.UnswappableDepotsException;
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.VirtualView;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -172,7 +171,7 @@ public class PlayerController {
      * Sets the virtual view containing the reference to the socket connection
      * @param view the virtual view containing the reference to the socket connection
      */
-    public void setView(VirtualView view){
+    public void setView(View view){
         this.view = view;
     }
 
@@ -440,13 +439,6 @@ public class PlayerController {
      */
     public PlayerBoard getPlayerBoard() {
         return playerBoard;
-    }
-
-    /**
-     * Organizes the endGame Phase
-     */
-    public void endGame(){
-        view.showMessage("MATCH ENDED");//TODO: gestire messaggi sul vincitore
     }
 
     /**

@@ -18,42 +18,38 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      * A reference to the match
      */
     private transient Match match;
-
     /**
      * Player's username
      */
     private final String username;
-
     /**
      * A reference to their faith Track
      */
     protected FaithTrack faithTrack;
-
     /**
      * A reference to their warehouse
      */
     protected Warehouse warehouse;
-
     /**
      * A reference to their strongbox
      */
     protected Strongbox strongbox;
-
     /**
      * An array referencing their DevelopmentCardSlots
      */
     private final DevelopmentCardSlot[] developmentCardSlots;
-
     /**
      * A list referencing their LeaderCards
      */
     private List<LeaderCard> leaderCards;
-
     /**
      * A counter that stores the number of DevelopmentCards bought
      */
     private int boughtDevelopmentCardsCounter = 0;
-
+    /**
+     * Denotes the player who played the first turn
+     */
+    private boolean inkwell;
     /**
      * A list containing all VirtualViews to notify on update
      */
@@ -71,6 +67,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
         strongbox = new Strongbox();
         faithTrack = new FaithTrack(match, username);
         developmentCardSlots = Stream.generate(DevelopmentCardSlot::new).limit(3).toArray(DevelopmentCardSlot[]::new);
+        inkwell = false;
 
 /*
         //TODO: rimuovere bypass
@@ -88,6 +85,14 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
 */
         leaderCards = new ArrayList<>();
         views = new ArrayList<>();
+    }
+
+    public void setInkwell(){
+        inkwell = true;
+    }
+
+    public boolean hasInkwell(){
+        return inkwell;
     }
 
     /**
@@ -385,7 +390,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
         Map<ResourceType,Integer> newGains = new HashMap<>();
         gains.forEach(entry->{
             if(entry.getKey() == NonPhysicalResourceType.FAITH_POINT)
-                gainFaithPoints(1);
+                gainFaithPoints(entry.getValue());
             else if(entry.getKey() instanceof ResourceType)
                 newGains.put((ResourceType) entry.getKey(),entry.getValue());
         });

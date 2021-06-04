@@ -146,6 +146,7 @@ public class Match implements ObservableFromView {
 
     public void setCurrentPlayerIndex(int currentPlayerIndex) {
         this.currentPlayerIndex = currentPlayerIndex;
+        players.get(currentPlayerIndex).setInkwell();
     }
 
     public boolean isStarted() {

@@ -134,7 +134,7 @@ public class GameController implements PlayerStatusListener {
                     break;
             }
         } catch (EndGameException e) {
-            setPhase(Match.GamePhase.END_GAME);
+            endGame();
         }
     }
 
@@ -164,7 +164,9 @@ public class GameController implements PlayerStatusListener {
     public void start(){
         match.setStarted(true);
         if(!isSuspended()) {
-            match.setCurrentPlayerIndex(new Random().nextInt(players.size()));
+            int firstPlayerIndex = new Random().nextInt(players.size());
+            match.setCurrentPlayerIndex(firstPlayerIndex);
+            players.get(firstPlayerIndex).getPlayerBoard().setInkwell();
             for(int i=0;i<players.size();i++)
                 players.get((match.getCurrentPlayerIndex()+i)%players.size()).setPlayerIndex(i);
             setPhase(Match.GamePhase.PLAYERS_SETUP);
@@ -300,10 +302,37 @@ public class GameController implements PlayerStatusListener {
                 showCurrentActiveUser();
                 break;
             case END_GAME:
-                players.forEach(PlayerController::endGame);
+                if (players.get(match.getCurrentPlayerIndex()).getPlayerBoard().hasInkwell())
+                    findWinner();
+                else {
+                    players.get(match.getCurrentPlayerIndex()).startTurn();
+                    showCurrentActiveUser();
+                }
                 break;
         }
         statusObserver.onStatusChanged(this);
+    }
+
+    /**
+     * Ranks the players and shows them the charts
+     */
+    private void findWinner() {
+        if (players.size() == 1){
+            SoloMatch soloMatch = (SoloMatch) match;
+            //TODO: gestire anche il caso di development card esaurite, migliorare messaggi
+            if (soloMatch.getBlackCross().getFaithMarker() == FaithTrack.SIZE)
+                players.get(0).getView().showMessage("You won!");
+            else
+                players.get(0).getView().showMessage("You lost!");
+            return;
+        }
+
+        List<PlayerBoard> playerList = (players.stream().map(PlayerController::getPlayerBoard).sorted(Comparator.comparingInt(PlayerBoard::getTotalVictoryPoints)).collect(Collectors.toList()));
+        Collections.reverse(playerList);
+        for (PlayerController playerController:players) {
+            if (playerController.getView() != null)
+                playerController.getView().showCharts(playerList);
+        }
     }
 
     /**
@@ -326,8 +355,12 @@ public class GameController implements PlayerStatusListener {
         final PlayerController playerController = players.get(match.getCurrentPlayerIndex());
         switch (player.getCurrentStatus()) {
             case TURN_ENDED:
-                match.endTurn();
-                nextTurn();
+                try {
+                    match.endTurn();
+                    nextTurn();
+                } catch (EndGameException e){
+                    endGame();
+                }
                 break;
             case PERFORMING_ACTION:
                 playerController.askForAction();
@@ -338,6 +371,11 @@ public class GameController implements PlayerStatusListener {
                 match.setCurrentPhase(Match.GamePhase.TURN);
                 break;
         }
+    }
+
+    private void endGame() {
+        players.forEach(playerController -> playerController.getView().showEndGameTriggered());
+        setPhase(Match.GamePhase.END_GAME);
     }
 
     private void askForNormalAction(PlayerController playerController) {

@@ -259,5 +259,19 @@ public class Serializer {
         Type listType = new TypeToken<List<Integer>>() {}.getType();
         return new Gson().fromJson(choices, listType);
     }
+
+    public static String serializePlayerBoardList(List<PlayerBoard> list) {
+        return new Gson().toJson(list);
+    }
+
+    public static List<PlayerBoard> deserializePlayerBoardList(String choices) {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Depot.class, new DepotCreator());
+        gsonBuilder.registerTypeAdapter(LeaderCard.class, new LeaderCardCreator());
+        gsonBuilder.registerTypeAdapter(Requirements.class, new RequirementsCreator());
+        gsonBuilder.registerTypeAdapter(Resource.class,new ResourceCreator());
+        Type listType = new TypeToken<List<PlayerBoard>>() {}.getType();
+        return gsonBuilder.create().fromJson(choices, listType);
+    }
 }
 

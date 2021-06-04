@@ -126,6 +126,8 @@ public class Message{
         SHOW_PLAYER_LEADER_CARDS,
         SHOW_LEADER_CARDS,
         SHOW_SLOTS,
+        END_GAME,
+        CHARTS,
         // from client to server
         LOGIN_REQUEST,
         LOBBY_CHOICE,

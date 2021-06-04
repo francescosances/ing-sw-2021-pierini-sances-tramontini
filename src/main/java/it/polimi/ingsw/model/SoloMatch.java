@@ -71,6 +71,7 @@ public class SoloMatch extends Match{
      * @param color the color specified
      */
     protected void discardDevelopmentCards(DevelopmentColorType color){
+        //TODO: se tutte le carte di un colore sono state scartate lanciare EndGameException (hai perso)
         int count = 2;
         int level = 1;
         while (count > 0){
@@ -100,15 +101,10 @@ public class SoloMatch extends Match{
     public void endTurn(){
         super.endTurn();
         if (drawableActionToken) {
-            try {
-                ActionToken actionToken = drawActionToken();
-                for (View view : views) {
-                    view.showActionToken(actionToken);
-                    actionToken.show(this);
-                }
-                //TODO: creare metodo endgame per contare i punti
-            } catch (EndGameException e) {
-                e.printStackTrace();
+            ActionToken actionToken = drawActionToken();
+            for (View view : views) {
+                view.showActionToken(actionToken);
+                actionToken.show(this);
             }
         }
         drawableActionToken = true;

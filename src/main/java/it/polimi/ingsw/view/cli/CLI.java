@@ -529,6 +529,28 @@ public class CLI implements View {
     }
 
     @Override
+    public void showEndGameTriggered() {
+        outputLock.lock();
+        output.println("\n"+ currentActiveUser+" has played " +getPronoun() + "last turn!");
+    }
+
+    @Override
+    public void showCharts(List<PlayerBoard> playerList) {
+        outputLock.lock();
+        output.println("\nMatch ended!\nThe chart is:");
+        for (int i = 0; i < playerList.size(); i++) {
+            output.println();
+            output.println(i + "° place: " + playerList.get(i));
+            output.println("Total victory points: " + playerList.get(i).getTotalVictoryPoints());
+            showPlayerBoard(playerList.get(i));
+        }
+        if (clientController.getUsername().equals(playerList.get(0).getUsername()))
+            output.println("You won!");
+        else
+            output.println(playerList.get(0).getUsername() + " won!");
+    }
+
+    @Override
     public String getUsername() {
         return clientController.getUsername();
     }
@@ -537,8 +559,7 @@ public class CLI implements View {
     @Override
     public void showPlayerBoard(PlayerBoard playerBoard) {
         outputLock.lock();
-        output.println();
-        output.println(playerBoard.getUsername() + "'s player board is");
+        output.println("\n" + playerBoard.getUsername() + "'s player board is");
         printFaithTrack(playerBoard.getFaithTrack());
         printStorage(playerBoard);
         printDevelopmentCards(playerBoard.getDevelopmentCardSlots());

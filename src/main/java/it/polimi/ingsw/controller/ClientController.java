@@ -251,6 +251,17 @@ public class ClientController {
                 view.showDevelopmentCardSlots(developmentCardSlots);
                 lock.unlock();
                 break;
+            case END_GAME:
+                lock.lock();
+                view.showEndGameTriggered();
+                lock.unlock();
+                break;
+            case CHARTS:
+                lock.lock();
+                List<PlayerBoard> playerBoardChart = Serializer.deserializePlayerBoardList(message.getData("charts"));
+                view.showCharts(playerBoardChart);
+                lock.unlock();
+                break;
             default:
                 clientSocket.log("Received unexpected message");
                 clientSocket.log(message.serialize());

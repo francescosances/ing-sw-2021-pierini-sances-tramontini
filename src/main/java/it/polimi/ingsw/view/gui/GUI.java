@@ -351,6 +351,16 @@ public class GUI implements View {
     }
 
     @Override
+    public void showEndGameTriggered() {
+        //TODO
+    }
+
+    @Override
+    public void showCharts(List<PlayerBoard> playerList) {
+        //TODO
+    }
+
+    @Override
     public String getUsername() {
         return clientController.getUsername();
     }

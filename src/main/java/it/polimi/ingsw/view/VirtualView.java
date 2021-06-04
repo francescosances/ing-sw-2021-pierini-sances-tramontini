@@ -291,6 +291,19 @@ public class VirtualView implements View {
     }
 
     @Override
+    public void showEndGameTriggered() {
+        Message message = new Message(Message.MessageType.END_GAME);
+        sendMessage(message);
+    }
+
+    @Override
+    public void showCharts(List<PlayerBoard> playerList) {
+        Message message = new Message((Message.MessageType.CHARTS));
+        message.addData("charts", Serializer.serializePlayerBoardList(playerList));
+        sendMessage(message);
+    }
+
+    @Override
     public void askForAction(List<String> usernames, Action... availableActions) {
         Gson gson = new Gson();
         List<String> list = usernames.stream().map(t-> t.equals(this.username) ? t = Match.YOU_STRING : t).collect(Collectors.toList());

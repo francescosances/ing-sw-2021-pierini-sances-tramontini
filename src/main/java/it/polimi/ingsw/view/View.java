@@ -232,8 +232,21 @@ public interface View {
     void actionPerformed();
 
     /**
+     * Notifies the user a player has played his last turn
+     */
+    void showEndGameTriggered();
+
+    /**
+     * Shows the player the charts
+     * @param playerList the ordered charts
+     */
+    void showCharts(List<PlayerBoard> playerList);
+
+    /**
      * Returns the username of the player
      * @return the username of the player
      */
     String getUsername();
+
+
 }
