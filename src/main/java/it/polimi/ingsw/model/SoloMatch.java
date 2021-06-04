@@ -15,6 +15,10 @@ public class SoloMatch extends Match{
      * A deck containing the action token to draw at the end of each turn
      */
     private Deck<ActionToken> actionTokens;
+    /**
+     * Is true if an action token has to be drawn at the end of the turn
+     */
+    private boolean drawableActionToken;
 
     /**
      * Initializes a new SoloMatch object
@@ -25,6 +29,7 @@ public class SoloMatch extends Match{
         blackCross = new FaithTrack(this, FaithTrack.BLACK_CROSS);
         blackCross.setBlackCross(true);
         shuffleActionTokens();
+        drawableActionToken = false;
     }
 
     /**
@@ -93,18 +98,20 @@ public class SoloMatch extends Match{
      */
     @Override
     public void endTurn(){
-        //TODO: eliminare chiamata iniziale che fa avanzare gli action token inutilmente
         super.endTurn();
-        try {
-            ActionToken actionToken = drawActionToken();
-            for (View view: views) {
-                view.showActionToken(actionToken);
-                actionToken.show(this);
+        if (drawableActionToken) {
+            try {
+                ActionToken actionToken = drawActionToken();
+                for (View view : views) {
+                    view.showActionToken(actionToken);
+                    actionToken.show(this);
+                }
+                //TODO: creare metodo endgame per contare i punti
+            } catch (EndGameException e) {
+                e.printStackTrace();
             }
-            //TODO: creare metodo endgame per contare i punti
-        } catch (EndGameException e) {
-            e.printStackTrace();
         }
+        drawableActionToken = true;
     }
 
     /**
