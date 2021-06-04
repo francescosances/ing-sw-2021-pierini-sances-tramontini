@@ -38,6 +38,11 @@ public class SelectResourcesController extends Controller{
     @FXML
     public void initialize(int resourcesToChoose,ResourcesChooser onAction) {
 
+        if(resourcesToChoose==0){
+            onAction.choose(new Resource[0]);
+            return;
+        }
+
         Button[] minusButtons = {coin_minus,servant_minus,shield_minus,stone_minus};
         TextField[] textFields = {coin_input,servant_input,shield_input,stone_input};
         Button[] plusButtons = {coin_plus,servant_plus,shield_plus,stone_plus};

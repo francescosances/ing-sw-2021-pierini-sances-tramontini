@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.*;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -64,8 +63,6 @@ public class PlayerboardSceneController extends Controller{
     private final static double[][] FAITH_TRACK_CELLS = {{22,212}, {64,212}, {106,212}, {106,170}, {106,128}, {148,128}, {190,128}, {232,128}, {276,128}, {318,128}, {318,170}, {318,212}, {360,212}, {402,212}, {446,212}, {488,212}, {530,212}, {530,170}, {530,128}, {572,128}, {614,128}, {658,128}, {700,128}, {742,128}, {784,128}};
 
     private PlayerBoard playerBoard;
-
-    private List<Producer> selectedProducers = new ArrayList<>();
 
     private Runnable onRollbackAction = ()->{};
 
@@ -191,7 +188,7 @@ public class PlayerboardSceneController extends Controller{
 
     @FXML
     public void startProduction() {
-        if (selectedProducers.isEmpty()) {
+        if (clientController.getSelectedProducers().isEmpty()) {
             disableControls();
             selectUser.setDisable(true);
             clientController.performAction(Action.ACTIVATE_PRODUCTION);
@@ -441,20 +438,20 @@ public class PlayerboardSceneController extends Controller{
     private void addListenerToProducer(ImageView imageView, Producer producer){
         imageView.setDisable(false);
         imageView.setOnMouseClicked((e)->{
-            if(selectedProducers.contains(producer)){
-                selectedProducers.remove(producer);
+            if(clientController.getSelectedProducers().contains(producer)){
+                clientController.getSelectedProducers().remove(producer);
                 imageView.getStyleClass().remove("selected");
             }else{
-                selectedProducers.add(producer);
+                clientController.getSelectedProducers().add(producer);
                 imageView.getStyleClass().add("selected");
             }
-            startProductionBtn.setDisable(selectedProducers.isEmpty());
+            startProductionBtn.setDisable(clientController.getSelectedProducers().isEmpty());
         });
     }
 
     public void askProductionsToStart(List<Producer> availableProductions) {
         selectUser.setDisable(true);
-        selectedProducers = new ArrayList<>();
+        clientController.setSelectedProducers(new ArrayList<>());
 
         marketBtn.setVisible(false);
         buyDevelopmentcardBtn.setVisible(false);
@@ -462,16 +459,7 @@ public class PlayerboardSceneController extends Controller{
         startProductionBtn.setVisible(true);
 
         startProductionBtn.setOnAction((e)->{
-
-            Requirements onDemandCosts = new Requirements();
-            Requirements onDemandGains = new Requirements();
-
-            for(Producer producer:selectedProducers) {
-                onDemandCosts.addResourceRequirement(NonPhysicalResourceType.ON_DEMAND, producer.getProductionCost().getResources(NonPhysicalResourceType.ON_DEMAND));
-                onDemandGains.addResourceRequirement(NonPhysicalResourceType.ON_DEMAND, producer.getProductionGain().getResources(NonPhysicalResourceType.ON_DEMAND));
-            }
-
-            clientController.chooseProductionCosts(onDemandCosts);
+            clientController.chooseProductionCosts(clientController.calculateRequirements(clientController.getSelectedProducers()).fst);
 
         });
 
@@ -511,7 +499,7 @@ public class PlayerboardSceneController extends Controller{
     }
 
     public void cancelProductionSelection(){
-        selectedProducers = new ArrayList<>();
+        clientController.setSelectedProducers(new ArrayList<>());
 
         startProductionBtn.setVisible(true);
         marketBtn.setVisible(true);

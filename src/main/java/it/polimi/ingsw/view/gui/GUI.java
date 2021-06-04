@@ -297,15 +297,16 @@ public class GUI implements View {
 
     @Override
     public void askToChooseProductionCosts(Requirements requirements) {
-        Platform.runLater(()-> ((SelectResourcesController) loadScene("select_resources_scene")).initialize(requirements.getResources(NonPhysicalResourceType.ON_DEMAND),(resources)-> {
+        Platform.runLater(()-> ((SelectResourcesController) loadScene("select_resources_scene",true)).initialize(requirements.getResources(NonPhysicalResourceType.ON_DEMAND),(resources)-> {
             System.out.println("Risorse scelte cost");
             System.out.println(resources);
+            askToChooseProductionGains(clientController.calculateRequirements(clientController.getSelectedProducers()).snd);
         }));
     }
 
     @Override
     public void askToChooseProductionGains(Requirements requirements) {
-        Platform.runLater(()-> ((SelectResourcesController) loadScene("select_resources_scene")).initialize(requirements.getResources(NonPhysicalResourceType.ON_DEMAND),(resources)-> {
+        Platform.runLater(()-> ((SelectResourcesController) loadScene("select_resources_scene",true)).initialize(requirements.getResources(NonPhysicalResourceType.ON_DEMAND),(resources)-> {
             System.out.println("Risorse scelte gain");
             System.out.println(resources);
         }));
