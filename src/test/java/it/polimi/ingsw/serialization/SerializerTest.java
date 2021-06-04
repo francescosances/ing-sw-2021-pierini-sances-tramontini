@@ -293,6 +293,16 @@ public class SerializerTest {
     }
 
     @Test
+    public void serializeIntList(){
+        List<Integer> intList = new ArrayList<>();
+        intList.add(0);
+        intList.add(5);
+        intList.add(265);
+        String json = Serializer.serializeIntList(intList);
+        assertEquals(intList, Serializer.deserializeIntList(json));
+    }
+
+    @Test
     public void serializePlayerBoardList(){
         List<PlayerBoard> list = new ArrayList<>();
         Match match = new Match("Test");
