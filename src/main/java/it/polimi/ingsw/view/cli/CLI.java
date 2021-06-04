@@ -418,10 +418,18 @@ public class CLI implements View {
             temp = input.nextInt();
         }
 
-        chooseOnDemandResources(onDemandCosts, "Spend");
-        chooseOnDemandResources(onDemandGains, "gain");
+        askToChooseProductionCosts(onDemandCosts);
+        askToChooseProductionGains(onDemandGains);
 
         clientController.chooseProductions(choices, onDemandCosts, onDemandGains);
+    }
+
+    public void askToChooseProductionCosts(Requirements requirements) {
+        chooseOnDemandResources(requirements,"spend");
+    }
+
+    public void askToChooseProductionGains(Requirements requirements) {
+        chooseOnDemandResources(requirements,"gain");
     }
 
     private void chooseOnDemandResources(Requirements entries, String string) {

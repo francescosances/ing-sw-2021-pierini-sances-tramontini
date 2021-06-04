@@ -418,6 +418,10 @@ public class ClientController {
         clientSocket.sendMessage(message);
     }
 
+    public void chooseProductionCosts(Requirements requirements){
+        view.askToChooseProductionCosts(requirements);
+    }
+
     /**
      * Sends to the server an array containing all the resourcesChosen at the start of the match
      * @param resourcesChosen the resources chosen
@@ -513,4 +517,6 @@ public class ClientController {
         Message message = new Message(Message.MessageType.LOBBY_INFO);
         clientSocket.sendMessage(message);
     }
+
+
 }

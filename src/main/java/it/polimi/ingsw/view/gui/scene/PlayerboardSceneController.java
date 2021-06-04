@@ -461,6 +461,20 @@ public class PlayerboardSceneController extends Controller{
         rollbackBtn.setVisible(true);
         startProductionBtn.setVisible(true);
 
+        startProductionBtn.setOnAction((e)->{
+
+            Requirements onDemandCosts = new Requirements();
+            Requirements onDemandGains = new Requirements();
+
+            for(Producer producer:selectedProducers) {
+                onDemandCosts.addResourceRequirement(NonPhysicalResourceType.ON_DEMAND, producer.getProductionCost().getResources(NonPhysicalResourceType.ON_DEMAND));
+                onDemandGains.addResourceRequirement(NonPhysicalResourceType.ON_DEMAND, producer.getProductionGain().getResources(NonPhysicalResourceType.ON_DEMAND));
+            }
+
+            clientController.chooseProductionCosts(onDemandCosts);
+
+        });
+
         if(availableProductions.contains(DevelopmentCard.getBaseProduction())) {
             baseProductionBtn.getStyleClass().add("btnProduction");
             addListenerToProducer(baseProductionBtn, DevelopmentCard.getBaseProduction());

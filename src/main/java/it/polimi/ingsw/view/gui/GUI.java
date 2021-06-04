@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.gui;
 import it.polimi.ingsw.controller.ClientController;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.*;
+import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.Strongbox;
 import it.polimi.ingsw.model.storage.Warehouse;
@@ -286,13 +287,28 @@ public class GUI implements View {
 
     @Override
     public void chooseProductions(List<Producer> availableProductions, PlayerBoard playerBoard) {
-
         Platform.runLater(()->{
             if(getPlayerBoardSceneController() != null) {
                 playerboardSceneController.initialize(playerBoard);
                 playerboardSceneController.askProductionsToStart(availableProductions);
             }
         });
+    }
+
+    @Override
+    public void askToChooseProductionCosts(Requirements requirements) {
+        Platform.runLater(()-> ((SelectResourcesController) loadScene("select_resources_scene")).initialize(requirements.getResources(NonPhysicalResourceType.ON_DEMAND),(resources)-> {
+            System.out.println("Risorse scelte cost");
+            System.out.println(resources);
+        }));
+    }
+
+    @Override
+    public void askToChooseProductionGains(Requirements requirements) {
+        Platform.runLater(()-> ((SelectResourcesController) loadScene("select_resources_scene")).initialize(requirements.getResources(NonPhysicalResourceType.ON_DEMAND),(resources)-> {
+            System.out.println("Risorse scelte gain");
+            System.out.println(resources);
+        }));
     }
 
     @Override
@@ -305,7 +321,7 @@ public class GUI implements View {
 
     @Override
     public void askToChooseStartResources(Resource[] values, int resourcesToChoose) {
-        Platform.runLater(()-> ((SelectResourcesController) loadScene("select_resources_scene")).initialize(values,resourcesToChoose));
+        Platform.runLater(()-> ((SelectResourcesController) loadScene("select_resources_scene")).initialize(resourcesToChoose,(resources)-> clientController.chooseStartResources(resources)));
     }
 
     @Override

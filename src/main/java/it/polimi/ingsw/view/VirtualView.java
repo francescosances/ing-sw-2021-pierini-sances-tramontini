@@ -2,10 +2,7 @@ package it.polimi.ingsw.view;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.cards.Deck;
-import it.polimi.ingsw.model.cards.DevelopmentCard;
-import it.polimi.ingsw.model.cards.DevelopmentCardSlot;
-import it.polimi.ingsw.model.cards.LeaderCard;
+import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.Strongbox;
 import it.polimi.ingsw.model.storage.Warehouse;
@@ -309,6 +306,16 @@ public class VirtualView implements View {
         message.addData("productions",Serializer.serializeProducerList(availableProductions));
         message.addData("playerBoard",Serializer.serializePlayerBoard(playerBoard));
         sendMessage(message);
+    }
+
+    @Override
+    public void askToChooseProductionCosts(Requirements requirements) {
+
+    }
+
+    @Override
+    public void askToChooseProductionGains(Requirements requirements) {
+
     }
 
     public String getCurrentActiveUser(){
