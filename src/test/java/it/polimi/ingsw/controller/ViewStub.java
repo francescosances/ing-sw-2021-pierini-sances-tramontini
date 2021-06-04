@@ -70,7 +70,7 @@ class ViewStub implements View {
 
     @Override
     public void listLeaderCards(List<LeaderCard> leaderCardList, int cardsToChoose) {
-
+        messages.add(leaderCardList.toString() + cardsToChoose);
     }
 
     @Override

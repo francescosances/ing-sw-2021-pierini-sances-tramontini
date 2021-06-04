@@ -13,7 +13,6 @@ import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.VirtualView;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,10 +20,6 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,7 +28,7 @@ class PlayerControllerTest {
 
     PlayerController playerController;
     ViewStub viewStub;
-    String expectedMessage; //TODO use ViewStub instead of expectedMessage
+    String tempExpMessage; //TODO use ViewStub instead of expectedMessage
 
     @BeforeEach
     void setUp() {
@@ -47,7 +42,7 @@ class PlayerControllerTest {
     @AfterEach
     void tearDown() {
         playerController = null;
-        expectedMessage = null;
+        tempExpMessage = null;
     }
 
     @Test
@@ -69,7 +64,7 @@ class PlayerControllerTest {
             developmentCardSlots[j] = new DevelopmentCardSlot();
         Requirements cost = new Requirements();
         DevelopmentCard developmentCard = new DevelopmentCard("", 1, cost, 1, DevelopmentColorType.GREEN, null, (Requirements) null);
-        for (int i = 0; i < /*playerController.getPlayerBoard().getDevelopmentCardSlots().length*/ 2; i++) {
+        for (int i = 0; i < 2; i++) {
             playerController.activate();
             playerController.buyDevelopmentCard(developmentCard);
             playerController.deactivate();
@@ -101,13 +96,14 @@ class PlayerControllerTest {
 
     @Test
     void setup() {
+        String expectedMessage;
         for (int i = 0; i < 4; i++) {
             playerController.setPlayerIndex(i);
             if (i == 0) {
                 List<LeaderCard> leaderCardList = new ArrayList<>();
                 for (int j = 0; j < 4; j++)
                     leaderCardList.add(playerController.getPlayerBoard().getMatch().getLeaderCards().get(j));
-                expectedMessage = leaderCardList.toString();
+                expectedMessage = leaderCardList.toString() + 2;
             } else {
                 int num = 1;
                 if (i == 3)
@@ -115,6 +111,7 @@ class PlayerControllerTest {
                 expectedMessage = "[COIN, SERVANT, SHIELD, STONE]" + num;
             }
             playerController.setup();
+            assertEquals(expectedMessage, viewStub.popMessage());
             assertEquals(i / 2, playerController.getPlayerBoard().getFaithTrack().getFaithMarker());
             tearDown();
             setUp();
@@ -137,8 +134,8 @@ class PlayerControllerTest {
         List<LeaderCard> leaderCardList = new ArrayList<>();
         for (int j = 0; j < 4; j++)
             leaderCardList.add(playerController.getPlayerBoard().getMatch().getLeaderCards().get(j));
-        expectedMessage = leaderCardList.toString();
         playerController.listLeaderCards();
+        assertEquals(leaderCardList.toString() + 2,viewStub.popMessage());
         leaderCardList.subList(0, 2).clear();
         playerController.chooseLeaderCards(leaderCardList.get(0), leaderCardList.get(1));
         assertEquals(leaderCardList.get(0), playerController.getPlayerBoard().getLeaderCards().get(0));
@@ -159,8 +156,8 @@ class PlayerControllerTest {
     void activateLeaderCard() throws IncompatibleDepotException {
         LeaderCard leaderCard = new DepotLeaderCard("",3,new Requirements(new Pair<>(ResourceType.COIN, 1)),ResourceType.SHIELD);
         playerController.getPlayerBoard().getLeaderCards().add(leaderCard);
-        expectedMessage = "You cannot activate this card";
         playerController.activateLeaderCard(0);
+        assertEquals("You cannot activate this card", viewStub.popMessage());
         assertFalse(playerController.getPlayerBoard().getLeaderCards().get(0).isActive());
         playerController.getPlayerBoard().getWarehouse().getDepots().get(0).addResource(ResourceType.COIN);
         playerController.activateLeaderCard(0);
@@ -177,7 +174,7 @@ class PlayerControllerTest {
         List<LeaderCard> leaderCardList = new ArrayList<>();
         for (int j = 0; j < 4; j++)
             leaderCardList.add(playerController.getPlayerBoard().getMatch().getLeaderCards().get(j));
-        expectedMessage = leaderCardList.toString();
+        assertEquals(leaderCardList.toString(), leaderCardList.toString());
 
         boolean bool = false;
         try {
@@ -193,9 +190,8 @@ class PlayerControllerTest {
 
         playerController.setPlayerIndex(1);
 
-        expectedMessage = "[COIN, SERVANT, SHIELD, STONE]" + 1;
-
         playerController.setup(); // virtualView was null
+        assertEquals("[COIN, SERVANT, SHIELD, STONE]" + 1, viewStub.popMessage());
         try {
             playerController.chooseStartResources(resources);
         } catch (NullPointerException ignored) {} //virtualView is null
@@ -211,9 +207,9 @@ class PlayerControllerTest {
 
         playerController.setPlayerIndex(3);
 
-        expectedMessage = "[COIN, SERVANT, SHIELD, STONE]" + 2;
-
         playerController.setup();
+        assertEquals("[COIN, SERVANT, SHIELD, STONE]" + 2, viewStub.popMessage());
+
         playerController.chooseStartResources(resources);
         assertEquals(ResourceType.COIN, playerController.getPlayerBoard().getWarehouse().getDepots().get(2).getResourceType());
         assertEquals(1, playerController.getPlayerBoard().getWarehouse().getDepots().get(2).getOccupied());
@@ -232,12 +228,12 @@ class PlayerControllerTest {
     }
 
     private void askForActionNoLeadersFormat(){
-        expectedMessage = playerController.getPlayerBoard().getMatch().getPlayers().stream().map(p->p.getUsername()).collect(Collectors.toList())
+        tempExpMessage = playerController.getPlayerBoard().getMatch().getPlayers().stream().map(p->p.getUsername()).collect(Collectors.toList())
                 + "[Take resources from market, Buy development card, Activate production, Move resources, Show a player board]";
     }
 
     private void askForActionSomeLeadersFormat(){
-        expectedMessage = playerController.getPlayerBoard().getMatch().getPlayers().stream().map(p->p.getUsername()).collect(Collectors.toList())
+        tempExpMessage = playerController.getPlayerBoard().getMatch().getPlayers().stream().map(p->p.getUsername()).collect(Collectors.toList())
                 + "[Take resources from market, Buy development card, Activate production, Move resources, Activate or discard a leader card, Show a player board]";
     }
 
@@ -252,12 +248,12 @@ class PlayerControllerTest {
     }
 
     private void askForNormalActionNoLeadersFormat(){
-        expectedMessage = playerController.getPlayerBoard().getMatch().getPlayers().stream().map(p->p.getUsername()).collect(Collectors.toList())
+        tempExpMessage = playerController.getPlayerBoard().getMatch().getPlayers().stream().map(p->p.getUsername()).collect(Collectors.toList())
                 + "[Go ahead / Skip, Move resources, Show a player board]";
     }
 
     private void askForNormalActionSomeLeadersFormat(){
-        expectedMessage = playerController.getPlayerBoard().getMatch().getPlayers().stream().map(p->p.getUsername()).collect(Collectors.toList())
+        tempExpMessage = playerController.getPlayerBoard().getMatch().getPlayers().stream().map(p->p.getUsername()).collect(Collectors.toList())
                 + "[Go ahead / Skip, Move resources, Activate or discard a leader card, Show a player board]";
     }
 
@@ -269,24 +265,24 @@ class PlayerControllerTest {
     @Test
     void listPlayableLeaderCards() {
         List<LeaderCard> leaderCardList = new ArrayList<>();
-        expectedMessage = leaderCardList.toString();
+        tempExpMessage = leaderCardList.toString();
         playerController.performAction(Action.PLAY_LEADER);
 
         LeaderCard leaderCard = new DepotLeaderCard("",3,new Requirements(new Pair<>(ResourceType.COIN, 0)),ResourceType.SHIELD);
         leaderCardList.add(leaderCard);
         playerController.getPlayerBoard().getLeaderCards().add(leaderCard);
-        expectedMessage = leaderCardList.toString();
+        tempExpMessage = leaderCardList.toString();
         playerController.performAction(Action.PLAY_LEADER);
 
         leaderCard = new DiscountLeaderCard("",2, new Requirements(new Triple<>(DevelopmentColorType.YELLOW, 1, 0)), ResourceType.SERVANT);
         leaderCardList.add(leaderCard);
         playerController.getPlayerBoard().getLeaderCards().add(leaderCard);
-        expectedMessage = leaderCardList.toString();
+        tempExpMessage = leaderCardList.toString();
         playerController.performAction(Action.PLAY_LEADER);
 
         leaderCardList.remove(0);
         playerController.getPlayerBoard().getLeaderCards().get(0).activate(playerController.getPlayerBoard());
-        expectedMessage = leaderCardList.toString();
+        tempExpMessage = leaderCardList.toString();
         playerController.performAction(Action.PLAY_LEADER);
     }
 
@@ -297,25 +293,25 @@ class PlayerControllerTest {
         LeaderCard leaderCard = new DepotLeaderCard("",3,new Requirements(new Pair<>(ResourceType.COIN, 1)),ResourceType.SHIELD);
         playerController.getPlayerBoard().getLeaderCards().add(leaderCard);
         playerController.getPlayerBoard().getLeaderCards().get(0).activate(playerController.getPlayerBoard());
-        expectedMessage = playerController.getPlayerBoard().getWarehouse().toString();
+        tempExpMessage = playerController.getPlayerBoard().getWarehouse().toString();
         playerController.performAction(Action.MOVE_RESOURCES);
     }
 
     @Test
     void takeResourcesFromMarket(){
-        expectedMessage = playerController.getPlayerBoard().getMatch().getMarket().toString();
+        tempExpMessage = playerController.getPlayerBoard().getMatch().getMarket().toString();
         playerController.performAction(Action.TAKE_RESOURCES_FROM_MARKET);
     }
 
     @Test
     void listDevelopmentCardToBuy(){
-        expectedMessage = playerController.getPlayerBoard().getMatch().getDevelopmentCardDecks().stream().map(t->t.top()).collect(Collectors.toList()).toString();
+        tempExpMessage = playerController.getPlayerBoard().getMatch().getDevelopmentCardDecks().stream().map(t->t.top()).collect(Collectors.toList()).toString();
         playerController.performAction(Action.BUY_DEVELOPMENT_CARD);
     }
 
     @Test
     void performAction_activateProduction(){
-        expectedMessage = playerController.getPlayerBoard().getAvailableProductions().toString() + playerController.getPlayerBoard().toString();
+        tempExpMessage = playerController.getPlayerBoard().getAvailableProductions().toString() + playerController.getPlayerBoard().toString();
         playerController.performAction(Action.ACTIVATE_PRODUCTION);
     }
 
@@ -368,7 +364,7 @@ class PlayerControllerTest {
         List<Resource> resources = marbles.stream().map(MarbleType::toResource).collect(Collectors.toList());
         Warehouse warehouse = new Warehouse();
         warehouse.toBeStored(resources.subList(0, resources.size()-1).toArray(Resource[]::new));
-        expectedMessage = resources.get(resources.size()-1).toString() + warehouse;
+        tempExpMessage = resources.get(resources.size()-1).toString() + warehouse;
         playerController.selectMarketRow(j-1);
     }
 
@@ -388,7 +384,7 @@ class PlayerControllerTest {
         List<Resource> resources = marbles.stream().map(MarbleType::toResource).collect(Collectors.toList());
         Warehouse warehouse = new Warehouse();
         warehouse.toBeStored(resources.subList(0, resources.size()-1).toArray(Resource[]::new));
-        expectedMessage = resources.get(resources.size()-1).toString() + warehouse;
+        tempExpMessage = resources.get(resources.size()-1).toString() + warehouse;
         playerController.selectMarketColumn(j-1);
     }
 
@@ -398,7 +394,7 @@ class PlayerControllerTest {
         resources[0] = NonPhysicalResourceType.VOID;
         resources[1] = NonPhysicalResourceType.FAITH_POINT;
         resources[2] = ResourceType.COIN;
-        expectedMessage = ResourceType.COIN.toString() + playerController.getPlayerBoard().getWarehouse();
+        tempExpMessage = ResourceType.COIN.toString() + playerController.getPlayerBoard().getWarehouse();
         playerController.askToStoreResourcesFromMarket(resources);
         assertEquals(1, playerController.getPlayerBoard().getFaithTrack().getFaithMarker());
 
@@ -410,7 +406,7 @@ class PlayerControllerTest {
         LeaderCard leaderCard = new WhiteMarbleLeaderCard("",5, new Requirements(new Triple<>(DevelopmentColorType.GREEN, 1, 0)), ResourceType.SHIELD, true);
         playerController.getPlayerBoard().getLeaderCards().add(leaderCard);
         Warehouse warehouse = new Warehouse();
-        expectedMessage = leaderCard.getOutputResourceType().toString() + warehouse;
+        tempExpMessage = leaderCard.getOutputResourceType().toString() + warehouse;
         playerController.askToStoreResourcesFromMarket(resources);
 
         tearDown();
@@ -434,12 +430,12 @@ class PlayerControllerTest {
         Resource[] resources1 = new Resource[1];
         resources1[0] = ResourceType.SERVANT;
         warehouse.toBeStored(resources1);
-        expectedMessage = resources[1].toString() + warehouse;
+        tempExpMessage = resources[1].toString() + warehouse;
         playerController.askToStoreResource();
 
         warehouse = new Warehouse();
         warehouse.addResources(0, ResourceType.SHIELD, 1);
-        expectedMessage = resources[0].toString() + warehouse;
+        tempExpMessage = resources[0].toString() + warehouse;
         playerController.storeResourceToWarehouse(0);
     }
 
@@ -451,15 +447,15 @@ class PlayerControllerTest {
         LeaderCard leaderCard1 = new WhiteMarbleLeaderCard("",5, new Requirements(new Triple<>(DevelopmentColorType.GREEN, 1, 0)), ResourceType.COIN, true);
         playerController.getPlayerBoard().getLeaderCards().add(leaderCard);
         playerController.getPlayerBoard().getLeaderCards().add(leaderCard1);
-        expectedMessage = leaderCard.toString() + leaderCard1;
+        tempExpMessage = leaderCard.toString() + leaderCard1;
         playerController.askToStoreResourcesFromMarket(resources);
-        expectedMessage = leaderCard1.getOutputResourceType().toString() + playerController.getPlayerBoard().getWarehouse();
+        tempExpMessage = leaderCard1.getOutputResourceType().toString() + playerController.getPlayerBoard().getWarehouse();
         playerController.chooseWhiteMarbleConversion(1);
     }
 
     @Test
     void showPlayerBoard() {
-        expectedMessage = playerController.getPlayerBoard().toString();
+        tempExpMessage = playerController.getPlayerBoard().toString();
         playerController.showPlayerBoard();
         playerController.showPlayerBoard(playerController.getPlayerBoard());
     }
@@ -470,7 +466,7 @@ class PlayerControllerTest {
         //TODO: Testare anche il lancio dell'eccezione
         // invia due messaggi, gestire multithreading
         playerController.getPlayerBoard().getWarehouse().addResources(0, ResourceType.SHIELD, 1);
-        expectedMessage = Arrays.toString(playerController.getPlayerBoard().getDevelopmentCardSlots()) + developmentCard;
+        tempExpMessage = Arrays.toString(playerController.getPlayerBoard().getDevelopmentCardSlots()) + developmentCard;
         playerController.buyDevelopmentCard(developmentCard);
 
         playerController.chooseDevelopmentCardSlot(1);
