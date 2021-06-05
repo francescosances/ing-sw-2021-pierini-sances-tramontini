@@ -87,7 +87,6 @@ class GameControllerTest {
         List<PlayerBoard> charts = playerControllerList.stream().map(PlayerController::getPlayerBoard).collect(Collectors.toList());
 
         for (ViewStub view: views) {
-            assertEquals("MATCH ENDED", view.popMessage());
             assertEquals(charts.toString(), view.popMessage());
         }
 
