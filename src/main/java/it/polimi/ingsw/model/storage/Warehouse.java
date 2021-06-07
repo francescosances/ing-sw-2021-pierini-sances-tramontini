@@ -256,7 +256,8 @@ public class Warehouse implements Storage, ObservableFromView {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Warehouse warehouse = (Warehouse) o;
-        return Objects.equals(depots, warehouse.depots) && Objects.equals(toBeStored, warehouse.toBeStored);
+
+        return depots.equals(warehouse.depots) && toBeStored.equals(warehouse.toBeStored);
     }
 
     /**

@@ -443,21 +443,53 @@ class PlayerControllerTest {
 
     @Test
     void askToStoreResource() throws IncompatibleDepotException {
-        Resource[] resources = new Resource[2];
+        Resource[] resources = new Resource[5];
         resources[0] = ResourceType.SERVANT;
-        resources[1] = ResourceType.SHIELD;
+        resources[1] = ResourceType.SERVANT;
+        resources[2] = ResourceType.SERVANT;
+        resources[3] = ResourceType.SHIELD;
+        resources[4] = ResourceType.SERVANT;
         playerController.getPlayerBoard().getWarehouse().toBeStored(resources);
+
         Warehouse warehouse = new Warehouse();
-        Resource[] resources1 = new Resource[1];
-        resources1[0] = ResourceType.SERVANT;
-        warehouse.toBeStored(resources1);
+        warehouse.toBeStored(resources);
+
         playerController.askToStoreResource();
+        warehouse.popResourceToBeStored();
+        assertEquals(resources[4], viewStub.popMessage());
+        assertEquals(warehouse, viewStub.popMessage());
+
+        playerController.storeResourceToWarehouse(1);
+        warehouse.addResources(1, ResourceType.SERVANT, 1);
+        warehouse.popResourceToBeStored();
+        assertEquals(resources[3], viewStub.popMessage());
+        assertEquals(warehouse, viewStub.popMessage());
+
+        playerController.storeResourceToWarehouse(1);
+        assertEquals("Resource Type not compatible with depot", viewStub.popMessage());
+        assertEquals(resources[3], viewStub.popMessage());
+        assertEquals(warehouse, viewStub.popMessage());
+
+        playerController.storeResourceToWarehouse(0);
+        warehouse.addResources(0, ResourceType.SHIELD, 1);
+        warehouse.popResourceToBeStored();
+        assertEquals(resources[2], viewStub.popMessage());
+        assertEquals(warehouse, viewStub.popMessage());
+
+        //Resource is discarded
+        playerController.storeResourceToWarehouse(4);
+        warehouse.popResourceToBeStored();
         assertEquals(resources[1], viewStub.popMessage());
         assertEquals(warehouse, viewStub.popMessage());
 
-        warehouse = new Warehouse();
-        warehouse.addResources(0, ResourceType.SHIELD, 1);
-        playerController.storeResourceToWarehouse(0);
+        playerController.storeResourceToWarehouse(1);
+        warehouse.addResources(1, ResourceType.SERVANT, 1);
+        warehouse.popResourceToBeStored();
+        assertEquals(resources[0], viewStub.popMessage());
+        assertEquals(warehouse, viewStub.popMessage());
+
+        playerController.storeResourceToWarehouse(1);
+        assertEquals("Depot is full", viewStub.popMessage());
         assertEquals(resources[0], viewStub.popMessage());
         assertEquals(warehouse, viewStub.popMessage());
     }

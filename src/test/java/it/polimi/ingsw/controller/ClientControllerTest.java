@@ -193,7 +193,7 @@ class ClientControllerTest {
     void resumeMatch() {
         PlayerBoard playerBoard = new PlayerBoard("TestUsername", new Match("TestMatch"));
         clientController.resumeMatch(playerBoard);
-        assertEquals(playerBoard.toString(), viewStub.popMessage());
+        assertEquals(playerBoard, viewStub.popMessage());
     }
 
     @Test

@@ -93,11 +93,13 @@ public class PlayerController {
         setAfterDepotsSwapAction(this::askForAction);
     }
 
+    /*
     public PlayerController(String username,PlayerBoard playerBoard){
         this.username = username;
         this.playerBoard = playerBoard;
         this.active = false;
     }
+    */
 
     /**
      * Mark the user as "online" and able to play
@@ -275,9 +277,7 @@ public class PlayerController {
         } catch (Exception e){
             view.showErrorMessage(e.getMessage());
         } finally {
-            for (PlayerStatusListener x : this.observers) {
-                x.onPlayerStatusChanged(this);
-            }
+            notifyPlayerStatusListeners();
         }
     }
 

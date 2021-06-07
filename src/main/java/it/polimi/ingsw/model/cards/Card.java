@@ -10,7 +10,7 @@ public abstract class Card {
     /**
      * The name associated to the card
      */
-    private String cardName;
+    private final String cardName;
 
     Card(int victoryPoints,String cardName){
         this.victoryPoints = victoryPoints;
