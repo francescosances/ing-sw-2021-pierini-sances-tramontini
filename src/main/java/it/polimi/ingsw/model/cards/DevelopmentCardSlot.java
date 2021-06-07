@@ -92,7 +92,7 @@ public class DevelopmentCardSlot implements Iterable<DevelopmentCard> {
 
     /**
      * Returns the sum of the victory points of the cards in the slot
-     * @returnthe sum of the victory points of the cards in the slot
+     * @return the sum of the victory points of the cards in the slot
      */
     public int getVictoryPoints(){
         return developmentCards.stream()

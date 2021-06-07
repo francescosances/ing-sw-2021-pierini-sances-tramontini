@@ -9,19 +9,18 @@ import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 class ViewStub implements View {
     
-    List<String> messages;
+    List<Object> messages;
 
     public ViewStub() {
         messages = new ArrayList<>();
     }
 
-    public String popMessage() {
+    public Object popMessage() {
         return messages.remove(0);
     }
 
@@ -41,12 +40,12 @@ class ViewStub implements View {
 
     @Override
     public void listLobbies(List<Triple<String, Integer, Integer>> availableLobbies) {
-        messages.add(availableLobbies.toString());
+        messages.add(availableLobbies);
     }
 
     @Override
     public void resumeMatch(PlayerBoard playerBoard) {
-        messages.add(playerBoard.toString());
+        messages.add(playerBoard);
     }
 
     @Override
@@ -54,9 +53,7 @@ class ViewStub implements View {
     }
 
     @Override
-    public void askLogin() {
-        messages.add("a");
-    }
+    public void askLogin() {}
 
     @Override
     public void waitForOtherPlayers() {
@@ -74,118 +71,124 @@ class ViewStub implements View {
 
     @Override
     public void listLeaderCards(List<LeaderCard> leaderCardList, int cardsToChoose) {
-        messages.add(leaderCardList.toString() + cardsToChoose);
+        messages.add(leaderCardList);
+        messages.add(cardsToChoose);
     }
 
     @Override
     public void showPlayerLeaderCards(List<LeaderCard> leaderCardList) {
-        messages.add(leaderCardList.toString());
+        messages.add(leaderCardList);
     }
 
     @Override
     public void showLeaderCards(List<LeaderCard> leaderCards) {
-        messages.add(leaderCards.toString());
+        messages.add(leaderCards);
     }
 
     @Override
     public void showDevelopmentCardSlots(DevelopmentCardSlot[] developmentCardSlots) {
-        messages.add(Arrays.toString(developmentCardSlots));
+        messages.add(developmentCardSlots);
     }
 
     @Override
     public void listDevelopmentCards(List<Deck<DevelopmentCard>> developmentCardList, int cardsToChoose, PlayerBoard userBoard) {
-        messages.add(developmentCardList.toString() + cardsToChoose + userBoard);
+        messages.add(developmentCardList);
+        messages.add(cardsToChoose);
+        messages.add(userBoard);
     }
 
     @Override
     public void showPlayerBoard(PlayerBoard playerBoard) {
-        messages.add(playerBoard.toString());
+        messages.add(playerBoard);
     }
 
     @Override
     public void showFaithTrack(FaithTrack faithTrack) {
-        messages.add(faithTrack.toString());
+        messages.add(faithTrack);
 
     }
 
     @Override
     public void showVaticanReportTriggered(String username, int vaticanReportCount) {
-        messages.add(username + vaticanReportCount);
+        messages.add(username);
+        messages.add(vaticanReportCount);
     }
 
     @Override
     public void showWarehouse(Warehouse warehouse) {
-        messages.add(warehouse.toString());
+        messages.add(warehouse);
 
     }
 
     @Override
     public void showStrongbox(Strongbox strongbox) {
-        messages.add(strongbox.toString());
+        messages.add(strongbox);
 
     }
 
     @Override
     public void askToSwapDepots(Warehouse warehouse) {
-        messages.add(warehouse.toString());
+        messages.add(warehouse);
 
     }
 
     @Override
     public void askForAction(List<String> usernames, Action... availableActions) {
-        messages.add(usernames.toString()
-                + Arrays.toString(availableActions));
+        messages.add(usernames);
+        messages.add(availableActions);
     }
 
     @Override
     public void takeResourcesFromMarket(Market market) {
-        messages.add(market.toString());
+        messages.add(market);
 
     }
 
     @Override
     public void showMarket(Market market) {
-        messages.add(market.toString());
+        messages.add(market);
 
     }
 
     @Override
     public void showResourcesGainedFromMarket(Resource[] resources) {
-        messages.add(Arrays.toString(resources));
+        messages.add(resources);
 
     }
 
     @Override
     public void askToStoreResource(Resource resource, Warehouse warehouse) {
-        messages.add(resource.toString() + warehouse.toString());
-
+        messages.add(resource);
+        messages.add(warehouse);
     }
 
     @Override
     public void chooseWhiteMarbleConversion(LeaderCard leaderCard, LeaderCard leaderCard1) {
-        messages.add(leaderCard.toString() + leaderCard1.toString());
-
+        messages.add(leaderCard);
+        messages.add(leaderCard1);
     }
 
     @Override
     public void askToChooseDevelopmentCardSlot(DevelopmentCardSlot[] slots, DevelopmentCard developmentCard) {
-        messages.add(Arrays.toString(slots) + developmentCard.toString());
+        messages.add(slots);
+        messages.add(developmentCard);
 
     }
 
     @Override
     public void chooseProductions(List<Producer> availableProductions, PlayerBoard playerBoard) {
-        messages.add(availableProductions.toString() + playerBoard.toString());
+        messages.add(availableProductions);
+        messages.add(playerBoard);
     }
 
     @Override
     public void askToChooseProductionCosts(Requirements requirements) {
-        messages.add(requirements.toString());
+        messages.add(requirements);
     }
 
     @Override
     public void askToChooseProductionGains(Requirements requirements) {
-        messages.add(requirements.toString());
+        messages.add(requirements);
     }
 
     @Override
@@ -196,17 +199,18 @@ class ViewStub implements View {
 
     @Override
     public void askToChooseStartResources(Resource[] values, int resourcesToChoose) {
-        messages.add(Arrays.toString(values) + resourcesToChoose);
+        messages.add(values);
+        messages.add(resourcesToChoose);
     }
 
     @Override
     public void showPlayers(Map<String, Boolean> users) {
-        messages.add(users.toString());
+        messages.add(users);
     }
 
     @Override
     public void showActionToken(ActionToken actionToken) {
-        messages.add(actionToken.toString());
+        messages.add(actionToken);
 
     }
 
@@ -225,7 +229,7 @@ class ViewStub implements View {
 
     @Override
     public void showCharts(List<PlayerBoard> playerList) {
-        messages.add(playerList.toString());
+        messages.add(playerList);
     }
 
     @Override

@@ -29,7 +29,6 @@ class GameControllerTest {
     List<PlayerController> playerControllerList;
     List<ViewStub> views;
 
-    @BeforeEach
     void setUp() {
         setUp(2);
     }
@@ -47,6 +46,10 @@ class GameControllerTest {
 
     @AfterEach
     void tearDown() {
+        for (PlayerController playerController : playerControllerList) {
+            ViewStub viewStub = (ViewStub) playerController.getView();
+            viewStub.isEmpty();
+        }
         gameController = null;
         playerControllerList = null;
         views = null;
@@ -54,17 +57,24 @@ class GameControllerTest {
 
     @Test
     void addPlayers() {
-        tearDown();
         gameController = new GameController("TestMatch", 2, new FakeStatusObserver());
         gameController.addPlayer("TestPlayer0", null);
         assertFalse(gameController.isFull());
         gameController.addPlayer("TestPlayer1", null);
         assertTrue(gameController.isFull());
+
+        //In order to avoid tearDown() Exception
+        playerControllerList = new ArrayList<>();
+        views = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            views.add(new ViewStub());
+            playerControllerList.add(gameController.addPlayer("TestPlayer" + i, null, false));
+            playerControllerList.get(i).setView(views.get(i));
+        }
     }
 
     @Test
     void endGame() {
-        tearDown();
         setUp(4);
 
         gameController.getMatch().setCurrentPlayerIndex(0);
@@ -87,16 +97,18 @@ class GameControllerTest {
         List<PlayerBoard> charts = playerControllerList.stream().map(PlayerController::getPlayerBoard).collect(Collectors.toList());
 
         for (ViewStub view: views) {
-            assertEquals(charts.toString(), view.popMessage());
+            assertEquals(charts, view.popMessage());
         }
 
     }
 
     @Test
     void start() {
+        setUp();
     }
 
     @Test
     void leaderCardsChoice() {
+        setUp();
     }
 }
