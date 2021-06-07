@@ -485,7 +485,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      */
     private void updateProduction(){
         for (View view:views)
-            view.showProducerUser();
+            view.showProducerUser(this);
     }
 
 

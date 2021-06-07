@@ -223,8 +223,9 @@ public interface View {
 
     /**
      * Notifies the player of the production started
+     * @param playerBoard
      */
-    void showProducerUser();
+    void showProducerUser(PlayerBoard playerBoard);
 
     /**
      * Notifies the user the current player has performed his main action

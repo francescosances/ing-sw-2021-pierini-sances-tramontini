@@ -201,8 +201,6 @@ public class PlayerboardSceneController extends Controller{
             disableControls();
             selectUser.setDisable(true);
             clientController.performAction(Action.ACTIVATE_PRODUCTION);
-        }else{
-            chooseResourcesForProduction();
         }
     }
 
@@ -447,19 +445,29 @@ public class PlayerboardSceneController extends Controller{
     private void addListenerToProducer(ImageView imageView, Producer producer){
         imageView.setDisable(false);
         imageView.setOnMouseClicked((e)->{
-            if(clientController.getSelectedProducers().contains(producer)){
-                clientController.getSelectedProducers().remove(producer);
+            List<Producer> availableProducers = clientController.getAvailableProducers();
+            Integer i;
+            for (i = 0; i < availableProducers.size(); i++) {
+                Producer tempProducer = availableProducers.get(i);//TODO: questa parte non funziona
+                if (tempProducer.equals(producer))
+                    break;
+            }
+            if(i == clientController.getAvailableProducers().size()){
+                clientController.getSelectedProducers().remove(i);
                 imageView.getStyleClass().remove("selected");
             }else{
-                clientController.getSelectedProducers().add(producer);
+                clientController.getSelectedProducers().add(i);
                 imageView.getStyleClass().add("selected");
             }
+            System.out.println("aggiorno selected producers");
+            System.out.println(availableProducers);
             startProductionBtn.setDisable(clientController.getSelectedProducers().isEmpty());
         });
     }
 
     public void askProductionsToStart(List<Producer> availableProductions) {
         selectUser.setDisable(true);
+        clientController.setAvailableProducers(availableProductions);
         clientController.setSelectedProducers(new ArrayList<>());
 
         marketBtn.setVisible(false);
@@ -521,6 +529,10 @@ public class PlayerboardSceneController extends Controller{
 
         ImageView[] leaderCardsImg = {leadercard0,leadercard1};
 
+        startProductionBtn.setOnAction((e)->{
+            startProduction();
+        });
+
         int index = 0;
         for(LeaderCard leaderCard:playerBoard.getLeaderCards()){
             if(leaderCard.isActive() && leaderCard.isProductionLeaderCard()){
@@ -547,8 +559,6 @@ public class PlayerboardSceneController extends Controller{
         }
     }
 
-    private void chooseResourcesForProduction() {
-    }
 
     public void chooseDevelopmentCardSlot(DevelopmentCardSlot[] slots, DevelopmentCard developmentCard) {
         disableControls();

@@ -520,7 +520,7 @@ public class CLI implements View {
     }
 
     @Override
-    public void showProducerUser() {
+    public void showProducerUser(PlayerBoard playerBoard) {
         output.println("\n" + currentActiveUser + " decided to produce");
     }
 
