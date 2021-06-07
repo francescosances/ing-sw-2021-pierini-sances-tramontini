@@ -530,7 +530,6 @@ public class CLI implements View {
 
     @Override
     public void showEndGameTriggered() {
-        outputLock.lock();
         output.println("\n"+ currentActiveUser+" has played " +getPronoun() + "last turn!");
     }
 
