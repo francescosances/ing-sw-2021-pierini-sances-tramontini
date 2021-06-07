@@ -577,8 +577,7 @@ public class PlayerController {
      */
     public void showPlayerBoard(PlayerBoard playerBoard){
         this.view.showPlayerBoard(playerBoard);
-        for (PlayerStatusListener x : this.observers)
-            x.onPlayerStatusChanged(this);
+        notifyPlayerStatusListeners();
     }
 
     /**
@@ -623,10 +622,12 @@ public class PlayerController {
             playerBoard.produce(choices, costs, gains);
         } catch (IndexOutOfBoundsException e) {
             view.showErrorMessage("You cannot activate these productions");
-            askForNormalAction();
+            view.chooseProductions(playerBoard.getAvailableProductions(),playerBoard);
+            return;
         } catch (NotSatisfiedRequirementsException e){
             view.showErrorMessage(e.getMessage());
-            askForNormalAction();
+            view.chooseProductions(playerBoard.getAvailableProductions(),playerBoard);
+            return;
         }
         nextStatus();
     }

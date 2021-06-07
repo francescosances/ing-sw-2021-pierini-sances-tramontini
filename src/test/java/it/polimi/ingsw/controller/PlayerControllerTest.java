@@ -7,6 +7,8 @@ import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
+import it.polimi.ingsw.serialization.Serializer;
+import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.VirtualView;
@@ -346,11 +348,6 @@ class PlayerControllerTest {
     }
 
     @Test
-    void endGame() {
-        //TODO
-    }
-
-    @Test
     void swapDepots() throws IncompatibleDepotException {
         playerController.getPlayerBoard().getWarehouse().addResources(0, ResourceType.COIN, 1);
         playerController.getPlayerBoard().getWarehouse().addResources(2, ResourceType.STONE, 1);
@@ -543,6 +540,35 @@ class PlayerControllerTest {
 
     @Test
     void chooseProductions() {
-        //TODO
+        List<Integer> intList = new ArrayList<>();
+        intList.add(0);
+        intList.add(2);
+        DevelopmentCard developmentCard = new DevelopmentCard("",1, new Requirements(new Pair<>(ResourceType.SHIELD, 0)), 1, DevelopmentColorType.GREEN, new Requirements(new Pair<>(ResourceType.COIN, 1)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1));
+        DevelopmentCard developmentCard1 = new DevelopmentCard("",1, new Requirements(new Pair<>(ResourceType.SHIELD, 0)), 1, DevelopmentColorType.BLUE, new Requirements(new Pair<>(ResourceType.SERVANT, 1)), new Pair<>(ResourceType.SHIELD, 1), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1));
+        playerController.getPlayerBoard().addDevelopmentCardToSlot(developmentCard, 0);
+        playerController.getPlayerBoard().addDevelopmentCardToSlot(developmentCard1, 1);
+        Requirements onDemandCost = new Requirements();
+        onDemandCost.addResourceRequirement(ResourceType.SERVANT, 2);
+        Requirements onDemandGains = new Requirements();
+        onDemandGains.addResourceRequirement(ResourceType.SHIELD, 1);
+        playerController.chooseProductions(intList, onDemandCost, onDemandGains);
+        assertEquals("Costs not satisfied", viewStub.popMessage());
+
+        assertEquals(playerController.getPlayerBoard().getAvailableProductions(), viewStub.popMessage());
+        assertEquals(playerController.getPlayerBoard(), viewStub.popMessage());
+        playerController.chooseProductions(intList, onDemandGains, onDemandCost);
+        assertEquals("Wrong on demand choices", viewStub.popMessage());
+
+        assertEquals(playerController.getPlayerBoard().getAvailableProductions(), viewStub.popMessage());
+        assertEquals(playerController.getPlayerBoard(), viewStub.popMessage());
+        for (int i = 0; i < 3; i++)
+            playerController.getPlayerBoard().getStrongbox().addResource(ResourceType.SERVANT);
+        playerController.chooseProductions(intList, onDemandCost, onDemandGains);
+
+        assertEquals(0, playerController.getPlayerBoard().getAllResources().getResources(ResourceType.SERVANT));
+        assertEquals(0, playerController.getPlayerBoard().getAllResources().getResources(ResourceType.COIN));
+        assertEquals(2, playerController.getPlayerBoard().getAllResources().getResources(ResourceType.SHIELD));
+        assertEquals(0, playerController.getPlayerBoard().getAllResources().getResources(ResourceType.STONE));
+        assertEquals(1, playerController.getPlayerBoard().getFaithTrack().getFaithMarker());
     }
 }

@@ -352,7 +352,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      */
     public void payResources(Requirements costs) {
         costs = warehouse.removeResources(costs);
-        if (costs.getResourcesMap().isEmpty())
+        if (!costs.getResourcesMap().isEmpty())
             strongbox.removeResources(costs);
     }
 
