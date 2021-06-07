@@ -47,7 +47,7 @@ public class CLI implements View {
     /**
      * The username of the player currently playing
      */
-    private String currentActiveUser;
+    private String currentActiveUser;//TODO: va spostato su clientcontroller
     /**
      * Helps granting optimal visualization to different screen
      */
