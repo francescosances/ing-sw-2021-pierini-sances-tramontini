@@ -157,7 +157,7 @@ public class VirtualView implements View {
     @Override
     public void showVaticanReportTriggered(String username, int vaticanReportCount) {
         String name;
-        if (username.equals(this.username))//TODO: in caso di black cross compare comunque "you"
+        if (username.equals(this.username))
             name = Match.YOU_STRING;
         else
             name = username;

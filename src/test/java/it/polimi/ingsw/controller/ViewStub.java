@@ -25,6 +25,10 @@ class ViewStub implements View {
         return messages.remove(0);
     }
 
+    public boolean isEmpty(){
+        return messages.isEmpty();
+    }
+
     @Override
     public void showMessage(String message) {
         messages.add(message);
@@ -90,13 +94,12 @@ class ViewStub implements View {
 
     @Override
     public void listDevelopmentCards(List<Deck<DevelopmentCard>> developmentCardList, int cardsToChoose, PlayerBoard userBoard) {
-
+        messages.add(developmentCardList.toString() + cardsToChoose + userBoard);
     }
 
     @Override
     public void showPlayerBoard(PlayerBoard playerBoard) {
         messages.add(playerBoard.toString());
-
     }
 
     @Override
@@ -177,12 +180,12 @@ class ViewStub implements View {
 
     @Override
     public void askToChooseProductionCosts(Requirements requirements) {
-
+        messages.add(requirements.toString());
     }
 
     @Override
     public void askToChooseProductionGains(Requirements requirements) {
-
+        messages.add(requirements.toString());
     }
 
     @Override

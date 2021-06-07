@@ -373,7 +373,6 @@ public class PlayerController {
     /**
      * Shows all DevelopmentCards at the top of their Deck.
      */
-    //TODO: aggiungere controlli anche quando la carta viene selezionata
     private void listDevelopmentCardToBuy() {
         List<Deck<DevelopmentCard>> cards = getPlayerBoard().getMatch().getDevelopmentCardDecks();
         List<Deck<DevelopmentCard>> newCards = new ArrayList<>();
