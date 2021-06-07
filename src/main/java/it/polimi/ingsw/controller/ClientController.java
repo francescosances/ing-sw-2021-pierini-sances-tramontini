@@ -45,7 +45,11 @@ public class ClientController {
      */
     private final Lock lock;
 
-    private List<Producer> selectedProducers = new ArrayList<>();
+    private List<Integer> selectedProducers = new ArrayList<>();
+
+    private List<Producer> availableProducers = new ArrayList<>();
+
+    private Resource[] productionCosts;
 
     /**
      * Default empty constructor that initialize a new socket
@@ -222,7 +226,7 @@ public class ClientController {
                 break;
             case PRODUCTION_PERFORMED:
                 lock.lock();
-                view.showProducerUser();
+                view.showProducerUser(Serializer.deserializePlayerBoard(message.getData("playerboard")));
                 lock.unlock();
                 break;
             case ACTION_PERFORMED:
@@ -431,11 +435,12 @@ public class ClientController {
         selectedProducers = new ArrayList<>();
     }
 
-    public Pair<Requirements,Requirements> calculateRequirements(List<Producer> producers){
+    public Pair<Requirements,Requirements> calculateRequirements(List<Integer> producers){
         Requirements onDemandCosts = new Requirements();
         Requirements onDemandGains = new Requirements();
 
-        for(Producer producer:producers) {
+        for(Integer index:producers) {
+            Producer producer = availableProducers.get(index);
             onDemandCosts.addResourceRequirement(NonPhysicalResourceType.ON_DEMAND, producer.getProductionCost().getResources(NonPhysicalResourceType.ON_DEMAND));
             onDemandGains.addResourceRequirement(NonPhysicalResourceType.ON_DEMAND, producer.getProductionGain().getResources(NonPhysicalResourceType.ON_DEMAND));
         }
@@ -547,11 +552,27 @@ public class ClientController {
         clientSocket.sendMessage(message);
     }
 
-    public List<Producer> getSelectedProducers() {
+    public List<Integer> getSelectedProducers() {
         return selectedProducers;
     }
 
-    public void setSelectedProducers(ArrayList<Producer> producers) {
+    public void setSelectedProducers(ArrayList<Integer> producers) {
         this.selectedProducers = producers;
+    }
+
+    public List<Producer> getAvailableProducers() {
+        return availableProducers;
+    }
+
+    public void setAvailableProducers(List<Producer> producers) {
+        this.availableProducers = producers;
+    }
+
+    public void setProductionCosts(Resource[] resources) {
+        this.productionCosts = resources;
+    }
+
+    public Resource[] getProductionCosts() {
+        return productionCosts;
     }
 }

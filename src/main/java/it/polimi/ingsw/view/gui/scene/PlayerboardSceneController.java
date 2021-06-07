@@ -6,6 +6,8 @@ import it.polimi.ingsw.model.storage.*;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -121,42 +123,40 @@ public class PlayerboardSceneController extends Controller{
 
     private void leaderCardClicked(int cardIndex){
         Dialog<String> dialog = new Dialog<>();
+
         dialog.setTitle("Choose action");
 
         Pane pane = new Pane();
 
-        pane.setMinWidth(300);
-        pane.setMinHeight(200);
+        VBox vBox = new VBox();
+        vBox.setPadding(new Insets(10,10,10,10));
+        vBox.setSpacing(10);
 
-        VBox vbox = new VBox();
-
-        Button activate = new Button();
-        activate.setBackground(new Background(new BackgroundImage(new Image("/images/buttons/activate.png"),
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
-                BackgroundSize.DEFAULT)));
-        activate.setOnAction((e)->{
+        ImageView activate = new ImageView("/images/buttons/activate.png");
+        activate.setCursor(Cursor.HAND);
+        activate.setPreserveRatio(true);
+        activate.setFitWidth(250);
+        activate.setOnMouseClicked((e)->{
             dialog.setResult("activate");
             dialog.close();
         });
-        vbox.getChildren().add(activate);
+        vBox.getChildren().add(activate);
 
-        Button discard = new Button();
-        discard.setPrefWidth(250);
-        discard.setPrefHeight(50);
-        discard.setBackground(new Background(new BackgroundImage(new Image("/images/buttons/discard.png"),
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-                BackgroundSize.DEFAULT)));
-        discard.setOnAction((e)->{
+        ImageView discard = new ImageView("/images/buttons/discard.png");
+        discard.setPreserveRatio(true);
+        discard.setCursor(Cursor.HAND);
+        discard.setFitWidth(250);
+        discard.setOnMouseClicked((e)->{
             dialog.setResult("discard");
             dialog.close();
         });
-        vbox.getChildren().add(discard);
+        vBox.getChildren().add(discard);
 
-        pane.getChildren().add(vbox);
+        pane.getChildren().add(vBox);
         dialog.getDialogPane().setContent(pane);
 
-        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-        Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+        Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CANCEL);
         closeButton.managedProperty().bind(closeButton.visibleProperty());
 
         Optional result = dialog.showAndWait();
@@ -201,8 +201,6 @@ public class PlayerboardSceneController extends Controller{
             disableControls();
             selectUser.setDisable(true);
             clientController.performAction(Action.ACTIVATE_PRODUCTION);
-        }else{
-            chooseResourcesForProduction();
         }
     }
 
@@ -447,19 +445,29 @@ public class PlayerboardSceneController extends Controller{
     private void addListenerToProducer(ImageView imageView, Producer producer){
         imageView.setDisable(false);
         imageView.setOnMouseClicked((e)->{
-            if(clientController.getSelectedProducers().contains(producer)){
-                clientController.getSelectedProducers().remove(producer);
+            List<Producer> availableProducers = clientController.getAvailableProducers();
+            Integer i;
+            for (i = 0; i < availableProducers.size(); i++) {
+                Producer tempProducer = availableProducers.get(i);//TODO: questa parte non funziona
+                if (tempProducer.equals(producer))
+                    break;
+            }
+            if(i == clientController.getAvailableProducers().size()){
+                clientController.getSelectedProducers().remove(i);
                 imageView.getStyleClass().remove("selected");
             }else{
-                clientController.getSelectedProducers().add(producer);
+                clientController.getSelectedProducers().add(i);
                 imageView.getStyleClass().add("selected");
             }
+            System.out.println("aggiorno selected producers");
+            System.out.println(availableProducers);
             startProductionBtn.setDisable(clientController.getSelectedProducers().isEmpty());
         });
     }
 
     public void askProductionsToStart(List<Producer> availableProductions) {
         selectUser.setDisable(true);
+        clientController.setAvailableProducers(availableProductions);
         clientController.setSelectedProducers(new ArrayList<>());
 
         marketBtn.setVisible(false);
@@ -521,6 +529,10 @@ public class PlayerboardSceneController extends Controller{
 
         ImageView[] leaderCardsImg = {leadercard0,leadercard1};
 
+        startProductionBtn.setOnAction((e)->{
+            startProduction();
+        });
+
         int index = 0;
         for(LeaderCard leaderCard:playerBoard.getLeaderCards()){
             if(leaderCard.isActive() && leaderCard.isProductionLeaderCard()){
@@ -547,8 +559,6 @@ public class PlayerboardSceneController extends Controller{
         }
     }
 
-    private void chooseResourcesForProduction() {
-    }
 
     public void chooseDevelopmentCardSlot(DevelopmentCardSlot[] slots, DevelopmentCard developmentCard) {
         disableControls();

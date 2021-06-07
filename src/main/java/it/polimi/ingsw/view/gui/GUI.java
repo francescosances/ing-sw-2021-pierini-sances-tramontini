@@ -298,8 +298,7 @@ public class GUI implements View {
     @Override
     public void askToChooseProductionCosts(Requirements requirements) {
         Platform.runLater(()-> ((SelectResourcesController) loadScene("select_resources_scene",true)).initialize(requirements.getResources(NonPhysicalResourceType.ON_DEMAND),(resources)-> {
-            System.out.println("Risorse scelte cost");
-            System.out.println(resources);
+            clientController.setProductionCosts(resources);
             askToChooseProductionGains(clientController.calculateRequirements(clientController.getSelectedProducers()).snd);
         }));
     }
@@ -307,8 +306,17 @@ public class GUI implements View {
     @Override
     public void askToChooseProductionGains(Requirements requirements) {
         Platform.runLater(()-> ((SelectResourcesController) loadScene("select_resources_scene",true)).initialize(requirements.getResources(NonPhysicalResourceType.ON_DEMAND),(resources)-> {
-            System.out.println("Risorse scelte gain");
-            System.out.println(resources);
+            Map<Resource,Integer> costsMap = new HashMap<>();
+            for(Resource resource:clientController.getProductionCosts()){
+                costsMap.put(resource,costsMap.getOrDefault(resource,0)+1);
+            }
+            Map<Resource,Integer> gainsMap = new HashMap<>();
+            for(Resource resource:resources){
+                gainsMap.put(resource,gainsMap.getOrDefault(resource,0)+1);
+            }
+            System.out.println("Selected producers");
+            System.out.println(clientController.getSelectedProducers());
+            clientController.chooseProductions(clientController.getSelectedProducers(),new Requirements(costsMap),new Requirements(gainsMap));
         }));
     }
 
@@ -339,8 +347,8 @@ public class GUI implements View {
     }
 
     @Override
-    public void showProducerUser() {
-        //TODO
+    public void showProducerUser(PlayerBoard playerBoard) {
+        showPlayerBoard(playerBoard);
     }
 
     @Override
