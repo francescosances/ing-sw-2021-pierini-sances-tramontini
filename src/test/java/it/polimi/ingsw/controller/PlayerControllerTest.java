@@ -1,9 +1,6 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.model.Action;
-import it.polimi.ingsw.model.MarbleType;
-import it.polimi.ingsw.model.Market;
-import it.polimi.ingsw.model.Match;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
 import it.polimi.ingsw.model.storage.Resource;
@@ -68,8 +65,9 @@ class PlayerControllerTest {
             playerController.activate();
             playerController.buyDevelopmentCard(developmentCard);
             playerController.deactivate();
-            assertEquals(Arrays.toString(developmentCardSlots) + developmentCard, viewStub.popMessage());
             developmentCardSlots[i].addCard(developmentCard);
+            assertArrayEquals(developmentCardSlots, (DevelopmentCardSlot[]) viewStub.popMessage());
+            assertEquals(developmentCard, viewStub.popMessage());
             assertEquals(developmentCard, playerController.getPlayerBoard().getDevelopmentCardSlots()[i].getTopCard());
         }
     }
@@ -92,22 +90,23 @@ class PlayerControllerTest {
 
     @Test
     void setup() {
-        String expectedMessage;
         for (int i = 0; i < 4; i++) {
             playerController.setPlayerIndex(i);
             if (i == 0) {
                 List<LeaderCard> leaderCardList = new ArrayList<>();
                 for (int j = 0; j < 4; j++)
                     leaderCardList.add(playerController.getPlayerBoard().getMatch().getLeaderCards().get(j));
-                expectedMessage = leaderCardList.toString() + 2;
+                playerController.setup();
+                assertEquals(leaderCardList, viewStub.popMessage());
+                assertEquals(2, viewStub.popMessage());
             } else {
                 int num = 1;
                 if (i == 3)
                     num = 2;
-                expectedMessage = "[COIN, SERVANT, SHIELD, STONE]" + num;
+                playerController.setup();
+                assertArrayEquals(ResourceType.values(), (ResourceType[])viewStub.popMessage());
+                assertEquals(num, viewStub.popMessage());
             }
-            playerController.setup();
-            assertEquals(expectedMessage, viewStub.popMessage());
             assertEquals(i / 2, playerController.getPlayerBoard().getFaithTrack().getFaithMarker());
             tearDown();
             setUp();
@@ -131,7 +130,8 @@ class PlayerControllerTest {
         for (int j = 0; j < 4; j++)
             leaderCardList.add(playerController.getPlayerBoard().getMatch().getLeaderCards().get(j));
         playerController.listLeaderCards();
-        assertEquals(leaderCardList.toString() + 2,viewStub.popMessage());
+        assertEquals(leaderCardList,viewStub.popMessage());
+        assertEquals(2,viewStub.popMessage());
         leaderCardList.subList(0, 2).clear();
         playerController.chooseLeaderCards(leaderCardList.get(0), leaderCardList.get(1));
         assertEquals(leaderCardList.get(0), playerController.getPlayerBoard().getLeaderCards().get(0));
@@ -180,7 +180,8 @@ class PlayerControllerTest {
         }
         assertTrue(bool);
 
-        assertEquals(leaderCardList.toString() + 2, viewStub.popMessage());
+        assertEquals(leaderCardList, viewStub.popMessage());
+        assertEquals(2, viewStub.popMessage());
 
         tearDown();
         setUp();
@@ -192,13 +193,15 @@ class PlayerControllerTest {
             leaderCardList.add(playerController.getPlayerBoard().getMatch().getLeaderCards().get(j));
 
         playerController.setup();
-        assertEquals("[COIN, SERVANT, SHIELD, STONE]" + 1, viewStub.popMessage());
+        assertArrayEquals(ResourceType.values(), (ResourceType[]) viewStub.popMessage());
+        assertEquals(1, viewStub.popMessage());
 
         playerController.chooseStartResources(resources);
         assertEquals(ResourceType.COIN, playerController.getPlayerBoard().getWarehouse().getDepots().get(2).getResourceType());
         assertEquals(1, playerController.getPlayerBoard().getWarehouse().getDepots().get(2).getOccupied());
 
-        assertEquals(leaderCardList.toString() + 2, viewStub.popMessage());
+        assertEquals(leaderCardList, viewStub.popMessage());
+        assertEquals(2, viewStub.popMessage());
 
         tearDown();
         setUp();
@@ -210,7 +213,8 @@ class PlayerControllerTest {
         playerController.setPlayerIndex(3);
 
         playerController.setup();
-        assertEquals("[COIN, SERVANT, SHIELD, STONE]" + 2, viewStub.popMessage());
+        assertArrayEquals(ResourceType.values(), (ResourceType[]) viewStub.popMessage());
+        assertEquals(2, viewStub.popMessage());
 
         leaderCardList = new ArrayList<>();
         for (int j = 0; j < 4; j++)
@@ -221,47 +225,52 @@ class PlayerControllerTest {
         assertEquals(1, playerController.getPlayerBoard().getWarehouse().getDepots().get(2).getOccupied());
         assertEquals(ResourceType.STONE, playerController.getPlayerBoard().getWarehouse().getDepots().get(1).getResourceType());
         assertEquals(1, playerController.getPlayerBoard().getWarehouse().getDepots().get(1).getOccupied());
-        assertEquals(leaderCardList.toString() + 2, viewStub.popMessage());
+        assertEquals(leaderCardList, viewStub.popMessage());
+        assertEquals(2, viewStub.popMessage());
     }
 
     @Test
     void askForAction() {
         playerController.askForAction();
-        assertEquals(askForActionNoLeadersFormat(), viewStub.popMessage());
+        assertEquals(playerController.getPlayerBoard().getMatch().getPlayers().stream().map(PlayerBoard::getUsername).collect(Collectors.toList()), viewStub.popMessage());
+        assertArrayEquals(askForActionNoLeadersFormat(), (Action[]) viewStub.popMessage());
         LeaderCard leaderCard = new DepotLeaderCard("",3,new Requirements(new Pair<>(ResourceType.COIN, 1)),ResourceType.SHIELD);
         playerController.getPlayerBoard().getLeaderCards().add(leaderCard);
         playerController.askForAction();
-        assertEquals(askForActionSomeLeadersFormat(), viewStub.popMessage());
+        assertEquals(playerController.getPlayerBoard().getMatch().getPlayers().stream().map(PlayerBoard::getUsername).collect(Collectors.toList()), viewStub.popMessage());
+        assertArrayEquals(askForActionSomeLeadersFormat(), (Action[])viewStub.popMessage());
     }
 
-    private String askForActionNoLeadersFormat(){
-        return playerController.getPlayerBoard().getMatch().getPlayers().stream().map(p->p.getUsername()).collect(Collectors.toList())
-                + Arrays.toString(Arrays.stream(Action.ALL_ACTIONS).filter(x -> !((x == Action.PLAY_LEADER))).toArray());
+    private Action[] askForActionNoLeadersFormat(){
+        return Arrays.stream(Action.ALL_ACTIONS)
+                .filter(x -> x != Action.CANCEL)
+                .filter(x -> !((x == Action.PLAY_LEADER)))
+                        .toArray(Action[]::new);
     }
 
-    private String askForActionSomeLeadersFormat(){
-        return playerController.getPlayerBoard().getMatch().getPlayers().stream().map(p->p.getUsername()).collect(Collectors.toList())
-                + Arrays.toString(Action.ALL_ACTIONS);
+    private Action[] askForActionSomeLeadersFormat(){
+        return Action.ALL_ACTIONS;
     }
 
     @Test
     void askForNormalAction() {
         playerController.askForNormalAction();
-        assertEquals(askForNormalActionNoLeadersFormat(), viewStub.popMessage());
+        assertEquals(playerController.getPlayerBoard().getMatch().getPlayers().stream().map(PlayerBoard::getUsername).collect(Collectors.toList()), viewStub.popMessage());
+        assertArrayEquals(askForNormalActionNoLeadersFormat(), (Action[]) viewStub.popMessage());
+
         LeaderCard leaderCard = new DepotLeaderCard("",3,new Requirements(new Pair<>(ResourceType.COIN, 1)),ResourceType.SHIELD);
         playerController.getPlayerBoard().getLeaderCards().add(leaderCard);
         playerController.askForNormalAction();
-        assertEquals(askForNormalActionSomeLeadersFormat(), viewStub.popMessage());
+        assertEquals(playerController.getPlayerBoard().getMatch().getPlayers().stream().map(PlayerBoard::getUsername).collect(Collectors.toList()), viewStub.popMessage());
+        assertArrayEquals(askForNormalActionSomeLeadersFormat(), (Action[]) viewStub.popMessage());
     }
 
-    private String askForNormalActionNoLeadersFormat(){
-        return playerController.getPlayerBoard().getMatch().getPlayers().stream().map(p->p.getUsername()).collect(Collectors.toList())
-                + Arrays.toString(Arrays.stream(Action.NORMAL_ACTIONS).filter(x -> !((x == Action.PLAY_LEADER))).toArray());
+    private Action[] askForNormalActionNoLeadersFormat(){
+        return Arrays.stream(Action.NORMAL_ACTIONS).filter(x -> !((x == Action.PLAY_LEADER))).toArray(Action[]::new);
     }
 
-    private String askForNormalActionSomeLeadersFormat(){
-        return playerController.getPlayerBoard().getMatch().getPlayers().stream().map(p->p.getUsername()).collect(Collectors.toList())
-                + Arrays.toString(Action.NORMAL_ACTIONS);
+    private Action[] askForNormalActionSomeLeadersFormat(){
+        return Action.NORMAL_ACTIONS;
     }
 
     @Test
@@ -273,24 +282,24 @@ class PlayerControllerTest {
     void listPlayableLeaderCards() {
         List<LeaderCard> leaderCardList = new ArrayList<>();
         playerController.performAction(Action.PLAY_LEADER);
-        assertEquals(leaderCardList.toString(), viewStub.popMessage());
+        assertEquals(leaderCardList, viewStub.popMessage());
 
         LeaderCard leaderCard = new DepotLeaderCard("",3,new Requirements(new Pair<>(ResourceType.COIN, 0)),ResourceType.SHIELD);
         leaderCardList.add(leaderCard);
         playerController.getPlayerBoard().getLeaderCards().add(leaderCard);
         playerController.performAction(Action.PLAY_LEADER);
-        assertEquals(leaderCardList.toString(), viewStub.popMessage());
+        assertEquals(leaderCardList, viewStub.popMessage());
 
         leaderCard = new DiscountLeaderCard("",2, new Requirements(new Triple<>(DevelopmentColorType.YELLOW, 1, 0)), ResourceType.SERVANT);
         leaderCardList.add(leaderCard);
         playerController.getPlayerBoard().getLeaderCards().add(leaderCard);
         playerController.performAction(Action.PLAY_LEADER);
-        assertEquals(leaderCardList.toString(), viewStub.popMessage());
+        assertEquals(leaderCardList, viewStub.popMessage());
 
         leaderCardList.remove(0);
         playerController.getPlayerBoard().getLeaderCards().get(0).activate(playerController.getPlayerBoard());
         playerController.performAction(Action.PLAY_LEADER);
-        assertEquals(leaderCardList.toString(), viewStub.popMessage());
+        assertEquals(leaderCardList, viewStub.popMessage());
     }
 
     @Test
@@ -301,57 +310,28 @@ class PlayerControllerTest {
         playerController.getPlayerBoard().getLeaderCards().add(leaderCard);
         playerController.getPlayerBoard().getLeaderCards().get(0).activate(playerController.getPlayerBoard());
         playerController.performAction(Action.MOVE_RESOURCES);
-        assertEquals(playerController.getPlayerBoard().getWarehouse().toString(), viewStub.popMessage());
+        assertEquals(playerController.getPlayerBoard().getWarehouse(), viewStub.popMessage());
     }
 
     @Test
     void takeResourcesFromMarket(){
         playerController.performAction(Action.TAKE_RESOURCES_FROM_MARKET);
-        assertEquals(playerController.getPlayerBoard().getMatch().getMarket().toString(), viewStub.popMessage());
+        assertEquals(playerController.getPlayerBoard().getMatch().getMarket(), viewStub.popMessage());
     }
 
     @Test
     void listDevelopmentCardToBuy(){
         playerController.performAction(Action.BUY_DEVELOPMENT_CARD);
-        String message = viewStub.popMessage();
-        message = adjustMessage(message); //comment this line if testing only this method
-        assertEquals(playerController.getPlayerBoard().getMatch().getDevelopmentCardDecks().toString()
-                + 1 + playerController.getPlayerBoard(), message);
-    }
-
-    private String adjustMessage(String message){
-        message = message.replace("cost = [1 STONE, 1 SERVANT, 1 SHIELD]", "cost = [1 SERVANT, 1 STONE, 1 SHIELD]");
-        message = message.replace("productionCost = [1 STONE, 1 SERVANT]", "productionCost = [1 SERVANT, 1 STONE]");
-        message = message.replace("productionCost = [1 COIN, 1 SERVANT]", "productionCost = [1 SERVANT, 1 COIN]");
-        message = message.replace("productionGain = [2 STONE, 1 FAITH_POINT, 2 SHIELD]", "productionGain = [1 FAITH_POINT, 2 STONE, 2 SHIELD]");
-        message = message.replace("cost = [1 STONE, 1 SERVANT, 1 COIN]", "cost = [1 SERVANT, 1 STONE, 1 COIN]");
-        message = message.replace("cost = [2 COIN, 2 SERVANT]", "cost = [2 SERVANT, 2 COIN]");
-        message = message.replace("productionGain = [1 FAITH_POINT, 2 SERVANT]", "productionGain = [2 SERVANT, 1 FAITH_POINT]");
-        message = message.replace("productionGain = [2 STONE, 2 SERVANT, 1 FAITH_POINT]", "productionGain = [2 SERVANT, 1 FAITH_POINT, 2 STONE]");
-        message = message.replace("productionCost = [1 COIN, 1 SERVANT]", "productionCost = [1 SERVANT, 1 COIN]");
-        message = message.replace("cost = [3 STONE, 3 SERVANT]", "cost = [3 SERVANT, 3 STONE]");
-        message = message.replace("productionGain = [2 FAITH_POINT, 2 SERVANT]", "productionGain = [2 SERVANT, 2 FAITH_POINT]");
-        message = message.replace("productionGain = [1 STONE, 1 SERVANT, 1 COIN]", "productionGain = [1 SERVANT, 1 STONE, 1 COIN]");
-        message = message.replace("cost = [5 STONE, 2 SERVANT]", "cost = [2 SERVANT, 5 STONE]");
-        message = message.replace("productionCost = [1 STONE, 1 SERVANT]", "productionCost = [1 SERVANT, 1 STONE]");
-        message = message.replace("productionGain = [3 FAITH_POINT, 1 SERVANT]", "productionGain = [1 SERVANT, 3 FAITH_POINT]");
-        message = message.replace("cost = [4 STONE, 4 SERVANT]", "cost = [4 SERVANT, 4 STONE]");
-        message = message.replace("productionGain = [1 STONE, 3 SERVANT]", "productionGain = [3 SERVANT, 1 STONE]");
-        message = message.replace("productionGain = [2 FAITH_POINT, 3 SERVANT]", "productionGain = [3 SERVANT, 2 FAITH_POINT]");
-        message = message.replace("productionGain = [1 STONE, 1 SERVANT, 1 SHIELD]","productionGain = [1 SERVANT, 1 STONE, 1 SHIELD]");
-        message = message.replace("cost = [2 STONE, 2 SERVANT]","cost = [2 SERVANT, 2 STONE]");
-        message = message.replace("productionGain = [1 FAITH_POINT, 2 SERVANT]","productionGain = [2 SERVANT, 1 FAITH_POINT]");
-        message = message.replace("cost = [2 COIN, 3 SERVANT]","cost = [3 SERVANT, 2 COIN]");
-        message = message.replace("productionCost = [1 COIN, 1 SERVANT]","productionCost = [1 SERVANT, 1 COIN]");
-        message = message.replace("productionGain = [3 STONE, 1 SERVANT]","productionGain = [1 SERVANT, 3 STONE]");
-        message = message.replace("cost = [2 COIN, 5 SERVANT]","cost = [5 SERVANT, 2 COIN]");
-        return message;
+        assertEquals(playerController.getPlayerBoard().getMatch().getDevelopmentCardDecks(), viewStub.popMessage());
+        assertEquals(1, viewStub.popMessage());
+        assertEquals(playerController.getPlayerBoard(), viewStub.popMessage());
     }
 
     @Test
     void performAction_activateProduction(){
         playerController.performAction(Action.ACTIVATE_PRODUCTION);
-        assertEquals(playerController.getPlayerBoard().getAvailableProductions().toString() + playerController.getPlayerBoard().toString(), viewStub.popMessage());
+        assertEquals(playerController.getPlayerBoard().getAvailableProductions(), viewStub.popMessage());
+        assertEquals(playerController.getPlayerBoard(), viewStub.popMessage());
     }
 
     @Test
@@ -375,11 +355,14 @@ class PlayerControllerTest {
         playerController.getPlayerBoard().getWarehouse().addResources(0, ResourceType.COIN, 1);
         playerController.getPlayerBoard().getWarehouse().addResources(2, ResourceType.STONE, 1);
         playerController.swapDepots(0, 2);
-        assertEquals(askForActionNoLeadersFormat(), viewStub.popMessage());
+        assertEquals(playerController.getPlayerBoard().getMatch().getPlayers().stream().map(PlayerBoard::getUsername).collect(Collectors.toList()), viewStub.popMessage());
+        assertArrayEquals(askForActionNoLeadersFormat(), (Action[]) viewStub.popMessage());
+
         playerController.getPlayerBoard().getWarehouse().addResources(2, ResourceType.COIN, 1);
         playerController.swapDepots(0, 2);
         assertEquals("Unable to swap selected depots", viewStub.popMessage());
-        assertEquals(askForActionNoLeadersFormat(), viewStub.popMessage());
+        assertEquals(playerController.getPlayerBoard().getMatch().getPlayers().stream().map(PlayerBoard::getUsername).collect(Collectors.toList()), viewStub.popMessage());
+        assertArrayEquals(askForActionNoLeadersFormat(), (Action[]) viewStub.popMessage());
     }
 
     @Test
@@ -399,7 +382,8 @@ class PlayerControllerTest {
         Warehouse warehouse = new Warehouse();
         warehouse.toBeStored(resources.subList(0, resources.size()-1).toArray(Resource[]::new));
         playerController.selectMarketRow(j-1);
-        assertEquals(resources.get(resources.size()-1).toString() + warehouse, viewStub.popMessage());
+        assertEquals(resources.get(resources.size()-1), viewStub.popMessage());
+        assertEquals(warehouse, viewStub.popMessage());
     }
 
     @Test
@@ -419,7 +403,8 @@ class PlayerControllerTest {
         Warehouse warehouse = new Warehouse();
         warehouse.toBeStored(resources.subList(0, resources.size()-1).toArray(Resource[]::new));
         playerController.selectMarketColumn(j-1);
-        assertEquals(resources.get(resources.size()-1).toString() + warehouse, viewStub.popMessage());
+        assertEquals(resources.get(resources.size()-1), viewStub.popMessage());
+        assertEquals(warehouse, viewStub.popMessage());
     }
 
     @Test
@@ -430,7 +415,8 @@ class PlayerControllerTest {
         resources[2] = ResourceType.COIN;
         playerController.askToStoreResourcesFromMarket(resources);
         assertEquals(1, playerController.getPlayerBoard().getFaithTrack().getFaithMarker());
-        assertEquals(ResourceType.COIN.toString() + playerController.getPlayerBoard().getWarehouse(), viewStub.popMessage());
+        assertEquals(ResourceType.COIN, viewStub.popMessage());
+        assertEquals(playerController.getPlayerBoard().getWarehouse(), viewStub.popMessage());
 
         tearDown();
         setUp();
@@ -441,7 +427,8 @@ class PlayerControllerTest {
         playerController.getPlayerBoard().getLeaderCards().add(leaderCard);
         Warehouse warehouse = new Warehouse();
         playerController.askToStoreResourcesFromMarket(resources);
-        assertEquals(leaderCard.getOutputResourceType().toString() + warehouse, viewStub.popMessage());
+        assertEquals(leaderCard.getOutputResourceType(), viewStub.popMessage());
+        assertEquals(warehouse, viewStub.popMessage());
 
         tearDown();
         setUp();
@@ -465,12 +452,14 @@ class PlayerControllerTest {
         resources1[0] = ResourceType.SERVANT;
         warehouse.toBeStored(resources1);
         playerController.askToStoreResource();
-        assertEquals(resources[1].toString() + warehouse, viewStub.popMessage());
+        assertEquals(resources[1], viewStub.popMessage());
+        assertEquals(warehouse, viewStub.popMessage());
 
         warehouse = new Warehouse();
         warehouse.addResources(0, ResourceType.SHIELD, 1);
         playerController.storeResourceToWarehouse(0);
-        assertEquals(resources[0].toString() + warehouse, viewStub.popMessage());
+        assertEquals(resources[0], viewStub.popMessage());
+        assertEquals(warehouse, viewStub.popMessage());
     }
 
     @Test
@@ -482,18 +471,20 @@ class PlayerControllerTest {
         playerController.getPlayerBoard().getLeaderCards().add(leaderCard);
         playerController.getPlayerBoard().getLeaderCards().add(leaderCard1);
         playerController.askToStoreResourcesFromMarket(resources);
-        assertEquals(leaderCard.toString() + leaderCard1, viewStub.popMessage());
+        assertEquals(leaderCard, viewStub.popMessage());
+        assertEquals(leaderCard1, viewStub.popMessage());
         playerController.chooseWhiteMarbleConversion(1);
-        assertEquals(leaderCard1.getOutputResourceType().toString() + playerController.getPlayerBoard().getWarehouse(), viewStub.popMessage());
+        assertEquals(leaderCard1.getOutputResourceType(), viewStub.popMessage());
+        assertEquals(playerController.getPlayerBoard().getWarehouse(), viewStub.popMessage());
     }
 
     @Test
     void showPlayerBoard() {
         playerController.showPlayerBoard();
-        assertEquals(playerController.getPlayerBoard().toString(), viewStub.popMessage());
+        assertEquals(playerController.getPlayerBoard(), viewStub.popMessage());
 
         playerController.showPlayerBoard(playerController.getPlayerBoard());
-        assertEquals(playerController.getPlayerBoard().toString(), viewStub.popMessage());
+        assertEquals(playerController.getPlayerBoard(), viewStub.popMessage());
     }
 
     @Test
@@ -501,7 +492,8 @@ class PlayerControllerTest {
         DevelopmentCard developmentCard = new DevelopmentCard("",1, new Requirements(new Pair<>(ResourceType.SHIELD, 1)), 1, DevelopmentColorType.GREEN, new Requirements(new Pair<>(ResourceType.COIN, 1)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1));
         playerController.getPlayerBoard().getWarehouse().addResources(0, ResourceType.SHIELD, 1);
         playerController.buyDevelopmentCard(developmentCard);
-        assertEquals(Arrays.toString(playerController.getPlayerBoard().getDevelopmentCardSlots()) + developmentCard, viewStub.popMessage());
+        assertArrayEquals(playerController.getPlayerBoard().getDevelopmentCardSlots(), (DevelopmentCardSlot[]) viewStub.popMessage());
+        assertEquals(developmentCard, viewStub.popMessage());
 
         playerController.chooseDevelopmentCardSlot(1);
         assertEquals(PlayerController.PlayerStatus.ACTION_PERFORMED, playerController.getCurrentStatus());
@@ -511,10 +503,9 @@ class PlayerControllerTest {
 
         playerController.buyDevelopmentCard(developmentCard);
         assertEquals("You cannot buy this card", viewStub.popMessage());
-        String message = viewStub.popMessage();
-        message = adjustMessage(message); //comment this line if testing only this method
-        assertEquals(playerController.getPlayerBoard().getMatch().getDevelopmentCardDecks().toString()
-                + 1 + playerController.getPlayerBoard(), message);
+        assertEquals(playerController.getPlayerBoard().getMatch().getDevelopmentCardDecks(), viewStub.popMessage());
+        assertEquals(1, viewStub.popMessage());
+        assertEquals(playerController.getPlayerBoard(), viewStub.popMessage());
         assertEquals(PlayerController.PlayerStatus.PERFORMING_ACTION, playerController.getCurrentStatus());
     }
 
