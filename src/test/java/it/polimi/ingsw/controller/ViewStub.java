@@ -9,7 +9,6 @@ import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
