@@ -353,12 +353,24 @@ public class GUI implements View {
 
     @Override
     public void showEndGameTriggered() {
-        //TODO
+        showMessage("Game ended");
     }
 
     @Override
     public void showCharts(List<PlayerBoard> playerList) {
-        //TODO
+        StringBuilder builder = new StringBuilder();
+        builder.append("Match ended!\nThe chart is:\n");
+        for (int i = 0; i < playerList.size(); i++) {
+            builder.append("\n");
+            builder.append(i).append("° place: ").append(playerList.get(i)).append("\n");
+            builder.append("Total victory points: ").append(playerList.get(i).getTotalVictoryPoints()).append("\n");
+            showPlayerBoard(playerList.get(i));
+        }
+        if (clientController.getUsername().equals(playerList.get(0).getUsername()))
+            builder.append("You won!\n");
+        else
+            builder.append(playerList.get(0).getUsername()).append(" won!");
+        showMessage(builder.toString());
     }
 
     @Override

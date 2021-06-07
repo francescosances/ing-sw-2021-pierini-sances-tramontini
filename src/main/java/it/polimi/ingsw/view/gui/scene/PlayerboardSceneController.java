@@ -125,18 +125,27 @@ public class PlayerboardSceneController extends Controller{
 
         Pane pane = new Pane();
 
-        pane.setMinWidth(200);
+        pane.setMinWidth(300);
+        pane.setMinHeight(200);
 
         VBox vbox = new VBox();
 
-        Button activate = new Button("Activate");
+        Button activate = new Button();
+        activate.setBackground(new Background(new BackgroundImage(new Image("/images/buttons/activate.png"),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+                BackgroundSize.DEFAULT)));
         activate.setOnAction((e)->{
             dialog.setResult("activate");
             dialog.close();
         });
         vbox.getChildren().add(activate);
 
-        Button discard = new Button("Discard");
+        Button discard = new Button();
+        discard.setPrefWidth(250);
+        discard.setPrefHeight(50);
+        discard.setBackground(new Background(new BackgroundImage(new Image("/images/buttons/discard.png"),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                BackgroundSize.DEFAULT)));
         discard.setOnAction((e)->{
             dialog.setResult("discard");
             dialog.close();
