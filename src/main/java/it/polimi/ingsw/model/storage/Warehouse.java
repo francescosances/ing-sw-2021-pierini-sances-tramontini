@@ -6,7 +6,6 @@ import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 import it.polimi.ingsw.model.storage.exceptions.UnswappableDepotsException;
 import it.polimi.ingsw.view.ObservableFromView;
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.VirtualView;
 
 import java.util.*;
 

@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.storage.Resource;
-import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.Triple;
 

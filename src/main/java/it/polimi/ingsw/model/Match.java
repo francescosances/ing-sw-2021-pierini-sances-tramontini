@@ -289,6 +289,6 @@ public class Match implements ObservableFromView {
         ADDING_PLAYERS,
         PLAYERS_SETUP,
         TURN,
-        END_GAME;
+        END_GAME
     }
 }

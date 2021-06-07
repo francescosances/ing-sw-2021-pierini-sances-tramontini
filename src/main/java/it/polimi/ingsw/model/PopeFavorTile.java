@@ -7,7 +7,7 @@ public class PopeFavorTile {
      */
     private boolean uncovered = false;
     /**
-     * the vicotry points associated with the tile
+     * the victory points associated with the tile
      */
     private final int victoryPoints;
 

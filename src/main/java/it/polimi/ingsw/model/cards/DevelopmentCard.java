@@ -5,8 +5,6 @@ import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.utils.Pair;
 
-import java.util.Map;
-
 public class DevelopmentCard extends Card implements Producer {
 
     /**
@@ -72,7 +70,7 @@ public class DevelopmentCard extends Card implements Producer {
 
     /**
      * Returns the amount of resources to be paid in order to buy this card
-     * @return a Requirements object containin the amount of resources to be paid in order to buy this card
+     * @return a Requirements object containing the amount of resources to be paid in order to buy this card
      */
     public Requirements getCost() {
         return cost;

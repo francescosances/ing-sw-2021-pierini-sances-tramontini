@@ -3,7 +3,6 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
 import it.polimi.ingsw.model.storage.*;
-import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.view.ObservableFromView;
 import it.polimi.ingsw.view.View;
@@ -282,7 +281,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
 
     /**
      * Discards the LeaderCard, makes the player gain 1 FaithPoint
-     * @param num the number of the LeaderCard's position thatdiscarded
+     * @param num the number of the LeaderCard's position that discarded
      * @throws EndGameException if the player reaches the last space
      */
     public void discardLeaderCard(int num) throws EndGameException {
@@ -398,8 +397,8 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
     }
 
     /**
-     * Set the warehouse associated to the playerboard
-     * @param warehouse the warehouse associated to the playerboard
+     * Set the warehouse associated to the playerBoard
+     * @param warehouse the warehouse associated to the playerBoard
      */
     public void setWarehouse(Warehouse warehouse) {
         this.warehouse = warehouse;
@@ -416,8 +415,8 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
     //TODO: verificare se vale la pena di spostare i setter su una nuova classe mutable
 
     /**
-     * Set the faithTrack associated to the playerboard
-     * @param faithTrack the faith track associated to the playerboard
+     * Set the faithTrack associated to the playerBoard
+     * @param faithTrack the faith track associated to the playerBoard
      */
     public void setFaithTrack(FaithTrack faithTrack){
         this.faithTrack = faithTrack;
@@ -425,8 +424,8 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
     }
 
     /**
-     * Set the strongbox associated to the playerboard
-     * @param strongbox the strongbox associated to the playerboard
+     * Set the strongbox associated to the playerBoard
+     * @param strongbox the strongbox associated to the playerBoard
      */
     public void setStrongbox(Strongbox strongbox){
         this.strongbox = strongbox;

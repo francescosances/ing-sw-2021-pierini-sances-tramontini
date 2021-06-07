@@ -4,5 +4,5 @@ public enum DevelopmentColorType {
     GREEN,
     BLUE,
     YELLOW,
-    PURPLE;
+    PURPLE
 }

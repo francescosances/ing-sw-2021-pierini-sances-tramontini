@@ -1,15 +1,8 @@
 package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.model.Producer;
-import it.polimi.ingsw.model.cards.LeaderCard;
-import it.polimi.ingsw.model.cards.Requirements;
 import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
-import it.polimi.ingsw.model.storage.Resource;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class ProductionLeaderCard extends LeaderCard implements Producer {
     /**

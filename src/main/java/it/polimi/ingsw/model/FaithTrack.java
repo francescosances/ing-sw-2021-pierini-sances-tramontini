@@ -186,7 +186,7 @@ public class FaithTrack implements ObservableFromView {
             }
             if (faithMarker == SIZE) {
                 updateViews();
-                throw new EndGameException(true);
+                throw new EndGameException();
             }
         }
         updateViews();
@@ -218,11 +218,6 @@ public class FaithTrack implements ObservableFromView {
         if (number < 0 || number > popeFavorTiles.length)
             throw new ArrayIndexOutOfBoundsException();
         popeFavorTiles[number] = null;
-        int count = 0;
-        for (PopeFavorTile pft:popeFavorTiles) {
-            if (pft == null)
-                count++;
-        }
     }
 
     /**

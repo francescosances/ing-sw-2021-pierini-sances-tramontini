@@ -4,7 +4,6 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.view.ObservableFromView;
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.VirtualView;
 
 import java.util.ArrayList;
 import java.util.Collections;

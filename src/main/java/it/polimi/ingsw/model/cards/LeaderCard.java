@@ -94,14 +94,14 @@ public abstract class LeaderCard extends Card {
     /**
      * Applies a discount to the card where applicable, otherwise returns the same Requirements
      * @param requirements the requirements on top of which the discount will be applied
-     * @return the discounted Requirments
+     * @return the discounted Requirements
      */
     public Requirements recalculateRequirements(Requirements requirements){
         return requirements.clone();
     }
 
     /**
-     * Returns true if the LeaderCard is a ProductionLeaderCard (in overriden method), false elsewhere
+     * Returns true if the LeaderCard is a ProductionLeaderCard (in overridden method), false elsewhere
      * @return true if the LeaderCard is a ProductionLeaderCard, false elsewhere
      */
     public boolean isProductionLeaderCard(){
@@ -109,13 +109,13 @@ public abstract class LeaderCard extends Card {
     }
 
     /**
-     * Returns true if the LeaderCard is a DiscountLeaderCard (in overriden method), false elsewhere
+     * Returns true if the LeaderCard is a DiscountLeaderCard (in overridden method), false elsewhere
      * @return true if the LeaderCard is a DiscountLeaderCard, false elsewhere
      */
     public boolean isDiscountLeaderCard(){ return false; }
 
     /**
-     * Returns true if the LeaderCard is a DepotLeaderCard (in overriden method), false elsewhere
+     * Returns true if the LeaderCard is a DepotLeaderCard (in overridden method), false elsewhere
      * @return true if the LeaderCard is a DepotLeaderCard, false elsewhere
      */
    public boolean isDepotLeaderCard(){
