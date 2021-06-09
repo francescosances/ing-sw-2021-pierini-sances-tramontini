@@ -7,8 +7,6 @@ import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
-import it.polimi.ingsw.serialization.Serializer;
-import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.utils.Pair;
 import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.VirtualView;
@@ -327,6 +325,27 @@ class PlayerControllerTest {
         assertEquals(playerController.getPlayerBoard().getMatch().getDevelopmentCardDecks(), viewStub.popMessage());
         assertEquals(1, viewStub.popMessage());
         assertEquals(playerController.getPlayerBoard(), viewStub.popMessage());
+
+        LeaderCard leaderCard = new DiscountLeaderCard("",2, new Requirements(new Triple<>(DevelopmentColorType.YELLOW, 1, 0)), ResourceType.SHIELD);
+        playerController.getPlayerBoard().getLeaderCards().add(leaderCard);
+        playerController.getPlayerBoard().getLeaderCards().get(0).activate(playerController.getPlayerBoard());
+        playerController.performAction(Action.BUY_DEVELOPMENT_CARD);
+        List<Deck<DevelopmentCard>> cards = playerController.getPlayerBoard().getMatch().getDevelopmentCardDecks();
+        List<Deck<DevelopmentCard>> newCards = new ArrayList<>();
+        for(Deck<DevelopmentCard> deck : cards){
+            Deck<DevelopmentCard> newDeck = new Deck<>();
+            newCards.add(newDeck);
+            for(DevelopmentCard card:deck) {
+                DevelopmentCard newCard = card.clone();
+                Requirements requirements = newCard.getCost();
+                requirements = leaderCard.recalculateRequirements(requirements);
+                newCard.setCost(requirements);
+                newDeck.add(newCard);
+            }
+        }
+        assertEquals(newCards, viewStub.popMessage());
+        assertEquals(1, viewStub.popMessage());
+        assertEquals(playerController.getPlayerBoard(), viewStub.popMessage());
     }
 
     @Test
@@ -527,6 +546,23 @@ class PlayerControllerTest {
         playerController.chooseDevelopmentCardSlot(1);
         assertEquals(PlayerController.PlayerStatus.ACTION_PERFORMED, playerController.getCurrentStatus());
 
+        playerController.turnEnded();
+        playerController.startTurn();
+
+        DevelopmentCard developmentCard1 = new DevelopmentCard("",1, new Requirements(new Pair<>(ResourceType.STONE, 0)), 1, DevelopmentColorType.YELLOW, new Requirements(new Pair<>(ResourceType.COIN, 1)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1));
+        playerController.buyDevelopmentCard(developmentCard1);
+
+        assertArrayEquals(playerController.getPlayerBoard().getDevelopmentCardSlots(), (DevelopmentCardSlot[]) viewStub.popMessage());
+        assertEquals(developmentCard1, viewStub.popMessage());
+
+        playerController.chooseDevelopmentCardSlot(1);
+        assertEquals("You cannot choose this slot", viewStub.popMessage());
+        assertEquals(playerController.getPlayerBoard().getDevelopmentCardSlots(), viewStub.popMessage());
+        assertEquals(developmentCard1, viewStub.popMessage());
+
+        playerController.chooseDevelopmentCardSlot(2);
+        assertEquals(PlayerController.PlayerStatus.ACTION_PERFORMED, playerController.getCurrentStatus());
+
         tearDown();
         setUp();
 
@@ -543,6 +579,7 @@ class PlayerControllerTest {
         List<Integer> intList = new ArrayList<>();
         intList.add(0);
         intList.add(2);
+        intList.add(3);
         DevelopmentCard developmentCard = new DevelopmentCard("",1, new Requirements(new Pair<>(ResourceType.SHIELD, 0)), 1, DevelopmentColorType.GREEN, new Requirements(new Pair<>(ResourceType.COIN, 1)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1));
         DevelopmentCard developmentCard1 = new DevelopmentCard("",1, new Requirements(new Pair<>(ResourceType.SHIELD, 0)), 1, DevelopmentColorType.BLUE, new Requirements(new Pair<>(ResourceType.SERVANT, 1)), new Pair<>(ResourceType.SHIELD, 1), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1));
         playerController.getPlayerBoard().addDevelopmentCardToSlot(developmentCard, 0);
@@ -551,6 +588,13 @@ class PlayerControllerTest {
         onDemandCost.addResourceRequirement(ResourceType.SERVANT, 2);
         Requirements onDemandGains = new Requirements();
         onDemandGains.addResourceRequirement(ResourceType.SHIELD, 1);
+        playerController.chooseProductions(intList, onDemandCost, onDemandGains);
+        assertEquals("You cannot activate these productions", viewStub.popMessage());
+
+        assertEquals(playerController.getPlayerBoard().getAvailableProductions(), viewStub.popMessage());
+        assertEquals(playerController.getPlayerBoard(), viewStub.popMessage());
+
+        intList.remove(2);
         playerController.chooseProductions(intList, onDemandCost, onDemandGains);
         assertEquals("Costs not satisfied", viewStub.popMessage());
 

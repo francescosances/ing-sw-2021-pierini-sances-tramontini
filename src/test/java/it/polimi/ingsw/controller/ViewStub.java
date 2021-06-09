@@ -216,6 +216,7 @@ class ViewStub implements View {
 
     @Override
     public void showProducerUser(PlayerBoard playerBoard) {
+        messages.add(playerBoard);
     }
 
     @Override

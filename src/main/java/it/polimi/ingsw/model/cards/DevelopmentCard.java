@@ -19,7 +19,6 @@ public class DevelopmentCard extends Card implements Producer {
      * The color of this card
      */
     private DevelopmentColorType color;
-
     /**
      * The amount of resources to be paid in order to start the production
      */
@@ -136,7 +135,7 @@ public class DevelopmentCard extends Card implements Producer {
         if (!(other instanceof DevelopmentCard))
             return false;
         DevelopmentCard o = (DevelopmentCard) other;
-        return this.color.equals(o.color) && this.productionCost.equals(o.productionCost)
+        return cost.equals(o.cost) && this.color.equals(o.color) && this.productionCost.equals(o.productionCost)
                 && this.productionGain.equals(o.productionGain) && this.level == o.level;
     }
 
