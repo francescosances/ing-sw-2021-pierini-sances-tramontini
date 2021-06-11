@@ -56,10 +56,11 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
 
     /**
      * Initializes a new PlayerBoard object
+     *
      * @param username the player's username
-     * @param match a reference to the match
+     * @param match    a reference to the match
      */
-    public PlayerBoard(String username,Match match){
+    public PlayerBoard(String username, Match match) {
         this.match = match;
         this.username = username;
         warehouse = new Warehouse();
@@ -86,32 +87,34 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
         views = new ArrayList<>();
     }
 
-    public void setInkwell(){
+    public void setInkwell() {
         inkwell = true;
     }
 
-    public boolean hasInkwell(){
+    public boolean hasInkwell() {
         return inkwell;
     }
 
     /**
      * Returns true if the the player has a slot where a DevelopmentCard can be stored into, false elsewhere
+     *
      * @param developmentCard the DevelopmentCard to check
      * @return true if the the player has a slot where a DevelopmentCard can be stored into, false elsewhere
      */
-    public boolean acceptsDevelopmentCard(DevelopmentCard developmentCard){
-        return Arrays.stream(getDevelopmentCardSlots()).anyMatch(t->t.accepts(developmentCard));
+    public boolean acceptsDevelopmentCard(DevelopmentCard developmentCard) {
+        return Arrays.stream(getDevelopmentCardSlots()).anyMatch(t -> t.accepts(developmentCard));
     }
 
     /**
      * Pays the requirements needed to buy the DevelopmentCard, applying discounts where possible
+     *
      * @param developmentCard the DevelopmentCard to buy
      */
-    public void buyDevelopmentCard(DevelopmentCard developmentCard) throws EndGameException{
+    public void buyDevelopmentCard(DevelopmentCard developmentCard) throws EndGameException {
         Requirements requirements = developmentCard.getCost();
-        for(LeaderCard leaderCard:leaderCards)
+        for (LeaderCard leaderCard : leaderCards)
             requirements = leaderCard.recalculateRequirements(requirements);
-        if(!requirements.satisfied(this)){
+        if (!requirements.satisfied(this)) {
             throw new IllegalArgumentException("Card not purchasable");
         }
         requirements = warehouse.removeResources(requirements);
@@ -124,19 +127,21 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
 
     /**
      * Advances the player in their Faith Track
+     *
      * @param points the number of points the player must move
      * @throws EndGameException if last space is reached
      */
     public void gainFaithPoints(int points) throws EndGameException {
-        for (int i=0;i<points;i++)
+        for (int i = 0; i < points; i++)
             faithTrack.moveMarker();
     }
 
     /**
      * Returns the number of total victory points gained by the player
+     *
      * @return the number of total victory points gained by the player
      */
-    public int getTotalVictoryPoints(){
+    public int getTotalVictoryPoints() {
         return faithTrack.getVictoryPoints() +
                 getDevelopmentCardsVictoryPoints() +
                 getLeaderCardsVictoryPoints() +
@@ -145,9 +150,10 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
 
     /**
      * Returns the number of victory points gained by the DevelopmentCards only
+     *
      * @return the number of victory points gained by the DevelopmentCards only
      */
-    public int getDevelopmentCardsVictoryPoints(){
+    public int getDevelopmentCardsVictoryPoints() {
         return Arrays.stream(developmentCardSlots)
                 .mapToInt(DevelopmentCardSlot::getVictoryPoints)
                 .sum();
@@ -155,9 +161,10 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
 
     /**
      * Returns the number of victory points gained by the LeaderCards only
+     *
      * @return the number of victory points gained by the LeaderCards only
      */
-    public int getLeaderCardsVictoryPoints(){
+    public int getLeaderCardsVictoryPoints() {
         return leaderCards.stream()
                 .filter(LeaderCard::isActive)
                 .mapToInt(Card::getVictoryPoints)
@@ -166,15 +173,17 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
 
     /**
      * Returns the number of victory points gained by the number of resources only
+     *
      * @return the number of victory points gained by the number of resources only
      */
-    public int getResourcesVictoryPoints(){
+    public int getResourcesVictoryPoints() {
         return Arrays.stream(ResourceType.values())
                 .mapToInt(res -> getAllResources().getResources(res)).sum() / 5;
     }
 
     /**
      * Returns the match reference
+     *
      * @return the match reference
      */
     public Match getMatch() {
@@ -183,6 +192,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
 
     /**
      * Returns player's username String
+     *
      * @return player's username String
      */
     public String getUsername() {
@@ -191,6 +201,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
 
     /**
      * Returns player's FaithTrack
+     *
      * @return player's FaithTrack
      */
     public FaithTrack getFaithTrack() {
@@ -199,30 +210,34 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
 
     /**
      * Returns player's DevelopmentCardSlots array
+     *
      * @return player's DevelopmentCardSlots array
      */
-    public DevelopmentCardSlot[] getDevelopmentCardSlots(){
+    public DevelopmentCardSlot[] getDevelopmentCardSlots() {
         return developmentCardSlots;
     }
 
     /**
      * Returns a Requirements object containing all the resources the player owns
+     *
      * @return a Requirements object containing all the resources the player owns
      */
-    public Requirements getAllResources(){
+    public Requirements getAllResources() {
         return Requirements.sum(strongbox.getAllResources(), warehouse.getAllResources());
     }
 
     /**
      * Adds a LeaderCard to player's hand
+     *
      * @param card to be added
      */
-    public void addLeaderCard(LeaderCard card){
+    public void addLeaderCard(LeaderCard card) {
         this.leaderCards.add(card);
     }
 
     /**
      * Returns player's Warehouse
+     *
      * @return player's Warehouse
      */
     public Warehouse getWarehouse() {
@@ -231,6 +246,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
 
     /**
      * Returns player's Strongbox
+     *
      * @return player's Strongbox
      */
     public Strongbox getStrongbox() {
@@ -239,12 +255,13 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
 
     /**
      * Activates the LeaderCard
+     *
      * @param leaderCard the LeaderCard to be activated
      * @throws NotSatisfiedRequirementsException if the LeaderCard cannot be activated
      */
     public void activateLeaderCard(LeaderCard leaderCard) throws NotSatisfiedRequirementsException {
-        for(LeaderCard x: leaderCards){
-            if(x.equals(leaderCard)) {
+        for (LeaderCard x : leaderCards) {
+            if (x.equals(leaderCard)) {
                 x.activate(this);
                 updateLeaderCardsList();
             }
@@ -254,6 +271,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
 
     /**
      * Activates the LeaderCard in the selected position
+     *
      * @param num the position if the LeaderCard to be activated
      * @throws NotSatisfiedRequirementsException if the LeaderCard cannot be activated
      */
@@ -263,54 +281,37 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
 
     /**
      * Discards the LeaderCard, makes the player gain 1 FaithPoint
-     * @param leaderCard the LeaderCard to discard
-     * @throws EndGameException if the player reaches the last space
-     */
-    public void discardLeaderCard(LeaderCard leaderCard) throws EndGameException {
-        for (Iterator<LeaderCard> iterator = leaderCards.iterator(); iterator.hasNext();) {
-            LeaderCard temp = iterator.next();
-            if(temp.equals(leaderCard)) {
-                if (temp.isActive())
-                    throw new IllegalArgumentException("You cannot discard active cards");
-                iterator.remove();
-                updateLeaderCardsList();
-                this.gainFaithPoints(1);
-            }
-        }
-    }
-
-    /**
-     * Discards the LeaderCard, makes the player gain 1 FaithPoint
+     *
      * @param num the number of the LeaderCard's position that discarded
      * @throws EndGameException if the player reaches the last space
      */
     public void discardLeaderCard(int num) throws EndGameException {
-        discardLeaderCard(leaderCards.get(num));
+        leaderCards.remove(getAvailableLeaderCards().remove(num));
+        gainFaithPoints(1);
     }
 
     /**
      * Returns a list with all player's LeaderCards
+     *
      * @return a list with all player's LeaderCards
      */
     public List<LeaderCard> getLeaderCards() {
         return leaderCards;
     }
 
-    public void setLeaderCards(List<LeaderCard> leaderCardList) {
-        this.leaderCards = leaderCardList;
-    }
-
     /**
      * Returns the leader cards that can be activated or discarded
+     *
      * @return a list of leader cards that can be activated or discarded
      */
-    public List<LeaderCard> getAvailableLeaderCards(){
-        return leaderCards.stream().filter(x->!x.isActive()).collect(Collectors.toList());
+    public List<LeaderCard> getAvailableLeaderCards() {
+        return leaderCards.stream().filter(x -> !x.isActive()).collect(Collectors.toList());
     }
 
     /**
      * Returns the boughtDevelopmentCardsCounter attribute
-     * @return  the boughtDevelopmentCardsCounter
+     *
+     * @return the boughtDevelopmentCardsCounter
      */
     public int getBoughtDevelopmentCardsCounter() {
         return boughtDevelopmentCardsCounter;
@@ -318,30 +319,32 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
 
     /**
      * Returns a list containing all Available productions
+     *
      * @return a list containing all Available productions
      */
     public List<Producer> getAvailableProductions() {
         List<Producer> producers = new ArrayList<>();
         producers.add(DevelopmentCard.getBaseProduction());
-        Arrays.stream(developmentCardSlots).forEach(slot->{
-            if(slot.getTopCard() != null)
+        Arrays.stream(developmentCardSlots).forEach(slot -> {
+            if (slot.getTopCard() != null)
                 producers.add(slot.getTopCard());
         });
         leaderCards.forEach(card -> {
-            if(card.isActive() && card.isProductionLeaderCard())
+            if (card.isActive() && card.isProductionLeaderCard())
                 producers.add((ProductionLeaderCard) card);
         });
         return producers;
     }
 
-    public void setMatch(Match match){
-        this.match = match;
-        this.faithTrack.setMatch(match);
-    }
-
-    public void addDevelopmentCardToSlot(DevelopmentCard developmentCard, int slot){
+    /**
+     * Adds the parameter developmentCard to the specified slot, if possible
+     * @param developmentCard the development card to add
+     * @param slot the slot in which to add the card
+     * @throws NotSatisfiedRequirementsException if the slot doesn't accept the development card
+     */
+    public void addDevelopmentCardToSlot(DevelopmentCard developmentCard, int slot) throws NotSatisfiedRequirementsException {
         if (!developmentCardSlots[slot].accepts(developmentCard))
-            throw new NotSatisfiedRequirementsException("You cannot buy this card");
+            throw new NotSatisfiedRequirementsException("Invalid slot selection");
         developmentCardSlots[slot].addCard(developmentCard);
         updateSlots();
     }
@@ -350,7 +353,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      * Makes the player pay the cost
      * @param costs the cost player must pay
      */
-    public void payResources(Requirements costs) {
+    private void payResources(Requirements costs) {
         costs = warehouse.removeResources(costs);
         if (!costs.getResourcesMap().isEmpty())
             strongbox.removeResources(costs);
@@ -358,19 +361,20 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
 
     /**
      * Activates the production, paying the costs and gaining the gains
-     * @param choices the indexes of the chosen producers
+     * @param choices       the indexes of the chosen producers
      * @param onDemandCosts the cost of the production
      * @param onDemandGains the gains of the production
      */
-    public void produce(List<Integer> choices, Requirements onDemandCosts, Requirements onDemandGains){
+    public void produce(List<Integer> choices, Requirements onDemandCosts, Requirements onDemandGains) {
         Requirements costs = new Requirements();
         Requirements gains = new Requirements();
-        for (int i:choices){
+
+        for (int i : choices) {
             costs.sum(getAvailableProductions().get(i).getProductionCost());
             gains.sum(getAvailableProductions().get(i).getProductionGain());
         }
 
-        if (    costs.getResources(NonPhysicalResourceType.ON_DEMAND) != onDemandCosts.getTotalResourcesNumber() ||
+        if (costs.getResources(NonPhysicalResourceType.ON_DEMAND) != onDemandCosts.getTotalResourcesNumber() ||
                 gains.getResources(NonPhysicalResourceType.ON_DEMAND) != onDemandGains.getTotalResourcesNumber())
             throw new NotSatisfiedRequirementsException("Wrong on demand choices");
 
@@ -386,18 +390,19 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
 
         updateProduction();
         payResources(costs);
-        Map<ResourceType,Integer> newGains = new HashMap<>();
-        gains.forEach(entry->{
-            if(entry.getKey() == NonPhysicalResourceType.FAITH_POINT)
+        Map<ResourceType, Integer> newGains = new HashMap<>();
+        gains.forEach(entry -> {
+            if (entry.getKey() == NonPhysicalResourceType.FAITH_POINT)
                 gainFaithPoints(entry.getValue());
-            else if(entry.getKey() instanceof ResourceType)
-                newGains.put((ResourceType) entry.getKey(),entry.getValue());
+            else if (entry.getKey() instanceof ResourceType)
+                newGains.put((ResourceType) entry.getKey(), entry.getValue());
         });
         strongbox.addResources(newGains);
     }
 
     /**
      * Set the warehouse associated to the playerBoard
+     *
      * @param warehouse the warehouse associated to the playerBoard
      */
     public void setWarehouse(Warehouse warehouse) {
@@ -405,10 +410,10 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
         addObservers(warehouse);
     }
 
-    private void addObservers(ObservableFromView observable){
-        if(views == null)
+    private void addObservers(ObservableFromView observable) {
+        if (views == null)
             views = new ArrayList<>();
-        for (View temp:views)
+        for (View temp : views)
             observable.addView(temp);
     }
 
@@ -416,24 +421,36 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
 
     /**
      * Set the faithTrack associated to the playerBoard
+     *
      * @param faithTrack the faith track associated to the playerBoard
      */
-    public void setFaithTrack(FaithTrack faithTrack){
+    public void setFaithTrack(FaithTrack faithTrack) {
         this.faithTrack = faithTrack;
         addObservers(faithTrack);
     }
 
     /**
      * Set the strongbox associated to the playerBoard
+     *
      * @param strongbox the strongbox associated to the playerBoard
      */
-    public void setStrongbox(Strongbox strongbox){
+    public void setStrongbox(Strongbox strongbox) {
         this.strongbox = strongbox;
         addObservers(strongbox);
     }
 
+    public void setMatch(Match match) {
+        this.match = match;
+        this.faithTrack.setMatch(match);
+    }
+
+    public void setLeaderCards(List<LeaderCard> leaderCardList) {
+        this.leaderCards = leaderCardList;
+    }
+
     /**
      * Adds the view to the list of views
+     *
      * @param view the view that has to be added
      */
     @Override
@@ -450,6 +467,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
 
     /**
      * Removes the view from the list of views
+     *
      * @param view the view that has to be removed
      */
     @Override
@@ -459,7 +477,8 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
             faithTrack.removeView(view);
             strongbox.removeView(view);
             warehouse.removeView(view);
-        } catch (NullPointerException ignored){}
+        } catch (NullPointerException ignored) {
+        }
     }
 
 
@@ -467,15 +486,15 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      * Notifies all views of the change
      */
     private void updateLeaderCardsList() {
-        for (View view:views)
+        for (View view : views)
             view.showLeaderCards(leaderCards);
     }
 
     /**
      * Notifies all views of the change
      */
-    private void updateSlots(){
-        for (View view:views)
+    private void updateSlots() {
+        for (View view : views)
             view.showDevelopmentCardSlots(developmentCardSlots);
     }
 
@@ -483,14 +502,15 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
     /**
      * Notifies all views of the change
      */
-    private void updateProduction(){
-        for (View view:views)
+    private void updateProduction() {
+        for (View view : views)
             view.showProducerUser(this);
     }
 
 
     /**
      * Returns a String representation of the object
+     *
      * @return a String representation of the object
      */
     @Override
@@ -507,6 +527,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
 
     /**
      * Indicates whether some other object is equal to this one
+     *
      * @param o that is confronted
      * @return true if o is equal to the object, false elsewhere
      */
@@ -515,7 +536,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PlayerBoard that = (PlayerBoard) o;
-        return  username.equals(that.username) &&
+        return username.equals(that.username) &&
                 this.getFaithTrack().equals(that.getFaithTrack()) &&
                 Arrays.equals(this.getDevelopmentCardSlots(), that.getDevelopmentCardSlots()) &&
                 this.getStrongbox().equals(that.getStrongbox()) &&
@@ -525,6 +546,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
 
     /**
      * Returns the hash code of the object
+     *
      * @return the hash code of the object
      */
     @Override
@@ -535,6 +557,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
 
     /**
      * Returns a new Object which is equal to this
+     *
      * @return a new Object which is equal to this
      */
     @Override
