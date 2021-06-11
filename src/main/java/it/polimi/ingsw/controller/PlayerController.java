@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 public class PlayerController {
 
+
     /**
      * The username associated with this player controller
      */
@@ -618,6 +619,7 @@ public class PlayerController {
      * @param gains the Resources the player gain if the production is activated
      */
     public void chooseProductions(List<Integer> choices, Requirements costs,Requirements gains) {
+        //TODO: controllare bug
         try {
             playerBoard.produce(choices, costs, gains);
         } catch (IndexOutOfBoundsException e) {

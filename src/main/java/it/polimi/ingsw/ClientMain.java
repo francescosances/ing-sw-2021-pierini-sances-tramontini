@@ -6,6 +6,12 @@ import javafx.application.Application;
 
 import java.util.Arrays;
 
+
+//TODO: javadoc
+//TODO: controllare tutti gli attributi di visibilità dei metodi
+//TODO: aggiornare UML
+//TODO: aggiornare readme
+
 public class ClientMain
 {
     public static void main( String[] args )

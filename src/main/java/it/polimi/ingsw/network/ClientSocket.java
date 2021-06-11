@@ -85,7 +85,6 @@ public class ClientSocket implements Runnable{
                 break;
             }
         }
-        //TODO: in caso di no line found e quindi chiusura della connessione dal server, chiudere anche thread javafx o settarlo come demone
         socketIn.close();
         socketOut.close();
         try {

@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.gui.scene;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.*;
+import it.polimi.ingsw.view.gui.GUI;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -15,8 +16,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static it.polimi.ingsw.view.gui.GUI.SPEND;
 
 public class PlayerboardSceneController extends Controller{
+    //TODO: disattivare pulsanti dopo produzione
+    //TODO: mostrare black cross all'inizio
 
     @FXML
     protected ImageView leadercard0,leadercard1;
@@ -87,6 +93,8 @@ public class PlayerboardSceneController extends Controller{
             disableControls();
         }
     };
+
+    private List<Producer> selectedProducers;
 
     @FXML
     public void initialize(PlayerBoard playerBoard){
@@ -197,7 +205,9 @@ public class PlayerboardSceneController extends Controller{
 
     @FXML
     public void startProduction() {
-        if (clientController.getSelectedProducers().isEmpty()) {
+        if(selectedProducers == null)
+            selectedProducers = new ArrayList<>();
+        if (selectedProducers.isEmpty()) {
             disableControls();
             selectUser.setDisable(true);
             clientController.performAction(Action.ACTIVATE_PRODUCTION);
@@ -270,7 +280,6 @@ public class PlayerboardSceneController extends Controller{
 
         if(selectedWarehouseRows.contains(rowIndex)){
             selectedWarehouseRows.removeIf(i -> i == rowIndex);
-            //clearWarehouseSelection(); attivare
             if(rowIndex<3){
                 warehouseVoids[rowIndex].getStyleClass().remove("selected");
             }else{
@@ -416,7 +425,6 @@ public class PlayerboardSceneController extends Controller{
         enableWarehouseSelection(()->{
             if(selectedWarehouseRows.size() == 1){
                 clientController.chooseDepot(selectedWarehouseRows.get(0));
-                System.out.println("Seleziono il deposito "+selectedWarehouseRows.get(0));
                 clearWarehouseSelection();
             }
         });
@@ -445,30 +453,31 @@ public class PlayerboardSceneController extends Controller{
     private void addListenerToProducer(ImageView imageView, Producer producer){
         imageView.setDisable(false);
         imageView.setOnMouseClicked((e)->{
-            List<Producer> availableProducers = clientController.getAvailableProducers();
-            Integer i;
-            for (i = 0; i < availableProducers.size(); i++) {
-                Producer tempProducer = availableProducers.get(i);//TODO: questa parte non funziona
-                if (tempProducer.equals(producer))
-                    break;
-            }
-            if(i == clientController.getAvailableProducers().size()){
-                clientController.getSelectedProducers().remove(i);
+            if(selectedProducers.contains(producer)){
+                selectedProducers.remove(producer);
                 imageView.getStyleClass().remove("selected");
             }else{
-                clientController.getSelectedProducers().add(i);
+                selectedProducers.add(producer);
                 imageView.getStyleClass().add("selected");
             }
-            System.out.println("aggiorno selected producers");
-            System.out.println(availableProducers);
-            startProductionBtn.setDisable(clientController.getSelectedProducers().isEmpty());
+            startProductionBtn.setDisable(selectedProducers.isEmpty());
         });
     }
 
-    public void askProductionsToStart(List<Producer> availableProductions) {
+    public static Requirements calculateRequirements(List<Producer> producers,String type){
+        Requirements result = new Requirements();
+
+        for(Producer producer:producers) {
+            result.addResourceRequirement(NonPhysicalResourceType.ON_DEMAND, (type.equals(SPEND)?producer.getProductionCost():producer.getProductionGain()).getResources(NonPhysicalResourceType.ON_DEMAND));
+        }
+
+        return result;
+    }
+
+    public void askProductionsToStart(List<Producer> availableProductions,ProductionChooser chooser) {
+        selectedProducers = new ArrayList<>();
+
         selectUser.setDisable(true);
-        clientController.setAvailableProducers(availableProductions);
-        clientController.setSelectedProducers(new ArrayList<>());
 
         marketBtn.setVisible(false);
         buyDevelopmentcardBtn.setVisible(false);
@@ -476,8 +485,7 @@ public class PlayerboardSceneController extends Controller{
         startProductionBtn.setVisible(true);
 
         startProductionBtn.setOnAction((e)->{
-            clientController.chooseProductionCosts(clientController.calculateRequirements(clientController.getSelectedProducers()).fst);
-
+            chooser.chooseResource(selectedProducers, calculateRequirements(selectedProducers, SPEND));
         });
 
         if(availableProductions.contains(DevelopmentCard.getBaseProduction())) {
@@ -516,7 +524,7 @@ public class PlayerboardSceneController extends Controller{
     }
 
     public void cancelProductionSelection(){
-        clientController.setSelectedProducers(new ArrayList<>());
+        selectedProducers = new ArrayList<>();
 
         startProductionBtn.setVisible(true);
         marketBtn.setVisible(true);

@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectDeveloperCardsController extends Controller{
+public class SelectDevelopmentCardsController extends Controller{
 
     @FXML
     protected AnchorPane rootPane;

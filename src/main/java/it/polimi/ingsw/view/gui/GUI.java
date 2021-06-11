@@ -20,6 +20,8 @@ import javafx.stage.Stage;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
 
 public class GUI implements View {
 
@@ -36,6 +38,15 @@ public class GUI implements View {
     private Semaphore playerBoardSemaphore = new Semaphore(0);
 
     private Set<Alert> openedAlert;
+
+    private List<Producer> selectedProducers;
+
+    private Resource[] productionCosts;
+
+    private List<Producer> availableProductions;
+
+    public static final String SPEND = "spend";
+    public static final String GAIN = "gain";
 
     public GUI(ClientController clientController, Stage stage){
         this.clientController = clientController;
@@ -185,7 +196,7 @@ public class GUI implements View {
     @Override
     public void listDevelopmentCards(List<Deck<DevelopmentCard>> developmentCardList, int cardsToChoose, PlayerBoard userBoard) {
         Platform.runLater(()->{
-            SelectDeveloperCardsController controller = (SelectDeveloperCardsController) openModal("select_development_cards_scene","Select development cards",()->{clientController.rollback();});
+            SelectDevelopmentCardsController controller = (SelectDevelopmentCardsController) openModal("select_development_cards_scene","Select development cards",()->{clientController.rollback();});
             controller.initialize(developmentCardList,cardsToChoose,userBoard);
         });
     }
@@ -287,37 +298,52 @@ public class GUI implements View {
 
     @Override
     public void chooseProductions(List<Producer> availableProductions, PlayerBoard playerBoard) {
+        this.availableProductions = availableProductions;
         Platform.runLater(()->{
             if(getPlayerBoardSceneController() != null) {
                 playerboardSceneController.initialize(playerBoard);
-                playerboardSceneController.askProductionsToStart(availableProductions);
+                playerboardSceneController.askProductionsToStart(availableProductions, ((producers,requirements) -> {
+                    selectedProducers = producers;
+                    askToChooseProductionCosts(requirements);
+                }));
             }
         });
     }
 
     @Override
     public void askToChooseProductionCosts(Requirements requirements) {
-        Platform.runLater(()-> ((SelectResourcesController) loadScene("select_resources_scene",true)).initialize(requirements.getResources(NonPhysicalResourceType.ON_DEMAND),(resources)-> {
-            clientController.setProductionCosts(resources);
-            askToChooseProductionGains(clientController.calculateRequirements(clientController.getSelectedProducers()).snd);
-        }));
+        if(requirements.getResources(NonPhysicalResourceType.ON_DEMAND) == 0) {
+            productionCosts = new Resource[0];
+            askToChooseProductionGains(PlayerboardSceneController.calculateRequirements(selectedProducers, GAIN));
+        }else{
+            Platform.runLater(() -> ((SelectResourcesController) openModal("select_resources_scene","Select resources to spend", ()->{})).initialize(requirements.getResources(NonPhysicalResourceType.ON_DEMAND), (resources) -> {
+                productionCosts = resources;
+                askToChooseProductionGains(PlayerboardSceneController.calculateRequirements(selectedProducers, GAIN));
+            },true));
+        }
+    }
+
+    private void chooseProductions(Resource[] costs,Resource[] gains){
+        Map<Resource, Integer> costsMap = new HashMap<>();
+        for (Resource resource : costs) {
+            costsMap.put(resource, costsMap.getOrDefault(resource, 0) + 1);
+        }
+        Map<Resource, Integer> gainsMap = new HashMap<>();
+        for (Resource resource : gains) {
+            gainsMap.put(resource, gainsMap.getOrDefault(resource, 0) + 1);
+        }
+        clientController.chooseProductions(selectedProducers.stream().mapToInt(availableProductions::indexOf).boxed().collect(Collectors.toList()), new Requirements(costsMap), new Requirements(gainsMap));
     }
 
     @Override
     public void askToChooseProductionGains(Requirements requirements) {
-        Platform.runLater(()-> ((SelectResourcesController) loadScene("select_resources_scene",true)).initialize(requirements.getResources(NonPhysicalResourceType.ON_DEMAND),(resources)-> {
-            Map<Resource,Integer> costsMap = new HashMap<>();
-            for(Resource resource:clientController.getProductionCosts()){
-                costsMap.put(resource,costsMap.getOrDefault(resource,0)+1);
-            }
-            Map<Resource,Integer> gainsMap = new HashMap<>();
-            for(Resource resource:resources){
-                gainsMap.put(resource,gainsMap.getOrDefault(resource,0)+1);
-            }
-            System.out.println("Selected producers");
-            System.out.println(clientController.getSelectedProducers());
-            clientController.chooseProductions(clientController.getSelectedProducers(),new Requirements(costsMap),new Requirements(gainsMap));
-        }));
+        if(requirements.getResources(NonPhysicalResourceType.ON_DEMAND) == 0){
+            chooseProductions(productionCosts,new Resource[0]);
+        }else {
+            Platform.runLater(() -> ((SelectResourcesController) openModal("select_resources_scene","Select resources to gain", ()->{})).initialize(requirements.getResources(NonPhysicalResourceType.ON_DEMAND), (resources) -> {
+                chooseProductions(productionCosts,resources);
+            },true));
+        }
     }
 
     @Override
@@ -330,7 +356,7 @@ public class GUI implements View {
 
     @Override
     public void askToChooseStartResources(Resource[] values, int resourcesToChoose) {
-        Platform.runLater(()-> ((SelectResourcesController) loadScene("select_resources_scene")).initialize(resourcesToChoose,(resources)-> clientController.chooseStartResources(resources)));
+        Platform.runLater(()-> ((SelectResourcesController) loadScene("select_resources_scene")).initialize(resourcesToChoose,(resources)-> clientController.chooseStartResources(resources),false));
     }
 
     @Override

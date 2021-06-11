@@ -7,9 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-
-import java.util.ArrayList;
-import java.util.List;
+import javafx.stage.Stage;
 
 public class SelectResourcesController extends Controller{
 
@@ -32,16 +30,19 @@ public class SelectResourcesController extends Controller{
 
     private int numResourcesSelected = 0;
 
-
     private ResourcesChooser onAction;
 
+    private boolean isModal;
+
     @FXML
-    public void initialize(int resourcesToChoose,ResourcesChooser onAction) {
+    public void initialize(int resourcesToChoose,ResourcesChooser onAction,boolean isModal) {
 
         if(resourcesToChoose==0){
             onAction.choose(new Resource[0]);
             return;
         }
+
+        this.isModal = isModal;
 
         Button[] minusButtons = {coin_minus,servant_minus,shield_minus,stone_minus};
         TextField[] textFields = {coin_input,servant_input,shield_input,stone_input};
@@ -113,6 +114,11 @@ public class SelectResourcesController extends Controller{
             resourcesChosen[added++] = ResourceType.STONE;
 
         onAction.choose(resourcesChosen);
+
+        if(isModal) {
+            Stage stage = (Stage) btnChoose.getScene().getWindow();
+            stage.close();
+        }
     }
 
     public interface ResourcesChooser{

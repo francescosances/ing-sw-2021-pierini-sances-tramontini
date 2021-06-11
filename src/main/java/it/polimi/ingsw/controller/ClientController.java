@@ -45,12 +45,6 @@ public class ClientController {
      */
     private final Lock lock;
 
-    private List<Integer> selectedProducers = new ArrayList<>();
-
-    private List<Producer> availableProducers = new ArrayList<>();
-
-    private Resource[] productionCosts;
-
     /**
      * Default empty constructor that initialize a new socket
      */
@@ -432,28 +426,6 @@ public class ClientController {
         message.addData("costs",Serializer.serializeRequirements(onDemandCosts));
         message.addData("gains",Serializer.serializeRequirements(onDemandGains));
         clientSocket.sendMessage(message);
-        selectedProducers = new ArrayList<>();
-    }
-
-    public Pair<Requirements,Requirements> calculateRequirements(List<Integer> producers){
-        Requirements onDemandCosts = new Requirements();
-        Requirements onDemandGains = new Requirements();
-
-        for(Integer index:producers) {
-            Producer producer = availableProducers.get(index);
-            onDemandCosts.addResourceRequirement(NonPhysicalResourceType.ON_DEMAND, producer.getProductionCost().getResources(NonPhysicalResourceType.ON_DEMAND));
-            onDemandGains.addResourceRequirement(NonPhysicalResourceType.ON_DEMAND, producer.getProductionGain().getResources(NonPhysicalResourceType.ON_DEMAND));
-        }
-
-        return new Pair<>(onDemandCosts,onDemandGains);
-    }
-
-    public void chooseProductionCosts(Requirements requirements){
-        view.askToChooseProductionCosts(requirements);
-    }
-
-    public void chooseProductionGain(Requirements requirements){
-        view.askToChooseProductionGains(requirements);
     }
 
     /**
@@ -552,27 +524,4 @@ public class ClientController {
         clientSocket.sendMessage(message);
     }
 
-    public List<Integer> getSelectedProducers() {
-        return selectedProducers;
-    }
-
-    public void setSelectedProducers(ArrayList<Integer> producers) {
-        this.selectedProducers = producers;
-    }
-
-    public List<Producer> getAvailableProducers() {
-        return availableProducers;
-    }
-
-    public void setAvailableProducers(List<Producer> producers) {
-        this.availableProducers = producers;
-    }
-
-    public void setProductionCosts(Resource[] resources) {
-        this.productionCosts = resources;
-    }
-
-    public Resource[] getProductionCosts() {
-        return productionCosts;
-    }
 }
