@@ -264,7 +264,11 @@ public class PlayerController {
      * @param num the position of the LeaderCard in the PlayerBoard
      */
     public void discardLeaderCard(int num){
-        playerBoard.discardLeaderCard(num);
+        try {
+            playerBoard.discardLeaderCard(num);
+        } catch (IndexOutOfBoundsException e){
+            view.showErrorMessage("You can't discard this card!");
+        }
         notifyPlayerStatusListeners();
     }
 
@@ -619,7 +623,6 @@ public class PlayerController {
      * @param gains the Resources the player gain if the production is activated
      */
     public void chooseProductions(List<Integer> choices, Requirements costs,Requirements gains) {
-        //TODO: controllare bug
         try {
             playerBoard.produce(choices, costs, gains);
         } catch (IndexOutOfBoundsException e) {

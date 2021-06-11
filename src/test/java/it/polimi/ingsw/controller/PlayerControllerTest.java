@@ -146,6 +146,8 @@ class PlayerControllerTest {
         LeaderCard leaderCard = playerController.getPlayerBoard().getLeaderCards().get(0);
         playerController.discardLeaderCard(0);
         assertTrue(playerController.getPlayerBoard().getLeaderCards().stream().noneMatch(c->c.equals(leaderCard)));
+        playerController.discardLeaderCard(1);
+        assertEquals("You can't discard this card!", viewStub.popMessage());
     }
 
     @Test
