@@ -40,6 +40,7 @@ class ClientControllerTest {
     void tearDown() {
         clientController = null;
         clientSocketStub = null;
+        assertTrue(viewStub.isEmpty());
         viewStub = null;
     }
 

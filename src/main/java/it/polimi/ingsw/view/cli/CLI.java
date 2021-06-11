@@ -53,6 +53,10 @@ public class CLI implements View {
      */
     private final boolean lightMode;
 
+    private static String SPEND = "spend";
+
+    private static String GAIN = "gain";
+
     public CLI(ClientController clientController, boolean lightMode) {
         this.clientController = clientController;
         this.input = new Scanner(System.in);
@@ -425,11 +429,11 @@ public class CLI implements View {
     }
 
     public void askToChooseProductionCosts(Requirements requirements) {
-        chooseOnDemandResources(requirements,"spend");
+        chooseOnDemandResources(requirements,SPEND);
     }
 
     public void askToChooseProductionGains(Requirements requirements) {
-        chooseOnDemandResources(requirements,"gain");
+        chooseOnDemandResources(requirements,GAIN);
     }
 
     private void chooseOnDemandResources(Requirements entries, String string) {
