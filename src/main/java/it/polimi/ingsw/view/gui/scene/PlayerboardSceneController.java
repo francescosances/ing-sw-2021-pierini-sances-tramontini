@@ -105,7 +105,9 @@ public class PlayerboardSceneController extends Controller{
         selectUser.setDisable(false);
 
         populateUserSelect();
+
     }
+
 
     @FXML
     public void rollback(){
@@ -230,7 +232,6 @@ public class PlayerboardSceneController extends Controller{
 
         List<Depot> depots = warehouse.getDepots();
 
-        System.out.println(depots);
 
         for (ImageView[] imageViews : imgWarehouse) {
             for (ImageView imageView : imageViews) imageView.setVisible(false);
@@ -452,6 +453,7 @@ public class PlayerboardSceneController extends Controller{
 
     private void addListenerToProducer(ImageView imageView, Producer producer){
         imageView.setDisable(false);
+        imageView.getStyleClass().remove("selected");
         imageView.setOnMouseClicked((e)->{
             if(selectedProducers.contains(producer)){
                 selectedProducers.remove(producer);
@@ -660,7 +662,15 @@ public class PlayerboardSceneController extends Controller{
             }
         }
 
+        baseProductionBtn.getStyleClass().remove("selected");
+
         this.clearResourceSupply();
+
+        if(leadercard0 != null)
+            leadercard0.getStyleClass().remove("selected");
+        if(leadercard1 != null)
+            leadercard1.getStyleClass().remove("selected");
+
     }
 
     @FXML
@@ -765,6 +775,11 @@ public class PlayerboardSceneController extends Controller{
 
     public void performedAction(){
         clearResourceSupply();
+        rollbackBtn.setVisible(false);
+        selectedProducers = new ArrayList<>();
+        baseProductionBtn.getStyleClass().clear();
+        baseProductionBtn.setOnMouseClicked((e)->{});
+        startProductionBtn.setOnAction(e->startProduction());
     }
 
 }

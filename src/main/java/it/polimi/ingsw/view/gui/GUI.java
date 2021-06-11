@@ -374,7 +374,7 @@ public class GUI implements View {
 
     @Override
     public void showProducerUser(PlayerBoard playerBoard) {
-        showPlayerBoard(playerBoard);
+        actionPerformed();
     }
 
     @Override
