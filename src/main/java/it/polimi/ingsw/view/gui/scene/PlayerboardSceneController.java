@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 import static it.polimi.ingsw.view.gui.GUI.SPEND;
 
 public class PlayerboardSceneController extends Controller{
-    //TODO: disattivare pulsanti dopo produzione
     //TODO: mostrare black cross all'inizio
     //TODO: bug: quando scarti una risorsa il tuo marker si aggiorna sulla playerboard perché ti viene mostrata la playerboard del giocatore che è avanzato
 

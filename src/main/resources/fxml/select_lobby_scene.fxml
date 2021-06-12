@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
@@ -8,18 +9,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="700.0" prefWidth="1000.0" styleClass="rootPane" stylesheets="@../css/select_lobby_scene.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.scene.SelectLobbySceneController">
-   <AnchorPane prefHeight="200.0" prefWidth="200.0">
-      <children>
-         <Button id="refreshButton" layoutX="102.0" layoutY="592.0" mnemonicParsing="false" onAction="#refresh" prefHeight="39.0" prefWidth="83.0" text="Refresh">
-            <font>
-               <Font size="18.0" />
-            </font>
-         </Button>
-      </children>
-   </AnchorPane>
+<StackPane prefHeight="700.0" prefWidth="1000.0" styleClass="rootPane" stylesheets="@../css/select_lobby_scene.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.scene.SelectLobbySceneController">
+   <AnchorPane prefHeight="200.0" prefWidth="200.0" />
     <Group scaleX="1.5" scaleY="1.5">
         <AnchorPane>
             <VBox layoutY="100.0" prefHeight="220.0" prefWidth="270.0">
@@ -32,11 +24,24 @@
                     </VBox.margin>
                 </Label>
                 <ChoiceBox fx:id="lobbySelector" prefHeight="26.0" prefWidth="271.0" />
-                <Button defaultButton="true" onAction="#join" prefHeight="45" prefWidth="300.0" style="-fx-start-margin: 55px" styleClass="btn">
+                <Button defaultButton="true" onAction="#join" prefHeight="45" prefWidth="300.0" style="-fx-start-margin: 55px">
                     <VBox.margin>
                         <Insets top="25.0" />
                     </VBox.margin>
+               <styleClass>
+                  <String fx:value="btn" />
+                  <String fx:value="btn-continue" />
+               </styleClass>
                 </Button>
+            <Button defaultButton="true" onAction="#refresh" prefHeight="45" prefWidth="300.0" style="-fx-start-margin: 55px">
+               <styleClass>
+                  <String fx:value="btn" />
+                  <String fx:value="btn-refresh" />
+               </styleClass>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Button>
             </VBox>
         </AnchorPane>
     </Group>
