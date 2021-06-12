@@ -66,6 +66,11 @@ public class SelectLobbySceneController extends Controller{
         }
     }
 
+    //TODO: refresh button con stile
+    public void refresh(){
+        clientController.refreshLobbies();
+    }
+
     @FXML
     public void join(){
         Triple<String,Integer,Integer> selected = lobbySelector.getValue();
