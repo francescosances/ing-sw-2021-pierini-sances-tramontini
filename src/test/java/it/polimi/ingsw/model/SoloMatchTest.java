@@ -7,6 +7,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class SoloMatchTest {
@@ -36,15 +39,32 @@ class SoloMatchTest {
 
     @Test
     void discardDevelopmentCards() {
-        Deck<DevelopmentCard> deck = new Deck<>();
-        for (DevelopmentCard card:match.getDevelopmentCardDeck(DevelopmentColorType.GREEN, 1))
-            deck.add(card);
+        List<Deck<DevelopmentCard>> deckList = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            deckList.add(new Deck<>());
+            for (DevelopmentCard card : match.getDevelopmentCardDeck(DevelopmentColorType.GREEN, i+1))
+                deckList.get(i).add(card);
+        }
 
-        for (int i = 0; i < 2; i++)
-            deck.pop();
+        for (int j = 0; j < 5; j++) {
+            for (int i = 0; i < 2; i++)
+                deckList.get(j/2).pop();
 
-        match.discardDevelopmentCards(DevelopmentColorType.GREEN);
-        assertEquals(deck, match.getDevelopmentCardDeck(DevelopmentColorType.GREEN, 1));
+            match.discardDevelopmentCards(DevelopmentColorType.GREEN);
+            for (int i = 0; i < 3; i++)
+                assertEquals(deckList.get(i), match.getDevelopmentCardDeck(DevelopmentColorType.GREEN, i + 1));
+        }
+
+        boolean exceptionCaught = false;
+        try {
+            match.discardDevelopmentCards(DevelopmentColorType.GREEN);
+        } catch (EndGameException e){
+            exceptionCaught = true;
+        }
+        assertTrue(exceptionCaught);
+
+        for (int i = 0; i < 3; i++)
+            assertTrue(match.getDevelopmentCardDeck(DevelopmentColorType.GREEN, i + 1).isEmpty());
     }
 
     @Test

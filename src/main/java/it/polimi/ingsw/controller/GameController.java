@@ -319,11 +319,10 @@ public class GameController implements PlayerStatusListener {
     private void findWinner() {
         if (players.size() == 1){
             SoloMatch soloMatch = (SoloMatch) match;
-            //TODO: gestire anche il caso di development card esaurite, migliorare messaggi
-            if (soloMatch.getBlackCross().getFaithMarker() == FaithTrack.SIZE)
-                players.get(0).getView().showMessage("You won!");
-            else
+            if (soloMatch.getBlackCross().getFaithMarker() == FaithTrack.SIZE || soloMatch.anEmptyDeck())
                 players.get(0).getView().showMessage("You lost!");
+            else
+                players.get(0).getView().showMessage("You won!");
             return;
         }
 

@@ -19,6 +19,10 @@ public class SoloMatch extends Match{
      * Is true if an action token has to be drawn at the end of the turn
      */
     private boolean drawableActionToken;
+    /**
+     * is true if a deck is empty, false elsewhere
+     */
+    private boolean cardsFinished;
 
     /**
      * Initializes a new SoloMatch object
@@ -30,6 +34,7 @@ public class SoloMatch extends Match{
         blackCross.setBlackCross(true);
         shuffleActionTokens();
         drawableActionToken = false;
+        cardsFinished = false;
     }
 
     /**
@@ -70,8 +75,7 @@ public class SoloMatch extends Match{
      * Discard two DevelopmentCards of the specified lowest level
      * @param color the color specified
      */
-    protected void discardDevelopmentCards(DevelopmentColorType color){
-        //TODO: se tutte le carte di un colore sono state scartate lanciare EndGameException (hai perso)
+    protected void discardDevelopmentCards(DevelopmentColorType color) throws EndGameException {
         int count = 2;
         int level = 1;
         while (count > 0){
@@ -81,8 +85,20 @@ public class SoloMatch extends Match{
             else {
                 temp.remove(0);
                 count--;
+                if (getDevelopmentCardDeck(color, 3).isEmpty()) {
+                    cardsFinished = true;
+                    throw new EndGameException();
+                }
             }
         }
+    }
+
+    /**
+     * Returns true if a deck is empty, false elsewhere
+     * @return true if a deck is empty, false elsewhere
+     */
+    public boolean anEmptyDeck(){
+        return cardsFinished;
     }
 
     /**
