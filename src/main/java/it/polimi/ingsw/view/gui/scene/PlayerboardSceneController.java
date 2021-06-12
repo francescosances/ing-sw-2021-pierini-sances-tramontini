@@ -431,7 +431,7 @@ public class PlayerboardSceneController extends Controller{
             }
         });
 
-      //  swapDepotsBtn.setVisible(true);
+        swapDepotsBtn.setVisible(true);
         discardResourceBtn.setVisible(true);
     }
 

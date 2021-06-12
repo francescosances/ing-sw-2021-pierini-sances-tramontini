@@ -13,7 +13,7 @@
 <StackPane prefHeight="700.0" prefWidth="1000.0" styleClass="rootPane" stylesheets="@../css/select_lobby_scene.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.scene.SelectLobbySceneController">
    <AnchorPane prefHeight="200.0" prefWidth="200.0">
       <children>
-         <Button id="refreshButton" onAction="#refresh" layoutX="102.0" layoutY="592.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="83.0" text="Refresh">
+         <Button id="refreshButton" layoutX="102.0" layoutY="592.0" mnemonicParsing="false" onAction="#refresh" prefHeight="39.0" prefWidth="83.0" text="Refresh">
             <font>
                <Font size="18.0" />
             </font>
