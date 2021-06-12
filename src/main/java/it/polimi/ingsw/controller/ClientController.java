@@ -37,6 +37,10 @@ public class ClientController {
      */
     private String username;
     /**
+     * The username of the player currently playing
+     */
+    private String currentActiveUser;
+    /**
      * The usernames of the players playing this match
      */
     private List<String> players;
@@ -103,6 +107,7 @@ public class ClientController {
                 break;
             case CURRENT_ACTIVE_USER:
                 view.showCurrentActiveUser(message.getData("username"));
+                currentActiveUser = new String(username);
                 break;
             case LOGIN_FAILED:
                 lock.lock();
@@ -514,6 +519,10 @@ public class ClientController {
      */
     public String getUsername(){
         return username;
+    }
+
+    public String getCurrentActiveUser(){
+        return currentActiveUser;
     }
 
     /**

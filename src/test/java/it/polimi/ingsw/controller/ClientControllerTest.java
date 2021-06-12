@@ -17,8 +17,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,6 +41,7 @@ class ClientControllerTest {
     @AfterEach
     void tearDown() {
         clientController = null;
+        assertTrue(clientSocketStub.isEmpty());
         clientSocketStub = null;
         assertTrue(viewStub.isEmpty());
         viewStub = null;
@@ -60,27 +63,31 @@ class ClientControllerTest {
     void login() {
         clientController.login("TestUsername");
         assertEquals("TestUsername", clientController.getUsername());
-        assertEquals(Message.MessageType.LOGIN_REQUEST, clientSocketStub.getMessage().getType());
-        assertEquals("TestUsername", clientSocketStub.getMessage().getData("username"));
+        Message message = clientSocketStub.popMessage();
+        assertEquals(Message.MessageType.LOGIN_REQUEST, message.getType());
+        assertEquals("TestUsername", message.getData("username"));
     }
 
     @Test
     void createNewLobby() {
         clientController.createNewLobby(1);
-        assertEquals(Message.MessageType.LOBBY_CHOICE, clientSocketStub.getMessage().getType());
-        assertNull(clientSocketStub.getMessage().getData("matchOwner"));
-        assertEquals("1", clientSocketStub.getMessage().getData("playersNumber"));
+        Message message = clientSocketStub.popMessage();
+        assertEquals(Message.MessageType.LOBBY_CHOICE, message.getType());
+        assertNull(message.getData("matchOwner"));
+        assertEquals("1", message.getData("playersNumber"));
         clientController.createNewLobby(2);
-        assertEquals(Message.MessageType.LOBBY_CHOICE, clientSocketStub.getMessage().getType());
-        assertNull(clientSocketStub.getMessage().getData("matchOwner"));
-        assertEquals("2", clientSocketStub.getMessage().getData("playersNumber"));
+        message = clientSocketStub.popMessage();
+        assertEquals(Message.MessageType.LOBBY_CHOICE, message.getType());
+        assertNull(message.getData("matchOwner"));
+        assertEquals("2", message.getData("playersNumber"));
     }
 
     @Test
     void lobbyChoice() {
         clientController.lobbyChoice("TestMatch", 2);
-        assertEquals(Message.MessageType.LOBBY_CHOICE, clientSocketStub.getMessage().getType());
-        assertEquals("TestMatch", clientSocketStub.getMessage().getData("matchOwner"));
+        Message message = clientSocketStub.popMessage();
+        assertEquals(Message.MessageType.LOBBY_CHOICE, message.getType());
+        assertEquals("TestMatch", message.getData("matchOwner"));
     }
 
     @Test
@@ -90,8 +97,9 @@ class ClientControllerTest {
                 new ProductionLeaderCard("",4, new Requirements(new Triple<>(DevelopmentColorType.YELLOW, 2, 1)), new Requirements(new Pair<>(ResourceType.SHIELD, 1)))
         };
         clientController.leaderCardsChoice(leaderCards);
-        assertEquals(Message.MessageType.LEADER_CARDS_CHOICE, clientSocketStub.getMessage().getType());
-        assertEquals(Arrays.asList(leaderCards), Serializer.deserializeLeaderCardList(clientSocketStub.getMessage().getData("leaderCards")));
+        Message message = clientSocketStub.popMessage();
+        assertEquals(Message.MessageType.LEADER_CARDS_CHOICE, message.getType());
+        assertEquals(Arrays.asList(leaderCards), Serializer.deserializeLeaderCardList(message.getData("leaderCards")));
     }
 
     @Test
@@ -101,59 +109,67 @@ class ClientControllerTest {
                 new DevelopmentCard("TestDevCard1", 5, new Requirements(), 2, DevelopmentColorType.BLUE, new Requirements(), new Requirements())
         };
         clientController.chooseDevelopmentCards(developmentCards);
-        assertEquals(Message.MessageType.DEVELOPMENT_CARDS_TO_BUY, clientSocketStub.getMessage().getType());
-        assertEquals(Arrays.asList(developmentCards), Serializer.deserializeDevelopmentCardsList(clientSocketStub.getMessage().getData("developmentCards")));
+        Message message = clientSocketStub.popMessage();
+        assertEquals(Message.MessageType.DEVELOPMENT_CARDS_TO_BUY, message.getType());
+        assertEquals(Arrays.asList(developmentCards), Serializer.deserializeDevelopmentCardsList(message.getData("developmentCards")));
     }
 
     @Test
     void chooseDevelopmentCardsSlot() {
         clientController.chooseDevelopmentCardsSlot(2);
-        assertEquals(Message.MessageType.CHOOSE_DEVELOPMENT_CARD_SLOT, clientSocketStub.getMessage().getType());
-        assertEquals("2", clientSocketStub.getMessage().getData("slotIndex"));
+        Message message = clientSocketStub.popMessage();
+        assertEquals(Message.MessageType.CHOOSE_DEVELOPMENT_CARD_SLOT, message.getType());
+        assertEquals("2", message.getData("slotIndex"));
     }
 
     @Test
     void performAction() {
         clientController.performAction(Action.TAKE_RESOURCES_FROM_MARKET);
+        Message message = clientSocketStub.popMessage();
         Gson gson = new Gson();
-        assertEquals(Message.MessageType.PERFORM_ACTION, clientSocketStub.getMessage().getType());
-        assertEquals(Action.TAKE_RESOURCES_FROM_MARKET, gson.fromJson(clientSocketStub.getMessage().getData("action"), Action.class));
+        assertEquals(Message.MessageType.PERFORM_ACTION, message.getType());
+        assertEquals(Action.TAKE_RESOURCES_FROM_MARKET, gson.fromJson(message.getData("action"), Action.class));
     }
 
     @Test
     void swapDepots() {
         clientController.swapDepots(2, 3);
-        assertEquals(Message.MessageType.SWAP_DEPOTS, clientSocketStub.getMessage().getType());
-        assertEquals("2", clientSocketStub.getMessage().getData("depotA"));
-        assertEquals("3", clientSocketStub.getMessage().getData("depotB"));
+        Message message = clientSocketStub.popMessage();
+        assertEquals(Message.MessageType.SWAP_DEPOTS, message.getType());
+        assertEquals("2", message.getData("depotA"));
+        assertEquals("3", message.getData("depotB"));
     }
 
     @Test
     void chooseMarketRow() {
         clientController.chooseMarketRow(2);
-        assertEquals(Message.MessageType.SELECT_MARKET_ROW, clientSocketStub.getMessage().getType());
-        assertEquals("2", clientSocketStub.getMessage().getData("row"));
+        Message message = clientSocketStub.popMessage();
+        assertEquals(Message.MessageType.SELECT_MARKET_ROW, message.getType());
+        assertEquals("2", message.getData("row"));
     }
 
     @Test
     void chooseMarketColumn() {
         clientController.chooseMarketColumn(2);
-        assertEquals(Message.MessageType.SELECT_MARKET_COLUMN, clientSocketStub.getMessage().getType());
-        assertEquals("2", clientSocketStub.getMessage().getData("column"));
+        Message message = clientSocketStub.popMessage();
+        assertEquals(Message.MessageType.SELECT_MARKET_COLUMN, message.getType());
+        assertEquals("2", message.getData("column"));
     }
 
     @Test
     void chooseWhiteMarbleConversion() {
         clientController.chooseWhiteMarbleConversion(1);
-        assertEquals(Message.MessageType.WHITE_MARBLE_CONVERSION, clientSocketStub.getMessage().getType());
-        assertEquals("1", clientSocketStub.getMessage().getData("choice"));
+        Message message = clientSocketStub.popMessage();
+        assertEquals(Message.MessageType.WHITE_MARBLE_CONVERSION, message.getType());
+        assertEquals("1", message.getData("choice"));
     }
 
     @Test
     void chooseDepot() {
         clientController.chooseDepot(2);
-        assertEquals(Message.MessageType.RESOURCE_TO_STORE, clientSocketStub.getMessage().getType());
-        assertEquals("2", clientSocketStub.getMessage().getData("choice"));
+        Message message = clientSocketStub.popMessage();
+        assertEquals(Message.MessageType.RESOURCE_TO_STORE, message.getType());
+        assertEquals("2", message.getData("choice"));
     }
 
     @Test
@@ -169,25 +185,30 @@ class ClientControllerTest {
                         put(1, 1);
                     }});
                 }});
-        //TODO
-        clientController.chooseProductions(null, costs, gains);
-        assertEquals(Message.MessageType.PRODUCTION, clientSocketStub.getMessage().getType());
-        assertEquals(costs, Serializer.deserializeRequirements(clientSocketStub.getMessage().getData("costs")));
-        assertEquals(gains, Serializer.deserializeRequirements(clientSocketStub.getMessage().getData("gains")));
+        List<Integer> choices = new ArrayList<>();
+        choices.add(0);
+        choices.add(3);
+        clientController.chooseProductions(choices, costs, gains);
+        Message message = clientSocketStub.popMessage();
+        assertEquals(Message.MessageType.PRODUCTION, message.getType());
+        assertEquals(costs, Serializer.deserializeRequirements(message.getData("costs")));
+        assertEquals(gains, Serializer.deserializeRequirements(message.getData("gains")));
+        assertEquals(choices, Serializer.deserializeIntList(message.getData("choices")));
     }
 
     @Test
     void chooseStartResources() {
         Resource[] res = new Resource[] {ResourceType.COIN, NonPhysicalResourceType.FAITH_POINT};
         clientController.chooseStartResources(res);
-        assertEquals(Message.MessageType.START_RESOURCES, clientSocketStub.getMessage().getType());
-        assertEquals(Arrays.asList(res), Arrays.asList(Serializer.deserializeResources(clientSocketStub.getMessage().getData("resources"))));
+        Message message = clientSocketStub.popMessage();
+        assertEquals(Message.MessageType.START_RESOURCES, message.getType());
+        assertEquals(Arrays.asList(res), Arrays.asList(Serializer.deserializeResources(message.getData("resources"))));
     }
 
     @Test
     void rollback() {
         clientController.rollback();
-        assertEquals(Message.MessageType.ROLLBACK, clientSocketStub.getMessage().getType());
+        assertEquals(Message.MessageType.ROLLBACK, clientSocketStub.popMessage().getType());
     }
 
     @Test
@@ -200,27 +221,30 @@ class ClientControllerTest {
     @Test
     void discardLeaderCard() {
         clientController.discardLeaderCard(1);
-        assertEquals(Message.MessageType.DISCARD_LEADER_CARD, clientSocketStub.getMessage().getType());
-        assertEquals("1", clientSocketStub.getMessage().getData("num"));
+        Message message = clientSocketStub.popMessage();
+        assertEquals(Message.MessageType.DISCARD_LEADER_CARD, message.getType());
+        assertEquals("1", message.getData("num"));
     }
 
     @Test
     void activateLeaderCard() {
         clientController.activateLeaderCard(1);
-        assertEquals(Message.MessageType.ACTIVATE_LEADER_CARD, clientSocketStub.getMessage().getType());
-        assertEquals("1", clientSocketStub.getMessage().getData("num"));
+        Message message = clientSocketStub.popMessage();
+        assertEquals(Message.MessageType.ACTIVATE_LEADER_CARD, message.getType());
+        assertEquals("1", message.getData("num"));
     }
 
     @Test
     void showPlayerBoard() {
         clientController.showPlayerBoard("TestUsername");
-        assertEquals(Message.MessageType.SHOW_PLAYER_BOARD, clientSocketStub.getMessage().getType());
-        assertEquals("TestUsername", clientSocketStub.getMessage().getData("username"));
+        Message message = clientSocketStub.popMessage();
+        assertEquals(Message.MessageType.SHOW_PLAYER_BOARD, message.getType());
+        assertEquals("TestUsername", message.getData("username"));
     }
 
     @Test
     void refreshLobbies() {
         clientController.refreshLobbies();
-        assertEquals(Message.MessageType.LOBBY_INFO, clientSocketStub.getMessage().getType());
+        assertEquals(Message.MessageType.LOBBY_INFO, clientSocketStub.popMessage().getType());
     }
 }

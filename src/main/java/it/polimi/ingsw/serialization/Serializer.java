@@ -20,7 +20,6 @@ public class Serializer {
         return new Gson().toJson(match);
     }
 
-    //TODO: provare che le leader card attive siano utilizzabili dopo una deserializzazione
     public static Match deserializeMatchState(String serializedMatch) {
         GsonBuilder gsonbuilder = new GsonBuilder();
         gsonbuilder.registerTypeAdapter(Requirements.class, new RequirementsCreator());

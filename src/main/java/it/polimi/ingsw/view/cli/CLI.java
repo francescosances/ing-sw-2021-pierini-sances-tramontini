@@ -45,17 +45,13 @@ public class CLI implements View {
      */
     private final Lock outputLock;
     /**
-     * The username of the player currently playing
-     */
-    private String currentActiveUser;//TODO: va spostato su clientcontroller
-    /**
      * Helps granting optimal visualization to different screen
      */
     private final boolean lightMode;
 
-    private static String SPEND = "spend";
+    private static final String SPEND = "spend";
 
-    private static String GAIN = "gain";
+    private static final String GAIN = "gain";
 
     public CLI(ClientController clientController, boolean lightMode) {
         this.clientController = clientController;
@@ -236,20 +232,20 @@ public class CLI implements View {
     @Override
     public void showLeaderCards(List<LeaderCard> leaderCards) {
         outputLock.lock();
-        output.println(currentActiveUser + " changed " + getPronoun() + "leader cards hand");
+        output.println(clientController.getCurrentActiveUser() + " changed " + getPronoun() + "leader cards hand");
         printLeaderCards(leaderCards);
         outputLock.unlock();
     }
 
     private String getPronoun() {
-        return currentActiveUser.equals(Match.YOU_STRING) ?
+        return clientController.getCurrentActiveUser().equals(Match.YOU_STRING) ?
                 "your" : "their";
     }
 
     @Override
     public void showDevelopmentCardSlots(DevelopmentCardSlot[] developmentCardSlots) {
         outputLock.lock();
-        output.println("\n" + currentActiveUser + " bought a card!");
+        output.println("\n" + clientController.getCurrentActiveUser() + " bought a card!");
         output.print("Now " + getPronoun());
         output.println(" development card slots are:");
         printDevelopmentCards(developmentCardSlots);
@@ -456,10 +452,9 @@ public class CLI implements View {
     public void showCurrentActiveUser(String username) {
         outputLock.lock();
         output.println();
-        currentActiveUser = new String(username);
         output.println("************");
         output.print("It's ");
-        if (currentActiveUser.equals(Match.YOU_STRING))
+        if (clientController.getCurrentActiveUser().equals(Match.YOU_STRING))
             output.print("your");
         else
             output.print(username + "'s");
@@ -525,7 +520,7 @@ public class CLI implements View {
 
     @Override
     public void showProducerUser(PlayerBoard playerBoard) {
-        output.println("\n" + currentActiveUser + " decided to produce");
+        output.println("\n" + clientController.getCurrentActiveUser() + " decided to produce");
     }
 
     @Override
@@ -534,7 +529,7 @@ public class CLI implements View {
 
     @Override
     public void showEndGameTriggered() {
-        output.println("\n"+ currentActiveUser+" has played " +getPronoun() + "last turn!");
+        output.println("\n"+ clientController.getCurrentActiveUser()+" has played " +getPronoun() + "last turn!");
     }
 
     @Override
@@ -651,7 +646,7 @@ public class CLI implements View {
     @Override
     public void showWarehouse(Warehouse warehouse) {
         outputLock.lock();
-        output.println("\n" + currentActiveUser + " changed " + getPronoun() + " warehouse");
+        output.println("\n" + clientController.getCurrentActiveUser() + " changed " + getPronoun() + " warehouse");
         printWarehouse(warehouse);
         outputLock.unlock();
     }
@@ -694,7 +689,7 @@ public class CLI implements View {
     @Override
     public void showStrongbox(Strongbox strongbox) {
         outputLock.lock();
-        output.println("\n" + currentActiveUser + " changed " + getPronoun() + " strongbox");
+        output.println("\n" + clientController.getCurrentActiveUser() + " changed " + getPronoun() + " strongbox");
         printStrongbox(strongbox);
         outputLock.unlock();
     }
@@ -791,7 +786,7 @@ public class CLI implements View {
     @Override
     public void showMarket(Market market) {
         outputLock.lock();
-        output.println("\n" + currentActiveUser + " took resources from market!");
+        output.println("\n" + clientController.getCurrentActiveUser() + " took resources from market!");
         output.println("Now the market is:");
         printMarket(market);
         outputLock.unlock();
