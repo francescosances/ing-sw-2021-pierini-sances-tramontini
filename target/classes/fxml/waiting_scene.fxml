@@ -13,7 +13,7 @@
                 <AnchorPane fx:id="rootPane" layoutX="-11.0" layoutY="61.0" prefHeight="261.0" prefWidth="547.0">
                <children>
                   <ProgressIndicator layoutX="250.0" layoutY="181.0" prefHeight="150.0" prefWidth="103.0" />
-                          <Label alignment="CENTER" layoutX="51.0" layoutY="89.0" prefHeight="37.0" prefWidth="459.0" styleClass="lbl" text="Waiting for other players" textAlignment="CENTER" />
+                          <Label alignment="CENTER" layoutX="51.0" layoutY="89.0" prefHeight="37.0" prefWidth="459.0" styleClass="lbl" text="Waiting..." textAlignment="CENTER" />
                </children>
                 </AnchorPane>
             </children>
