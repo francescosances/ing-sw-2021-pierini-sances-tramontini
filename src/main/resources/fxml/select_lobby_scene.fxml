@@ -33,7 +33,7 @@
                   <String fx:value="btn-continue" />
                </styleClass>
                 </Button>
-            <Button defaultButton="true" onAction="#refresh" prefHeight="45" prefWidth="300.0" style="-fx-start-margin: 55px">
+            <Button onAction="#refresh" prefHeight="45" prefWidth="300.0" style="-fx-start-margin: 55px">
                <styleClass>
                   <String fx:value="btn" />
                   <String fx:value="btn-refresh" />

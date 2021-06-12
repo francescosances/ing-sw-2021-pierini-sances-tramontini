@@ -78,6 +78,7 @@ public class PlayerboardSceneController extends Controller{
 
     private final Runnable defaultWarehouseAction = ()->{
         if(selectedWarehouseRows.size() == 2){
+            swapDepotsBtn.getStyleClass().remove("selected");
             clientController.swapDepots(selectedWarehouseRows.get(0),selectedWarehouseRows.get(1));
             clearWarehouseSelection();
         }
@@ -157,6 +158,7 @@ public class PlayerboardSceneController extends Controller{
         discard.setCursor(Cursor.HAND);
         discard.setFitWidth(250);
         discard.setOnMouseClicked((e)->{
+            swapDepotsBtn.getStyleClass().remove("selected");
             dialog.setResult("discard");
             dialog.close();
         });
@@ -679,6 +681,7 @@ public class PlayerboardSceneController extends Controller{
     }
 
     public void swapDepots() {
+        swapDepotsBtn.getStyleClass().add("selected");
        enableWarehouseSelection(defaultWarehouseAction);
     }
 
