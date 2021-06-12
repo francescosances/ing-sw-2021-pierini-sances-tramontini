@@ -188,6 +188,26 @@ public class PlayerboardSceneController extends Controller{
     }
 
     /**
+     * Returns the references to the imageViews showing the leader cards
+     * @return the references to the imageViews showing the leader cards
+     */
+    private ImageView[] getLeaderCardsImgs(){
+        return new ImageView[]{leadercard0,leadercard1};
+    }
+
+    /**
+     * Returns the references to the imageViews showing the development cards slots
+     * @return the references to the imageViews showing the development cards slots
+     */
+    private ImageView[][] getDevelopmentCardsSlotsImgs(){
+        return new ImageView[][]{
+                {developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2},
+                {developmentcardslot1_0,developmentcardslot1_1,developmentcardslot1_2},
+                {developmentcardslot2_0,developmentcardslot2_1,developmentcardslot2_2}
+        };
+    }
+
+    /**
      * The method used to initialize the stage. The controls are disabled by default
      * @param playerBoard the playerBoard to show
      */
@@ -289,8 +309,7 @@ public class PlayerboardSceneController extends Controller{
         marketBtn.setDisable(true);
         buyDevelopmentcardBtn.setDisable(true);
         startProductionBtn.setDisable(true);
-        leadercard0.setDisable(true);
-        leadercard1.setDisable(true);
+        Arrays.stream(getLeaderCardsImgs()).forEach(card->card.setDisable(true));
     }
 
     /**
@@ -302,8 +321,7 @@ public class PlayerboardSceneController extends Controller{
             marketBtn.setDisable(false);
             buyDevelopmentcardBtn.setDisable(false);
             startProductionBtn.setDisable(false);
-            leadercard0.setDisable(false);
-            leadercard1.setDisable(false);
+            Arrays.stream(getLeaderCardsImgs()).forEach(card->card.setDisable(false));
         }
         selectUser.setDisable(false);
     }
@@ -399,7 +417,7 @@ public class PlayerboardSceneController extends Controller{
 
         final ImageView[] warehouseVoids = getWarehouseRowsImgs();
 
-        final ImageView[] leaderCardsImgs = {leadercard0,leadercard1};
+        final ImageView[] leaderCardsImgs = getLeaderCardsImgs();
 
         if(selectedWarehouseRows.contains(rowIndex)){
             selectedWarehouseRows.removeIf(i -> i == rowIndex);
@@ -463,7 +481,7 @@ public class PlayerboardSceneController extends Controller{
             });
         }
 
-        final ImageView[] leaderCardsImg = {leadercard0,leadercard1};
+        final ImageView[] leaderCardsImg = getLeaderCardsImgs();
 
        List<LeaderCard> leaderCards = playerBoard.getLeaderCards();
         int depotIndex = 3;
@@ -493,7 +511,7 @@ public class PlayerboardSceneController extends Controller{
         Arrays.stream(getWarehouseRowsImgs()).forEach(row->row.getStyleClass().remove("selected"));
         Arrays.stream(getWarehouseResourcesImgs()).forEach(row->Arrays.stream(row).forEach(cell->cell.getStyleClass().remove("selected")));
 
-        final ImageView[] leaderCardsImg = {leadercard0,leadercard1};
+        final ImageView[] leaderCardsImg = getLeaderCardsImgs();
 
         List<LeaderCard> leaderCards = playerBoard.getLeaderCards();
         for(int i=0;i<leaderCards.size();i++){
@@ -612,7 +630,7 @@ public class PlayerboardSceneController extends Controller{
             addListenerToProducer(baseProductionBtn, DevelopmentCard.getBaseProduction());
         }
 
-        ImageView[] leaderCardsImg = {leadercard0,leadercard1};
+        final ImageView[] leaderCardsImg = getLeaderCardsImgs();
 
         int index = 0;
         for(LeaderCard leaderCard:playerBoard.getLeaderCards()){
@@ -624,10 +642,7 @@ public class PlayerboardSceneController extends Controller{
             index++;
         }
 
-        ImageView[][] slots =
-                        {{developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2},
-                        {developmentcardslot1_0,developmentcardslot1_1,developmentcardslot1_2},
-                        {developmentcardslot2_0,developmentcardslot2_1,developmentcardslot2_2}};
+        final ImageView[][] slots = getDevelopmentCardsSlotsImgs();
 
         index = 0;
         for(DevelopmentCardSlot slot:playerBoard.getDevelopmentCardSlots()){
@@ -654,7 +669,7 @@ public class PlayerboardSceneController extends Controller{
         baseProductionBtn.getStyleClass().remove("selected");
         baseProductionBtn.setDisable(true);
 
-        ImageView[] leaderCardsImg = {leadercard0,leadercard1};
+        final ImageView[] leaderCardsImg = getLeaderCardsImgs();
 
         startProductionBtn.setOnAction((e)->{
             startProduction();
@@ -670,10 +685,7 @@ public class PlayerboardSceneController extends Controller{
             index++;
         }
 
-        ImageView[][] slots =
-                {{developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2},
-                        {developmentcardslot1_0,developmentcardslot1_1,developmentcardslot1_2},
-                        {developmentcardslot2_0,developmentcardslot2_1,developmentcardslot2_2}};
+        final ImageView[][] slots = getDevelopmentCardsSlotsImgs();
 
         index = 0;
         for(DevelopmentCardSlot slot:playerBoard.getDevelopmentCardSlots()){
@@ -690,12 +702,9 @@ public class PlayerboardSceneController extends Controller{
     public void chooseDevelopmentCardSlot(DevelopmentCardSlot[] slots, DevelopmentCard developmentCard) {
         disableControls();
 
-        ImageView[][] slotsImg =
-                {{developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2},
-                        {developmentcardslot1_0,developmentcardslot1_1,developmentcardslot1_2},
-                        {developmentcardslot2_0,developmentcardslot2_1,developmentcardslot2_2}};
+        final ImageView[][] slotsImg = getDevelopmentCardsSlotsImgs();
 
-        ImageView[] desks = {desk0,desk1,desk2};
+        final ImageView[] desks = {desk0,desk1,desk2};
 
         buyDevelopmentcardBtn.setVisible(false);
         marketBtn.setVisible(false);
@@ -717,12 +726,9 @@ public class PlayerboardSceneController extends Controller{
     }
 
     private void disableDevelopmentCardSlots(){
-        ImageView[][] slotsImg =
-                {{developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2},
-                        {developmentcardslot1_0,developmentcardslot1_1,developmentcardslot1_2},
-                        {developmentcardslot2_0,developmentcardslot2_1,developmentcardslot2_2}};
+        final ImageView[][] slotsImg = getDevelopmentCardsSlotsImgs();
 
-        ImageView[] desks = {desk0,desk1,desk2};
+        final ImageView[] desks = {desk0,desk1,desk2};
 
         int index = 0;
         for(DevelopmentCardSlot slot:playerBoard.getDevelopmentCardSlots()){
@@ -769,10 +775,7 @@ public class PlayerboardSceneController extends Controller{
 
         enableWarehouseSelection(defaultWarehouseAction);
 
-        ImageView[][] slotsImg =
-                        {{developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2},
-                        {developmentcardslot1_0,developmentcardslot1_1,developmentcardslot1_2},
-                        {developmentcardslot2_0,developmentcardslot2_1,developmentcardslot2_2}};
+        final ImageView[][] slotsImg = getDevelopmentCardsSlotsImgs();
 
         for (ImageView[] imageViews : slotsImg) {
             for (ImageView imageView : imageViews) {
@@ -846,7 +849,7 @@ public class PlayerboardSceneController extends Controller{
     public void showLeaderCards(List<LeaderCard> leaderCardList) {
         this.playerBoard.setLeaderCards(leaderCardList);
 
-        ImageView[] leaderCards = {leadercard0,leadercard1};
+        final ImageView[] leaderCards = getLeaderCardsImgs();
 
         Arrays.stream(leaderCards).forEach(card->card.setVisible(false));
 
@@ -871,10 +874,7 @@ public class PlayerboardSceneController extends Controller{
 
     public void showDevelopmentCards(DevelopmentCardSlot[] developmentCardSlots) {
 
-        ImageView[][] slots =
-                {{developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2},
-                        {developmentcardslot1_0,developmentcardslot1_1,developmentcardslot1_2},
-                        {developmentcardslot2_0,developmentcardslot2_1,developmentcardslot2_2}};
+        final ImageView[][] slots = getDevelopmentCardsSlotsImgs();
 
         Arrays.stream(slots).forEach(slotRow -> Arrays.stream(slotRow).forEach(slot ->slot.setVisible(false)));
 
