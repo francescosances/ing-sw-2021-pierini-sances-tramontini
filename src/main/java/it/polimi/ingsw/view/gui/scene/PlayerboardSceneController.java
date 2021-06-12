@@ -3,7 +3,6 @@ package it.polimi.ingsw.view.gui.scene;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.*;
-import it.polimi.ingsw.view.gui.GUI;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -16,13 +15,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.view.gui.GUI.SPEND;
 
 public class PlayerboardSceneController extends Controller{
     //TODO: mostrare black cross all'inizio
-    //TODO: bug: quando scarti una risorsa il tuo marker si aggiorna sulla playerboard perché ti viene mostrata la playerboard del giocatore che è avanzato
+    //TODO: bug: mentre si piazzano le risorse il selettore utente resta sbloccato e permette di rieffettuare nuovamente l'azione
+    //TODO: disattivare selettore utenti quando non è il tuo turno
 
     @FXML
     protected ImageView leadercard0,leadercard1;
@@ -71,6 +70,11 @@ public class PlayerboardSceneController extends Controller{
     private final static double[][] FAITH_TRACK_CELLS = {{22,212}, {64,212}, {106,212}, {106,170}, {106,128}, {148,128}, {190,128}, {232,128}, {276,128}, {318,128}, {318,170}, {318,212}, {360,212}, {402,212}, {446,212}, {488,212}, {530,212}, {530,170}, {530,128}, {572,128}, {614,128}, {658,128}, {700,128}, {742,128}, {784,128}};
 
     private PlayerBoard playerBoard;
+
+    /**
+     * True if the user is storing resources
+     */
+    private boolean storing = false;
 
     private Runnable onRollbackAction = ()->{};
 
@@ -412,11 +416,12 @@ public class PlayerboardSceneController extends Controller{
     }
 
     public void askToStoreResource(Resource resource, Warehouse warehouse) {
+        storing = true;
 
         if(resource == null)
             return;
 
-        currentResource.setImage(new Image("/images/resources/"+resource.toString()+".png"));
+        currentResource.setImage(new Image("/images/resources/"+ resource +".png"));
 
         discardResourceBtn.setVisible(true);
         currentResource.setVisible(true);
@@ -619,6 +624,9 @@ public class PlayerboardSceneController extends Controller{
     }
 
     private void showPlayerBoard(PlayerBoard playerBoard){
+        if(storing && !playerBoard.getUsername().equals(this.playerBoard.getUsername()))
+            return;
+
         this.playerBoard = playerBoard;
 
         showLeaderCards(playerBoard.getLeaderCards());
@@ -633,6 +641,7 @@ public class PlayerboardSceneController extends Controller{
     }
 
     public void resetControls(Action[] availableActions) {
+        storing = false;
         this.populateUserSelect();
         this.enableControls();
 
@@ -687,6 +696,9 @@ public class PlayerboardSceneController extends Controller{
 
     public void showFaithTrack(FaithTrack faithTrack) {
         if(!faithTrack.isBlackCross()) {
+            if(storing && !faithTrack.getUsername().equals(this.playerBoard.getUsername()))
+                return;
+
             playerBoard.setFaithTrack(faithTrack);
 
             marker.setX(FAITH_TRACK_CELLS[faithTrack.getFaithMarker()][0]);
@@ -777,6 +789,7 @@ public class PlayerboardSceneController extends Controller{
     }
 
     public void performedAction(){
+        storing = false;
         clearResourceSupply();
         rollbackBtn.setVisible(false);
         selectedProducers = new ArrayList<>();
