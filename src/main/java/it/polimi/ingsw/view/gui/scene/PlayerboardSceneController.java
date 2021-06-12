@@ -23,52 +23,103 @@ public class PlayerboardSceneController extends Controller{
     //TODO: bug: mentre si piazzano le risorse il selettore utente resta sbloccato e permette di rieffettuare nuovamente l'azione
     //TODO: disattivare selettore utenti quando non è il tuo turno
 
+    /**
+     * The imageViews of the two user's leader cards
+     */
     @FXML
     protected ImageView leadercard0,leadercard1;
 
+    /**
+     * The imageViews used to show the leader cards depots. This imageViews are hidden when the scene is loaded
+     */
     @FXML
     protected ImageView leaderCardDepot00,leaderCardDepot01,leaderCardDepot10,leaderCardDepot11;
 
+    /**
+     * The imageViews showing the development cards sorted by slot
+     */
     @FXML
     protected ImageView developmentcardslot0_0,developmentcardslot0_1,developmentcardslot0_2,developmentcardslot1_0,developmentcardslot1_1,developmentcardslot1_2,developmentcardslot2_0,developmentcardslot2_1,developmentcardslot2_2,desk0,desk1,desk2;
 
+    /**
+     * The action buttons
+     */
     @FXML
     protected Button marketBtn,startProductionBtn,buyDevelopmentcardBtn,rollbackBtn,discardResourceBtn,skipBtn,swapDepotsBtn;
 
+    /**
+     * The imageViews showing the resources in the warehouse
+     */
     @FXML
-    protected ImageView warehouse0,warehouse1,warehouse2,warehouse3,warehouse4,warehouse5,warehouse_void_0,warehouse_void_1,warehouse_void_2;
+    protected ImageView warehouse0,warehouse1,warehouse2,warehouse3,warehouse4,warehouse5;
 
+    /**
+     * The imageViews showing the void rows of the warehouse
+     */
+    @FXML
+    protected ImageView warehouse_void_0,warehouse_void_1,warehouse_void_2;
+
+    /**
+     * The strongbox imageViews
+     */
     @FXML
     protected ImageView strongbox0,strongbox1,strongbox2,strongbox3;
 
+    /**
+     * The pope favor tiles imageViews
+     */
     @FXML
     protected ImageView vaticanreport0,vaticanreport1,vaticanreport2;
 
+    /**
+     * The resource supply and the resources to be stored imageviews
+     */
     @FXML
     protected ImageView resources_supply,resources_supply_0,resources_supply_1,resources_supply_2,resources_supply_3,currentResource,boxCurrentResource;
 
+    /**
+     * The counters of the resources in the strongbox
+     */
     @FXML
     protected Label lblStoring,lblCoinStrongbox,lblStoneStrongbox,lblShieldStrongbox,lblServantStrongbox;
 
+    /**
+     * The marker of the player and the marker of the black cross on the faith track
+     */
     @FXML
     protected ImageView marker,blackCross;
 
-    @FXML
-    protected StackPane root;
-
+    /**
+     * The graphic regions over the warehouse row
+     */
     @FXML
     protected Region warehouseRow0,warehouseRow1,warehouseRow2;
 
+    /**
+     * The choicebox used to select the user to show
+     */
     @FXML
     protected ChoiceBox<String> selectUser;
 
+    /**
+     * The button used to choose the base production
+     */
     @FXML
     protected ImageView baseProductionBtn;
 
+    /**
+     * True if the buttons are enabled so that the user can click them
+     */
     private boolean controlsEnabled = false;
 
+    /**
+     * The coordinates of the faith track cells used to show the marker
+     */
     private final static double[][] FAITH_TRACK_CELLS = {{22,212}, {64,212}, {106,212}, {106,170}, {106,128}, {148,128}, {190,128}, {232,128}, {276,128}, {318,128}, {318,170}, {318,212}, {360,212}, {402,212}, {446,212}, {488,212}, {530,212}, {530,170}, {530,128}, {572,128}, {614,128}, {658,128}, {700,128}, {742,128}, {784,128}};
 
+    /**
+     * A reference to the current shown playerboard
+     */
     private PlayerBoard playerBoard;
 
     /**
@@ -76,10 +127,19 @@ public class PlayerboardSceneController extends Controller{
      */
     private boolean storing = false;
 
-    private Runnable onRollbackAction = ()->{};
+    /**
+     * The action to be executed when the rollback button is pressed
+     */
+    private Runnable onRollbackAction = ()->{};//TODO: controllare quando viene utilizzato e perché non risettato mai ai valori di default
 
+    /**
+     * The warehouse rows that have been selected
+     */
     private final List<Integer> selectedWarehouseRows = new ArrayList<>();
 
+    /**
+     * The default action executed when a warehouse row is selected
+     */
     private final Runnable defaultWarehouseAction = ()->{
         if(selectedWarehouseRows.size() == 2){
             swapDepotsBtn.getStyleClass().remove("selected");
@@ -88,19 +148,49 @@ public class PlayerboardSceneController extends Controller{
         }
     };
 
+    /**
+     * The action to be executed when the user change the current shown user on the choiceBox
+     */
     private final ChangeListener<? super Number> changeUserListener = (observableValue, value, index) -> {
         int intIndex = (Integer) index;
         if(intIndex < 0)return;
         String username = selectUser.getItems().get(intIndex);
-        if(!username.equals(playerBoard.getUsername())) {
+        if(!username.equals(playerBoard.getUsername())) {//if the user is not already shown
             clientController.showPlayerBoard(selectUser.getItems().get(intIndex));
             selectUser.setDisable(true);
             disableControls();
         }
     };
 
+    /**
+     * The producers that have currently been selected to start the production
+     */
     private List<Producer> selectedProducers;
 
+    /**
+     * Returns the references to the imageViews showing the resources in the wharehouse
+     * @return the references to the imageViews showing the resources in the wharehouse
+     */
+    private ImageView[][] getWarehouseResourcesImgs(){
+        return new ImageView[][]{
+                {warehouse0},
+                {warehouse1,warehouse2},
+                {warehouse3,warehouse4,warehouse5}
+        };
+    }
+
+    /**
+     * Returns the references to the imageViews showing the rows of the warehouse
+     * @return the references to the imageViews showing the rows of the warehouse
+     */
+    private ImageView[] getWarehouseRowsImgs(){
+        return new ImageView[]{warehouse_void_0,warehouse_void_1,warehouse_void_2};
+    }
+
+    /**
+     * The method used to initialize the stage. The controls are disabled by default
+     * @param playerBoard the playerBoard to show
+     */
     @FXML
     public void initialize(PlayerBoard playerBoard){
         showPlayerBoard(playerBoard);
@@ -110,32 +200,38 @@ public class PlayerboardSceneController extends Controller{
         selectUser.setDisable(false);
 
         populateUserSelect();
-
     }
 
-
+    /**
+     * The method called when the rollback button is pressed. It executes the set rollbackAction and tell the clientcontroller to rollback.
+     */
     @FXML
     public void rollback(){
         onRollbackAction.run();
         clientController.rollback();
     }
 
-
+    /**
+     * Populate the user ChoiceBox with the list of players
+     */
     public void populateUserSelect(){
         List<String> players = clientController.getPlayers();
 
         if(players == null)
             return;
 
-        selectUser.getSelectionModel().selectedIndexProperty().removeListener(changeUserListener);
-
+        selectUser.getSelectionModel().selectedIndexProperty().removeListener(changeUserListener);//remove the listener to avoid loop listeners call
 
         selectUser.setItems(FXCollections.observableArrayList(players));
         selectUser.setValue((playerBoard.getUsername().equals(clientController.getUsername()))?Match.YOU_STRING: playerBoard.getUsername());
 
-        selectUser.getSelectionModel().selectedIndexProperty().addListener(changeUserListener);
+        selectUser.getSelectionModel().selectedIndexProperty().addListener(changeUserListener);//reset the listener to the choicebox
     }
 
+    /**
+     * The method to call when a leader card is clicked. It shows a dialog that let the user play or discard the card
+     * @param cardIndex the index of the choosen card in the player's cards list
+     */
     private void leaderCardClicked(int cardIndex){
         Dialog<String> dialog = new Dialog<>();
 
@@ -185,6 +281,9 @@ public class PlayerboardSceneController extends Controller{
         }
     }
 
+    /**
+     * Disable all the buttons so that the user cannot click them
+     */
     public void disableControls(){
         controlsEnabled = false;
         marketBtn.setDisable(true);
@@ -194,6 +293,9 @@ public class PlayerboardSceneController extends Controller{
         leadercard1.setDisable(true);
     }
 
+    /**
+     * Enable the default buttons so that the user can click them
+     */
     public void enableControls(){
         if(playerBoard.getUsername().equals(clientController.getUsername())) {
             controlsEnabled = true;
@@ -206,11 +308,18 @@ public class PlayerboardSceneController extends Controller{
         selectUser.setDisable(false);
     }
 
+    /**
+     * Method called when the market button is pressed. It tells the client controller to open the market
+     */
     @FXML
     public void goToMarket() {
         clientController.performAction(Action.TAKE_RESOURCES_FROM_MARKET);
     }
 
+    /**
+     * Method called when the production button is pressed.
+     * If the user has not choose the producers, it enables the listener to let him choose them. Otherwise, it sends the producer list to the clientController to start the production
+     */
     @FXML
     public void startProduction() {
         if(selectedProducers == null)
@@ -222,22 +331,24 @@ public class PlayerboardSceneController extends Controller{
         }
     }
 
+    /**
+     * Method called when the buy development card button is pressed. It tells the client controller to open the development cards list
+     */
     @FXML
     public void buyDevelopmentCard() {
         clientController.performAction(Action.BUY_DEVELOPMENT_CARD);
     }
 
+    /**
+     * Update the warehouse on the playerboard
+     * @param warehouse the new warehouse to show
+     */
     public void showWarehouse(Warehouse warehouse){
         this.playerBoard.setWarehouse(warehouse);
 
-        ImageView[][] imgWarehouse = {
-                {warehouse0},
-                {warehouse1,warehouse2},
-                {warehouse3,warehouse4,warehouse5}
-        };
+        final ImageView[][] imgWarehouse = getWarehouseResourcesImgs();
 
         List<Depot> depots = warehouse.getDepots();
-
 
         for (ImageView[] imageViews : imgWarehouse) {
             for (ImageView imageView : imageViews) imageView.setVisible(false);
@@ -246,16 +357,19 @@ public class PlayerboardSceneController extends Controller{
         for(int i=0;i<3;i++){
             int j;
             for(j=0;j<depots.get(i).getOccupied();j++){
+                //shows the stored resources
                 imgWarehouse[i][j].setImage(new Image("/images/resources/"+depots.get(i).getResourceType().toString()+".png"));
                 imgWarehouse[i][j].setVisible(true);
             }
         }
 
+        //The depots leaderCards imageViews references
         final ImageView[][] leaderCardsDepotImg = {
                 {leaderCardDepot00,leaderCardDepot01},
                 {leaderCardDepot10,leaderCardDepot11}
         };
 
+        //hide all the resources by default
         Arrays.stream(leaderCardsDepotImg).forEach(card-> Arrays.stream(card).forEach(item->item.setVisible(false)));
 
         List<LeaderCard> leaderCards = playerBoard.getLeaderCards();
@@ -273,15 +387,17 @@ public class PlayerboardSceneController extends Controller{
         enableWarehouseSelection(defaultWarehouseAction);
     }
 
+
+    /**
+     * Method to call when a warehouse row is clicked. It runs the action specified by parameter
+     * @param rowIndex the index of the warehouse's row
+     * @param action the action to be executed
+     */
     private void warehouseSelected(int rowIndex,Runnable action){
 
-        final ImageView[][] imgWarehouse = {
-                {warehouse0},
-                {warehouse1,warehouse2},
-                {warehouse3,warehouse4,warehouse5}
-        };
+        final ImageView[][] imgWarehouse = getWarehouseResourcesImgs();
 
-        final ImageView[] warehouseVoids = {warehouse_void_0,warehouse_void_1,warehouse_void_2};
+        final ImageView[] warehouseVoids = getWarehouseRowsImgs();
 
         final ImageView[] leaderCardsImgs = {leadercard0,leadercard1};
 
@@ -315,15 +431,15 @@ public class PlayerboardSceneController extends Controller{
         }
     }
 
+    /**
+     * Let the user click on the warehouse rows
+     * @param onDepotSelectedAction the action to be executed when the depot is clicked
+     */
     private void enableWarehouseSelection(Runnable onDepotSelectedAction){
 
-        final ImageView[][] imgWarehouse = {
-                {warehouse0},
-                {warehouse1,warehouse2},
-                {warehouse3,warehouse4,warehouse5}
-        };
+        final ImageView[][] imgWarehouse = getWarehouseResourcesImgs();
 
-        final ImageView[] warehouseVoids = {warehouse_void_0,warehouse_void_1,warehouse_void_2};
+        final ImageView[] warehouseVoids = getWarehouseRowsImgs();
 
         final Region[] warehouseRows = {warehouseRow0,warehouseRow1,warehouseRow2};
 
@@ -372,16 +488,10 @@ public class PlayerboardSceneController extends Controller{
         }
     }
 
+
     private void clearWarehouseSelection(){
-        warehouse_void_0.getStyleClass().remove("selected");
-        warehouse_void_1.getStyleClass().remove("selected");
-        warehouse_void_2.getStyleClass().remove("selected");
-        warehouse0.getStyleClass().remove("selected");
-        warehouse1.getStyleClass().remove("selected");
-        warehouse2.getStyleClass().remove("selected");
-        warehouse3.getStyleClass().remove("selected");
-        warehouse4.getStyleClass().remove("selected");
-        warehouse5.getStyleClass().remove("selected");
+        Arrays.stream(getWarehouseRowsImgs()).forEach(row->row.getStyleClass().remove("selected"));
+        Arrays.stream(getWarehouseResourcesImgs()).forEach(row->Arrays.stream(row).forEach(cell->cell.getStyleClass().remove("selected")));
 
         final ImageView[] leaderCardsImg = {leadercard0,leadercard1};
 
