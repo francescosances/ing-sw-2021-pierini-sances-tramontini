@@ -98,9 +98,11 @@ public class Match implements ObservableFromView {
     }
 
     public Deck<DevelopmentCard> getDevelopmentCardDeck(DevelopmentColorType color, int level){
-        List<DevelopmentColorType> colors = Arrays.asList(DevelopmentColorType.values());
-        int column = colors.indexOf(color);
-        return developmentDecks.get((level-1)*colors.size()+column);
+        for (Deck<DevelopmentCard> deck:developmentDecks) {
+            if (!deck.isEmpty() && deck.top().getColor() == color && deck.top().getLevel() == level)
+                return deck;
+        }
+        return new Deck<>();
     }
 
     public List<LeaderCard> drawLeaderCards(int num) {

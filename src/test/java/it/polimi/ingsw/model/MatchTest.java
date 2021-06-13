@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.cards.Deck;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
+import it.polimi.ingsw.model.cards.DevelopmentColorType;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.serialization.Serializer;
@@ -92,6 +93,40 @@ public class MatchTest {
             else
                 assertEquals(markerPositionsBefore.get(index) +1,match.getPlayers().get(index).getFaithTrack().getFaithMarker());
         }
+    }
+
+    @Test
+    public void getDevelopmentCardTest(){
+        assertEquals(DevelopmentColorType.BLUE, match.getDevelopmentCardDeck(DevelopmentColorType.BLUE, 1).top().getColor());
+        assertEquals(1, match.getDevelopmentCardDeck(DevelopmentColorType.BLUE, 1).top().getLevel());
+        assertEquals(DevelopmentColorType.GREEN, match.getDevelopmentCardDeck(DevelopmentColorType.GREEN, 1).top().getColor());
+        assertEquals(1, match.getDevelopmentCardDeck(DevelopmentColorType.GREEN, 1).top().getLevel());
+        assertEquals(DevelopmentColorType.YELLOW, match.getDevelopmentCardDeck(DevelopmentColorType.YELLOW, 1).top().getColor());
+        assertEquals(1, match.getDevelopmentCardDeck(DevelopmentColorType.YELLOW, 1).top().getLevel());
+        assertEquals(DevelopmentColorType.PURPLE, match.getDevelopmentCardDeck(DevelopmentColorType.PURPLE, 1).top().getColor());
+        assertEquals(1, match.getDevelopmentCardDeck(DevelopmentColorType.PURPLE, 1).top().getLevel());
+
+        assertEquals(DevelopmentColorType.BLUE, match.getDevelopmentCardDeck(DevelopmentColorType.BLUE, 2).top().getColor());
+        assertEquals(2, match.getDevelopmentCardDeck(DevelopmentColorType.BLUE, 2).top().getLevel());
+        assertEquals(DevelopmentColorType.GREEN, match.getDevelopmentCardDeck(DevelopmentColorType.GREEN, 2).top().getColor());
+        assertEquals(2, match.getDevelopmentCardDeck(DevelopmentColorType.GREEN, 2).top().getLevel());
+        assertEquals(DevelopmentColorType.YELLOW, match.getDevelopmentCardDeck(DevelopmentColorType.YELLOW, 2).top().getColor());
+        assertEquals(2, match.getDevelopmentCardDeck(DevelopmentColorType.YELLOW, 2).top().getLevel());
+        assertEquals(DevelopmentColorType.PURPLE, match.getDevelopmentCardDeck(DevelopmentColorType.PURPLE, 2).top().getColor());
+        assertEquals(2, match.getDevelopmentCardDeck(DevelopmentColorType.PURPLE, 2).top().getLevel());
+
+        assertEquals(DevelopmentColorType.BLUE, match.getDevelopmentCardDeck(DevelopmentColorType.BLUE, 3).top().getColor());
+        assertEquals(3, match.getDevelopmentCardDeck(DevelopmentColorType.BLUE, 3).top().getLevel());
+        assertEquals(DevelopmentColorType.GREEN, match.getDevelopmentCardDeck(DevelopmentColorType.GREEN, 3).top().getColor());
+        assertEquals(3, match.getDevelopmentCardDeck(DevelopmentColorType.GREEN, 3).top().getLevel());
+        assertEquals(DevelopmentColorType.YELLOW, match.getDevelopmentCardDeck(DevelopmentColorType.YELLOW, 3).top().getColor());
+        assertEquals(3, match.getDevelopmentCardDeck(DevelopmentColorType.YELLOW, 3).top().getLevel());
+        assertEquals(DevelopmentColorType.PURPLE, match.getDevelopmentCardDeck(DevelopmentColorType.PURPLE, 3).top().getColor());
+        assertEquals(3, match.getDevelopmentCardDeck(DevelopmentColorType.PURPLE, 3).top().getLevel());
+
+        for (int i = 0; i < 4; i++)
+            match.getDevelopmentCardDeck(DevelopmentColorType.BLUE,1).pop();
+        assertTrue(match.getDevelopmentCardDeck(DevelopmentColorType.BLUE,1).isEmpty());
     }
 
     @Test

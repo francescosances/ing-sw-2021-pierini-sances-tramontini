@@ -51,7 +51,7 @@ public class SoloMatch extends Match{
     /**
      * The actionTokens deck is refilled with all action tokens and shuffled
      */
-    public void shuffleActionTokens(){
+    public void shuffleActionTokens() {
         actionTokens = new Deck<>();
         actionTokens.add(new ActionToken(DevelopmentColorType.BLUE));
         actionTokens.add(new ActionToken(DevelopmentColorType.GREEN));

@@ -273,16 +273,20 @@ public class CLI implements View {
         output.println();
         List<DevelopmentCard> availableCards = new ArrayList<>();
         for (Deck<DevelopmentCard> deck : developmentCardList) {
-            output.print(developmentCardColor(deck.top().getColor()));
-            output.printf("%s level %d\n", deck.top().getColor(), deck.top().getLevel());
-            DevelopmentCard developmentCard = deck.top();
-            if (!developmentCard.getCost().satisfied(playerBoard) || !playerBoard.acceptsDevelopmentCard(developmentCard))
-                output.print(ANSI_WHITE + "[X]");
+            if (deck.isEmpty())
+                output.println("\n");
             else {
-                output.printf(developmentCardColor(developmentCard.getColor()) + "[%d]", availableCards.size());
-                availableCards.add(developmentCard);
+                DevelopmentCard developmentCard = deck.top();
+                output.print(developmentCardColor(developmentCard.getColor()));
+                output.printf("%s level %d\n", developmentCard.getColor(), deck.top().getLevel());
+                if (!developmentCard.getCost().satisfied(playerBoard) || !playerBoard.acceptsDevelopmentCard(developmentCard))
+                    output.print(ANSI_WHITE + "[X]");
+                else {
+                    output.printf(developmentCardColor(developmentCard.getColor()) + "[%d]", availableCards.size());
+                    availableCards.add(developmentCard);
+                }
+                output.println(developmentCard);
             }
-            output.println(developmentCard);
         }
         output.print(ANSI_RESET);
 

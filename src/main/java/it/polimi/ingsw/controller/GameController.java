@@ -171,6 +171,10 @@ public class GameController implements PlayerStatusListener {
                 players.get((match.getCurrentPlayerIndex()+i)%players.size()).setPlayerIndex(i);
             setPhase(Match.GamePhase.PLAYERS_SETUP);
             listPlayers();
+            if (match.getPlayers().size() == 1){
+                SoloMatch soloMatch = (SoloMatch) match;
+                players.get(firstPlayerIndex).getView().showFaithTrack(soloMatch.getBlackCross());
+            }
         }else{
             setSuspended(false);
             setPhase(match.getCurrentPhase());

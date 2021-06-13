@@ -218,10 +218,8 @@ public class ClientController {
                 lock.unlock();
                 break;
             case ACTION_TOKEN:
-                lock.lock();
                 ActionToken actionToken = Serializer.deserializeActionToken(message.getData("actionToken"));
                 view.showActionToken(actionToken);
-                lock.unlock();
                 break;
             case PRODUCTION_PERFORMED:
                 lock.lock();
