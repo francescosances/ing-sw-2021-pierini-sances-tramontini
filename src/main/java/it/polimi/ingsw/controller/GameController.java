@@ -74,7 +74,7 @@ public class GameController implements PlayerStatusListener {
     public synchronized void handleReceivedGameMessage(Message message, String username){
         Gson gson = new Gson();
         try {
-            if(message.getType() != Message.MessageType.SHOW_PLAYER_BOARD && !username.equals(players.get(match.getCurrentPlayerIndex()).getUsername())) {
+            if(message.getType() != Message.MessageType.SHOW_PLAYER_BOARD && !username.equals(getCurrentPlayer().getUsername())) {
                 System.out.println("Invalid message received from "+username);
                 return;
             }
@@ -283,6 +283,14 @@ public class GameController implements PlayerStatusListener {
     }
 
     /**
+     * Returns the current player
+     * @return the current player
+     */
+    public PlayerController getCurrentPlayer() {
+        return players.get(match.getCurrentPlayerIndex());
+    }
+
+    /**
      * Method that should be called everytime that the game phase or the current player are changed
      * Organizes the main game phases
      */
@@ -293,19 +301,19 @@ public class GameController implements PlayerStatusListener {
                     setPhase(Match.GamePhase.TURN);
                     return;
                 }
-                players.get(match.getCurrentPlayerIndex()).setup();
+                getCurrentPlayer().setup();
                 match.setUsersReadyToPlay(match.getUsersReadyToPlay()+1);
                 showCurrentActiveUser();
                 break;
             case TURN:
-                players.get(match.getCurrentPlayerIndex()).startTurn();
+                getCurrentPlayer().startTurn();
                 showCurrentActiveUser();
                 break;
             case END_GAME:
-                if (players.get(match.getCurrentPlayerIndex()).getPlayerBoard().hasInkwell())
+                if (getCurrentPlayer().getPlayerBoard().hasInkwell())
                     findWinner();
                 else {
-                    players.get(match.getCurrentPlayerIndex()).startTurn();
+                    getCurrentPlayer().startTurn();
                     showCurrentActiveUser();
                 }
                 break;
@@ -339,7 +347,7 @@ public class GameController implements PlayerStatusListener {
      */
     private void showCurrentActiveUser() {
         for (PlayerController player : players)
-            player.getView().showCurrentActiveUser(players.get(match.getCurrentPlayerIndex()).getUsername());
+            player.getView().showCurrentActiveUser(getCurrentPlayer().getUsername());
     }
 
     /**
@@ -348,10 +356,10 @@ public class GameController implements PlayerStatusListener {
      */
     @Override
     public void onPlayerStatusChanged(PlayerController player) {
-        if(!player.getUsername().equals(players.get(match.getCurrentPlayerIndex()).getUsername()))
+        if(!player.getUsername().equals(getCurrentPlayer().getUsername()))
             return;
         System.out.println("The player "+player.getUsername()+" has changed his status to "+player.getCurrentStatus());
-        final PlayerController playerController = players.get(match.getCurrentPlayerIndex());
+        final PlayerController playerController = getCurrentPlayer();
         switch (player.getCurrentStatus()) {
             case TURN_ENDED:
                 try {
@@ -396,8 +404,8 @@ public class GameController implements PlayerStatusListener {
             statusObserver.onStatusChanged(this);
             return;
         }
-        if(!players.get(match.getCurrentPlayerIndex()).isActive()) { // The current player is inactive
-            broadcastMessage("The player: "+players.get(match.getCurrentPlayerIndex()).username+" is inactive. His turn has been skipped");
+        if(!getCurrentPlayer().isActive()) { // The current player is inactive
+            broadcastMessage("The player: "+getCurrentPlayer().username+" is inactive. His turn has been skipped");
             if(match.getCurrentPhase() == Match.GamePhase.PLAYERS_SETUP)
                 onStatusChanged();
             nextTurn();
@@ -506,7 +514,7 @@ public class GameController implements PlayerStatusListener {
     public void resumeMatch(String username) {
         match.addView(getPlayerController(username).getView());
         listPlayers();
-        getPlayerController(username).getView().showCurrentActiveUser(players.get(match.getCurrentPlayerIndex()).getUsername());
+        getPlayerController(username).getView().showCurrentActiveUser(getCurrentPlayer().getUsername());
         getPlayerController(username).getView().resumeMatch(getPlayerController(username).getPlayerBoard());
     }
 }
