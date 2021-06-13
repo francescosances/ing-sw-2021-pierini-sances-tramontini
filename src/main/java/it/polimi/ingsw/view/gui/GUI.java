@@ -315,11 +315,11 @@ public class GUI implements View {
     public void askToChooseProductionCosts(Requirements requirements) {
         if(requirements.getResources(NonPhysicalResourceType.ON_DEMAND) == 0) {
             productionCosts = new Resource[0];
-            askToChooseProductionGains(PlayerboardSceneController.calculateRequirements(selectedProducers, GAIN));
+            askToChooseProductionGains(calculateRequirements(selectedProducers, GAIN));
         }else{
             Platform.runLater(() -> ((SelectResourcesController) openModal("select_resources_scene","Select resources to spend", ()->{})).initialize(requirements.getResources(NonPhysicalResourceType.ON_DEMAND), (resources) -> {
                 productionCosts = resources;
-                askToChooseProductionGains(PlayerboardSceneController.calculateRequirements(selectedProducers, GAIN));
+                askToChooseProductionGains(calculateRequirements(selectedProducers, GAIN));
             }, SPEND));
         }
     }
@@ -413,5 +413,14 @@ public class GUI implements View {
         return clientController.getUsername();
     }
 
+    public static Requirements calculateRequirements(List<Producer> producers,String type){
+        Requirements result = new Requirements();
+
+        for(Producer producer:producers) {
+            result.addResourceRequirement(NonPhysicalResourceType.ON_DEMAND, (type.equals(SPEND)?producer.getProductionCost():producer.getProductionGain()).getResources(NonPhysicalResourceType.ON_DEMAND));
+        }
+
+        return result;
+    }
 
 }

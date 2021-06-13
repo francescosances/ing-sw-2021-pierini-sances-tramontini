@@ -17,6 +17,7 @@ import javafx.scene.layout.*;
 import java.util.*;
 
 import static it.polimi.ingsw.view.gui.GUI.SPEND;
+import static it.polimi.ingsw.view.gui.GUI.calculateRequirements;
 
 public class PlayerboardSceneController extends Controller{
     //TODO: bug: mentre si piazzano le risorse il selettore utente resta sbloccato e permette di rieffettuare nuovamente l'azione
@@ -206,6 +207,23 @@ public class PlayerboardSceneController extends Controller{
                 {developmentcardslot2_0,developmentcardslot2_1,developmentcardslot2_2}
         };
     }
+
+    /**
+     * Returns the references to the imageViews showing the resources to store
+     * @return the references to the imageViews showing the resources to store
+     */
+    private ImageView[] getResourcesSupplyImgs(){
+        return new ImageView[]{resources_supply_0,resources_supply_1,resources_supply_2,resources_supply_3};
+    }
+
+    /**
+     * Returns the references to the imageViews showing the development card slot's desks
+     * @return the references to the imageViews showing the development card slot's desks
+     */
+    private ImageView[] getDesksImgs(){
+        return new ImageView[]{desk0,desk1,desk2};
+    }
+
 
     /**
      * The method used to initialize the stage. The controls are disabled by default
@@ -506,7 +524,9 @@ public class PlayerboardSceneController extends Controller{
         }
     }
 
-
+    /**
+     * Cancel the current warehouse rows selection
+     */
     private void clearWarehouseSelection(){
         Arrays.stream(getWarehouseRowsImgs()).forEach(row->row.getStyleClass().remove("selected"));
         Arrays.stream(getWarehouseResourcesImgs()).forEach(row->Arrays.stream(row).forEach(cell->cell.getStyleClass().remove("selected")));
@@ -523,12 +543,16 @@ public class PlayerboardSceneController extends Controller{
         selectedWarehouseRows.clear();
     }
 
+    /**
+     * Shows the resources supply and enables the controls needed to store the resources in the warehouse
+     * @param resources the resources to store
+     */
     public void storeResourcesFromMarket(Resource[] resources){
         marketBtn.setVisible(false);
         startProductionBtn.setVisible(false);
         buyDevelopmentcardBtn.setVisible(false);
 
-        ImageView[] imgs = {resources_supply_0,resources_supply_1,resources_supply_2,resources_supply_3};
+        final ImageView[] imgs = getResourcesSupplyImgs();
 
         Arrays.stream(imgs).forEach(imageView -> imageView.setVisible(false));
 
@@ -543,6 +567,11 @@ public class PlayerboardSceneController extends Controller{
         resources_supply.setVisible(true);
     }
 
+    /**
+     * Highlights the current resource to store
+     * @param resource the resource to store
+     * @param warehouse the warehouse where to store the resource
+     */
     public void askToStoreResource(Resource resource, Warehouse warehouse) {
         storing = true;
 
@@ -569,16 +598,19 @@ public class PlayerboardSceneController extends Controller{
         discardResourceBtn.setVisible(true);
     }
 
+    /**
+     * Discards the resource that is currently been stored
+     */
     public void discardResource() {
         clientController.chooseDepot(playerBoard.getWarehouse().getDepots().size() + 1);
     }
 
+    /**
+     * Closes the resource supply after placing the resources
+     */
     private void clearResourceSupply(){
+        Arrays.stream(getResourcesSupplyImgs()).forEach(img -> img.setVisible(false));
         resources_supply.setVisible(false);
-        resources_supply_0.setVisible(false);
-        resources_supply_1.setVisible(false);
-        resources_supply_2.setVisible(false);
-        resources_supply_3.setVisible(false);
         currentResource.setVisible(false);
         lblStoring.setVisible(false);
         boxCurrentResource.setVisible(false);
@@ -586,6 +618,11 @@ public class PlayerboardSceneController extends Controller{
         swapDepotsBtn.setVisible(false);
     }
 
+    /**
+     * Associates the imageview with the relative producer and makes it selectable to start the production
+     * @param imageView the imageView to enable
+     * @param producer the producer associated to the imageview
+     */
     private void addListenerToProducer(ImageView imageView, Producer producer){
         imageView.setDisable(false);
         imageView.getStyleClass().remove("selected");
@@ -601,16 +638,12 @@ public class PlayerboardSceneController extends Controller{
         });
     }
 
-    public static Requirements calculateRequirements(List<Producer> producers,String type){
-        Requirements result = new Requirements();
 
-        for(Producer producer:producers) {
-            result.addResourceRequirement(NonPhysicalResourceType.ON_DEMAND, (type.equals(SPEND)?producer.getProductionCost():producer.getProductionGain()).getResources(NonPhysicalResourceType.ON_DEMAND));
-        }
-
-        return result;
-    }
-
+    /**
+     * Enables controls used to choose producers and to start the production
+     * @param availableProductions the productions that can be started
+     * @param chooser the action to be executed when a producer is selected
+     */
     public void askProductionsToStart(List<Producer> availableProductions,ProductionChooser chooser) {
         selectedProducers = new ArrayList<>();
 
@@ -657,6 +690,9 @@ public class PlayerboardSceneController extends Controller{
         onRollbackAction = this::cancelProductionSelection;
     }
 
+    /**
+     * Reset the currently selected producers
+     */
     public void cancelProductionSelection(){
         selectedProducers = new ArrayList<>();
 
@@ -698,7 +734,11 @@ public class PlayerboardSceneController extends Controller{
         }
     }
 
-
+    /**
+     * Method called when a development card is bought to choose in which slot put it.
+     * @param slots the available slots
+     * @param developmentCard the development card to be placed
+     */
     public void chooseDevelopmentCardSlot(DevelopmentCardSlot[] slots, DevelopmentCard developmentCard) {
         disableControls();
 
@@ -725,20 +765,25 @@ public class PlayerboardSceneController extends Controller{
         }
     }
 
+    /**
+     * Makes the slots not selectable by the user
+     */
     private void disableDevelopmentCardSlots(){
         final ImageView[][] slotsImg = getDevelopmentCardsSlotsImgs();
 
-        final ImageView[] desks = {desk0,desk1,desk2};
-
         int index = 0;
         for(DevelopmentCardSlot slot:playerBoard.getDevelopmentCardSlots()){
-                final ImageView selectedImageView = slot.isEmpty()?desks[index]:slotsImg[index][slot.getSize()-1];
+                final ImageView selectedImageView = slot.isEmpty()?getDesksImgs()[index]:slotsImg[index][slot.getSize()-1];
                 selectedImageView.getStyleClass().remove("selectable");
                 selectedImageView.setOnMouseClicked((e)->{});
             index++;
         }
     }
 
+    /**
+     * Render the specified playerboard
+     * @param playerBoard the playerboard to be shown
+     */
     private void showPlayerBoard(PlayerBoard playerBoard){
         if(storing && !playerBoard.getUsername().equals(this.playerBoard.getUsername()))
             return;
@@ -756,6 +801,10 @@ public class PlayerboardSceneController extends Controller{
         showFaithTrack(playerBoard.getFaithTrack());
     }
 
+    /**
+     * Reset all the controls to the default state
+     * @param availableActions the action that can be executed (the relative buttons are re-enabled)
+     */
     public void resetControls(Action[] availableActions) {
         storing = false;
         this.populateUserSelect();
@@ -775,9 +824,7 @@ public class PlayerboardSceneController extends Controller{
 
         enableWarehouseSelection(defaultWarehouseAction);
 
-        final ImageView[][] slotsImg = getDevelopmentCardsSlotsImgs();
-
-        for (ImageView[] imageViews : slotsImg) {
+        for (ImageView[] imageViews : getDevelopmentCardsSlotsImgs()) {
             for (ImageView imageView : imageViews) {
                 imageView.getStyleClass().clear();
                 imageView.getStyleClass().add("card");
@@ -797,20 +844,31 @@ public class PlayerboardSceneController extends Controller{
 
     }
 
+    /**
+     * Method called when the turn ends
+     */
     @FXML
     public void skip(){
         clientController.performAction(Action.SKIP);
     }
 
+    /**
+     * Makes the warehouse rows selectable in order to swap two depots
+     */
     public void swapDepots() {
         swapDepotsBtn.getStyleClass().add("selected");
-       enableWarehouseSelection(defaultWarehouseAction);
+        enableWarehouseSelection(defaultWarehouseAction);
     }
 
+    /**
+     * Updates the currently shown playerboard with the specified faithtrack
+     * @param faithTrack the faithrack to be shown
+     */
     public void showFaithTrack(FaithTrack faithTrack) {
+        if(!faithTrack.getUsername().equals(this.playerBoard.getUsername()))
+            return;
+
         if(!faithTrack.isBlackCross()) {
-            if(storing && !faithTrack.getUsername().equals(this.playerBoard.getUsername()))
-                return;
 
             playerBoard.setFaithTrack(faithTrack);
 
@@ -837,6 +895,10 @@ public class PlayerboardSceneController extends Controller{
 
     }
 
+    /**
+     * Updates the currently shown playerboard with the specified strongbox
+     * @param strongbox the strongbox to be shown
+     */
     public void showStrongbox(Strongbox strongbox){
         this.playerBoard.setStrongbox(strongbox);
 
@@ -846,6 +908,10 @@ public class PlayerboardSceneController extends Controller{
         lblServantStrongbox.setText(String.valueOf(strongbox.getResourcesNum(ResourceType.SERVANT)));
     }
 
+    /**
+     * Updates the currently shown playerboard with the specified leadercards
+     * @param leaderCardList the leader cards to show
+     */
     public void showLeaderCards(List<LeaderCard> leaderCardList) {
         this.playerBoard.setLeaderCards(leaderCardList);
 
@@ -872,6 +938,10 @@ public class PlayerboardSceneController extends Controller{
         }
     }
 
+    /**
+     * Updates the currently shown playerboard with the specified developmentcards
+     * @param developmentCardSlots the development cards to be shown
+     */
     public void showDevelopmentCards(DevelopmentCardSlot[] developmentCardSlots) {
 
         final ImageView[][] slots = getDevelopmentCardsSlotsImgs();
@@ -890,6 +960,10 @@ public class PlayerboardSceneController extends Controller{
         }
     }
 
+    /**
+     * Update the user's choicebox with the currently active user
+     * @param username the username of the current active user
+     */
     public void showCurrentActiveUser(String username) {
         if(!username.equals(clientController.getUsername()) && !username.equals(Match.YOU_STRING)){
             selectUser.setValue(username);
@@ -898,6 +972,9 @@ public class PlayerboardSceneController extends Controller{
         }
     }
 
+    /**
+     * This method is called at the end of the turn to bring back the controls to the default status
+     */
     public void performedAction(){
         storing = false;
         clearResourceSupply();
