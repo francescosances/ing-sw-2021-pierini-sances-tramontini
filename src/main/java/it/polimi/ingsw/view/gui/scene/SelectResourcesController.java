@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.gui.scene;
 
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.ResourceType;
+import it.polimi.ingsw.view.gui.GUI;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -32,21 +33,23 @@ public class SelectResourcesController extends Controller{
 
     private ResourcesChooser onAction;
 
-    private boolean isModal;
+    String type;
+
 
     @FXML
-    public void initialize(int resourcesToChoose,ResourcesChooser onAction,boolean isModal) {
+    public void initialize(int resourcesToChoose,ResourcesChooser onAction, String type) {
 
         if(resourcesToChoose==0){
             onAction.choose(new Resource[0]);
             return;
         }
 
-        this.isModal = isModal;
+        this.type = type;
 
         Button[] minusButtons = {coin_minus,servant_minus,shield_minus,stone_minus};
         TextField[] textFields = {coin_input,servant_input,shield_input,stone_input};
         Button[] plusButtons = {coin_plus,servant_plus,shield_plus,stone_plus};
+        lbl.setText("Choose " + resourcesToChoose + " resources to " + type + ':');
 
         numResourcesSelected = 0;
         this.resourcesToChoose = resourcesToChoose;
@@ -115,7 +118,7 @@ public class SelectResourcesController extends Controller{
 
         onAction.choose(resourcesChosen);
 
-        if(isModal) {
+        if(!type.equals(GUI.START)) {
             Stage stage = (Stage) btnChoose.getScene().getWindow();
             stage.close();
         }

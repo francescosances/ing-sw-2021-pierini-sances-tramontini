@@ -125,11 +125,18 @@ public class SoloMatch extends Match{
         drawableActionToken = true;
     }
 
+    /**
+     * Notifies all players where the BlackCross is
+     */
     private void updateBlackCross() {
         for (View view : views)
             view.showFaithTrack(blackCross);
     }
 
+    /**
+     * Shows all players which ActionToken was drawn
+     * @param actionToken the ActionToken drawn
+     */
     private void updateActionToken(ActionToken actionToken) {
         for (View view : views)
             view.showActionToken(actionToken);

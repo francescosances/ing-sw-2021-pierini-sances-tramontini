@@ -47,6 +47,7 @@ public class GUI implements View {
 
     public static final String SPEND = "spend";
     public static final String GAIN = "gain";
+    public static final String START = "gain as start resources";
 
     public GUI(ClientController clientController, Stage stage){
         this.clientController = clientController;
@@ -319,7 +320,7 @@ public class GUI implements View {
             Platform.runLater(() -> ((SelectResourcesController) openModal("select_resources_scene","Select resources to spend", ()->{})).initialize(requirements.getResources(NonPhysicalResourceType.ON_DEMAND), (resources) -> {
                 productionCosts = resources;
                 askToChooseProductionGains(PlayerboardSceneController.calculateRequirements(selectedProducers, GAIN));
-            },true));
+            }, SPEND));
         }
     }
 
@@ -342,7 +343,7 @@ public class GUI implements View {
         }else {
             Platform.runLater(() -> ((SelectResourcesController) openModal("select_resources_scene","Select resources to gain", ()->{})).initialize(requirements.getResources(NonPhysicalResourceType.ON_DEMAND), (resources) -> {
                 chooseProductions(productionCosts,resources);
-            },true));
+            }, GAIN));
         }
     }
 
@@ -356,7 +357,7 @@ public class GUI implements View {
 
     @Override
     public void askToChooseStartResources(Resource[] values, int resourcesToChoose) {
-        Platform.runLater(()-> ((SelectResourcesController) loadScene("select_resources_scene")).initialize(resourcesToChoose,(resources)-> clientController.chooseStartResources(resources),false));
+        Platform.runLater(()-> ((SelectResourcesController) loadScene("select_resources_scene")).initialize(resourcesToChoose,(resources)-> clientController.chooseStartResources(resources), START));
     }
 
     @Override

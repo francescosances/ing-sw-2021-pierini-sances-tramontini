@@ -10,13 +10,13 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="700.0" prefWidth="1000.0" styleClass="rootPane" stylesheets="@../css/select_resources_scene.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.scene.SelectResourcesController">
+<StackPane prefHeight="700.0" prefWidth="1000.0" styleClass="rootPane" stylesheets="@../css/select_resources_scene.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.scene.SelectResourcesController">
     <children>
         <Group scaleX="1.5" scaleY="1.5">
             <children>
                <AnchorPane fx:id="rootPane" layoutX="-74.0" layoutY="44.0" prefHeight="400.0" prefWidth="577.0">
                <children>
-                  <Label fx:id="lbl" layoutX="219.0" layoutY="113.0" text="Choose resources:" textAlignment="CENTER" textFill="#fdc309" AnchorPane.bottomAnchor="265.0">
+                  <Label fx:id="lbl" alignment="CENTER" layoutX="42.0" layoutY="117.0" prefHeight="26.0" prefWidth="500.0" textFill="#fdc309" AnchorPane.bottomAnchor="257.0">
                      <font>
                         <Font size="17.0" />
                      </font>
