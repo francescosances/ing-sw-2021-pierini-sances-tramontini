@@ -259,7 +259,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      * @param leaderCard the LeaderCard to be activated
      * @throws NotSatisfiedRequirementsException if the LeaderCard cannot be activated
      */
-    public void activateLeaderCard(LeaderCard leaderCard) throws NotSatisfiedRequirementsException {
+    protected void activateLeaderCard(LeaderCard leaderCard) throws NotSatisfiedRequirementsException {
         for (LeaderCard x : leaderCards) {
             if (x.equals(leaderCard)) {
                 x.activate(this);
@@ -277,6 +277,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      */
     public void activateLeaderCard(int num) throws NotSatisfiedRequirementsException {
         activateLeaderCard(getAvailableLeaderCards().get(num));
+        updateLeaderCardsList();
     }
 
     /**
@@ -287,6 +288,7 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
      */
     public void discardLeaderCard(int num) throws EndGameException {
         leaderCards.remove(getAvailableLeaderCards().remove(num));
+        updateLeaderCardsList();
         gainFaithPoints(1);
     }
 

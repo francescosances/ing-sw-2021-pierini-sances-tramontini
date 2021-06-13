@@ -149,10 +149,7 @@ public class GameController implements PlayerStatusListener {
                 String request = message.getData("username");
                 if (request.equals(Match.YOU_STRING))
                     request = username;
-                PlayerBoard res = match.getPlayerBoard(request).clone();
-                if (!username.equals(request))
-                    res.setLeaderCards(res.getLeaderCards().stream().filter(LeaderCard::isActive).collect(Collectors.toList()));
-                controller.showPlayerBoard(res);
+                controller.showPlayerBoard(match.getPlayerBoard(request));
                 break;
             }
         }

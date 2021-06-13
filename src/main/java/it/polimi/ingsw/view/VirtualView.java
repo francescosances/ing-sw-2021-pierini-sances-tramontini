@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.Resource;
+import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.model.storage.Strongbox;
 import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.network.ClientHandler;
@@ -115,10 +116,22 @@ public class VirtualView implements View {
     @Override
     public void showLeaderCards(List<LeaderCard> leaderCardList) {
         if (!currentActiveUser.equals(username))
-            leaderCardList.stream().filter(LeaderCard::isActive).collect(Collectors.toList());
+            leaderCardList = hideInactiveLeaderCards(leaderCardList);
         Message message = new Message(Message.MessageType.SHOW_LEADER_CARDS);
         message.addData("leaderCards", Serializer.serializeLeaderCardList(leaderCardList));
         sendMessage(message);
+    }
+
+    private List<LeaderCard> hideInactiveLeaderCards(List<LeaderCard> leaderCardList) {
+        List<LeaderCard> list = new ArrayList<>(leaderCardList);
+        for (int i = 0; i < leaderCardList.size(); i++) {
+            LeaderCard leaderCard = leaderCardList.get(i);
+            if (!leaderCard.isActive()){
+                list.remove(leaderCard);
+                list.add(new InactiveLeaderCard());
+            }
+        }
+        return list;
     }
 
     @Override
@@ -141,7 +154,7 @@ public class VirtualView implements View {
     public void showPlayerBoard(PlayerBoard pb){
         PlayerBoard playerBoard = pb.clone();
         if (!pb.getUsername().equals(this.username))
-            playerBoard.getLeaderCards().removeIf(card -> !card.isActive());
+            playerBoard.setLeaderCards(hideInactiveLeaderCards(playerBoard.getLeaderCards()));
         Message message = new Message(Message.MessageType.SHOW_PLAYER_BOARD);
         message.addData("playerBoard",Serializer.serializePlayerBoard(playerBoard));
         sendMessage(message);

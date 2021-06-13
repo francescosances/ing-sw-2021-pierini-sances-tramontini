@@ -22,9 +22,10 @@ public class LeaderCardCreator implements JsonDeserializer<LeaderCard> {
         else if (jsonObject.has("productionCost"))
             leaderCard = productionLeaderCard(jsonObject, context);
 
-        else
+        else if (jsonObject.has("outputResourceType"))
             leaderCard = whiteMarbleLeaderCard(jsonObject, context);
-
+        else
+            leaderCard = new InactiveLeaderCard();
         return leaderCard;
     }
 
