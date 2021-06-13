@@ -171,10 +171,6 @@ public class GameController implements PlayerStatusListener {
                 players.get((match.getCurrentPlayerIndex()+i)%players.size()).setPlayerIndex(i);
             setPhase(Match.GamePhase.PLAYERS_SETUP);
             listPlayers();
-            if (match.getPlayers().size() == 1){
-                SoloMatch soloMatch = (SoloMatch) match;
-                players.get(firstPlayerIndex).getView().showFaithTrack(soloMatch.getBlackCross());
-            }
         }else{
             setSuspended(false);
             setPhase(match.getCurrentPhase());
@@ -520,5 +516,9 @@ public class GameController implements PlayerStatusListener {
         listPlayers();
         getPlayerController(username).getView().showCurrentActiveUser(getCurrentPlayer().getUsername());
         getPlayerController(username).getView().resumeMatch(getPlayerController(username).getPlayerBoard());
+        if (match.getPlayers().size() == 1) {
+            SoloMatch soloMatch = (SoloMatch) match;
+            getPlayerController(username).getView().showFaithTrack(soloMatch.getBlackCross());
+        }
     }
 }

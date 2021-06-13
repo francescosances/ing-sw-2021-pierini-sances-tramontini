@@ -118,12 +118,21 @@ public class SoloMatch extends Match{
         super.endTurn();
         if (drawableActionToken) {
             ActionToken actionToken = drawActionToken();
-            for (View view : views) {
-                view.showActionToken(actionToken);
-                actionToken.show(this);
-            }
-        }
+            updateActionToken(actionToken);
+            actionToken.show(this);
+        } else
+            updateBlackCross();
         drawableActionToken = true;
+    }
+
+    private void updateBlackCross() {
+        for (View view : views)
+            view.showFaithTrack(blackCross);
+    }
+
+    private void updateActionToken(ActionToken actionToken) {
+        for (View view : views)
+            view.showActionToken(actionToken);
     }
 
     /**
