@@ -454,7 +454,7 @@ public class CLI implements View {
         output.println();
         output.println("************");
         output.print("It's ");
-        if (clientController.getCurrentActiveUser().equals(Match.YOU_STRING))
+        if (username.equals(Match.YOU_STRING))
             output.print("your");
         else
             output.print(username + "'s");

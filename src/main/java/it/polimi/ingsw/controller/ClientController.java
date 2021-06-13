@@ -106,8 +106,8 @@ public class ClientController {
                 view.showErrorMessage(message.getData("text"));
                 break;
             case CURRENT_ACTIVE_USER:
-                view.showCurrentActiveUser(message.getData("username"));
                 currentActiveUser = new String(username);
+                view.showCurrentActiveUser(message.getData("username"));
                 break;
             case LOGIN_FAILED:
                 lock.lock();
