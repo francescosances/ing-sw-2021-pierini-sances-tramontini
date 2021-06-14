@@ -294,7 +294,7 @@ public class VirtualView implements View {
     @Override
     public void showProducerUser(PlayerBoard playerBoard) {
         Message message = new Message(Message.MessageType.PRODUCTION_PERFORMED);
-        message.addData("playerboard",Serializer.serializePlayerBoard(playerBoard));
+        message.addData("playerBoard",Serializer.serializePlayerBoard(playerBoard));
         sendMessage(message);
     }
 

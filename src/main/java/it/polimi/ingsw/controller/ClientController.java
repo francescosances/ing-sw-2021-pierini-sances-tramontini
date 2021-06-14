@@ -223,7 +223,7 @@ public class ClientController {
                 break;
             case PRODUCTION_PERFORMED:
                 lock.lock();
-                view.showProducerUser(Serializer.deserializePlayerBoard(message.getData("playerboard")));
+                view.showProducerUser(Serializer.deserializePlayerBoard(message.getData("playerBoard")));
                 lock.unlock();
                 break;
             case ACTION_PERFORMED:
