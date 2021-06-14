@@ -1,17 +1,14 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.model.Action;
-import it.polimi.ingsw.model.FaithTrack;
-import it.polimi.ingsw.model.PlayerBoard;
-import it.polimi.ingsw.model.cards.DevelopmentCard;
-import it.polimi.ingsw.model.cards.DevelopmentColorType;
-import it.polimi.ingsw.model.cards.Requirements;
+import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.NonPhysicalResourceType;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.utils.Pair;
+import it.polimi.ingsw.utils.Triple;
 import it.polimi.ingsw.view.View;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,51 +23,65 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GameControllerTest {
     private GameController gameController;
-    List<PlayerController> playerControllerList;
-    List<ViewStub> views;
 
-    void setUp() {
-        setUp(2);
+    private void addTestPlayer(String username) {
+        gameController.addPlayer(username, null, false).setView(new ViewStub());
     }
 
     private void setUp(int playersNumber) {
         gameController = new GameController("TestMatch", playersNumber, new FakeStatusObserver());
-        playerControllerList = new ArrayList<>();
-        views = new ArrayList<>();
+        assertEquals("TestMatch", gameController.getMatchName());
+        assertEquals(playersNumber, gameController.getTotalPlayers());
+
         for (int i = 0; i < playersNumber; i++) {
-            views.add(new ViewStub());
-            playerControllerList.add(gameController.addPlayer("TestPlayer" + i, null, false));
-            playerControllerList.get(i).setView(views.get(i));
+            assertEquals(i, gameController.getJoinedPlayers());
+            addTestPlayer("TestPlayer" + i);
         }
+
+        assertEquals(playersNumber, gameController.getJoinedPlayers());
     }
 
     @AfterEach
     void tearDown() {
-        for (PlayerController playerController : playerControllerList) {
-            ViewStub viewStub = (ViewStub) playerController.getView();
-            viewStub.isEmpty();
-        }
         gameController = null;
-        playerControllerList = null;
-        views = null;
     }
 
     @Test
     void addPlayers() {
         gameController = new GameController("TestMatch", 2, new FakeStatusObserver());
-        gameController.addPlayer("TestPlayer0", null);
+        addTestPlayer("TestPlayer0");
         assertFalse(gameController.isFull());
-        gameController.addPlayer("TestPlayer1", null);
+        addTestPlayer("TestPlayer1");
         assertTrue(gameController.isFull());
+    }
 
-        //In order to avoid tearDown() Exception
-        playerControllerList = new ArrayList<>();
-        views = new ArrayList<>();
-        for (int i = 0; i < 2; i++) {
-            views.add(new ViewStub());
-            playerControllerList.add(gameController.addPlayer("TestPlayer" + i, null, false));
-            playerControllerList.get(i).setView(views.get(i));
+    @Test
+    void regenerateControllerAndResume() {
+        List<String> players = new ArrayList<>(){{
+            add("TestPlayer1");
+            add("TestPlayer2");
+        }};
+        Match match = new Match("TestMatch", 2);
+        match.addPlayer("TestPlayer1");
+        match.addPlayer("TestPlayer2");
+        match.setCurrentPhase(Match.GamePhase.TURN);
+        StatusObserver statusObserver = new FakeStatusObserver();
+
+        gameController = GameController.regenerateController(match, statusObserver, players);
+
+        assertEquals(match, gameController.getMatch());
+        for (String player : players) {
+            PlayerController playerController = gameController.getPlayerController(player);
+            assertEquals(player, playerController.getPlayerBoard().getUsername());
+            assertNull(playerController.getView());
+            playerController.setView(new ViewStub());
         }
+
+        assertTrue(gameController.isSuspended());
+
+        gameController.start();
+        assertFalse(gameController.isSuspended());
+        assertEquals(Match.GamePhase.TURN, gameController.getMatch().getCurrentPhase());
     }
 
     @Test
@@ -78,13 +89,13 @@ class GameControllerTest {
         setUp(4);
 
         gameController.getMatch().setCurrentPlayerIndex(0);
-        playerControllerList.get(0).getPlayerBoard().gainFaithPoints(10);
-        playerControllerList.get(1).getPlayerBoard().gainFaithPoints(19);
-        playerControllerList.get(2).getPlayerBoard().gainFaithPoints(10);
+        gameController.getPlayerController("TestPlayer0").getPlayerBoard().gainFaithPoints(10);
+        gameController.getPlayerController("TestPlayer1").getPlayerBoard().gainFaithPoints(19);
+        gameController.getPlayerController("TestPlayer2").getPlayerBoard().gainFaithPoints(10);
 
         DevelopmentCard developmentCard = new DevelopmentCard("",3, new Requirements(), 1, DevelopmentColorType.GREEN,
                 new Requirements(), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 20));
-        playerControllerList.get(0).getPlayerBoard().addDevelopmentCardToSlot(developmentCard, 0);
+        gameController.getPlayerController("TestPlayer0").getPlayerBoard().addDevelopmentCardToSlot(developmentCard, 0);
 
         Message message = new Message(Message.MessageType.PRODUCTION);
         List<Integer> choices = new ArrayList<>();
@@ -94,21 +105,87 @@ class GameControllerTest {
         message.addData("gains",Serializer.serializeRequirements(new Requirements()));
         gameController.handleReceivedGameMessage(message, "TestPlayer0");
 
-        List<PlayerBoard> charts = playerControllerList.stream().map(PlayerController::getPlayerBoard).collect(Collectors.toList());
-
-        for (ViewStub view: views) {
-            assertEquals(charts, view.popMessage());
-        }
-
+        List<PlayerBoard> charts = gameController.getPlayers().stream().map(PlayerController::getPlayerBoard).collect(Collectors.toList());
     }
 
     @Test
     void start() {
-        setUp();
+        setUp(4);
+        assertFalse(gameController.isStarted());
+        gameController.start();
+        assertTrue(gameController.isStarted());
+        assertEquals(Match.GamePhase.PLAYERS_SETUP, gameController.getMatch().getCurrentPhase());
+    }
+
+    @Test
+    void soloStart() {
+        setUp(1);
+        assertFalse(gameController.isStarted());
+        gameController.start();
+        assertTrue(gameController.isStarted());
+        assertTrue(((SoloMatch) gameController.getMatch()).getBlackCross().isBlackCross());
+        assertEquals(Match.GamePhase.PLAYERS_SETUP, gameController.getMatch().getCurrentPhase());
     }
 
     @Test
     void leaderCardsChoice() {
-        setUp();
+        setUp(2);
+        gameController.start();
+        assertEquals(Match.GamePhase.PLAYERS_SETUP, gameController.getMatch().getCurrentPhase());
+
+        assertEquals(1, gameController.getMatch().getUsersReadyToPlay());
+        gameController.getCurrentPlayer().chooseLeaderCards(
+                new DepotLeaderCard("",3,new Requirements(new Pair<>(ResourceType.COIN, 1)),ResourceType.SHIELD),
+                new DiscountLeaderCard("",2, new Requirements(new Triple<>(DevelopmentColorType.YELLOW, 1, 0)), ResourceType.SERVANT)
+        );
+        assertEquals(2, gameController.getMatch().getUsersReadyToPlay());
+        gameController.getCurrentPlayer().chooseStartResources(new Resource[] {ResourceType.COIN});
+        gameController.getCurrentPlayer().chooseLeaderCards(
+                new DepotLeaderCard("",3,new Requirements(new Pair<>(ResourceType.COIN, 1)),ResourceType.SHIELD),
+                new DiscountLeaderCard("",2, new Requirements(new Triple<>(DevelopmentColorType.YELLOW, 1, 0)), ResourceType.SERVANT)
+        );
+
+        assertEquals(Match.GamePhase.TURN, gameController.getMatch().getCurrentPhase());
+    }
+
+    @Test
+    void disconnectAndReconnect() {
+        setUp(2);
+        gameController.start();
+
+        PlayerController playerController1 = gameController.getCurrentPlayer();
+        gameController.disconnect(playerController1.getUsername());
+
+        assertFalse(playerController1.isActive());
+        assertFalse(gameController.isConnected(playerController1.getUsername()));
+        assertNotEquals(gameController.getCurrentPlayer(), playerController1);
+
+        gameController.getCurrentPlayer().turnEnded();
+        assertNotEquals(gameController.getCurrentPlayer(), playerController1);
+
+        gameController.connect(playerController1.getUsername());
+        assertTrue(playerController1.isActive());
+        assertTrue(gameController.isConnected(playerController1.getUsername()));
+    }
+
+    @Test
+    void disconnectAll() {
+        setUp(2);
+        gameController.start();
+
+        PlayerController pc = gameController.getCurrentPlayer();
+        gameController.disconnect(pc.getUsername());
+
+        assertFalse(pc.isActive());
+        assertFalse(gameController.isConnected(pc.getUsername()));
+        assertNotEquals(gameController.getCurrentPlayer(), pc);
+
+        pc = gameController.getCurrentPlayer();
+        gameController.disconnect(pc.getUsername());
+
+        assertFalse(pc.isActive());
+        assertFalse(gameController.isConnected(pc.getUsername()));
+
+        assertEquals(Match.GamePhase.END_GAME, gameController.getMatch().getCurrentPhase());
     }
 }
