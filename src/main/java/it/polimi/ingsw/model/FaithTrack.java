@@ -311,7 +311,7 @@ public class FaithTrack implements ObservableFromView {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FaithTrack that = (FaithTrack) o;
-        return faithMarker == that.faithMarker && Arrays.equals(popeFavorTiles, that.popeFavorTiles) && Arrays.equals(vaticanReports, that.vaticanReports);
+        return username.equals(that.username) && faithMarker == that.faithMarker && Arrays.equals(popeFavorTiles, that.popeFavorTiles) && Arrays.equals(vaticanReports, that.vaticanReports);
     }
 
     /**

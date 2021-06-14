@@ -141,6 +141,7 @@ public interface View {
 
     /**
       * Shows the actions that the user can choose to perform
+      * @param usernames the usernames of the players in the match
       * @param availableActions the array of available actions which the user can choose
       */
     void askForAction(List<String> usernames, Action... availableActions);
