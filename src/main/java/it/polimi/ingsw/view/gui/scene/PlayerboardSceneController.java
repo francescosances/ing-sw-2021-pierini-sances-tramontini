@@ -22,7 +22,7 @@ import static it.polimi.ingsw.view.gui.GUI.calculateRequirements;
 public class PlayerboardSceneController extends Controller{
     //TODO: bug: mentre si piazzano le risorse il selettore utente resta sbloccato e permette di rieffettuare nuovamente l'azione
     //TODO: disattivare selettore utenti quando non è il tuo turno
-    //TODO: bug: quando si scartano le risorse dal mercato, gli altri giocatori vedono il tuo marker avanzare
+    //TODO: bug: disattivare leader card mentre si stanno eseguendo altre operazioni
 
     /**
      * The imageViews of the two user's leader cards

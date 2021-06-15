@@ -4,7 +4,9 @@
 Descrizione
 
 ### Componenti del gruppo
-Pierini - Sances - Tramontini
+- Matteo Pierini
+- Francesco Maria Sances
+- Marco Tramontini
 
 
 ## Funzionalità
