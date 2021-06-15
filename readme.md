@@ -35,11 +35,23 @@ Descrizione
 
 
 ## Setup
+### Package
 Per effettuare il package degli eseguibili di client e server, lanciare il seguente comando dalla root del progetto:
 ```
 mvn clean package
 ```
 I rispettivi JAR verranno creati all'interno della cartella ```/target```.
+
+### Caratteri colorati
+Per aumentare la leggibilità, nell'interfaccia a linea di comando di client e server vengono utilizzati dei caratteri colorati attraverso sequenze di escape ANSI. Tuttavia, nella maggior parte delle verisioni di Windows, queste non sono supportate dal terminale. La soluzione migliore è quella di utilizzare un sottosistema Windows per Linux (WSL). Alternativamente, solo su Windows 10, è possibile modificare una chiave di registro per risolvere il problema.  
+La modifica necessaria si ottiene lanciando il seguente comando da un terminale con permessi di amministratore:
+```
+reg add HKEY_CURRENT_USER\Console /v VirtualTerminalLevel /t REG_DWORD /d 0x00000001 /f
+```
+Allo stesso modo, per ripristinare il valore di default:
+```
+reg add HKEY_CURRENT_USER\Console /v VirtualTerminalLevel /t REG_DWORD /d 0x00000000 /f
+```
 
 ## Esecuzione
 
