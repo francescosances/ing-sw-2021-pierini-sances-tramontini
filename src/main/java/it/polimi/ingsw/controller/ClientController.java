@@ -324,11 +324,11 @@ public class ClientController {
 
     /**
      * Sends to the server the array of leader cards chosen by the user
-     * @param leaderCards the array of leader cards chosen by the user
+     * @param choices the array of the integers corresponding to the cards chosen by the user
      */
-    public void leaderCardsChoice(LeaderCard ... leaderCards){
+    public void leaderCardsChoice(List<Integer> choices){
         Message message = new Message(Message.MessageType.LEADER_CARDS_CHOICE);
-        message.addData("leaderCards", Serializer.serializeLeaderCardList(leaderCards));
+        message.addData("leaderCards", Serializer.serializeIntList(choices));
         clientSocket.sendMessage(message);
         view.waitForOtherPlayers();
     }

@@ -75,11 +75,10 @@ public class SelectLeaderCardsController extends Controller{
     public void choose(){
         if(numCardsSelected != cardsToChoose)
             return;
-        LeaderCard[] cardsChosen = new LeaderCard[cardsToChoose];
-        int added =0;
+        List<Integer> cardsChosen = new ArrayList<>();
         for(int i=0;i<leaderCardList.size();i++){
             if(cardsSelected.get(i))
-                cardsChosen[added++] = leaderCardList.get(i);
+                cardsChosen.add(i);
         }
         clientController.leaderCardsChoice(cardsChosen);
 

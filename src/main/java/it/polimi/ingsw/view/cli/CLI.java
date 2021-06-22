@@ -161,29 +161,27 @@ public class CLI implements View {
         printLeaderCards(leaderCardList);
         output.println("Choose " + cardsToChoose + " leader cards:");
         outputLock.unlock();
-        int[] choices = new int[cardsToChoose];
-        LeaderCard[] cardsChosen = new LeaderCard[cardsToChoose];
+        List<Integer> choices = new ArrayList<>();
         for (int i = 0; i < cardsToChoose; i++) {
-            choices[i] = input.nextInt();
-            if (choices[i] < 0 && cardsToChoose == 1) {
+            choices.add(input.nextInt());
+            if (choices.get(i) < 0 && cardsToChoose == 1) {
                 clientController.rollback();
                 return;
             }
             for (int j = 0; j < i; j++) {
-                if (choices[i] == choices[j]) {
+                if (choices.get(i).equals(choices.get(j))) {
                     showErrorMessage("You chose the same card twice");
                     listLeaderCards(leaderCardList, cardsToChoose);
                     return;
                 }
             }
-            if (choices[i] < 0 || choices[i] >= leaderCardList.size()) {
+            if (choices.get(i) < 0 || choices.get(i) >= leaderCardList.size()) {
                 showErrorMessage("Invalid choice");
                 listLeaderCards(leaderCardList, cardsToChoose);
                 return;
             }
-            cardsChosen[i] = leaderCardList.get(choices[i]);
         }
-        clientController.leaderCardsChoice(cardsChosen);
+        clientController.leaderCardsChoice(choices);
     }
 
     @Override

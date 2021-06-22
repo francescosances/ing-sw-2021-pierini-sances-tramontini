@@ -81,7 +81,7 @@ public class GameController implements PlayerStatusListener {
             final PlayerController currentPlayerController = getPlayerController(username);
             switch (message.getType()) {
                 case LEADER_CARDS_CHOICE:
-                    leaderCardsChoice(username, Serializer.deserializeLeaderCardList(message.getData("leaderCards")));
+                    getPlayerController(username).chooseLeaderCards(Serializer.deserializeIntList(message.getData("leaderCards")));
                     break;
                 case START_RESOURCES:
                     currentPlayerController.chooseStartResources(Serializer.deserializeResources(message.getData("resources")));
@@ -172,15 +172,6 @@ public class GameController implements PlayerStatusListener {
             setSuspended(false);
             setPhase(match.getCurrentPhase());
         }
-    }
-
-    /**
-     * Submit the leader cards choice to the right player controller and move the turn to next player.
-     * @param username the username of the user who chose the cards
-     * @param leaderCards the cards chosen by the user
-     */
-    public void leaderCardsChoice(String username,List<LeaderCard> leaderCards){
-        getPlayerController(username).chooseLeaderCards(leaderCards.toArray(new LeaderCard[]{}));
     }
 
     /**

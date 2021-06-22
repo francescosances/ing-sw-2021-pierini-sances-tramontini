@@ -22,7 +22,7 @@ public class PlayerController {
      */
     protected String username;
     /**
-     * The playerboard of to the player
+     * The PlayerBoard of to the player
      */
     protected PlayerBoard playerBoard;
     /**
@@ -44,9 +44,9 @@ public class PlayerController {
     private final List<PlayerStatusListener> observers = new ArrayList<>();
 
     /**
-     * Strategy pattern used to get the user's cards choice
+     * The list of LeaderCards the player has to choose from
      */
-    private LeaderCardsChooser leaderCardsChooser;
+    private List <LeaderCard> leaderCardsToChoose;
 
     /**
      * Holds a resource while it is being stored
@@ -81,7 +81,7 @@ public class PlayerController {
     /**
      * Initialize a new player controller active and waiting for his turn.
      * @param username the username of the player associated with the player controller
-     * @param playerBoard the playerboard of the user
+     * @param playerBoard the PlayerBoard of the user
      * @param View the virtual view containing the reference to the socket connection
      */
     public PlayerController(String username,PlayerBoard playerBoard,View View){
@@ -93,14 +93,6 @@ public class PlayerController {
         gotResourcesOfYourChoice = false;
         setAfterDepotsSwapAction(this::askForAction);
     }
-
-    /*
-    public PlayerController(String username,PlayerBoard playerBoard){
-        this.username = username;
-        this.playerBoard = playerBoard;
-        this.active = false;
-    }
-    */
 
     /**
      * Mark the user as "online" and able to play
@@ -240,23 +232,25 @@ public class PlayerController {
      * If the user is inactive, the cards are randomly chosen
      */
     public void listLeaderCards(){
-        List<LeaderCard> leaderCardList = playerBoard.getMatch().drawLeaderCards(4);
-        view.listLeaderCards(leaderCardList,2);
-        leaderCardsChooser = cards -> {
-            for (LeaderCard card : cards) {
-                playerBoard.addLeaderCard(card);
-                playerBoard.getMatch().chooseLeaderCard(card);
-            }
-            turnEnded();
-        };
+        leaderCardsToChoose = playerBoard.getMatch().drawLeaderCards(4);
+        view.listLeaderCards(leaderCardsToChoose,2);
     }
 
     /**
-     * Receive the leader cards chosen by the user and execute the action indicated by the leaderCardsChooser
-     * @param cards the cards chosen by the user
+     * Receives the leader cards chosen by the user and adds them to the PlayerBoard
+     * @param choices the number of the cards chosen by the user
      */
-    public void chooseLeaderCards(LeaderCard ... cards){
-        this.leaderCardsChooser.chooseLeaderCards(cards);
+    public void chooseLeaderCards(List<Integer> choices){
+        if (choices.size() != 2){
+            view.showErrorMessage("You chose an incorrect number of leader Cards!");
+            view.listLeaderCards(leaderCardsToChoose,2);
+            return;
+        }
+        for (int i : choices) {
+            playerBoard.addLeaderCard(leaderCardsToChoose.get(i));
+            playerBoard.getMatch().chooseLeaderCard(leaderCardsToChoose.get(i));
+        }
+        turnEnded();
     }
 
     /**
@@ -415,9 +409,8 @@ public class PlayerController {
      * Makes the controller choose a new action and notifies the observers of the rollback
      */
     private void notifyPlayerStatusListeners(){
-        for (PlayerStatusListener x : this.observers) {
+        for (PlayerStatusListener x : this.observers)
             x.onPlayerStatusChanged(this);
-        }
     }
 
 
