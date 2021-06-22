@@ -1,7 +1,8 @@
 # Progetto di Ingegneria del Software - A.A. 2020/2021
 
 ### Descrizione
-Descrizione
+Implementazione in Java del gioco da tavolo [Maestri del Rinascimento](http://www.craniocreations.it/prodotto/masters-of-renaissance/).
+È stato realizzato con l'utilizzo del pattern MVC (Model-View-Controller) distribuito (client/server) tramite socket, dove il server può gestire più partite (da 1 a 4 giocatori) contemporaneamente.
 
 ### Componenti del gruppo
 - Matteo Pierini
@@ -31,7 +32,7 @@ Descrizione
 ## Testing
 
 ### Coverage report
-![Coverage report](https://github.com/francescosances/ing-sw-2021-pierini-sances-tramontini/blob/master/coverage/coverage_report.png?raw=true)
+![Coverage report](https://github.com/francescosances/ing-sw-2021-pierini-sances-tramontini/blob/master/deliverables/coverage/coverage_report.png?raw=true)
 
 
 ## Setup
