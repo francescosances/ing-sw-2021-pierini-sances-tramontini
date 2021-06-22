@@ -13,9 +13,14 @@
 .idea/**/dictionaries
 .idea/**/shelf
 
+# .DS_Store
+.DS_Store
+
 # Storage
 storage/matches
 storage/matches.json
+
+# Target
 
 # Generated files
 .idea/**/contentModel.xml
