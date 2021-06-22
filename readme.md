@@ -1,7 +1,7 @@
 # Progetto di Ingegneria del Software - A.A. 2020/2021
 
 ### Descrizione
-Implementazione in Java del gioco da tavolo [Maestri del Rinascimento](http://www.craniocreations.it/prodotto/masters-of-renaissance/).
+Implementazione in Java del gioco da tavolo [Maestri del Rinascimento](http://www.craniocreations.it/prodotto/masters-of-renaissance/).  
 È stato realizzato con l'utilizzo del pattern MVC (Model-View-Controller) distribuito (client/server) tramite socket, dove il server può gestire più partite (da 1 a 4 giocatori) contemporaneamente.
 
 ### Componenti del gruppo
@@ -41,7 +41,9 @@ Per effettuare il package degli eseguibili di client e server, lanciare il segue
 ```
 mvn clean package
 ```
-I rispettivi JAR verranno creati all'interno della cartella ```/target```.
+I rispettivi JAR verranno creati all'interno della cartella ```/target```.  
+  
+Alternativamente, possono essere ottenuti da [qui](https://github.com/francescosances/ing-sw-2021-pierini-sances-tramontini/tree/master/deliverables/jars).
 
 ### Caratteri colorati
 Per aumentare la leggibilità, nell'interfaccia a linea di comando di client e server vengono utilizzati dei caratteri colorati attraverso sequenze di escape ANSI. Tuttavia, nella maggior parte delle verisioni di Windows, queste non sono supportate dal terminale. La soluzione migliore è quella di utilizzare un sottosistema Windows per Linux (WSL). Alternativamente, solo su Windows 10, è possibile modificare una chiave di registro per risolvere il problema.  
