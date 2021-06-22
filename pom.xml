@@ -174,5 +174,10 @@
           </executions>
         </plugin>
       </plugins>
+    <resources>
+      <resource>
+        <directory>storage/cards</directory>
+      </resource>
+    </resources>
   </build>
 </project>
