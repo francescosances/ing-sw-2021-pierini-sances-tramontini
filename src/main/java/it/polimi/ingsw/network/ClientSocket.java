@@ -73,9 +73,6 @@ public class ClientSocket implements Runnable{
                 String received = socketIn.nextLine();
                 Message message = Message.messageFromString(received);
 
-                //TODO ELIMINARE STA ROBA
-                if (clientController.getView() instanceof GUI)
-                    log("received"+received);
 
                 Thread t = new Thread(()-> clientController.handleReceivedMessage(message));
                 t.setDaemon(true);

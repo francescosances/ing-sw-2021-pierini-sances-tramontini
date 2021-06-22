@@ -16,6 +16,7 @@ public class ProductionLeaderCard extends LeaderCard implements Producer {
 
     /**
      * Initializes a new ProductionLeaderCard
+     * @param cardName the name of the card
      * @param victoryPoints the victory points associated with the card
      * @param requirements the requirements the player has to satisfy so as to play the card
      * @param productionCost cost that a player has to pay to trigger the production
@@ -26,6 +27,7 @@ public class ProductionLeaderCard extends LeaderCard implements Producer {
 
     /**
      * Initializes a new ProductionLeaderCard. Manually sets the active status
+     * @param cardName the name of the card
      * @param victoryPoints the victory points associated with the card
      * @param requirements the requirements the player has to satisfy so as to play the card
      * @param productionCost cost that a player has to pay to trigger the production

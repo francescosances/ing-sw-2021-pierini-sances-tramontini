@@ -66,7 +66,6 @@ public class SelectLobbySceneController extends Controller{
         }
     }
 
-    //TODO: refresh button con stile
     @FXML
     public void refresh(){
         clientController.refreshLobbies();

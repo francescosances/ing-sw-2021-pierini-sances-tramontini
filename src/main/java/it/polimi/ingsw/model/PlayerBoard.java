@@ -69,20 +69,6 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
         developmentCardSlots = Stream.generate(DevelopmentCardSlot::new).limit(3).toArray(DevelopmentCardSlot[]::new);
         inkwell = false;
 
-/*
-        //TODO: rimuovere bypass
-        developmentCardSlots[0].addCard(match.getDevelopmentCardDecks().get(0).top());
-        developmentCardSlots[0].addCard(match.getDevelopmentCardDecks().get(1).top());
-        developmentCardSlots[1].addCard(match.getDevelopmentCardDecks().get(3).top());
-
-
-        try {
-            warehouse.addResources(0,ResourceType.SERVANT,1);
-            warehouse.addResources(1,ResourceType.SHIELD,1);
-        } catch (IncompatibleDepotException e) {
-            e.printStackTrace();
-        }
-*/
         leaderCards = new ArrayList<>();
         views = new ArrayList<>();
     }
@@ -418,8 +404,6 @@ public class PlayerBoard implements Cloneable, ObservableFromView {
         for (View temp : views)
             observable.addView(temp);
     }
-
-    //TODO: verificare se vale la pena di spostare i setter su una nuova classe mutable
 
     /**
      * Set the faithTrack associated to the playerBoard

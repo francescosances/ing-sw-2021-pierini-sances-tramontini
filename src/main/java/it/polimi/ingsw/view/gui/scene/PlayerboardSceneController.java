@@ -131,7 +131,7 @@ public class PlayerboardSceneController extends Controller{
     /**
      * The action to be executed when the rollback button is pressed
      */
-    private Runnable onRollbackAction = ()->{};//TODO: controllare quando viene utilizzato e perché non risettato mai ai valori di default
+    private Runnable onRollbackAction = ()->{};
 
     /**
      * The warehouse rows that have been selected
@@ -444,7 +444,7 @@ public class PlayerboardSceneController extends Controller{
             }else{
                 Arrays.stream(leaderCardsImgs).forEach(img->img.getStyleClass().remove("selected"));
             }
-            for(ImageView imageView:imgWarehouse[rowIndex])//TODO: verificare perché può verificarsi index out of bound (quando si seleziona due volte stessa carta leader)
+            for(ImageView imageView:imgWarehouse[rowIndex])
                 imageView.getStyleClass().remove("selected");
         }else{
             selectedWarehouseRows.add(rowIndex);
