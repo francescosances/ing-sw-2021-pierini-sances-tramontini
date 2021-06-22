@@ -98,14 +98,12 @@ public class FileManager {
     }
 
     public List<Deck<DevelopmentCard>> readDevelopmentCardsDecks() throws IOException {
-        File cardsFile = new File(ROOT_FOLDER_NAME+"/development_cards.json");
-        BufferedReader reader = new BufferedReader(new FileReader(cardsFile));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("cards/development_cards.json")));
         return Serializer.deserializeDevelopmentCardsDeckList(reader.readLine());
     }
 
     public Deck<LeaderCard> readLeaderCards() throws IOException {
-        File cardsFile = new File(ROOT_FOLDER_NAME+"/leader_cards.json");
-        BufferedReader reader = new BufferedReader(new FileReader(cardsFile));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("cards/leader_cards.json")));
         return Serializer.deserializeLeaderCardDeck(reader.readLine());
     }
 

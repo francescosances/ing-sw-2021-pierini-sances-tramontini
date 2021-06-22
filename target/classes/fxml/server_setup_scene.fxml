@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane prefHeight="700.0" prefWidth="1000.0" styleClass="rootPane" stylesheets="@../css/server_setup_scene.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.scene.ServerSetupSceneController">
+    <children>
+        <Group scaleX="1.5" scaleY="1.5">
+            <children>
+                <AnchorPane fx:id="rootPane">
+                    <children>
+                        <VBox layoutY="100.0" prefHeight="220.0" prefWidth="270.0">
+                            <children>
+                                <Label style="-fx-end-margin: 25px;-fx-text-fill: #fff" text="Server IP address:">
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin>
+                                </Label>
+                                <TextField fx:id="txtSrvAddress" promptText="127.0.0.1" />
+                                <Label style="-fx-start-margin: 10px;-fx-end-margin: 5px;-fx-text-fill: #fff" text="Server port:">
+                           <VBox.margin>
+                              <Insets bottom="5.0" top="10.0" />
+                           </VBox.margin></Label>
+                                <TextField fx:id="txtSrvPort" promptText="8000" />
+                                <Button styleClass="btn" onAction="#connect" prefHeight="45" prefWidth="300.0" style="-fx-start-margin: 55px" defaultButton="true">
+                           <VBox.margin>
+                              <Insets top="25.0" />
+                           </VBox.margin></Button>
+                            </children>
+                        </VBox>
+                    </children>
+                </AnchorPane>
+            </children>
+        </Group>
+    </children>
+</StackPane>

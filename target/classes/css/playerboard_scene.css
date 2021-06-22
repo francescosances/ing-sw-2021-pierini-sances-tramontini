@@ -1,0 +1,118 @@
+.rootPane {
+    -fx-background-image: url("../images/backgrounds/blue.png");
+    -fx-background-size: stretch;
+}
+
+.developmentcard {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.28), 10, 0.7, 0, 1) !important;
+}
+
+.card {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.28), 10, 0.3, 0, 0);
+}
+
+.playerBoard{
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.28), 10, 0.3, 0, 0);
+}
+
+.card-selected {
+    -fx-effect: dropshadow(gaussian, #FDC309, 20, 0.3, 0, 0);
+    -fx-cursor: hand;
+}
+
+.leadercard{
+    -fx-opacity: 0.7;
+}
+
+.active-leadercard{
+    -fx-opacity: 1!important;
+}
+
+.leadercard:hover {
+    -fx-effect: dropshadow(gaussian, #FDC309, 20, 0.3, 0, 0) !important;
+}
+
+.btnProduction{
+    -fx-cursor: hand;
+}
+
+.btnProduction:hover {
+    -fx-effect: dropshadow(gaussian, #FDC309, 20, 0.3, 0, 0) !important;
+}
+
+.selected{
+    -fx-effect: dropshadow(gaussian, #FDC309, 20, 0.3, 0, 0) !important;
+    -fx-cursor: hand;
+}
+
+.selectable{
+    -fx-cursor: hand;
+}
+
+.selectable:hover {
+    -fx-effect: dropshadow(gaussian, #FDC309, 20, 0.3, 0, 0) !important;
+}
+
+.btn{
+    -fx-border-color: transparent;
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+
+    -fx-background-radius: 0;
+    -fx-background-color: transparent;
+}
+
+.btn:hover {
+    -fx-effect: dropshadow(gaussian, #FDC309, 20, 0.3, 0, 0);
+    -fx-cursor: hand;
+}
+
+#marketBtn{
+    -fx-background-image: url("../images/buttons/market.png");
+}
+
+#marketBtn:disabled{
+    -fx-background-image: url("../images/buttons/market_disabled.png");
+}
+
+#rollbackBtn{
+    -fx-background-image: url("../images/buttons/cancel.png");
+}
+
+#startProductionBtn{
+    -fx-background-image: url("../images/buttons/activate_production.png");
+}
+
+#startProductionBtn:disabled{
+    -fx-background-image: url("../images/buttons/activate_production_disabled.png");
+}
+
+
+#buyDevelopmentcardBtn{
+    -fx-background-image: url("../images/buttons/buy_development_card.png");
+}
+
+#buyDevelopmentcardBtn:disabled{
+    -fx-background-image: url("../images/buttons/buy_development_card_disabled.png");
+}
+
+#buyDevelopmentcardBtn:disabled{
+    -fx-background-image: url("../images/buttons/buy_development_card_disabled.png");
+}
+
+#discardResourceBtn{
+    -fx-background-image: url("../images/buttons/discard.png");
+}
+
+#skipBtn{
+    -fx-background-image: url("../images/buttons/end_turn.png");
+}
+
+#swapDepotsBtn{
+    -fx-background-image: url("../images/buttons/swap_depots.png");
+}
+
+.lblStrongbox{
+    -fx-effect: dropshadow(gaussian, #FDC309, 10, 0.5, 1, 1);
+}
