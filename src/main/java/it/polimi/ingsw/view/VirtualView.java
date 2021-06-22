@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.model.storage.Strongbox;
 import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.network.ClientHandler;
+import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.utils.Triple;
@@ -69,7 +70,7 @@ public class VirtualView implements View {
 
     @Override
     public void init() {
-        System.out.println("Initialized virtual view");
+        Server.log("Initialized virtual view");
     }
 
     @Override

@@ -83,7 +83,7 @@ public class FileManager {
                 e.printStackTrace();
             }
         } else
-            System.out.println("Impossible to delete " + matchName + ".json file!");
+            Server.log("Impossible to delete " + matchName + ".json file!");
 
     }
 
