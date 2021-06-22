@@ -2,9 +2,9 @@ package it.polimi.ingsw.controller;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.Requirements;
 import it.polimi.ingsw.network.ClientHandler;
+import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.view.VirtualView;
@@ -75,7 +75,7 @@ public class GameController implements PlayerStatusListener {
         Gson gson = new Gson();
         try {
             if(message.getType() != Message.MessageType.SHOW_PLAYER_BOARD && !username.equals(getCurrentPlayer().getUsername())) {
-                System.out.println("Invalid message received from "+username);
+                Server.log("Invalid message received from "+username);
                 return;
             }
             final PlayerController currentPlayerController = getPlayerController(username);
@@ -156,7 +156,7 @@ public class GameController implements PlayerStatusListener {
     }
 
     /**
-     * Starts the match ending the phase of adding players. The firt player is chosen randomly.
+     * Starts the match ending the phase of adding players. The first player is chosen randomly.
      */
     public void start(){
         match.setStarted(true);
@@ -247,8 +247,8 @@ public class GameController implements PlayerStatusListener {
     }
 
     /**
-     * Returns true if the match has reached the maximum number of players and cannot accept another. Otherwhise it returns false.
-     * @return true if the match has reached the maximum number of players and cannot accept another. Otherwhise it returns false.
+     * Returns true if the match has reached the maximum number of players and cannot accept another. Otherwise it returns false.
+     * @return true if the match has reached the maximum number of players and cannot accept another. Otherwise it returns false.
      */
     public boolean isFull(){
         return match.isFull();
@@ -346,7 +346,7 @@ public class GameController implements PlayerStatusListener {
     public void onPlayerStatusChanged(PlayerController player) {
         if(!player.getUsername().equals(getCurrentPlayer().getUsername()))
             return;
-        System.out.println("The player "+player.getUsername()+" has changed his status to "+player.getCurrentStatus());
+        Server.log("The player "+player.getUsername()+" has changed his status to "+player.getCurrentStatus());
         final PlayerController playerController = getCurrentPlayer();
         switch (player.getCurrentStatus()) {
             case TURN_ENDED:
