@@ -16,6 +16,7 @@ import javafx.scene.layout.*;
 
 import java.util.*;
 
+import static it.polimi.ingsw.model.Match.YOU_STRING;
 import static it.polimi.ingsw.view.gui.GUI.SPEND;
 import static it.polimi.ingsw.view.gui.GUI.calculateRequirements;
 
@@ -261,7 +262,7 @@ public class PlayerboardSceneController extends Controller{
         selectUser.getSelectionModel().selectedIndexProperty().removeListener(changeUserListener);//removes the listener to avoid loop listeners call
 
         selectUser.setItems(FXCollections.observableArrayList(players));
-        selectUser.setValue((playerBoard.getUsername().equals(clientController.getUsername()))?Match.YOU_STRING: playerBoard.getUsername());
+        selectUser.setValue((playerBoard.getUsername().equals(clientController.getUsername()))? YOU_STRING: playerBoard.getUsername());
 
         selectUser.getSelectionModel().selectedIndexProperty().addListener(changeUserListener);//reset the listener to the choicebox
     }
@@ -548,6 +549,11 @@ public class PlayerboardSceneController extends Controller{
      * @param resources the resources to store
      */
     public void storeResourcesFromMarket(Resource[] resources){
+
+        selectUser.setDisable(true);
+
+        Arrays.stream(getLeaderCardsImgs()).forEach(card -> card.setDisable(true));
+
         marketBtn.setVisible(false);
         startProductionBtn.setVisible(false);
         buyDevelopmentcardBtn.setVisible(false);
@@ -812,6 +818,8 @@ public class PlayerboardSceneController extends Controller{
 
         selectUser.setDisable(false);
 
+        if(!selectUser.getValue().equals(Match.YOU_STRING))return;
+
         startProductionBtn.setDisable(Arrays.stream(availableActions).noneMatch(action -> action == Action.ACTIVATE_PRODUCTION));
         marketBtn.setDisable(Arrays.stream(availableActions).noneMatch(action -> action == Action.TAKE_RESOURCES_FROM_MARKET));
         buyDevelopmentcardBtn.setDisable(Arrays.stream(availableActions).noneMatch(action -> action == Action.BUY_DEVELOPMENT_CARD));
@@ -965,7 +973,7 @@ public class PlayerboardSceneController extends Controller{
      * @param username the username of the current active user
      */
     public void showCurrentActiveUser(String username) {
-        if(!username.equals(clientController.getUsername()) && !username.equals(Match.YOU_STRING)){
+        if(!username.equals(clientController.getUsername()) && !username.equals(YOU_STRING)){
             selectUser.setValue(username);
             selectUser.setDisable(true);
             skipBtn.setVisible(false);
