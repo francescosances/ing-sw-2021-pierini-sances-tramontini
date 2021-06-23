@@ -353,21 +353,16 @@ class ClientControllerTest {
         assertEquals("TestMatch", message.getData("matchOwner"));
     }
 
-    //TODO: aggiustare test
-    /*
     @Test
     void leaderCardsChoice() {
-        LeaderCard[] leaderCards = new LeaderCard[] {
-                new DepotLeaderCard("",3, new Requirements(new Pair<>(ResourceType.SERVANT, 5)), ResourceType.SHIELD),
-                new ProductionLeaderCard("",4, new Requirements(new Triple<>(DevelopmentColorType.YELLOW, 2, 1)), new Requirements(new Pair<>(ResourceType.SHIELD, 1)))
-        };
-        clientController.leaderCardsChoice(leaderCards);
+        List<Integer> choices = new ArrayList<>();
+        choices.add(1);
+        choices.add(3);
+        clientController.leaderCardsChoice(choices);
         Message message = clientSocketStub.popMessage();
         assertEquals(Message.MessageType.LEADER_CARDS_CHOICE, message.getType());
-        assertEquals(Arrays.asList(leaderCards), Serializer.deserializeLeaderCardList(message.getData("leaderCards")));
+        assertEquals(choices, Serializer.deserializeIntList(message.getData("leaderCards")));
     }
-
-     */
 
     @Test
     void chooseDevelopmentCards() {

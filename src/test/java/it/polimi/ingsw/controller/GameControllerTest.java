@@ -127,8 +127,6 @@ class GameControllerTest {
         assertEquals(Match.GamePhase.PLAYERS_SETUP, gameController.getMatch().getCurrentPhase());
     }
 
-    //TODO: aggiustare test
-    /*
     @Test
     void leaderCardsChoice() {
         setUp(2);
@@ -137,20 +135,26 @@ class GameControllerTest {
 
         assertEquals(1, gameController.getMatch().getUsersReadyToPlay());
         gameController.getCurrentPlayer().chooseLeaderCards(
-                new DepotLeaderCard("",3,new Requirements(new Pair<>(ResourceType.COIN, 1)),ResourceType.SHIELD),
-                new DiscountLeaderCard("",2, new Requirements(new Triple<>(DevelopmentColorType.YELLOW, 1, 0)), ResourceType.SERVANT)
-        );
+                new ArrayList<>(){{
+                    add(0);
+                    add(1);
+                }});
         assertEquals(2, gameController.getMatch().getUsersReadyToPlay());
         gameController.getCurrentPlayer().chooseStartResources(new Resource[] {ResourceType.COIN});
         gameController.getCurrentPlayer().chooseLeaderCards(
-                new DepotLeaderCard("",3,new Requirements(new Pair<>(ResourceType.COIN, 1)),ResourceType.SHIELD),
-                new DiscountLeaderCard("",2, new Requirements(new Triple<>(DevelopmentColorType.YELLOW, 1, 0)), ResourceType.SERVANT)
-        );
-
+                new ArrayList<>(){{
+                    add(0);
+                    add(1);
+                    add(2);
+                }});
+        assertNotEquals(Match.GamePhase.TURN, gameController.getMatch().getCurrentPhase());
+        gameController.getCurrentPlayer().chooseLeaderCards(
+                new ArrayList<>(){{
+                    add(0);
+                    add(3);
+                }});
         assertEquals(Match.GamePhase.TURN, gameController.getMatch().getCurrentPhase());
     }
-
-     */
 
     @Test
     void disconnectAndReconnect() {
