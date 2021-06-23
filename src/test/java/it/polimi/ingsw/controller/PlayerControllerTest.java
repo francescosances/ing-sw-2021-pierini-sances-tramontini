@@ -124,8 +124,6 @@ class PlayerControllerTest {
         assertEquals(2, playerController.getPlayerBoard().getLeaderCards().size());
     }
 
-    //todo: aggiustare test
-    /*
     @Test
     void listAndChooseLeaderCards() {
         List<LeaderCard> leaderCardList = new ArrayList<>();
@@ -134,13 +132,13 @@ class PlayerControllerTest {
         playerController.listLeaderCards();
         assertEquals(leaderCardList,viewStub.popMessage());
         assertEquals(2,viewStub.popMessage());
-        leaderCardList.subList(0, 2).clear();
-        playerController.chooseLeaderCards(leaderCardList.get(0), leaderCardList.get(1));
-        assertEquals(leaderCardList.get(0), playerController.getPlayerBoard().getLeaderCards().get(0));
-        assertEquals(leaderCardList.get(1), playerController.getPlayerBoard().getLeaderCards().get(1));
+        leaderCardList.subList(2, 4).clear();
+        List<Integer> choices = new ArrayList<>();
+        choices.add(0);
+        choices.add(1);
+        playerController.chooseLeaderCards(choices);
+        assertEquals(leaderCardList, playerController.getPlayerBoard().getLeaderCards());
     }
-
-     */
 
     @Test
     void discardLeaderCard() {
