@@ -768,7 +768,7 @@ public class CLI implements View {
                 marble += ANSI_BLUE + "●";
                 break;
             case GREY:
-                marble += (lightMode) ? ANSI_BLACK + "●" : ANSI_WHITE + "◯";
+                marble += (lightMode) ? ANSI_BLACK + "●" : ANSI_WHITE + "ο";
                 break;
             case YELLOW:
                 marble += ANSI_YELLOW + "●";
@@ -777,7 +777,7 @@ public class CLI implements View {
                 marble += ANSI_PURPLE + "●";
                 break;
             case WHITE:
-                marble += (lightMode) ? ANSI_WHITE + "◯" : "●";
+                marble += (lightMode) ? ANSI_WHITE + "ο" : "●";
                 break;
             default:
                 marble = " ";
