@@ -37,7 +37,9 @@ public class GUI implements View {
 
     private Semaphore playerBoardSemaphore = new Semaphore(0);
 
-    private Set<Alert> openedAlert;
+    private Set<Alert> openedAlerts;
+
+    private Stage openedModal;
 
     private List<Producer> selectedProducers;
 
@@ -52,7 +54,7 @@ public class GUI implements View {
     public GUI(ClientController clientController, Stage stage){
         this.clientController = clientController;
         this.mainStage = stage;
-        this.openedAlert = new HashSet<>();
+        this.openedAlerts = new HashSet<>();
     }
 
     private Controller loadScene(String sceneName){
@@ -77,14 +79,18 @@ public class GUI implements View {
         stage.setAlwaysOnTop(true);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initOwner(mainStage);
-        stage.setOnCloseRequest((e)-> onClose.run());
+        stage.setOnCloseRequest((e)-> {
+            onClose.run();
+            openedModal = null;
+        });
         stage.setTitle(title);
+        openedModal = stage;
         stage.show();
-        for(Alert alert : openedAlert){
+        for(Alert alert : openedAlerts){
             alert.close();
             Alert newAlert = new Alert(alert.getAlertType(),alert.getContentText());
             newAlert.initOwner(stage);
-            newAlert.setOnCloseRequest((e)->openedAlert.remove(alert));
+            newAlert.setOnCloseRequest((e)-> openedAlerts.remove(alert));
             newAlert.show();
         }
         return temp.snd;
@@ -104,9 +110,9 @@ public class GUI implements View {
     public void showMessage(String message) {
         Platform.runLater(()->{
             Alert alert = new Alert(Alert.AlertType.INFORMATION, message);
-            alert.initOwner(mainStage);
-            openedAlert.add(alert);
-            alert.setOnCloseRequest((e)-> openedAlert.remove(alert));
+            alert.initOwner(openedModal==null?mainStage:openedModal);
+            openedAlerts.add(alert);
+            alert.setOnCloseRequest((e)-> openedAlerts.remove(alert));
             alert.show();
         });
     }
@@ -116,8 +122,8 @@ public class GUI implements View {
         Platform.runLater(()->{
             Alert alert = new Alert(Alert.AlertType.ERROR, message);
             alert.initOwner(mainStage);
-            openedAlert.add(alert);
-            alert.setOnCloseRequest((e)-> openedAlert.remove(alert));
+            openedAlerts.add(alert);
+            alert.setOnCloseRequest((e)-> openedAlerts.remove(alert));
             alert.show();
         });
     }
