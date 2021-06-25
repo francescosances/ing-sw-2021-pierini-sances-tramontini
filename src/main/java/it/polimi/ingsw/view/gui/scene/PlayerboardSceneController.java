@@ -141,8 +141,9 @@ public class PlayerboardSceneController extends Controller{
      */
     private final Runnable defaultWarehouseAction = ()->{
         if(selectedWarehouseRows.size() == 2){
-            swapDepotsBtn.getStyleClass().remove("selected");
             clientController.swapDepots(selectedWarehouseRows.get(0),selectedWarehouseRows.get(1));
+            swapDepotsBtn.getStyleClass().clear();
+            swapDepotsBtn.getStyleClass().add("btn");
             clearWarehouseSelection();
         }
     };
@@ -294,7 +295,6 @@ public class PlayerboardSceneController extends Controller{
         discard.setCursor(Cursor.HAND);
         discard.setFitWidth(250);
         discard.setOnMouseClicked((e)->{
-            swapDepotsBtn.getStyleClass().remove("selected");
             dialog.setResult("discard");
             dialog.close();
         });
@@ -605,6 +605,8 @@ public class PlayerboardSceneController extends Controller{
      * Discards the resource that is currently been stored
      */
     public void discardResource() {
+        swapDepotsBtn.getStyleClass().clear();
+        swapDepotsBtn.getStyleClass().add("btn");
         clientController.chooseDepot(playerBoard.getWarehouse().getDepots().size() + 1);
     }
 
@@ -822,6 +824,8 @@ public class PlayerboardSceneController extends Controller{
         buyDevelopmentcardBtn.setDisable(Arrays.stream(availableActions).noneMatch(action -> action == Action.BUY_DEVELOPMENT_CARD));
         skipBtn.setVisible(Arrays.stream(availableActions).anyMatch(action -> action == Action.SKIP));
         swapDepotsBtn.setVisible(false);
+        swapDepotsBtn.getStyleClass().clear();
+        swapDepotsBtn.getStyleClass().add("btn");
 
         startProductionBtn.setVisible(true);
         marketBtn.setVisible(true);
