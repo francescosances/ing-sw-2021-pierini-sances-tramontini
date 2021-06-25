@@ -15,9 +15,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.view.cli.CLI.ANSI_BLUE;
-import static it.polimi.ingsw.view.cli.CLI.ANSI_RESET;
-
 public class Server implements StatusObserver {
 
     /**
@@ -295,7 +292,7 @@ public class Server implements StatusObserver {
      * @param msg the message to log
      */
     public static void log(String msg) {
-        System.out.println(ANSI_BLUE+"Logger: "+msg+ANSI_RESET);
+        System.out.println(msg);
     }
 
 }

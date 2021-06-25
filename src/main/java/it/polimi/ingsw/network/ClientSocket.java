@@ -2,17 +2,12 @@ package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.controller.ClientController;
 import it.polimi.ingsw.utils.Message;
-import it.polimi.ingsw.view.cli.CLI;
 import it.polimi.ingsw.view.gui.GUI;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
-
-import static it.polimi.ingsw.view.cli.CLI.ANSI_BLUE;
-import static it.polimi.ingsw.view.cli.CLI.ANSI_RESET;
 
 public class ClientSocket implements Runnable{
     /**
@@ -55,7 +50,7 @@ public class ClientSocket implements Runnable{
      */
     public void setupSocket(String ip, int port) throws IOException {
         socket = new Socket(ip, port);
-        log("Connection established");
+        System.out.println("Connection established");
 
         socketIn = new Scanner(socket.getInputStream());
         socketOut = new PrintWriter(socket.getOutputStream());
@@ -75,7 +70,7 @@ public class ClientSocket implements Runnable{
 
                 //TODO: eliminare
                 if (clientController.getView() instanceof GUI)
-                    log("received"+received);
+                    System.out.println("received"+received);
 
                 Thread t = new Thread(()-> clientController.handleReceivedMessage(message));
                 t.setDaemon(true);
@@ -90,8 +85,8 @@ public class ClientSocket implements Runnable{
         try {
             socket.close();
         } catch (IOException e) {
-            log("Unable to close socket:");
-            log(e.getMessage());
+            System.out.println("Unable to close socket:");
+            System.out.println(e.getMessage());
         }
     }
 
@@ -103,13 +98,4 @@ public class ClientSocket implements Runnable{
         socketOut.println(message.serialize());
         socketOut.flush();
     }
-
-    /**
-     * Logs messages
-     * @param msg the message to be logged
-     */
-    public void log(String msg) {
-        System.out.println(ANSI_BLUE+"Logger: "+msg+ANSI_RESET);
-    }
-
 }

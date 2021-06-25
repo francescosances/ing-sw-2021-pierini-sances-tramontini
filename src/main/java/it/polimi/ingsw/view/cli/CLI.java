@@ -78,6 +78,9 @@ public class CLI implements View {
         askConnection();
     }
 
+    /**
+     * Asks the user to enter the server address and port and attempts the connection
+     */
     public void askConnection() {
         output.print("Insert server address: ");
         String serverAddress = input.next();
@@ -101,9 +104,9 @@ public class CLI implements View {
     @Override
     public void waitForOtherPlayers() {
         outputLock.lock();
-        output.println("************");
+        output.println("*************************");
         output.println("Waiting for other players");
-        output.println("************");
+        output.println("*************************");
         outputLock.unlock();
     }
 
@@ -263,7 +266,6 @@ public class CLI implements View {
         }
         return "";
     }
-
 
     @Override
     public void listDevelopmentCards(List<Deck<DevelopmentCard>> developmentCardList, int cardsToChoose, PlayerBoard playerBoard) {
@@ -454,14 +456,14 @@ public class CLI implements View {
     public void showCurrentActiveUser(String username) {
         outputLock.lock();
         output.println();
-        output.println("************");
+        output.println("*************************");
         output.print("It's ");
         if (username.equals(Match.YOU_STRING))
             output.print("your");
         else
             output.print(username + "'s");
         output.println(" turn");
-        output.println("************");
+        output.println("*************************");
         outputLock.unlock();
     }
 
@@ -555,11 +557,14 @@ public class CLI implements View {
         return clientController.getUsername();
     }
 
-
     @Override
     public void showPlayerBoard(PlayerBoard playerBoard) {
         outputLock.lock();
-        output.println("\n" + playerBoard.getUsername() + "'s player board is");
+        output.println("\n" +
+                (playerBoard.getUsername().equals(clientController.getUsername())
+                        ? "Your"
+                        : (playerBoard.getUsername() + "'s")
+                ) + " player board:");
         printFaithTrack(playerBoard.getFaithTrack());
         printStorage(playerBoard);
         printDevelopmentCards(playerBoard.getDevelopmentCardSlots());
