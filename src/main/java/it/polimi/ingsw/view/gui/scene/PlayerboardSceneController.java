@@ -887,7 +887,7 @@ public class PlayerboardSceneController extends Controller{
                 if (faithTrack.getPopeFavorTiles()[i] == null) {
                     popeFavorTiles[i].setVisible(false);
                 } else if (faithTrack.getPopeFavorTiles()[i].isUncovered()) {
-                    popeFavorTiles[i].setImage(new Image("/images/punchboard/pope_favor_tile_y" + i + ".png"));
+                    popeFavorTiles[i].setImage(new Image("/images/punchboard/pope_favor_tile_" + i + ".png"));
                     popeFavorTiles[i].setVisible(true);
                 }
             }
