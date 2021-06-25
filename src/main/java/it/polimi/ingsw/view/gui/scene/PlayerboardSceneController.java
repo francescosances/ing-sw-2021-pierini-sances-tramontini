@@ -870,10 +870,9 @@ public class PlayerboardSceneController extends Controller{
      * @param faithTrack the faithrack to be shown
      */
     public void showFaithTrack(FaithTrack faithTrack) {
-        if(!faithTrack.getUsername().equals(this.playerBoard.getUsername()))
-            return;
-
         if(!faithTrack.isBlackCross()) {
+            if(!faithTrack.getUsername().equals(this.playerBoard.getUsername()))
+                return;
 
             playerBoard.setFaithTrack(faithTrack);
 
