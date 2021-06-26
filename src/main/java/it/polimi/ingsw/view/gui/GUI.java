@@ -256,6 +256,8 @@ public class GUI implements View {
     public void askForAction(List<String> usernames, Action... availableActions) {
         clientController.setPlayers(usernames);
         Platform.runLater(()-> {
+            if(openedModal != null)
+                openedModal.close();
            if(getPlayerBoardSceneController() != null)
             getPlayerBoardSceneController().resetControls(availableActions);
         });
