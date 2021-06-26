@@ -164,10 +164,10 @@ public class GameController implements PlayerStatusListener {
             int firstPlayerIndex = new Random().nextInt(players.size());
             match.setCurrentPlayerIndex(firstPlayerIndex);
             players.get(firstPlayerIndex).getPlayerBoard().setInkwell();
+            listPlayers();
             for(int i=0;i<players.size();i++)
                 players.get((match.getCurrentPlayerIndex()+i)%players.size()).setPlayerIndex(i);
             setPhase(Match.GamePhase.PLAYERS_SETUP);
-            listPlayers();
         }else{
             setSuspended(false);
             setPhase(match.getCurrentPhase());

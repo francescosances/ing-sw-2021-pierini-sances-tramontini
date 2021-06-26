@@ -3,7 +3,7 @@
 ### Descrizione
 Implementazione in Java del gioco da tavolo [Maestri del Rinascimento](http://www.craniocreations.it/prodotto/masters-of-renaissance/).  
   
-È stato realizzato con l'utilizzo del pattern MVC (Model-View-Controller) distribuito (client/server) tramite socket, dove il server può gestire più partite (da 1 a 4 giocatori) contemporaneamente.
+È stato realizzato con l'utilizzo del pattern MVC (Model-View-Controller) implementando una logica distribuita (client/server) tramite socket, dove il server può gestire più partite (da 1 a 4 giocatori) contemporaneamente.
 
 ### Componenti del gruppo
 - Matteo Pierini
@@ -14,8 +14,8 @@ Implementazione in Java del gioco da tavolo [Maestri del Rinascimento](http://ww
 ## Funzionalità
 - Regole complete
 - Socket
-- CLI
-- GUI
+- CLI (interafccia a linea di comando)
+- GUI (interafccia grafica)
 - 3 funzionalità avanzate:
     - Partite multiple
     - Persistenza
@@ -47,8 +47,8 @@ I rispettivi JAR verranno creati all'interno della cartella ```/target```.
 Alternativamente, possono essere ottenuti direttamente da [qui](https://github.com/francescosances/ing-sw-2021-pierini-sances-tramontini/tree/master/deliverables/jars).
 
 ### Caratteri colorati
-Per aumentare la leggibilità, nell'interfaccia a linea di comando del client vengono utilizzati dei caratteri colorati attraverso sequenze di escape ANSI. Tuttavia, nella maggior parte delle verisioni di Windows, queste non sono supportate dal terminale.  
-La soluzione migliore è quella di utilizzare un sottosistema Windows per Linux (WSL).
+Per aumentare la leggibilità, nell'interfaccia a linea di comando del client vengono utilizzati dei caratteri colorati attraverso sequenze di escape ANSI e dei caratteri speciali Unicode. Tuttavia, nella maggior parte delle verisioni di Windows, questi non sono supportati dal terminale di default.  
+La soluzione consigliata è quella di utilizzare un sottosistema Windows per Linux (WSL).
 
 ## Esecuzione
 È necessario Java 11 o una versione superiore.

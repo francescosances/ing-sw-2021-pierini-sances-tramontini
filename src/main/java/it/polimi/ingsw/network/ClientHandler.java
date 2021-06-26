@@ -62,8 +62,7 @@ public class ClientHandler implements Runnable {
                     throw new IllegalStateException("Inactive client " + username);
                 }
                 Message message = Message.messageFromString(fromClient); //Read the new message
-                Server.log("Message received from " + username);
-                Server.log(message.serialize());
+                Server.log("Message received from " + username + ":\n" + message.serialize());
                 try {
                     server.handleReceivedMessage(message, this); // Forwards the message to the server
                 }catch (IllegalStateException | IllegalArgumentException e){
