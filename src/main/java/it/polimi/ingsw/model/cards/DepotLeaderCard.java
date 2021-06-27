@@ -88,7 +88,7 @@ public class DepotLeaderCard extends LeaderCard implements Depot {
     @Override
     public void addResource(ResourceType res) throws IncompatibleDepotException {
         if (this.resourceType != res)
-            throw new IncompatibleDepotException("Resource Type not compatible with depot");
+            throw new IncompatibleDepotException("Resource Type not compatible with the chosen depot");
         occupied++;
     }
 

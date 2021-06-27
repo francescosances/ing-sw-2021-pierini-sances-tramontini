@@ -14,6 +14,7 @@ import it.polimi.ingsw.view.gui.scene.*;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -91,6 +92,7 @@ public class GUI implements View {
             Alert newAlert = new Alert(alert.getAlertType(),alert.getContentText());
             newAlert.initOwner(stage);
             newAlert.setOnCloseRequest((e)-> openedAlerts.remove(alert));
+            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
             newAlert.show();
         }
         return temp.snd;
@@ -113,6 +115,7 @@ public class GUI implements View {
             alert.initOwner(openedModal==null?mainStage:openedModal);
             openedAlerts.add(alert);
             alert.setOnCloseRequest((e)-> openedAlerts.remove(alert));
+            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
             alert.show();
         });
     }
@@ -124,6 +127,7 @@ public class GUI implements View {
             alert.initOwner(mainStage);
             openedAlerts.add(alert);
             alert.setOnCloseRequest((e)-> openedAlerts.remove(alert));
+            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
             alert.show();
         });
     }
@@ -405,14 +409,13 @@ public class GUI implements View {
         builder.append("Match ended!\nThe chart is:\n");
         for (int i = 0; i < playerList.size(); i++) {
             builder.append("\n");
-            builder.append(i).append("° place: ").append(playerList.get(i)).append("\n");
+            builder.append("Position ").append(i + 1).append(": ").append(playerList.get(i).getUsername()).append("\n");
             builder.append("Total victory points: ").append(playerList.get(i).getTotalVictoryPoints()).append("\n");
-            showPlayerBoard(playerList.get(i));
         }
         if (clientController.getUsername().equals(playerList.get(0).getUsername()))
-            builder.append("You won!\n");
+            builder.append("\nYou won!\n");
         else
-            builder.append(playerList.get(0).getUsername()).append(" won!");
+            builder.append("\nThe winner is ").append(playerList.get(0).getUsername()).append(" !");
         showMessage(builder.toString());
     }
 

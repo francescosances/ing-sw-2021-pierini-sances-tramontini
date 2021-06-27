@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.storage;
 
 import it.polimi.ingsw.model.cards.DepotLeaderCard;
-import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.Requirements;
 import it.polimi.ingsw.model.storage.exceptions.IncompatibleDepotException;
 import it.polimi.ingsw.model.storage.exceptions.UnswappableDepotsException;
@@ -57,7 +56,7 @@ class WarehouseTest {
             warehouse.addResources(1, ResourceType.SERVANT, 1);
         } catch (IncompatibleDepotException e){
             bool = true;
-            assertEquals("Resource Type not compatible with depot", e.getMessage());
+            assertEquals("Resource Type not compatible with the chosen depot", e.getMessage());
         }
         assertTrue(bool);
         bool = false;

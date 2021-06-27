@@ -73,7 +73,7 @@ public class StandardDepot implements Depot {
             if (this.resourceType == null)
                 throw new IncompatibleDepotException("Depot occupied but Resource Type not defined");
             else if (this.resourceType != res)
-                throw new IncompatibleDepotException("Resource Type not compatible with depot");
+                throw new IncompatibleDepotException("Resource Type not compatible with the chosen depot");
         }
         occupied++;
     }

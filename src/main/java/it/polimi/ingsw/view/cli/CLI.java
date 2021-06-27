@@ -64,7 +64,9 @@ public class CLI implements View {
 
     @Override
     public void showMessage(String message) {
+        outputLock.lock();
         output.println(message);
+        outputLock.unlock();
     }
 
     @Override
@@ -533,23 +535,27 @@ public class CLI implements View {
 
     @Override
     public void showEndGameTriggered() {
-        output.println("\n"+ clientController.getCurrentActiveUser()+" has played " +getPronoun() + "last turn!");
+        outputLock.lock();
+        output.println("\n"+ clientController.getCurrentActiveUser()+" has played " + getPronoun() + " last turn!");
+        outputLock.unlock();
     }
 
     @Override
     public void showCharts(List<PlayerBoard> playerList) {
         outputLock.lock();
-        output.println("\nMatch ended!\nThe chart is:");
+        output.println("\n***********************************");
+        output.println("Match ended!\nThe chart is:");
         for (int i = 0; i < playerList.size(); i++) {
             output.println();
-            output.println(i + "° place: " + playerList.get(i));
+            output.println("Position " + (i + 1) + ": " + playerList.get(i).getUsername());
             output.println("Total victory points: " + playerList.get(i).getTotalVictoryPoints());
-            showPlayerBoard(playerList.get(i));
         }
         if (clientController.getUsername().equals(playerList.get(0).getUsername()))
-            output.println("You won!");
+            output.println("\nYou won!");
         else
-            output.println(playerList.get(0).getUsername() + " won!");
+            output.println("\nThe winner is " + playerList.get(0).getUsername() + " !");
+        output.println("***********************************");
+        outputLock.unlock();
     }
 
     @Override

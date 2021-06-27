@@ -486,7 +486,7 @@ class PlayerControllerTest {
         assertEquals(warehouse, viewStub.popMessage());
 
         playerController.storeResourceToWarehouse(1);
-        assertEquals("Resource Type not compatible with depot", viewStub.popMessage());
+        assertEquals("Resource Type not compatible with the chosen depot", viewStub.popMessage());
         assertEquals(resources[3], viewStub.popMessage());
         assertEquals(warehouse, viewStub.popMessage());
 

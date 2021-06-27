@@ -66,7 +66,7 @@ class StandardDepotTest {
         try {
             depots[1].addResource(ResourceType.COIN);
         } catch (IncompatibleDepotException e) {
-            assertEquals("Resource Type not compatible with depot", e.getMessage());
+            assertEquals("Resource Type not compatible with the chosen depot", e.getMessage());
             bool = true;
         }
         assertTrue(bool);

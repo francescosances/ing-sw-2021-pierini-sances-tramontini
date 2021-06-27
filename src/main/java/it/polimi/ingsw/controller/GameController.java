@@ -316,9 +316,9 @@ public class GameController implements PlayerStatusListener {
         if (players.size() == 1){
             SoloMatch soloMatch = (SoloMatch) match;
             if (soloMatch.getBlackCross().getFaithMarker() == FaithTrack.SIZE || soloMatch.anEmptyDeck())
-                players.get(0).getView().showMessage("You lost!");
+                players.get(0).getView().showMessage("\nYou lost!\n\nTotal victory points: " + players.get(0).getPlayerBoard().getTotalVictoryPoints());
             else
-                players.get(0).getView().showMessage("You won!");
+                players.get(0).getView().showMessage("\nYou won!\n\nTotal victory points: " + players.get(0).getPlayerBoard().getTotalVictoryPoints());
             return;
         }
 
