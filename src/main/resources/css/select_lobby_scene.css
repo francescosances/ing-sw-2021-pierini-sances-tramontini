@@ -26,3 +26,6 @@
     -fx-cursor: hand;
 }
 
+*{
+    -fx-font-family: Arial;
+}
