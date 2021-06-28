@@ -8,6 +8,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextInputDialog;
 import javafx.util.StringConverter;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -51,7 +53,7 @@ public class SelectLobbySceneController extends Controller{
         td.setHeaderText("Choose number of players:");
         td.setContentText("Insert a number between 1 and 4");
         Optional<String> dialogResult = td.showAndWait();
-        td.getDialogPane().getStylesheets().add(getClass().getResource("css/alert_dialog.css").toExternalForm());
+        td.getDialogPane().getStylesheets().add(getClass().getClassLoader().getResource("css/alert_dialog.css").toExternalForm());
         if (dialogResult.isPresent()) {
             try {
                 int res = Serializer.deserializeInt(dialogResult.get());
