@@ -8,3 +8,7 @@
     -fx-cursor: hand;
     -fx-border-color: #5f5f5f;
 }
+
+*{
+    -fx-font-family: Arial;
+}

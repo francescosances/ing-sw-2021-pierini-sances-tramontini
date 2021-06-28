@@ -51,6 +51,7 @@ public class SelectLobbySceneController extends Controller{
         td.setHeaderText("Choose number of players:");
         td.setContentText("Insert a number between 1 and 4");
         Optional<String> dialogResult = td.showAndWait();
+        td.getDialogPane().getStylesheets().add(getClass().getResource("css/alert_dialog.css").toExternalForm());
         if (dialogResult.isPresent()) {
             try {
                 int res = Serializer.deserializeInt(dialogResult.get());

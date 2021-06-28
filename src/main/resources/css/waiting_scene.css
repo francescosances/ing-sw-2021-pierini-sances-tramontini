@@ -13,3 +13,7 @@
     -fx-text-fill: #FDC309;
     -fx-font-size: 30px;
 }
+
+*{
+    -fx-font-family: Arial;
+}

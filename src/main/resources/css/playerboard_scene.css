@@ -116,3 +116,7 @@
 .lblStrongbox{
     -fx-effect: dropshadow(gaussian, #FDC309, 10, 0.5, 1, 1);
 }
+
+*{
+    -fx-font-family: Arial;
+}

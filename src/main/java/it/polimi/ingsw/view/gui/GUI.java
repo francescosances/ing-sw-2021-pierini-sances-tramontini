@@ -116,6 +116,7 @@ public class GUI implements View {
             openedAlerts.add(alert);
             alert.setOnCloseRequest((e)-> openedAlerts.remove(alert));
             alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+            alert.getDialogPane().getStylesheets().add(getClass().getResource("css/alert_dialog.css").toExternalForm());
             alert.show();
         });
     }
