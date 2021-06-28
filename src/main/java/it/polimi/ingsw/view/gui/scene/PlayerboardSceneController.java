@@ -234,8 +234,6 @@ public class PlayerboardSceneController extends Controller{
 
         disableControls();
 
-        selectUser.setDisable(false);
-
         populateUserSelect();
     }
 
