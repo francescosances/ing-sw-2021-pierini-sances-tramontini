@@ -844,10 +844,7 @@ public class PlayerboardSceneController extends Controller{
 
         this.clearResourceSupply();
 
-        if(leadercard0 != null)
-            leadercard0.getStyleClass().remove("selected");
-        if(leadercard1 != null)
-            leadercard1.getStyleClass().remove("selected");
+        showLeaderCards(this.playerBoard.getLeaderCards());
 
     }
 
@@ -932,6 +929,7 @@ public class PlayerboardSceneController extends Controller{
 
             if(card.isActive()) {
                 leaderCards[i].getStyleClass().remove("leadercard");
+                leaderCards[i].getStyleClass().remove("selected");
                 leaderCards[i].getStyleClass().add("active-leadercard");
                 leaderCards[i].setDisable(true);
                 leaderCards[i].setOnMouseClicked((e)->{});
