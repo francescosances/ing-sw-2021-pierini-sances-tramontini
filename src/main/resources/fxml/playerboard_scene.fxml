@@ -181,7 +181,7 @@
                    <Image url="@../images/punchboard/marker.png" />
                 </image>
              </ImageView>
-            <ImageView fx:id="blackCross" fitHeight="57.0" fitWidth="36.0" layoutX="10.0" layoutY="10.0" visible="false" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="blackCross" fitHeight="57.0" fitWidth="36.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@../images/punchboard/black_cross.png" />
                </image>
@@ -246,7 +246,7 @@
                   <Image url="@../images/backgrounds/resource_supply_single.png" />
                </image>
             </ImageView>
-            <Label fx:id="lblStoring" layoutX="423.0" layoutY="40.0" prefHeight="20.0" prefWidth="141.0" text="You are storing:" textFill="#fdc309" visible="false">
+            <Label fx:id="lblStoring" layoutX="345.0" layoutY="40.0" prefHeight="23.0" prefWidth="219.0" text="You are storing:" textFill="#fdc309" visible="false">
                <font>
                   <Font size="20.0" />
                </font>
