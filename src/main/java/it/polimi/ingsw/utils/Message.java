@@ -94,7 +94,6 @@ public class Message{
      * All possible types of message.
      */
     public enum MessageType {
-        // from server to client
         GENERIC,
         ERROR,
         LOGIN_FAILED,
@@ -128,7 +127,6 @@ public class Message{
         SHOW_SLOTS,
         END_GAME,
         CHARTS,
-        // from client to server
         LOGIN_REQUEST,
         LOBBY_CHOICE,
         LEADER_CARDS_CHOICE,

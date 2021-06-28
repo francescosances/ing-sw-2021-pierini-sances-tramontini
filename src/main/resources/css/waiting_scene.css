@@ -3,11 +3,6 @@
     -fx-background-size: stretch;
 }
 
-@font-face {
-    font-family: DominicanItalic;
-    src: url("../fonts/dominicanitalic.ttf");
-}
-
 .lbl{
     -fx-font-family: DominicanItalic;
     -fx-text-fill: #FDC309;

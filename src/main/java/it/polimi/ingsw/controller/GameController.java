@@ -346,8 +346,6 @@ public class GameController implements PlayerStatusListener {
     public void onPlayerStatusChanged(PlayerController player) {
         if(!player.getUsername().equals(getCurrentPlayer().getUsername()))
             return;
-        //TODO remove Server.log from Controller or it will print during tests
-        Server.log("The player "+player.getUsername()+" has changed his status to "+player.getCurrentStatus());
         final PlayerController playerController = getCurrentPlayer();
         switch (player.getCurrentStatus()) {
             case TURN_ENDED:

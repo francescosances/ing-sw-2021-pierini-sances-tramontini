@@ -68,10 +68,6 @@ public class ClientSocket implements Runnable{
                 String received = socketIn.nextLine();
                 Message message = Message.messageFromString(received);
 
-                //TODO: eliminare
-                if (clientController.getView() instanceof GUI)
-                    System.out.println("received"+received);
-
                 Thread t = new Thread(()-> clientController.handleReceivedMessage(message));
                 t.setDaemon(true);
                 t.start();

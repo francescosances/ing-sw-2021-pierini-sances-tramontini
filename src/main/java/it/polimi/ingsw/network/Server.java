@@ -63,13 +63,13 @@ public class Server implements StatusObserver {
      * @param username the username of the user
      * @return the GameController associated to the user
      */
-    public GameController getGameController(String username){ return players.get(username); }
+    private synchronized GameController getGameController(String username){ return players.get(username); }
 
     /**
      * List the matches that the user can join
      * @return a list of game controllers relating to matches that the user can join
      */
-    public synchronized List<GameController> getAvailableMatches(){
+    private synchronized List<GameController> getAvailableMatches(){
         return players.values().stream()
                 .filter(Objects::nonNull)
                 .filter(x->!x.isFull())
@@ -81,7 +81,7 @@ public class Server implements StatusObserver {
     /**
      * updates the matches list both locally and on disk
      */
-    public void updateMatchesList(){
+    private void updateMatchesList(){
         try {
             Map<String,List<String>> newMap = new HashMap<>();
             players.forEach((key, value) -> {
@@ -121,7 +121,7 @@ public class Server implements StatusObserver {
      * @param clientHandler the clientHandler that manages the socket connection with the client
      * @throws IllegalStateException if the chosen match is full
      */
-    public synchronized void addPlayerToMatch(String username,GameController gameController,ClientHandler clientHandler){
+    private synchronized void addPlayerToMatch(String username,GameController gameController,ClientHandler clientHandler){
         if(gameController.isFull())
             throw new IllegalStateException("Match full");
         players.put(username,gameController);
@@ -136,7 +136,7 @@ public class Server implements StatusObserver {
      * @param message the message received from the client
      * @param clientHandler the ClientHandler that manages the socket connection with the client
      */
-    public void handleReceivedMessage(Message message, ClientHandler clientHandler) {
+    protected void handleReceivedMessage(Message message, ClientHandler clientHandler) {
         switch (message.getType()){
             case LOGIN_REQUEST:
                 login(message.getData("username"), clientHandler);
