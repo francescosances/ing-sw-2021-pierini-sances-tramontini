@@ -8,14 +8,10 @@ import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.Message;
 import it.polimi.ingsw.utils.Pair;
-import it.polimi.ingsw.utils.Triple;
-import it.polimi.ingsw.view.View;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +25,7 @@ class GameControllerTest {
     }
 
     private void setUp(int playersNumber) {
-        gameController = new GameController("TestMatch", playersNumber, new FakeStatusObserver());
+        gameController = new GameController("TestMatch", playersNumber, new GameStatusObserverStub());
         assertEquals("TestMatch", gameController.getMatchName());
         assertEquals(playersNumber, gameController.getTotalPlayers());
 
@@ -48,7 +44,7 @@ class GameControllerTest {
 
     @Test
     void addPlayers() {
-        gameController = new GameController("TestMatch", 2, new FakeStatusObserver());
+        gameController = new GameController("TestMatch", 2, new GameStatusObserverStub());
         addTestPlayer("TestPlayer0");
         assertFalse(gameController.isFull());
         addTestPlayer("TestPlayer1");
@@ -65,9 +61,9 @@ class GameControllerTest {
         match.addPlayer("TestPlayer1");
         match.addPlayer("TestPlayer2");
         match.setCurrentPhase(Match.GamePhase.TURN);
-        StatusObserver statusObserver = new FakeStatusObserver();
+        GameStatusObserver gameStatusObserver = new GameStatusObserverStub();
 
-        gameController = GameController.regenerateController(match, statusObserver, players);
+        gameController = GameController.regenerateController(match, gameStatusObserver, players);
 
         assertEquals(match, gameController.getMatch());
         for (String player : players) {

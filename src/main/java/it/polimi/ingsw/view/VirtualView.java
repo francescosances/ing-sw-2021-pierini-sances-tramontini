@@ -1,10 +1,10 @@
 package it.polimi.ingsw.view;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.controller.Action;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.storage.Resource;
-import it.polimi.ingsw.model.storage.ResourceType;
 import it.polimi.ingsw.model.storage.Strongbox;
 import it.polimi.ingsw.model.storage.Warehouse;
 import it.polimi.ingsw.network.ClientHandler;

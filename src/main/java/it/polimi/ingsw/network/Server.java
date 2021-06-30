@@ -2,7 +2,7 @@ package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.controller.PlayerController;
-import it.polimi.ingsw.controller.StatusObserver;
+import it.polimi.ingsw.controller.GameStatusObserver;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.serialization.Serializer;
 import it.polimi.ingsw.utils.FileManager;
@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Server implements StatusObserver {
+public class Server implements GameStatusObserver {
 
     /**
      * The players connected to the server.

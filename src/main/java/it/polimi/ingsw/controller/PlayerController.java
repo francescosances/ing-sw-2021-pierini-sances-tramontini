@@ -1,6 +1,5 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.cards.*;
 import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.exceptions.NotSatisfiedRequirementsException;
@@ -40,7 +39,7 @@ public class PlayerController {
     /**
      * A list of observers of the player status
      */
-    private final List<PlayerStatusListener> observers = new ArrayList<>();
+    private final List<PlayerStatusObserver> observers = new ArrayList<>();
 
     /**
      * The list of LeaderCards the player has to choose from
@@ -408,25 +407,25 @@ public class PlayerController {
      * Makes the controller choose a new action and notifies the observers of the rollback
      */
     private void notifyPlayerStatusListeners(){
-        for (PlayerStatusListener x : this.observers)
+        for (PlayerStatusObserver x : this.observers)
             x.onPlayerStatusChanged(this);
     }
 
 
     /**
      * Add the specified observer to the list of observers
-     * @param playerStatusListener the observer to add
+     * @param playerStatusObserver the observer to add
      */
-    public void addObserver(PlayerStatusListener playerStatusListener){
-        observers.add(playerStatusListener);
+    public void addObserver(PlayerStatusObserver playerStatusObserver){
+        observers.add(playerStatusObserver);
     }
 
     /**
      * Remove the specified observer from the list of observers
-     * @param playerStatusListener the observer to remove
+     * @param playerStatusObserver the observer to remove
      */
-    public void removeObserver(PlayerStatusListener playerStatusListener){
-        observers.remove(playerStatusListener);
+    public void removeObserver(PlayerStatusObserver playerStatusObserver){
+        observers.remove(playerStatusObserver);
     }
 
     /**

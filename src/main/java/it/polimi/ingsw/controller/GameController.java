@@ -12,7 +12,7 @@ import it.polimi.ingsw.view.VirtualView;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class GameController implements PlayerStatusListener {
+public class GameController implements PlayerStatusObserver {
 
     /**
      * The match managed by the controller
@@ -27,21 +27,21 @@ public class GameController implements PlayerStatusListener {
     /**
      * An observer that catches all modifies to the match
      */
-    private transient StatusObserver statusObserver;
+    private transient GameStatusObserver gameStatusObserver;
 
     /**
      * True if the match has been suspended by the players
      */
     protected boolean suspended;
 
-    public GameController(String matchName, int playersNumber, StatusObserver statusObserver) {
+    public GameController(String matchName, int playersNumber, GameStatusObserver gameStatusObserver) {
         if (playersNumber == 1)
             match = new SoloMatch(matchName);
         else
             match = new Match(matchName,playersNumber);
         players = new ArrayList<>();
         match.setCurrentPhase(Match.GamePhase.ADDING_PLAYERS);
-        this.statusObserver = statusObserver;
+        this.gameStatusObserver = gameStatusObserver;
         this.suspended = false;
     }
 
@@ -52,10 +52,10 @@ public class GameController implements PlayerStatusListener {
         players = new ArrayList<>();
     }
 
-    public static GameController regenerateController(Match match,StatusObserver statusObserver,List<String> players){
+    public static GameController regenerateController(Match match, GameStatusObserver gameStatusObserver, List<String> players){
         GameController ret = new GameController();
         ret.match = match;
-        ret.statusObserver = statusObserver;
+        ret.gameStatusObserver = gameStatusObserver;
         for(String player : players) {
             PlayerController playerController = new PlayerController(player, match.getPlayerBoard(player), null);
             ret.players.add(playerController);
@@ -193,7 +193,7 @@ public class GameController implements PlayerStatusListener {
         playerController.addObserver(this);
         if (notify) {
             match.addView(playerController.getView());
-            statusObserver.onStatusChanged(this);
+            gameStatusObserver.onStatusChanged(this);
         }
         return playerController;
     }
@@ -306,7 +306,7 @@ public class GameController implements PlayerStatusListener {
                 }
                 break;
         }
-        statusObserver.onStatusChanged(this);
+        gameStatusObserver.onStatusChanged(this);
     }
 
     /**
@@ -388,7 +388,7 @@ public class GameController implements PlayerStatusListener {
         match.setCurrentPlayerIndex((match.getCurrentPlayerIndex()+1)%players.size());
         if(players.stream().noneMatch(PlayerController::isActive)){
             match.setCurrentPhase(Match.GamePhase.END_GAME);
-            statusObserver.onStatusChanged(this);
+            gameStatusObserver.onStatusChanged(this);
             return;
         }
         if(!getCurrentPlayer().isActive()) { // The current player is inactive

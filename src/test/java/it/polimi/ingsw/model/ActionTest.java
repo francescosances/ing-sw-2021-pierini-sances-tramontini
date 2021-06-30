@@ -2,9 +2,8 @@ package it.polimi.ingsw.model;
 
 import org.junit.jupiter.api.Test;
 
-import static it.polimi.ingsw.model.Action.*;
+import static it.polimi.ingsw.controller.Action.*;
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.*;
 
 class ActionTest {
 

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.controller;
 
-public interface StatusObserver {
+public interface GameStatusObserver {
 
     void onStatusChanged(GameController gameController);
 

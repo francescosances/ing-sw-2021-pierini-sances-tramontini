@@ -122,7 +122,7 @@ implements <a href="PlayerStatusListener.html" title="interface in it.polimi.ing
 </tr>
 <tr class="alt-color">
 <td class="col-first"><code>private <a href="StatusObserver.html" title="interface in it.polimi.ingsw.controller">StatusObserver</a></code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#statusObserver">statusObserver</a></span></code></th>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#gameStatusObserver">gameStatusObserver</a></span></code></th>
 <td class="col-last">
 <div class="block">An observer that catches all modifies to the match</div>
 </td>
@@ -165,7 +165,7 @@ implements <a href="PlayerStatusListener.html" title="interface in it.polimi.ing
 <td class="col-first"><code>&nbsp;</code></td>
 <th class="col-constructor-name" scope="row"><code><span class="member-name-link"><a href="#%3Cinit%3E(java.lang.String,int,it.polimi.ingsw.controller.StatusObserver)">GameController</a></span>&#8203;(java.lang.String&nbsp;matchName,
 int&nbsp;playersNumber,
-<a href="StatusObserver.html" title="interface in it.polimi.ingsw.controller">StatusObserver</a>&nbsp;statusObserver)</code></th>
+<a href="StatusObserver.html" title="interface in it.polimi.ingsw.controller">StatusObserver</a>&nbsp;gameStatusObserver)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
 </tbody>
@@ -367,7 +367,7 @@ java.util.List&lt;<a href="../model/cards/LeaderCard.html" title="class in it.po
 <tr class="row-color" id="i25">
 <td class="col-first"><code>static <a href="GameController.html" title="class in it.polimi.ingsw.controller">GameController</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#regenerateController(it.polimi.ingsw.model.Match,it.polimi.ingsw.controller.StatusObserver,java.util.List)">regenerateController</a></span>&#8203;(<a href="../model/Match.html" title="class in it.polimi.ingsw.model">Match</a>&nbsp;match,
-<a href="StatusObserver.html" title="interface in it.polimi.ingsw.controller">StatusObserver</a>&nbsp;statusObserver,
+<a href="StatusObserver.html" title="interface in it.polimi.ingsw.controller">StatusObserver</a>&nbsp;gameStatusObserver,
 java.util.List&lt;java.lang.String&gt;&nbsp;players)</code></th>
 <td class="col-last">&nbsp;</td>
 </tr>
@@ -447,9 +447,9 @@ java.util.List&lt;java.lang.String&gt;&nbsp;players)</code></th>
 </section>
 </li>
 <li>
-<section class="detail" id="statusObserver">
-<h3>statusObserver</h3>
-<div class="member-signature"><span class="modifiers">private transient</span>&nbsp;<span class="return-type"><a href="StatusObserver.html" title="interface in it.polimi.ingsw.controller">StatusObserver</a></span>&nbsp;<span class="member-name">statusObserver</span></div>
+<section class="detail" id="gameStatusObserver">
+<h3>gameStatusObserver</h3>
+<div class="member-signature"><span class="modifiers">private transient</span>&nbsp;<span class="return-type"><a href="StatusObserver.html" title="interface in it.polimi.ingsw.controller">StatusObserver</a></span>&nbsp;<span class="member-name">gameStatusObserver</span></div>
 <div class="block">An observer that catches all modifies to the match</div>
 </section>
 </li>
@@ -473,7 +473,7 @@ java.util.List&lt;java.lang.String&gt;&nbsp;players)</code></th>
 <h3>GameController</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="member-name">GameController</span>&#8203;(<span class="parameters">java.lang.String&nbsp;matchName,
 int&nbsp;playersNumber,
-<a href="StatusObserver.html" title="interface in it.polimi.ingsw.controller">StatusObserver</a>&nbsp;statusObserver)</span></div>
+<a href="StatusObserver.html" title="interface in it.polimi.ingsw.controller">StatusObserver</a>&nbsp;gameStatusObserver)</span></div>
 </section>
 </li>
 <li>
@@ -495,7 +495,7 @@ int&nbsp;playersNumber,
 <section class="detail" id="regenerateController(it.polimi.ingsw.model.Match,it.polimi.ingsw.controller.StatusObserver,java.util.List)">
 <h3>regenerateController</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="GameController.html" title="class in it.polimi.ingsw.controller">GameController</a></span>&nbsp;<span class="member-name">regenerateController</span>&#8203;(<span class="parameters"><a href="../model/Match.html" title="class in it.polimi.ingsw.model">Match</a>&nbsp;match,
-<a href="StatusObserver.html" title="interface in it.polimi.ingsw.controller">StatusObserver</a>&nbsp;statusObserver,
+<a href="StatusObserver.html" title="interface in it.polimi.ingsw.controller">StatusObserver</a>&nbsp;gameStatusObserver,
 java.util.List&lt;java.lang.String&gt;&nbsp;players)</span></div>
 </section>
 </li>
