@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<StackPane prefHeight="859.0" prefWidth="1000.0" styleClass="rootPane" stylesheets="@../css/select_development_cards_scene.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.scene.SelectDevelopmentCardsSceneController">
+<StackPane prefHeight="859.0" prefWidth="1000.0" styleClass="rootPane" stylesheets="@../css/select_development_cards_scene.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.scene.SelectDevelopmentCardsSceneController">
    <children>
       <AnchorPane fx:id="rootPane" prefHeight="985.0" prefWidth="1000.0">
          <children>

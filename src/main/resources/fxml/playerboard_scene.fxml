@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" prefHeight="720.0" prefWidth="1108.0" styleClass="rootPane" stylesheets="@../css/playerboard_scene.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.scene.PlayerboardSceneController">
+<StackPane fx:id="root" prefHeight="720.0" prefWidth="1108.0" styleClass="rootPane" stylesheets="@../css/playerboard_scene.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.scene.PlayerboardSceneController">
     <children>
         <Group scaleX="1.5" scaleY="1.5" />
           <AnchorPane fx:id="rootPane" prefHeight="720.0" prefWidth="1182.0">

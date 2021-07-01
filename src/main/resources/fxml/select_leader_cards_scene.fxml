@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 
 <StackPane prefHeight="700.0" prefWidth="1000.0" styleClass="rootPane"
-           stylesheets="@../css/select_leader_cards_scene.css" xmlns="http://javafx.com/javafx/11.0.2"
+           stylesheets="@../css/select_leader_cards_scene.css" xmlns="http://javafx.com/javafx/15.0.1"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="it.polimi.ingsw.view.gui.scene.SelectLeaderCardsSceneController">
    <Group scaleX="1.5" scaleY="1.5">

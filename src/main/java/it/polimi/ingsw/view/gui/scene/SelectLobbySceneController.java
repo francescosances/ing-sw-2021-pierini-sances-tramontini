@@ -21,25 +21,25 @@ public class SelectLobbySceneController extends SceneController {
     @FXML
     public void initialize(List<Triple<String, Integer, Integer>> availableLobbies){
         availableLobbies.add(0,new Triple<>("Create new match",0,0));
-        lobbySelector.setConverter(new StringConverter<Triple<String,Integer,Integer>>() {
+        lobbySelector.setConverter(new StringConverter<>() {
 
             @Override
             public String toString(Triple<String, Integer, Integer> temp) {
-                if(temp.getSecond() == 0 && temp.getThird() == 0)
+                if(temp == null)return "";
+                if (temp.getSecond() == 0 && temp.getThird() == 0)
                     return temp.getFirst();
-                return temp.getFirst()+" ("+temp.getSecond()+"/"+temp.getThird()+")";
+                return temp.getFirst() + " (" + temp.getSecond() + "/" + temp.getThird() + ")";
             }
 
             @Override
-            public Triple<String,Integer,Integer> fromString(String s) {
+            public Triple<String, Integer, Integer> fromString(String s) {
                 Pattern pattern = Pattern.compile("^(.*)\\(([0-9])+/([0-9])+\\)$");
                 Matcher matcher = pattern.matcher(s);
 
-                if (matcher.find())
-                {
-                   return new Triple<>(matcher.group(1), Serializer.deserializeInt(matcher.group(2)),Serializer.deserializeInt(matcher.group(3)));
+                if (matcher.find()) {
+                    return new Triple<>(matcher.group(1), Serializer.deserializeInt(matcher.group(2)), Serializer.deserializeInt(matcher.group(3)));
                 }
-                return new Triple<>(s,0,0);
+                return new Triple<>(s, 0, 0);
             }
         });
         lobbySelector.setItems(FXCollections.observableArrayList(availableLobbies));
