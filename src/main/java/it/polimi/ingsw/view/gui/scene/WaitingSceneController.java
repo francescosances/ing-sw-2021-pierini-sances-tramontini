@@ -1,4 +1,4 @@
 package it.polimi.ingsw.view.gui.scene;
 
-public class WaitingSceneController extends Controller{
+public class WaitingSceneController extends SceneController {
 }

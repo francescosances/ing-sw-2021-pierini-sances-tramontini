@@ -3,7 +3,7 @@ package it.polimi.ingsw.view.gui.scene;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
-public class LoginSceneController extends Controller{
+public class LoginSceneController extends SceneController {
 
     @FXML
     protected TextField txtUsername;

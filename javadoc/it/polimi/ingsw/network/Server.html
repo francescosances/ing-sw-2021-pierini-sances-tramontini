@@ -82,12 +82,12 @@ loadScripts(document, 'script');</script>
 <section class="description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../controller/StatusObserver.html" title="interface in it.polimi.ingsw.controller">StatusObserver</a></code></dd>
+<dd><code><a href="../sceneController/StatusObserver.html" title="interface in it.polimi.ingsw.sceneController">StatusObserver</a></code></dd>
 </dl>
 <hr>
 <pre>public class <span class="type-name-label">Server</span>
 extends java.lang.Object
-implements <a href="../controller/StatusObserver.html" title="interface in it.polimi.ingsw.controller">StatusObserver</a></pre>
+implements <a href="../sceneController/StatusObserver.html" title="interface in it.polimi.ingsw.sceneController">StatusObserver</a></pre>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -107,7 +107,7 @@ implements <a href="../controller/StatusObserver.html" title="interface in it.po
 </thead>
 <tbody>
 <tr class="alt-color">
-<td class="col-first"><code>private java.util.Map&lt;java.lang.String,&#8203;<a href="../controller/GameController.html" title="class in it.polimi.ingsw.controller">GameController</a>&gt;</code></td>
+<td class="col-first"><code>private java.util.Map&lt;java.lang.String,&#8203;<a href="../sceneController/GameController.html" title="class in it.polimi.ingsw.sceneController">GameController</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#players">players</a></span></code></th>
 <td class="col-last">
 <div class="block">The players connected to the server.</div>
@@ -163,8 +163,8 @@ implements <a href="../controller/StatusObserver.html" title="interface in it.po
 <tbody>
 <tr class="alt-color" id="i0">
 <td class="col-first"><code>void</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#addPlayerToMatch(java.lang.String,it.polimi.ingsw.controller.GameController,it.polimi.ingsw.network.ClientHandler)">addPlayerToMatch</a></span>&#8203;(java.lang.String&nbsp;username,
-<a href="../controller/GameController.html" title="class in it.polimi.ingsw.controller">GameController</a>&nbsp;gameController,
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#addPlayerToMatch(java.lang.String,it.polimi.ingsw.sceneController.GameController,it.polimi.ingsw.network.ClientHandler)">addPlayerToMatch</a></span>&#8203;(java.lang.String&nbsp;username,
+<a href="../sceneController/GameController.html" title="class in it.polimi.ingsw.sceneController">GameController</a>&nbsp;gameController,
 <a href="ClientHandler.html" title="class in it.polimi.ingsw.network">ClientHandler</a>&nbsp;clientHandler)</code></th>
 <td class="col-last">
 <div class="block">Add a new player to the specified match</div>
@@ -194,14 +194,14 @@ implements <a href="../controller/StatusObserver.html" title="interface in it.po
 </td>
 </tr>
 <tr class="alt-color" id="i4">
-<td class="col-first"><code>java.util.List&lt;<a href="../controller/GameController.html" title="class in it.polimi.ingsw.controller">GameController</a>&gt;</code></td>
+<td class="col-first"><code>java.util.List&lt;<a href="../sceneController/GameController.html" title="class in it.polimi.ingsw.sceneController">GameController</a>&gt;</code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getAvailableMatches()">getAvailableMatches</a></span>()</code></th>
 <td class="col-last">
 <div class="block">List the matches that the user can join</div>
 </td>
 </tr>
 <tr class="row-color" id="i5">
-<td class="col-first"><code><a href="../controller/GameController.html" title="class in it.polimi.ingsw.controller">GameController</a></code></td>
+<td class="col-first"><code><a href="../sceneController/GameController.html" title="class in it.polimi.ingsw.sceneController">GameController</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#getGameController(java.lang.String)">getGameController</a></span>&#8203;(java.lang.String&nbsp;username)</code></th>
 <td class="col-last">
 <div class="block">Returns the GameController associated to the specified user</div>
@@ -268,7 +268,7 @@ implements <a href="../controller/StatusObserver.html" title="interface in it.po
 </tr>
 <tr class="alt-color" id="i14">
 <td class="col-first"><code>void</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#onStatusChanged(it.polimi.ingsw.controller.GameController)">onStatusChanged</a></span>&#8203;(<a href="../controller/GameController.html" title="class in it.polimi.ingsw.controller">GameController</a>&nbsp;gameController)</code></th>
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#onStatusChanged(it.polimi.ingsw.sceneController.GameController)">onStatusChanged</a></span>&#8203;(<a href="../sceneController/GameController.html" title="class in it.polimi.ingsw.sceneController">GameController</a>&nbsp;gameController)</code></th>
 <td class="col-last">
 <div class="block">Updates GameController's match's save or deletes it in case it ended</div>
 </td>
@@ -309,7 +309,7 @@ implements <a href="../controller/StatusObserver.html" title="interface in it.po
 <li>
 <section class="detail" id="players">
 <h3>players</h3>
-<div class="member-signature"><span class="modifiers">private final</span>&nbsp;<span class="return-type">java.util.Map&lt;java.lang.String,&#8203;<a href="../controller/GameController.html" title="class in it.polimi.ingsw.controller">GameController</a>&gt;</span>&nbsp;<span class="member-name">players</span></div>
+<div class="member-signature"><span class="modifiers">private final</span>&nbsp;<span class="return-type">java.util.Map&lt;java.lang.String,&#8203;<a href="../sceneController/GameController.html" title="class in it.polimi.ingsw.sceneController">GameController</a>&gt;</span>&nbsp;<span class="member-name">players</span></div>
 <div class="block">The players connected to the server.
  The map associate each username to the relative GameController.
  If a user has not joined yet a match, his GameController is null</div>
@@ -352,7 +352,7 @@ implements <a href="../controller/StatusObserver.html" title="interface in it.po
 <li>
 <section class="detail" id="getGameController(java.lang.String)">
 <h3>getGameController</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../controller/GameController.html" title="class in it.polimi.ingsw.controller">GameController</a></span>&nbsp;<span class="member-name">getGameController</span>&#8203;(<span class="parameters">java.lang.String&nbsp;username)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../sceneController/GameController.html" title="class in it.polimi.ingsw.sceneController">GameController</a></span>&nbsp;<span class="member-name">getGameController</span>&#8203;(<span class="parameters">java.lang.String&nbsp;username)</span></div>
 <div class="block">Returns the GameController associated to the specified user</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -365,7 +365,7 @@ implements <a href="../controller/StatusObserver.html" title="interface in it.po
 <li>
 <section class="detail" id="getAvailableMatches()">
 <h3>getAvailableMatches</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.util.List&lt;<a href="../controller/GameController.html" title="class in it.polimi.ingsw.controller">GameController</a>&gt;</span>&nbsp;<span class="member-name">getAvailableMatches</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">java.util.List&lt;<a href="../sceneController/GameController.html" title="class in it.polimi.ingsw.sceneController">GameController</a>&gt;</span>&nbsp;<span class="member-name">getAvailableMatches</span>()</div>
 <div class="block">List the matches that the user can join</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -381,29 +381,29 @@ implements <a href="../controller/StatusObserver.html" title="interface in it.po
 </section>
 </li>
 <li>
-<section class="detail" id="onStatusChanged(it.polimi.ingsw.controller.GameController)">
+<section class="detail" id="onStatusChanged(it.polimi.ingsw.sceneController.GameController)">
 <h3>onStatusChanged</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">onStatusChanged</span>&#8203;(<span class="parameters"><a href="../controller/GameController.html" title="class in it.polimi.ingsw.controller">GameController</a>&nbsp;gameController)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">onStatusChanged</span>&#8203;(<span class="parameters"><a href="../sceneController/GameController.html" title="class in it.polimi.ingsw.sceneController">GameController</a>&nbsp;gameController)</span></div>
 <div class="block">Updates GameController's match's save or deletes it in case it ended</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../controller/StatusObserver.html#onStatusChanged(it.polimi.ingsw.controller.GameController)">onStatusChanged</a></code>&nbsp;in interface&nbsp;<code><a href="../controller/StatusObserver.html" title="interface in it.polimi.ingsw.controller">StatusObserver</a></code></dd>
+<dd><code><a href="../sceneController/StatusObserver.html#onStatusChanged(it.polimi.ingsw.sceneController.GameController)">onStatusChanged</a></code>&nbsp;in interface&nbsp;<code><a href="../sceneController/StatusObserver.html" title="interface in it.polimi.ingsw.sceneController">StatusObserver</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>gameController</code> - the match that needs to be updated or deleted</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="addPlayerToMatch(java.lang.String,it.polimi.ingsw.controller.GameController,it.polimi.ingsw.network.ClientHandler)">
+<section class="detail" id="addPlayerToMatch(java.lang.String,it.polimi.ingsw.sceneController.GameController,it.polimi.ingsw.network.ClientHandler)">
 <h3>addPlayerToMatch</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">addPlayerToMatch</span>&#8203;(<span class="parameters">java.lang.String&nbsp;username,
-<a href="../controller/GameController.html" title="class in it.polimi.ingsw.controller">GameController</a>&nbsp;gameController,
+<a href="../sceneController/GameController.html" title="class in it.polimi.ingsw.sceneController">GameController</a>&nbsp;gameController,
 <a href="ClientHandler.html" title="class in it.polimi.ingsw.network">ClientHandler</a>&nbsp;clientHandler)</span></div>
 <div class="block">Add a new player to the specified match</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>username</code> - the username of the user to be added</dd>
-<dd><code>gameController</code> - the game controller of the match chosen</dd>
+<dd><code>gameController</code> - the game sceneController of the match chosen</dd>
 <dd><code>clientHandler</code> - the clientHandler that manages the socket connection with the client</dd>
 <dt>Throws:</dt>
 <dd><code>java.lang.IllegalStateException</code> - if the chosen match is full</dd>
@@ -467,7 +467,7 @@ implements <a href="../controller/StatusObserver.html" title="interface in it.po
 <h3>createNewLobby</h3>
 <div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="member-name">createNewLobby</span>&#8203;(<span class="parameters">int&nbsp;playersNumber,
 <a href="ClientHandler.html" title="class in it.polimi.ingsw.network">ClientHandler</a>&nbsp;clientHandler)</span></div>
-<div class="block">Associate the user to the chosen lobby. It also connects the user to the realative game controller or crete a new one.
+<div class="block">Associate the user to the chosen lobby. It also connects the user to the realative game sceneController or crete a new one.
  The name of the new match is the username of the current user</div>
 <dl class="notes">
 <dt>Parameters:</dt>

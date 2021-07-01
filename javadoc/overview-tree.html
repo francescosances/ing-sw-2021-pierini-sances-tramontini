@@ -55,7 +55,7 @@ loadScripts(document, 'script');</script>
 <span class="package-hierarchy-label">Package Hierarchies:</span>
 <ul class="horizontal">
 <li><a href="it/polimi/ingsw/package-tree.html">it.polimi.ingsw</a>, </li>
-<li><a href="it/polimi/ingsw/controller/package-tree.html">it.polimi.ingsw.controller</a>, </li>
+<li><a href="it/polimi/ingsw/sceneController/package-tree.html">it.polimi.ingsw.sceneController</a>, </li>
 <li><a href="it/polimi/ingsw/model/package-tree.html">it.polimi.ingsw.model</a>, </li>
 <li><a href="it/polimi/ingsw/model/cards/package-tree.html">it.polimi.ingsw.model.cards</a>, </li>
 <li><a href="it/polimi/ingsw/model/cards/exceptions/package-tree.html">it.polimi.ingsw.model.cards.exceptions</a>, </li>
@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 </ul>
 </li>
 <li class="circle">it.polimi.ingsw.view.cli.<a href="it/polimi/ingsw/view/cli/CLI.html" title="class in it.polimi.ingsw.view.cli"><span class="type-name-link">CLI</span></a> (implements it.polimi.ingsw.view.<a href="it/polimi/ingsw/view/View.html" title="interface in it.polimi.ingsw.view">View</a>)</li>
-<li class="circle">it.polimi.ingsw.controller.<a href="it/polimi/ingsw/controller/ClientController.html" title="class in it.polimi.ingsw.controller"><span class="type-name-link">ClientController</span></a></li>
+<li class="circle">it.polimi.ingsw.sceneController.<a href="it/polimi/ingsw/sceneController/ClientController.html" title="class in it.polimi.ingsw.sceneController"><span class="type-name-link">ClientController</span></a></li>
 <li class="circle">it.polimi.ingsw.network.<a href="it/polimi/ingsw/network/ClientHandler.html" title="class in it.polimi.ingsw.network"><span class="type-name-link">ClientHandler</span></a> (implements java.lang.Runnable)</li>
 <li class="circle">it.polimi.ingsw.<a href="it/polimi/ingsw/ClientMain.html" title="class in it.polimi.ingsw"><span class="type-name-link">ClientMain</span></a></li>
 <li class="circle">it.polimi.ingsw.<a href="it/polimi/ingsw/ClientMainTest.html" title="class in it.polimi.ingsw"><span class="type-name-link">ClientMainTest</span></a></li>
@@ -121,7 +121,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">it.polimi.ingsw.model.cards.<a href="it/polimi/ingsw/model/cards/DevelopmentCardSlot.html" title="class in it.polimi.ingsw.model.cards"><span class="type-name-link">DevelopmentCardSlot</span></a> (implements java.lang.Iterable&lt;T&gt;)</li>
 <li class="circle">it.polimi.ingsw.model.<a href="it/polimi/ingsw/model/FaithTrack.html" title="class in it.polimi.ingsw.model"><span class="type-name-link">FaithTrack</span></a> (implements it.polimi.ingsw.view.<a href="it/polimi/ingsw/view/ObservableFromView.html" title="interface in it.polimi.ingsw.view">ObservableFromView</a>)</li>
 <li class="circle">it.polimi.ingsw.utils.<a href="it/polimi/ingsw/utils/FileManager.html" title="class in it.polimi.ingsw.utils"><span class="type-name-link">FileManager</span></a></li>
-<li class="circle">it.polimi.ingsw.controller.<a href="it/polimi/ingsw/controller/GameController.html" title="class in it.polimi.ingsw.controller"><span class="type-name-link">GameController</span></a> (implements it.polimi.ingsw.controller.<a href="it/polimi/ingsw/controller/PlayerStatusListener.html" title="interface in it.polimi.ingsw.controller">PlayerStatusListener</a>)</li>
+<li class="circle">it.polimi.ingsw.sceneController.<a href="it/polimi/ingsw/sceneController/GameController.html" title="class in it.polimi.ingsw.sceneController"><span class="type-name-link">GameController</span></a> (implements it.polimi.ingsw.sceneController.<a href="it/polimi/ingsw/sceneController/PlayerStatusListener.html" title="interface in it.polimi.ingsw.sceneController">PlayerStatusListener</a>)</li>
 <li class="circle">it.polimi.ingsw.view.gui.<a href="it/polimi/ingsw/view/gui/GUI.html" title="class in it.polimi.ingsw.view.gui"><span class="type-name-link">GUI</span></a> (implements it.polimi.ingsw.view.<a href="it/polimi/ingsw/view/View.html" title="interface in it.polimi.ingsw.view">View</a>)</li>
 <li class="circle">it.polimi.ingsw.serialization.<a href="it/polimi/ingsw/serialization/LeaderCardCreator.html" title="class in it.polimi.ingsw.serialization"><span class="type-name-link">LeaderCardCreator</span></a> (implements com.google.gson.JsonDeserializer&lt;T&gt;)</li>
 <li class="circle">it.polimi.ingsw.model.<a href="it/polimi/ingsw/model/Market.html" title="class in it.polimi.ingsw.model"><span class="type-name-link">Market</span></a> (implements it.polimi.ingsw.view.<a href="it/polimi/ingsw/view/ObservableFromView.html" title="interface in it.polimi.ingsw.view">ObservableFromView</a>)</li>
@@ -133,14 +133,14 @@ loadScripts(document, 'script');</script>
 <li class="circle">it.polimi.ingsw.utils.<a href="it/polimi/ingsw/utils/Message.html" title="class in it.polimi.ingsw.utils"><span class="type-name-link">Message</span></a></li>
 <li class="circle">it.polimi.ingsw.utils.<a href="it/polimi/ingsw/utils/Pair.html" title="class in it.polimi.ingsw.utils"><span class="type-name-link">Pair</span></a>&lt;E,&#8203;T&gt;</li>
 <li class="circle">it.polimi.ingsw.model.<a href="it/polimi/ingsw/model/PlayerBoard.html" title="class in it.polimi.ingsw.model"><span class="type-name-link">PlayerBoard</span></a> (implements java.lang.Cloneable, it.polimi.ingsw.view.<a href="it/polimi/ingsw/view/ObservableFromView.html" title="interface in it.polimi.ingsw.view">ObservableFromView</a>)</li>
-<li class="circle">it.polimi.ingsw.controller.<a href="it/polimi/ingsw/controller/PlayerController.html" title="class in it.polimi.ingsw.controller"><span class="type-name-link">PlayerController</span></a></li>
+<li class="circle">it.polimi.ingsw.sceneController.<a href="it/polimi/ingsw/sceneController/PlayerController.html" title="class in it.polimi.ingsw.sceneController"><span class="type-name-link">PlayerController</span></a></li>
 <li class="circle">it.polimi.ingsw.model.<a href="it/polimi/ingsw/model/PopeFavorTile.html" title="class in it.polimi.ingsw.model"><span class="type-name-link">PopeFavorTile</span></a></li>
 <li class="circle">it.polimi.ingsw.serialization.<a href="it/polimi/ingsw/serialization/ProducerCreator.html" title="class in it.polimi.ingsw.serialization"><span class="type-name-link">ProducerCreator</span></a> (implements com.google.gson.JsonDeserializer&lt;T&gt;)</li>
 <li class="circle">it.polimi.ingsw.model.cards.<a href="it/polimi/ingsw/model/cards/Requirements.html" title="class in it.polimi.ingsw.model.cards"><span class="type-name-link">Requirements</span></a> (implements java.lang.Cloneable, java.lang.Iterable&lt;T&gt;)</li>
 <li class="circle">it.polimi.ingsw.serialization.<a href="it/polimi/ingsw/serialization/RequirementsCreator.html" title="class in it.polimi.ingsw.serialization"><span class="type-name-link">RequirementsCreator</span></a> (implements com.google.gson.JsonDeserializer&lt;T&gt;)</li>
 <li class="circle">it.polimi.ingsw.serialization.<a href="it/polimi/ingsw/serialization/ResourceCreator.html" title="class in it.polimi.ingsw.serialization"><span class="type-name-link">ResourceCreator</span></a> (implements com.google.gson.JsonDeserializer&lt;T&gt;)</li>
 <li class="circle">it.polimi.ingsw.serialization.<a href="it/polimi/ingsw/serialization/Serializer.html" title="class in it.polimi.ingsw.serialization"><span class="type-name-link">Serializer</span></a></li>
-<li class="circle">it.polimi.ingsw.network.<a href="it/polimi/ingsw/network/Server.html" title="class in it.polimi.ingsw.network"><span class="type-name-link">Server</span></a> (implements it.polimi.ingsw.controller.<a href="it/polimi/ingsw/controller/StatusObserver.html" title="interface in it.polimi.ingsw.controller">StatusObserver</a>)</li>
+<li class="circle">it.polimi.ingsw.network.<a href="it/polimi/ingsw/network/Server.html" title="class in it.polimi.ingsw.network"><span class="type-name-link">Server</span></a> (implements it.polimi.ingsw.sceneController.<a href="it/polimi/ingsw/sceneController/StatusObserver.html" title="interface in it.polimi.ingsw.sceneController">StatusObserver</a>)</li>
 <li class="circle">it.polimi.ingsw.<a href="it/polimi/ingsw/ServerMain.html" title="class in it.polimi.ingsw"><span class="type-name-link">ServerMain</span></a></li>
 <li class="circle">it.polimi.ingsw.network.<a href="it/polimi/ingsw/network/SocketServer.html" title="class in it.polimi.ingsw.network"><span class="type-name-link">SocketServer</span></a></li>
 <li class="circle">it.polimi.ingsw.model.storage.<a href="it/polimi/ingsw/model/storage/StandardDepot.html" title="class in it.polimi.ingsw.model.storage"><span class="type-name-link">StandardDepot</span></a> (implements it.polimi.ingsw.model.storage.<a href="it/polimi/ingsw/model/storage/Depot.html" title="interface in it.polimi.ingsw.model.storage">Depot</a>)</li>
@@ -183,12 +183,12 @@ loadScripts(document, 'script');</script>
 <li class="circle">it.polimi.ingsw.model.storage.<a href="it/polimi/ingsw/model/storage/Depot.html" title="interface in it.polimi.ingsw.model.storage"><span class="type-name-link">Depot</span></a></li>
 <li class="circle">it.polimi.ingsw.model.cards.<a href="it/polimi/ingsw/model/cards/LeaderCardsChooser.html" title="interface in it.polimi.ingsw.model.cards"><span class="type-name-link">LeaderCardsChooser</span></a></li>
 <li class="circle">it.polimi.ingsw.view.<a href="it/polimi/ingsw/view/ObservableFromView.html" title="interface in it.polimi.ingsw.view"><span class="type-name-link">ObservableFromView</span></a></li>
-<li class="circle">it.polimi.ingsw.controller.<a href="it/polimi/ingsw/controller/PlayerStatusListener.html" title="interface in it.polimi.ingsw.controller"><span class="type-name-link">PlayerStatusListener</span></a></li>
+<li class="circle">it.polimi.ingsw.sceneController.<a href="it/polimi/ingsw/sceneController/PlayerStatusListener.html" title="interface in it.polimi.ingsw.sceneController"><span class="type-name-link">PlayerStatusListener</span></a></li>
 <li class="circle">it.polimi.ingsw.model.<a href="it/polimi/ingsw/model/Producer.html" title="interface in it.polimi.ingsw.model"><span class="type-name-link">Producer</span></a></li>
 <li class="circle">it.polimi.ingsw.view.gui.scene.<a href="it/polimi/ingsw/view/gui/scene/ProductionChooser.html" title="interface in it.polimi.ingsw.view.gui.scene"><span class="type-name-link">ProductionChooser</span></a></li>
 <li class="circle">it.polimi.ingsw.model.storage.<a href="it/polimi/ingsw/model/storage/Resource.html" title="interface in it.polimi.ingsw.model.storage"><span class="type-name-link">Resource</span></a></li>
 <li class="circle">it.polimi.ingsw.view.gui.scene.<a href="it/polimi/ingsw/view/gui/scene/SelectResourcesController.ResourcesChooser.html" title="interface in it.polimi.ingsw.view.gui.scene"><span class="type-name-link">SelectResourcesController.ResourcesChooser</span></a></li>
-<li class="circle">it.polimi.ingsw.controller.<a href="it/polimi/ingsw/controller/StatusObserver.html" title="interface in it.polimi.ingsw.controller"><span class="type-name-link">StatusObserver</span></a></li>
+<li class="circle">it.polimi.ingsw.sceneController.<a href="it/polimi/ingsw/sceneController/StatusObserver.html" title="interface in it.polimi.ingsw.sceneController"><span class="type-name-link">StatusObserver</span></a></li>
 <li class="circle">it.polimi.ingsw.model.storage.<a href="it/polimi/ingsw/model/storage/Storage.html" title="interface in it.polimi.ingsw.model.storage"><span class="type-name-link">Storage</span></a></li>
 <li class="circle">it.polimi.ingsw.view.<a href="it/polimi/ingsw/view/View.html" title="interface in it.polimi.ingsw.view"><span class="type-name-link">View</span></a></li>
 </ul>
@@ -206,7 +206,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">it.polimi.ingsw.model.<a href="it/polimi/ingsw/model/Match.GamePhase.html" title="enum in it.polimi.ingsw.model"><span class="type-name-link">Match.GamePhase</span></a></li>
 <li class="circle">it.polimi.ingsw.utils.<a href="it/polimi/ingsw/utils/Message.MessageType.html" title="enum in it.polimi.ingsw.utils"><span class="type-name-link">Message.MessageType</span></a></li>
 <li class="circle">it.polimi.ingsw.model.storage.<a href="it/polimi/ingsw/model/storage/NonPhysicalResourceType.html" title="enum in it.polimi.ingsw.model.storage"><span class="type-name-link">NonPhysicalResourceType</span></a> (implements it.polimi.ingsw.model.storage.<a href="it/polimi/ingsw/model/storage/Resource.html" title="interface in it.polimi.ingsw.model.storage">Resource</a>)</li>
-<li class="circle">it.polimi.ingsw.controller.<a href="it/polimi/ingsw/controller/PlayerController.PlayerStatus.html" title="enum in it.polimi.ingsw.controller"><span class="type-name-link">PlayerController.PlayerStatus</span></a></li>
+<li class="circle">it.polimi.ingsw.sceneController.<a href="it/polimi/ingsw/sceneController/PlayerController.PlayerStatus.html" title="enum in it.polimi.ingsw.sceneController"><span class="type-name-link">PlayerController.PlayerStatus</span></a></li>
 <li class="circle">it.polimi.ingsw.model.storage.<a href="it/polimi/ingsw/model/storage/ResourceType.html" title="enum in it.polimi.ingsw.model.storage"><span class="type-name-link">ResourceType</span></a> (implements it.polimi.ingsw.model.storage.<a href="it/polimi/ingsw/model/storage/Resource.html" title="interface in it.polimi.ingsw.model.storage">Resource</a>)</li>
 </ul>
 </li>

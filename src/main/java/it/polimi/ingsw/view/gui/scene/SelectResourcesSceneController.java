@@ -10,7 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
-public class SelectResourcesController extends Controller{
+public class SelectResourcesSceneController extends SceneController {
 
     @FXML
     protected ImageView imgcoin, imgservant, imgshield,imgstone;

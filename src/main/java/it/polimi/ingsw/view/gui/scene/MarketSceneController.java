@@ -6,7 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
-public class MarketSceneController extends Controller{
+public class MarketSceneController extends SceneController {
 
     @FXML
     protected ImageView slide;

@@ -1,10 +1,8 @@
 package it.polimi.ingsw.view.gui.scene;
 
-import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.ResourceType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
@@ -12,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SelectWhiteMarbleConversionController extends Controller{
+public class SelectWhiteMarbleConversionSceneController extends SceneController {
 
     @FXML
     protected ImageView imgcoin, imgservant, imgshield,imgstone;

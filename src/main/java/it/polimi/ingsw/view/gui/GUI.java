@@ -33,7 +33,7 @@ public class GUI implements View {
 
     private String currentScene;
 
-    private Controller currentController;
+    private SceneController currentSceneController;
 
     private PlayerboardSceneController playerboardSceneController;
 
@@ -59,22 +59,22 @@ public class GUI implements View {
         this.openedAlerts = new HashSet<>();
     }
 
-    private Controller loadScene(String sceneName){
+    private SceneController loadScene(String sceneName){
         return loadScene(sceneName,false);
     }
 
-    private Controller loadScene(String sceneName,boolean override){
+    private SceneController loadScene(String sceneName, boolean override){
         if(!override && currentScene != null && currentScene.equals(sceneName))
-            return currentController;
+            return currentSceneController;
         this.currentScene = sceneName;
-        Pair<Scene, Controller> sceneControllerPair = JavaFXGui.loadScene(sceneName, clientController);
-        this.currentController = sceneControllerPair.snd;
+        Pair<Scene, SceneController> sceneControllerPair = JavaFXGui.loadScene(sceneName, clientController);
+        this.currentSceneController = sceneControllerPair.snd;
         mainStage.setScene(sceneControllerPair.fst);
         return sceneControllerPair.snd;
     }
 
-    private Controller openModal(String sceneName,String title,Runnable onClose){
-        Pair<Scene,Controller> temp = JavaFXGui.loadScene(sceneName,this.clientController);
+    private SceneController openModal(String sceneName, String title, Runnable onClose){
+        Pair<Scene, SceneController> temp = JavaFXGui.loadScene(sceneName,this.clientController);
         Stage stage = new Stage();
         stage.setScene(temp.fst);
         stage.setResizable(false);
@@ -176,7 +176,7 @@ public class GUI implements View {
     @Override
     public void listLeaderCards(List<LeaderCard> leaderCardList, int cardsToChoose) {
         Platform.runLater(()->{
-            SelectLeaderCardsController controller = (SelectLeaderCardsController) loadScene("select_leader_cards_scene");
+            SelectLeaderCardsSceneController controller = (SelectLeaderCardsSceneController) loadScene("select_leader_cards_scene");
             controller.initialize(leaderCardList,cardsToChoose);
         });
     }
@@ -208,7 +208,7 @@ public class GUI implements View {
     @Override
     public void listDevelopmentCards(List<Deck<DevelopmentCard>> developmentCardList, int cardsToChoose, PlayerBoard userBoard) {
         Platform.runLater(()->{
-            SelectDevelopmentCardsController controller = (SelectDevelopmentCardsController) openModal("select_development_cards_scene","Select development cards",()->{clientController.rollback();});
+            SelectDevelopmentCardsSceneController controller = (SelectDevelopmentCardsSceneController) openModal("select_development_cards_scene","Select development cards",()->{clientController.rollback();});
             controller.initialize(developmentCardList,cardsToChoose,userBoard);
         });
     }
@@ -295,7 +295,7 @@ public class GUI implements View {
     @Override
     public void chooseWhiteMarbleConversion(LeaderCard leaderCard, LeaderCard leaderCard1) {
         Platform.runLater(()->{
-           SelectWhiteMarbleConversionController controller = (SelectWhiteMarbleConversionController) openModal("select_white_marble_conversion","Select white marble conversion",()->chooseWhiteMarbleConversion(leaderCard,leaderCard1));
+           SelectWhiteMarbleConversionSceneController controller = (SelectWhiteMarbleConversionSceneController) openModal("select_white_marble_conversion","Select white marble conversion",()->chooseWhiteMarbleConversion(leaderCard,leaderCard1));
            controller.initialize(leaderCard.getOutputResourceType(),leaderCard1.getOutputResourceType());
         });
     }
@@ -328,7 +328,7 @@ public class GUI implements View {
             productionCosts = new Resource[0];
             askToChooseProductionGains(calculateRequirements(selectedProducers, GAIN));
         }else{
-            Platform.runLater(() -> ((SelectResourcesController) openModal("select_resources_scene","Select resources to spend", ()->{})).initialize(requirements.getResources(NonPhysicalResourceType.ON_DEMAND), (resources) -> {
+            Platform.runLater(() -> ((SelectResourcesSceneController) openModal("select_resources_scene","Select resources to spend", ()->{})).initialize(requirements.getResources(NonPhysicalResourceType.ON_DEMAND), (resources) -> {
                 productionCosts = resources;
                 askToChooseProductionGains(calculateRequirements(selectedProducers, GAIN));
             }, SPEND));
@@ -352,7 +352,7 @@ public class GUI implements View {
         if(requirements.getResources(NonPhysicalResourceType.ON_DEMAND) == 0){
             chooseProductions(productionCosts,new Resource[0]);
         }else {
-            Platform.runLater(() -> ((SelectResourcesController) openModal("select_resources_scene","Select resources to gain", ()->{})).initialize(requirements.getResources(NonPhysicalResourceType.ON_DEMAND), (resources) -> {
+            Platform.runLater(() -> ((SelectResourcesSceneController) openModal("select_resources_scene","Select resources to gain", ()->{})).initialize(requirements.getResources(NonPhysicalResourceType.ON_DEMAND), (resources) -> {
                 chooseProductions(productionCosts,resources);
             }, GAIN));
         }
@@ -368,7 +368,7 @@ public class GUI implements View {
 
     @Override
     public void askToChooseStartResources(Resource[] values, int resourcesToChoose) {
-        Platform.runLater(()-> ((SelectResourcesController) loadScene("select_resources_scene")).initialize(resourcesToChoose,(resources)-> clientController.chooseStartResources(resources), START));
+        Platform.runLater(()-> ((SelectResourcesSceneController) loadScene("select_resources_scene")).initialize(resourcesToChoose,(resources)-> clientController.chooseStartResources(resources), START));
     }
 
     @Override

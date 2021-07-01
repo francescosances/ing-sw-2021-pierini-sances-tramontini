@@ -10,7 +10,7 @@ import javafx.scene.image.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectLeaderCardsController extends Controller{
+public class SelectLeaderCardsSceneController extends SceneController {
 
     @FXML
     protected ImageView img1;

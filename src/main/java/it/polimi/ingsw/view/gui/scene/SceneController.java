@@ -2,7 +2,7 @@ package it.polimi.ingsw.view.gui.scene;
 
 import it.polimi.ingsw.controller.ClientController;
 
-public abstract class Controller {
+public abstract class SceneController {
 
     protected ClientController clientController;
 

@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.cards.Deck;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.DiscountLeaderCard;
-import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.storage.ResourceType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -16,7 +15,7 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectDevelopmentCardsController extends Controller{
+public class SelectDevelopmentCardsSceneController extends SceneController {
 
     @FXML
     protected AnchorPane rootPane;

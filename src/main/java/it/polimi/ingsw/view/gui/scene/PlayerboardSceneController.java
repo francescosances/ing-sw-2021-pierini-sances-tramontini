@@ -21,7 +21,7 @@ import static it.polimi.ingsw.model.Match.YOU_STRING;
 import static it.polimi.ingsw.view.gui.GUI.SPEND;
 import static it.polimi.ingsw.view.gui.GUI.calculateRequirements;
 
-public class PlayerboardSceneController extends Controller{
+public class PlayerboardSceneController extends SceneController {
 
     /**
      * The imageViews of the two user's leader cards

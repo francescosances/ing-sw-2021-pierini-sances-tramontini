@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class ActionTokenSceneController extends Controller{
+public class ActionTokenSceneController extends SceneController {
 
     @FXML
     protected ImageView actionTokenImg;
