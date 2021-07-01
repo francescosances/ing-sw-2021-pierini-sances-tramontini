@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane prefHeight="700.0" prefWidth="1000.0" styleClass="rootPane" stylesheets="@../css/select_lobby_scene.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:sceneController="it.polimi.ingsw.view.gui.scene.SelectLobbySceneController">
+<StackPane prefHeight="700.0" prefWidth="1000.0" styleClass="rootPane" stylesheets="@../css/select_lobby_scene.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.scene.SelectLobbySceneController">
    <AnchorPane prefHeight="200.0" prefWidth="200.0" />
     <Group scaleX="1.5" scaleY="1.5">
         <AnchorPane>
