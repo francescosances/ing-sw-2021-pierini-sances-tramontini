@@ -12,32 +12,67 @@ import java.util.List;
 
 public class SelectLeaderCardsSceneController extends SceneController {
 
+    /**
+     * The imageView of the first leaderCard shown
+     */
     @FXML
     protected ImageView img1;
 
+    /**
+     * The imageView of the second leaderCard shown
+     */
     @FXML
     protected ImageView img2;
 
+    /**
+     * The imageView of the third leaderCard shown
+     */
     @FXML
     protected ImageView img3;
 
+    /**
+     * The imageView of the fourth leaderCard shown
+     */
     @FXML
     protected ImageView img4;
 
+    /**
+     * The label used as description to tell the user what he has to do
+     */
     @FXML
     protected Label lbl;
 
+    /**
+     * The button used to confirm the selection
+     */
     @FXML
     protected Button btnChoose;
 
+    /**
+     * The list of leaderCards shown
+     */
     private List<LeaderCard> leaderCardList;
 
+    /**
+     * The currently chosen cards
+     */
     private List<Boolean> cardsSelected = new ArrayList<>();
 
+    /**
+     * The number of cards to choose
+     */
     private int cardsToChoose;
 
+    /**
+     * The number of cards currentlySelected
+     */
     private int numCardsSelected = 0;
 
+    /**
+     * Set the imageView references to the given leadercards
+     * @param leaderCardList the leadercards to show
+     * @param cardsToChoose the number of cards to be chosen
+     */
     @FXML
     public void initialize(List<LeaderCard> leaderCardList, int cardsToChoose) {
         this.leaderCardList = leaderCardList;
@@ -71,6 +106,9 @@ public class SelectLeaderCardsSceneController extends SceneController {
         }
     }
 
+    /**
+     * Send to the clientController the chosen leaderCards
+     */
     @FXML
     public void choose(){
         if(numCardsSelected != cardsToChoose)

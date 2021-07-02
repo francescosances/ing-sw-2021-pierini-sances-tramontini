@@ -14,6 +14,10 @@ import java.io.IOException;
 
 public class JavaFXGui extends Application {
 
+    /**
+     * Starts the Scene whit the given stage
+     * @param stage the stage to be shown
+     */
     @Override
     public void start(Stage stage) {
 
@@ -26,12 +30,21 @@ public class JavaFXGui extends Application {
         stage.show();
     }
 
+    /**
+     * Terminates the execution of the application
+     */
     @Override
     public void stop() {
         Platform.exit();
         System.exit(0);
     }
 
+    /**
+     * Load the fxml scene's file from the resources folder
+     * @param fileName the name of the fxml file
+     * @param clientController the client controller of the match
+     * @return a pair containing the created scene and the relative scene controller
+     */
     public static Pair<Scene, SceneController> loadScene(String fileName, ClientController clientController){
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(JavaFXGui.class.getResource("/fxml/"+fileName+".fxml"));

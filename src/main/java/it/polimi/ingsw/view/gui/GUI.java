@@ -27,31 +27,65 @@ import java.util.stream.Collectors;
 
 public class GUI implements View {
 
+    /**
+     * The client controller associated to the view
+     */
     private ClientController clientController;
 
+    /**
+     * The currently shown main Stage
+     */
     private Stage mainStage;
 
+    /**
+     * The currently shown scene
+     */
     private String currentScene;
 
+    /**
+     * The controller associated to the current scene
+     */
     private SceneController currentSceneController;
 
+    /**
+     * The controller of the playerBoard scene
+     */
     private PlayerboardSceneController playerboardSceneController;
 
+    /**
+     * Semaphore used to check if the playerboardScene has already been created
+     */
     private Semaphore playerBoardSemaphore = new Semaphore(0);
 
+    /**
+     * The set of opened AlertDialogs
+     */
     private Set<Alert> openedAlerts;
 
+    /**
+     * The stage of the currently open modal
+     */
     private Stage openedModal;
 
+    /**
+     * The list of currently selected producers
+     */
     private List<Producer> selectedProducers;
 
+    /**
+     * The resources chosed by the user to start the production
+     */
     private Resource[] productionCosts;
 
+    /**
+     * The producer chosen by the user
+     */
     private List<Producer> availableProductions;
 
     public static final String SPEND = "spend";
     public static final String GAIN = "gain";
     public static final String START = "gain as start resources";
+
 
     public GUI(ClientController clientController, Stage stage){
         this.clientController = clientController;
@@ -59,10 +93,21 @@ public class GUI implements View {
         this.openedAlerts = new HashSet<>();
     }
 
+    /**
+     * Load the specified scene. If the scene is already shown, the scene is not reloaded
+     * @param sceneName the name of the fxml file to be loaded
+     * @return the scenecontroller of the loaded scene
+     */
     private SceneController loadScene(String sceneName){
         return loadScene(sceneName,false);
     }
 
+    /**
+     * Load the specified scene
+     * @param sceneName the name of the fxml file to be loaded
+     * @param override If true, if the scene is already shown, the scene is not reloaded
+     * @return the scenecontroller of the loaded scene
+     */
     private SceneController loadScene(String sceneName, boolean override){
         if(!override && currentScene != null && currentScene.equals(sceneName))
             return currentSceneController;
@@ -73,6 +118,13 @@ public class GUI implements View {
         return sceneControllerPair.snd;
     }
 
+    /**
+     * Open a modal with the specified scene
+     * @param sceneName the name of the fxml file to load in the modal
+     * @param title the tile of the opened modal
+     * @param onClose the action to be executed when the modal is closed by the user
+     * @return return the scene controller associated to the scene
+     */
     private SceneController openModal(String sceneName, String title, Runnable onClose){
         Pair<Scene, SceneController> temp = JavaFXGui.loadScene(sceneName,this.clientController);
         Stage stage = new Stage();
@@ -99,6 +151,10 @@ public class GUI implements View {
         return temp.snd;
     }
 
+    /**
+     * Returns the playerboard scene controller. This method is synchronized to check if the playerboard scene controller has already been created
+     * @return the scene controller of the playerboardScene controller
+     */
     private PlayerboardSceneController getPlayerBoardSceneController() {
         try {
             playerBoardSemaphore.tryAcquire(3, TimeUnit.SECONDS);

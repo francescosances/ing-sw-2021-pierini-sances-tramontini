@@ -12,29 +12,55 @@ import javafx.stage.Stage;
 
 public class SelectResourcesSceneController extends SceneController {
 
+    /**
+     * The imageViews of the shown resources
+     */
     @FXML
     protected ImageView imgcoin, imgservant, imgshield,imgstone;
 
+    /**
+     * The label used as description to tell the user what he has to do
+     */
     @FXML
     protected Label lbl;
 
+    /**
+     * The button used to confirm the selection
+     */
     @FXML
     protected Button btnChoose;
 
+    /**
+     * The buttons used to modify the amount of the resource
+     */
     @FXML
     protected Button coin_minus,coin_plus,servant_minus,servant_plus,shield_minus,shield_plus,stone_minus,stone_plus;
 
+    /**
+     * The input text used to input the amount of the resource
+     */
     @FXML
     protected TextField coin_input,servant_input,shield_input,stone_input;
 
+    /**
+     * The number of resources to choose
+     */
     private int resourcesToChoose;
 
+    /**
+     * The currently selected resources
+     */
     private int numResourcesSelected = 0;
 
+    /**
+     * The action to be executed when the resource has been choosen
+     */
     private ResourcesChooser onAction;
 
+    /**
+     * The type of resource to be chosen
+     */
     String type;
-
 
     @FXML
     public void initialize(int resourcesToChoose,ResourcesChooser onAction, String type) {
@@ -124,6 +150,9 @@ public class SelectResourcesSceneController extends SceneController {
         }
     }
 
+    /**
+     * Interface used to perform a custom action after the user has chosen the resources
+     */
     public interface ResourcesChooser{
 
         void choose(Resource[] resourcesChosen);

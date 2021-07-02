@@ -9,9 +9,15 @@ import java.net.UnknownHostException;
 
 public class ServerSetupSceneController extends SceneController {
 
+    /**
+     * The TextField used to insert the server address
+     */
     @FXML
     private TextField txtSrvAddress;
 
+    /**
+     * The TextField used to insert the server port
+     */
     @FXML
     private TextField txtSrvPort;
 
@@ -20,6 +26,9 @@ public class ServerSetupSceneController extends SceneController {
 
     }
 
+    /**
+     * Tell the client controller to connect to the server
+     */
     @FXML
     public void connect(){
         try {

@@ -15,9 +15,16 @@ import java.util.regex.Pattern;
 
 public class SelectLobbySceneController extends SceneController {
 
+    /**
+     * The choiceBox used to show the available lobbies
+     */
     @FXML
     private ChoiceBox<Triple<String,Integer,Integer>> lobbySelector;
 
+    /**
+     * Fill the choiceBox with the available matches
+     * @param availableLobbies the lobbies that the user can join
+     */
     @FXML
     public void initialize(List<Triple<String, Integer, Integer>> availableLobbies){
         availableLobbies.add(0,new Triple<>("Create new match",0,0));
@@ -46,6 +53,10 @@ public class SelectLobbySceneController extends SceneController {
         lobbySelector.setValue(availableLobbies.get(0));
     }
 
+    /**
+     * Show the prompt used to ask the number of player of the new match
+     * @return an optional containing the number of player of the new match. Empty if the back button has been pressed
+     */
     private Optional<Integer> askNumberOfPlayers(){
         TextInputDialog td = new TextInputDialog();
         td.setHeaderText("Choose number of players:");
@@ -67,11 +78,17 @@ public class SelectLobbySceneController extends SceneController {
         }
     }
 
+    /**
+     * Ask to the clientcontroller to refresh the list of available matches
+     */
     @FXML
     public void refresh(){
         clientController.refreshLobbies();
     }
 
+    /**
+     * Join the selected match
+     */
     @FXML
     public void join(){
         Triple<String,Integer,Integer> selected = lobbySelector.getValue();

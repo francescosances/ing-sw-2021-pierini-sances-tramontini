@@ -17,25 +17,52 @@ import java.util.List;
 
 public class SelectDevelopmentCardsSceneController extends SceneController {
 
+    /**
+     * The main container of the scene
+     */
     @FXML
     protected AnchorPane rootPane;
 
+    /**
+     * The imageViews used to show the first row of cards
+     */
     @FXML
     protected ImageView card0_0,card1_0,card2_0,card3_0,card4_0,card5_0,card6_0,card7_0,card8_0,card9_0,card10_0,card11_0;
 
+    /**
+     * The imageViews used to show the second row of cards
+     */
     @FXML
     protected ImageView card0_1,card1_1,card2_1,card3_1,card4_1,card5_1,card6_1,card7_1,card8_1,card9_1,card10_1,card11_1;
 
+    /**
+     * The imageViews used to show the third row of cards
+     */
     @FXML
     protected ImageView card0_2,card1_2,card2_2,card3_2,card4_2,card5_2,card6_2,card7_2,card8_2,card9_2,card10_2,card11_2;
 
+    /**
+     * The number of cards to choose
+     */
     private int cardsToChoose;
 
+    /**
+     * The button to close the prompt after the card selection
+     */
     @FXML
     private Button btnChoose;
 
+    /**
+     * The card chosen by the user
+     */
     private List<DevelopmentCard> chosenCards = new ArrayList<>();
 
+    /**
+     * Method that shows a single development card
+     * @param developmentCard the development card to show
+     * @param imageView the imageView of the card to show
+     * @param discounts the discounts applied by a leaderCard, if presents
+     */
     private void showDevelopmentCard(DevelopmentCard developmentCard, ImageView imageView, ResourceType[] discounts){
         imageView.setImage(new Image("/images/cards/FRONT/"+developmentCard.getCardName()+".png"));
 
@@ -65,6 +92,12 @@ public class SelectDevelopmentCardsSceneController extends SceneController {
         }
     }
 
+    /**
+     * Fill the grid with the development cards from the given decks
+     * @param developmentCardList the list of decks of developmentCards to be shown
+     * @param cardsToChoose the number of cards to choose
+     * @param playerBoard the playerboard of the user who is buying the card. Used to check if the card can be purchased
+     */
     @FXML
     public void initialize(List<Deck<DevelopmentCard>> developmentCardList, int cardsToChoose, PlayerBoard playerBoard){
         this.cardsToChoose = cardsToChoose;
@@ -124,6 +157,9 @@ public class SelectDevelopmentCardsSceneController extends SceneController {
         }
     }
 
+    /**
+     * Method called when a card is chosen. Send the chosen card to the client controller and close the stage
+     */
     @FXML
     public void choose(){
         if(cardsToChoose != chosenCards.size())

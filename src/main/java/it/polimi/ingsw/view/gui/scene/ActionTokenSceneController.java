@@ -7,9 +7,16 @@ import javafx.scene.image.ImageView;
 
 public class ActionTokenSceneController extends SceneController {
 
+    /**
+     * The imageview used to show the action token
+     */
     @FXML
     protected ImageView actionTokenImg;
 
+    /**
+     * Set the right image to the action token
+     * @param actionToken the action token to be shown
+     */
     @FXML
     public void initialize(ActionToken actionToken){
         String actionTokenName = "";

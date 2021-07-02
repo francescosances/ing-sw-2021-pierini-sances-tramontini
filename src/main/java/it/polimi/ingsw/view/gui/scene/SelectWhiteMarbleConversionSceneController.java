@@ -12,14 +12,27 @@ import java.util.List;
 
 public class SelectWhiteMarbleConversionSceneController extends SceneController {
 
+    /**
+     * The imageViews of the resources
+     */
     @FXML
     protected ImageView imgcoin, imgservant, imgshield,imgstone;
 
+    /**
+     * The button used to confirm the selection
+     */
     @FXML
     protected Button btnChoose;
 
+    /**
+     * The currently selected resource
+     */
     private int selectedResource = -1;
 
+    /**
+     * Set the imageviews to the given resources images
+     * @param values The available resources
+     */
     @FXML
     public void initialize(ResourceType ... values) {
         ImageView[] imageViews = {imgcoin,imgservant,imgshield,imgstone};
@@ -61,6 +74,9 @@ public class SelectWhiteMarbleConversionSceneController extends SceneController 
         }
     }
 
+    /**
+     * Send to the clientController the choice made by the user
+     */
     @FXML
     public void choose(){
         if(selectedResource == -1)
