@@ -929,14 +929,15 @@ public class PlayerboardSceneController extends SceneController {
             final int index = i;
 
             if(card.isActive()) {
-                leaderCards[i].getStyleClass().remove("leadercard");
-                leaderCards[i].getStyleClass().remove("selected");
+                leaderCards[i].getStyleClass().clear();
+                leaderCards[i].getStyleClass().add("card");
                 leaderCards[i].getStyleClass().add("active-leadercard");
                 leaderCards[i].setDisable(true);
                 leaderCards[i].setOnMouseClicked((e)->{});
             }else {
+                leaderCards[i].getStyleClass().clear();
+                leaderCards[i].getStyleClass().add("card");
                 leaderCards[i].getStyleClass().add("leadercard");
-                leaderCards[i].getStyleClass().remove("active-leadercard");
                 leaderCards[i].setOnMouseClicked((e) -> leaderCardClicked(index));
             }
             leaderCards[i].setVisible(true);
