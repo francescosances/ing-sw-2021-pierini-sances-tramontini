@@ -26,9 +26,11 @@ Implementazione in Java del gioco da tavolo [Maestri del Rinascimento](http://ww
 
 ### UML
 
-[First](https://github.com/francescosances/ing-sw-2021-pierini-sances-tramontini/tree/master/deliverables/uml/FirstModelUML.pdf)
+[Iniziale - Model](https://github.com/francescosances/ing-sw-2021-pierini-sances-tramontini/tree/master/deliverables/uml/FirstModelUML.pdf)
 
-[Final - High Level](https://github.com/francescosances/ing-sw-2021-pierini-sances-tramontini/tree/master/deliverables/uml/HighLevel_FinalUML.pdf)
+[Finale - Alto Livello](https://github.com/francescosances/ing-sw-2021-pierini-sances-tramontini/tree/master/deliverables/uml/HighLevel_FinalUML.pdf)
+
+[Finale - Completo](https://github.com/francescosances/ing-sw-2021-pierini-sances-tramontini/tree/master/deliverables/uml/generated)
 
 ### Javadoc
 
