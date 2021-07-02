@@ -3,12 +3,16 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.cards.Deck;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.DevelopmentColorType;
+import it.polimi.ingsw.model.storage.Resource;
+import it.polimi.ingsw.model.storage.ResourceType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -72,5 +76,29 @@ class SoloMatchTest {
         assertEquals(0, match.getBlackCross().getFaithMarker());
         match.discardResource(player);
         assertEquals(1, match.getBlackCross().getFaithMarker());
+    }
+
+    @Test
+    void buyDevelopmentCard() {
+        Map<ResourceType, Integer> resources = new HashMap<>();
+        resources.put(ResourceType.COIN, 50);
+        resources.put(ResourceType.SHIELD, 50);
+        resources.put(ResourceType.SERVANT, 50);
+        resources.put(ResourceType.STONE, 50);
+        player.getStrongbox().addResources(resources);
+        for (int i = 1; i < 3; i++) {
+            while (!match.getDevelopmentCardDeck(DevelopmentColorType.GREEN, i).isEmpty())
+                match.buyDevelopmentCard(match.getDevelopmentCardDeck(DevelopmentColorType.GREEN, i).top(), player);
+        }
+
+        boolean exceptionCaught = false;
+        try {
+            while (!match.getDevelopmentCardDeck(DevelopmentColorType.GREEN, 3).isEmpty())
+                match.buyDevelopmentCard(match.getDevelopmentCardDeck(DevelopmentColorType.GREEN, 3).top(), player);
+        } catch (EndGameException e){
+            assertTrue(match.anEmptyDeck());
+            exceptionCaught = true;
+        }
+        assertTrue(exceptionCaught);
     }
 }

@@ -14,9 +14,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -541,7 +539,7 @@ class PlayerControllerTest {
 
     @Test
     void buyDevelopmentCard() throws IncompatibleDepotException {
-        DevelopmentCard developmentCard = new DevelopmentCard("",1, new Requirements(new Pair<>(ResourceType.SHIELD, 1)), 1, DevelopmentColorType.GREEN, new Requirements(new Pair<>(ResourceType.COIN, 1)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1));
+        DevelopmentCard developmentCard = new DevelopmentCard("", 1, new Requirements(new Pair<>(ResourceType.SHIELD, 1)), 1, DevelopmentColorType.GREEN, new Requirements(new Pair<>(ResourceType.COIN, 1)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1));
         playerController.getPlayerBoard().getWarehouse().addResources(0, ResourceType.SHIELD, 1);
         playerController.buyDevelopmentCard(developmentCard);
         assertArrayEquals(playerController.getPlayerBoard().getDevelopmentCardSlots(), (DevelopmentCardSlot[]) viewStub.popMessage());
@@ -553,7 +551,7 @@ class PlayerControllerTest {
         playerController.turnEnded();
         playerController.startTurn();
 
-        DevelopmentCard developmentCard1 = new DevelopmentCard("",1, new Requirements(new Pair<>(ResourceType.STONE, 0)), 1, DevelopmentColorType.YELLOW, new Requirements(new Pair<>(ResourceType.COIN, 1)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1));
+        DevelopmentCard developmentCard1 = new DevelopmentCard("", 1, new Requirements(new Pair<>(ResourceType.STONE, 0)), 1, DevelopmentColorType.YELLOW, new Requirements(new Pair<>(ResourceType.COIN, 1)), new Pair<>(NonPhysicalResourceType.FAITH_POINT, 1));
         playerController.buyDevelopmentCard(developmentCard1);
 
         assertArrayEquals(playerController.getPlayerBoard().getDevelopmentCardSlots(), (DevelopmentCardSlot[]) viewStub.popMessage());
@@ -576,6 +574,37 @@ class PlayerControllerTest {
         assertEquals(1, viewStub.popMessage());
         assertEquals(playerController.getPlayerBoard(), viewStub.popMessage());
         assertEquals(PlayerController.PlayerStatus.PERFORMING_ACTION, playerController.getCurrentStatus());
+
+        tearDown();
+        //manual setUp
+        String username = "Test";
+        Match soloMatch = new SoloMatch(username);
+        viewStub = new ViewStub();
+        playerController = new PlayerController(username, soloMatch.addPlayer(username), viewStub);
+        playerController.active = true;
+
+        for (int level = 0; level < 3; level++){
+            while(!soloMatch.getDevelopmentCardDeck(DevelopmentColorType.BLUE, level).isEmpty())
+                soloMatch.getDevelopmentCardDeck(DevelopmentColorType.BLUE, level).remove(0);
+        }
+
+        Deck<DevelopmentCard> developmentCardDeck = soloMatch.getDevelopmentCardDeck(DevelopmentColorType.BLUE, 3);
+        while(!developmentCardDeck.top().equals(developmentCardDeck.get(developmentCardDeck.size()-1)))
+            developmentCardDeck.remove(0);
+
+        Map<ResourceType, Integer> resources = new HashMap<>();
+        resources.put(ResourceType.COIN, 10);
+        resources.put(ResourceType.SHIELD, 10);
+        resources.put(ResourceType.SERVANT, 10);
+        resources.put(ResourceType.STONE, 10);
+        playerController.getPlayerBoard().getStrongbox().addResources(resources);
+        boolean exceptionCaught = false;
+        try {
+            playerController.buyDevelopmentCard(developmentCardDeck.top());
+        } catch (EndGameException e) {
+            exceptionCaught = true;
+        }
+        assertTrue(exceptionCaught);
     }
 
     @Test

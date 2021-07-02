@@ -3,7 +3,11 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.cards.Deck;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.DevelopmentColorType;
+import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.view.View;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SoloMatch extends Match{
 
@@ -107,6 +111,15 @@ public class SoloMatch extends Match{
      */
     public ActionToken drawActionToken(){
         return actionTokens.remove(0);
+    }
+
+    @Override
+    protected void buyDevelopmentCard(DevelopmentCard developmentCard, PlayerBoard player){
+        super.buyDevelopmentCard(developmentCard, player);
+        if (getDevelopmentCardDeck(developmentCard.getColor(), 3).isEmpty()) {
+                cardsFinished = true;
+                throw new EndGameException();
+        }
     }
 
     /**
