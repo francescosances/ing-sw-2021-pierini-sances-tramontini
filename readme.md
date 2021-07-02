@@ -1,28 +1,28 @@
-# Progetto di Ingegneria del Software - A.A. 2020/2021
+# Software Engineering project - 2020/2021
 
-### Descrizione
-Implementazione in Java del gioco da tavolo [Maestri del Rinascimento](http://www.craniocreations.it/prodotto/masters-of-renaissance/).  
-  
-È stato realizzato con l'utilizzo del pattern MVC (Model-View-Controller) implementando una logica distribuita (client/server) tramite socket, dove il server può gestire più partite (da 1 a 4 giocatori) contemporaneamente.
+### Description
+BoardGame [Masters of Renaissance](http://www.craniocreations.it/prodotto/masters-of-renaissance/) java implementation.  
 
-### Componenti del gruppo
+Realized utilizing MVC (Model-View-Controller) pattern, implementing a client/server logic through sockets. The server can handle more than one multiplayer (1-4 players) matches at the same time.
+
+### Work Group
 - Matteo Pierini
 - Francesco Maria Sances
 - Marco Tramontini
 
 
-## Funzionalità
-- Regole complete
+## Functionalities
+- Full rules
 - Socket
-- CLI (interafccia a linea di comando)
-- GUI (interafccia grafica)
-- 3 funzionalità avanzate:
-    - Partite multiple
-    - Persistenza
-    - Resilienza alle disconnessioni
+- CLI (Command Line Interface)
+- GUI (Graphic User Interface)
+- 3 advanced functionalities:
+    - Simultaneous matches
+    - Persistence
+    - Disconnection resilience
 
 
-## Documentazione
+## Documentation
 
 ### UML
 
@@ -42,31 +42,33 @@ Implementazione in Java del gioco da tavolo [Maestri del Rinascimento](http://ww
 
 ## Setup
 ### Package
-Per effettuare il package degli eseguibili di client e server, lanciare il seguente comando dalla root del progetto:
+In order to build the client and server packages, input in the project root the command line.
 ```
 mvn clean package
 ```
-I rispettivi JAR verranno creati all'interno della cartella ```/target```.  
+Then, JARs will be built inside the folder named ```/target```.  
   
-Alternativamente, possono essere ottenuti direttamente da [qui](https://github.com/francescosances/ing-sw-2021-pierini-sances-tramontini/tree/master/deliverables/jars).
+Otherwise, you can download pre-built JARs [here](https://github.com/francescosances/ing-sw-2021-pierini-sances-tramontini/tree/master/deliverables/jars).
 
-### Caratteri colorati
-Per aumentare la leggibilità, nell'interfaccia a linea di comando del client vengono utilizzati dei caratteri colorati attraverso sequenze di escape ANSI e dei caratteri speciali Unicode. Tuttavia, nella maggior parte delle verisioni di Windows, questi non sono supportati dal terminale di default.  
-La soluzione consigliata è quella di utilizzare un sottosistema Windows per Linux (WSL).
+### Coloured characters
+CLI can use coloured character to enhance understandability, achieved through ANSI escapes and Unicode special characters.
+Sadly, most of Windows default terminals doesn't support them. 
+It is highly recommended to make use of WSL (Windows Subsystem for Linux).   
 
-## Esecuzione
-È necessario Java 11 o una versione superiore.
+## Execution
+Java 11 or newer is needed.
 
 ### Client
-Il client può essere lanciato tramite un doppio click sull'eseguibile ```GC13-client.jar``` (in questo caso viene avviata automaticamente la GUI) oppure tramite il seguente comando:
+Client can be launched double-clicking on the executable ```GC13-client.jar``` (GUI will be started) or through the command line:
 ```
 java -jar GC13-client.jar [-c|--cli]
 ```
-Specificando il parametro ```-c``` o ```--cli``` viene scelta come interafccia la linea di comando (CLI) anziché la GUI.
+Write ```-c``` or ```--cli```parameters only if you want to choose CLI instead of GUI.
 
 ### Server
-Per lanciare il server utilizzare il seguente comando:
+Use the command line
 ```
 java -jar GC13-server.jar [-p|--port port_number]
 ```
-```-p``` o ```--port``` permottono di specificare la porta sulla quale il server rimane in ascolto di nuove connessioni. Se non specificata viene usata la porta 8000.
+to launch server.
+```-p``` or ```--port``` enable to choose the port the server will use to listen to new connections. Default port is 8000.
