@@ -168,6 +168,12 @@
                       <exclude>module-info.class</exclude>
                     </excludes>
                   </filter>
+                  <filter>
+                    <artifact>org.openjfx</artifact>
+                    <includes>
+                      <include>**</include>
+                    </includes>
+                  </filter>
                 </filters>
               </configuration>
             </execution>
