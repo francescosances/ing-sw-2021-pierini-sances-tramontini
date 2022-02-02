@@ -1,15 +1,18 @@
-# Software Engineering project - 2020/2021
+# Software Engineering project - A.A. 2020/2021
 
 ### Description
 BoardGame [Masters of Renaissance](http://www.craniocreations.it/prodotto/masters-of-renaissance/) java implementation.  
 
 Realized utilizing MVC (Model-View-Controller) pattern, implementing a client/server logic through sockets. The server can handle more than one multiplayer (1-4 players) matches at the same time.
 
+### All the images are property of Cranio Creations. All rights reserved.
+
 ### Work Group
 - Matteo Pierini
 - Francesco Maria Sances
 - Marco Tramontini
 
+### Grade: 30L - Prof. G. Cugola
 
 ## Functionalities
 - Full rules
